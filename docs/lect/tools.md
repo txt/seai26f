@@ -31,34 +31,34 @@ continuity; A2 memory/diversification; A3 building-block decomposability;
 A4 Pareto incomparability; A5 surrogate feasible; A7 low intrinsic
 dimensionality).
 
-| # | Tool | Year | Assumption | Notes | Refs |
-|--:|------|------|:----:|-------|------|
-| 1 | Random Search | 1950s | floor | baseline sanity check; surprisingly strong in high dimensions; blind probing | orig [38]; SE [36][1][33][3] |
-| 2 | Hill Climbing | 1950s | A1 | local improvement, greedy trajectory; easily trapped in local optima | orig [8]; SE [9][10][11] |
-| 3 | Genetic Algorithms (GA) | 1975 | A3 | evolutionary search using selection, crossover, mutation | orig [23]; SE [24][25] |
-| 4 | (1+1) Evolution Strategy | 1973 | A1 | single incumbent, self-adaptive Gaussian step (1/5 rule) | orig [15]; SE [16] |
-| 5 | Simulated Annealing (SA) | 1983 | A1 | probabilistic escape from local optima via temperature | orig [12]; SE [13][14] |
-| 6 | Tabu Search | 1986 | A2 | memory-based search to avoid cycling | orig [19]; SE [20][21][22] |
-| 7 | Iterated Local Search (ILS) | 2003 | A2 | restart escape: kick incumbent to new region, re-optimize | orig [17]; SE [18] |
-| 8 | Genetic Programming (GP) | 1992 | A3 | evolves programs or parse trees | Koza [74]; GenProg [24] |
-| 9 | Ant Colony Optimization (ACO) | 1992 | A3 | pheromone-based path exploration | Dorigo 1992 (PhD thesis); Dorigo et al. 1996 |
-| 10 | Particle Swarm Optimization (PSO) | 1995 | A3 | flocking-based continuous optimization; velocity swarm | orig [28]; SE [29] |
-| 11 | MaxWalkSat | 1996 | A2 | greedy + random walk SAT solver | Kautz & Selman 1996 |
-| 12 | EDA (estimation of distribution) | 1996 | A3 | replaces crossover with a probability model fit to the best-so-far | orig [26]; SE [27] |
-| 13 | Differential Evolution (DE) | 1997 | A3 | vector-based evolutionary optimization; tournament winner at large budgets | orig [30]; SE [31] |
-| 14 | SPEA2 | 2001 | A4 | strength-based multi-objective optimization, external archive | orig [42]; SE [41] |
-| 15 | NSGA-II | 2002 | A4 | non-dominated sorting with crowding distance; widely recommended, needs many evals | orig [39]; SE [40][41] |
-| 16 | IBEA | 2004 | A4 | indicator-based multi-objective optimization | Zitzler & Künzli, PPSN 2004 |
-| 17 | SMS-EMOA | 2007 | A4 | hypervolume-contribution selection | orig [43]; SE [44] |
-| 18 | MOEA/D | 2007 | A4 | decomposes MOO into scalar subproblems | orig [45]; SE [40] |
-| 19 | Gaussian Process Models (GPM) | 2010s | A5 | probabilistic surrogates for expensive functions | Rasmussen & Williams 2006; BO [78] |
-| 20 | SMAC / SMBO | 2011 | A5 | sequential surrogate-based optimization; random-forest surrogate handles categorical spaces | orig [32]; SE [33][3] |
-| 21 | TPE | 2011 | A5 | Bayesian optimization via density estimation of good vs ordinary configs | orig [34]; SE [35][33] |
-| 22 | FLASH | 2017 | A5 | CART-based SMBO for SE configuration | Nair et al. [7] |
-| 23 | SWAY | 2016 | A7 | recursive median-distance bisection down to a few representatives | orig [36]; SE [36][37] |
-| 24 | DODGE | 2019 | A7 | epsilon-pruning: discard configs falling in same epsilon-bin | orig [22]; SE [22] |
-| 25 | LINE (kpp) | 2026 | A7 | centroid sampling (k-means++ style) from budget | orig [33]; SE [33][1] |
-| 26 | EZR | 2026 | A7 | distance-based proximity active learning; tournament winner at tight budgets | orig [1]; SE [1][33] |
+| # | Tool | Year | Assumption | Notes | Example SE use |
+|--:|------|------|:----:|-------|----------------|
+| 1 | Random Search | 1950s | floor | baseline sanity check; surprisingly strong in high dimensions; blind probing | baseline for hyper-parameter tuning [38]; matched far heavier search in SBSE [36] |
+| 2 | Hill Climbing | 1950s | A1 | local improvement, greedy trajectory; easily trapped in local optima | search-based test generation, local vs global search [9]; real-time API recommendation (Pyart) [11] |
+| 3 | Genetic Algorithms (GA) | 1975 | A3 | evolutionary search using selection, crossover, mutation | automatic program repair (GenProg) [24]; multi-objective release planning [25] |
+| 4 | (1+1) Evolution Strategy | 1973 | A1 | single incumbent, self-adaptive Gaussian step (1/5 rule) | many-independent-objective (MIO) test-suite generation [16] |
+| 5 | Simulated Annealing (SA) | 1983 | A1 | probabilistic escape from local optima via temperature | search-based fault localization [14]; SBSE surveys [13] |
+| 6 | Tabu Search | 1986 | A2 | memory-based search to avoid cycling | structural software testing [20]; cross-company defect-prediction transfer [21] |
+| 7 | Iterated Local Search (ILS) | 2003 | A2 | restart escape: kick incumbent to new region, re-optimize | software project scheduling [18] |
+| 8 | Genetic Programming (GP) | 1992 | A3 | evolves programs or parse trees | automatic patch evolution in GenProg [24][74] |
+| 9 | Ant Colony Optimization (ACO) | 1992 | A3 | pheromone-based path exploration | test sequence/test data generation, first by McMinn & Holcombe 2003; 21+ testing studies surveyed by Suri & Singhal 2012 |
+| 10 | Particle Swarm Optimization (PSO) | 1995 | A3 | flocking-based continuous optimization; velocity swarm | seed scheduling for greybox fuzzing [29] |
+| 11 | MaxWalkSat | 1996 | A2 | greedy + random walk SAT solver | finding robust solutions in NASA requirements models (Gay, Menzies et al., ASE J 2010) |
+| 12 | EDA (estimation of distribution) | 1996 | A3 | replaces crossover with a probability model fit to the best-so-far | test generation for mutation testing [27] |
+| 13 | Differential Evolution (DE) | 1997 | A3 | vector-based evolutionary optimization; tournament winner at large budgets | tuning learners for SE text mining ("easy over hard") [31] |
+| 14 | SPEA2 | 2001 | A4 | strength-based multi-objective optimization, external archive | multi-objective mutation testing of feature models [41] |
+| 15 | NSGA-II | 2002 | A4 | non-dominated sorting with crowding distance; widely recommended, needs many evals | many-objective software remodularization [40]; feature-model testing [41] |
+| 16 | IBEA | 2004 | A4 | indicator-based multi-objective optimization | software product-line configuration with user preferences (Sayyad et al., ICSE 2013 [48]) |
+| 17 | SMS-EMOA | 2007 | A4 | hypervolume-contribution selection | Pareto-based feature selection for defect prediction [44] |
+| 18 | MOEA/D | 2007 | A4 | decomposes MOO into scalar subproblems | compared on software remodularization [40] |
+| 19 | Gaussian Process Models (GPM) | 2010s | A5 | probabilistic surrogates for expensive functions | Bayesian compiler autotuning [35]; DBMS knob tuning (OtterTune) [47] |
+| 20 | SMAC / SMBO | 2011 | A5 | sequential surrogate-based optimization; random-forest surrogate handles categorical spaces | software configuration tuning [3][33] |
+| 21 | TPE | 2011 | A5 | Bayesian optimization via density estimation of good vs ordinary configs | efficient compiler autotuning (BOCA) [35] |
+| 22 | FLASH | 2017 | A5 | CART-based SMBO for SE configuration | finding faster software configurations [7] |
+| 23 | SWAY | 2016 | A7 | recursive median-distance bisection down to a few representatives | "sampling" as baseline SBSE optimizer [36]; surrogate-accuracy study [37] |
+| 24 | DODGE | 2019 | A7 | epsilon-pruning: discard configs falling in same epsilon-bin | tuning defect prediction and text mining pipelines [22] |
+| 25 | LINE (kpp) | 2026 | A7 | centroid sampling (k-means++ style) from budget | data-light SE optimization [33][1] |
+| 26 | EZR | 2026 | A7 | distance-based proximity active learning; tournament winner at tight budgets | explainable minimal-data optimization [1][33] |
 
 ## Selected references (from arXiv:2607.11705 bibliography)
 
@@ -88,6 +88,15 @@ dimensionality).
 - [43] N. Beume, B. Naujoks, and M. Emmerich, "Sms-emoa: Multiobjective selection based on dominated hypervolume," *EJOR*, 181(3):1653–1669, 2007.
 - [45] Q. Zhang and H. Li, "Moea/d: A multiobjective evolutionary algorithm based on decomposition," *IEEE Trans. Evol. Comput.*, 11(6):712–731, 2007.
 - [74] J. R. Koza, "Genetic programming as a means for programming computers by natural selection," *Statistics and Computing*, 4:87–112, 1994.
+- [37] P. Chen, J. Gong, and T. Chen, "Accuracy can lie: On the impact of surrogate model in configuration tuning," *IEEE TSE*, 51(2):548–580, 2025.
+- [40] W. Mkaouer et al., "Many-objective software remodularization using nsga-iii," *ACM TOSEM*, 24(3):1–45, 2015.
+- [41] R. A. Matnei Filho and S. R. Vergilio, "A multi-objective test data generation approach for mutation testing of feature models," *J. Softw. Eng. Res. Dev.*, 4(1):4, 2016.
+- [44] C. Ni, X. Chen, F. Wu, Y. Shen, and Q. Gu, "An empirical study on pareto based multi-objective feature selection for software defect prediction," *J. Syst. Softw.*, 152:215–238, 2019.
+- [47] D. Van Aken, A. Pavlo, G. J. Gordon, and B. Zhang, "Automatic database management system tuning through large-scale machine learning," *SIGMOD*, 2017.
+- [48] A. S. Sayyad, T. Menzies, and H. Ammar, "On the value of user preferences in search-based software engineering: A case study in software product lines," *ICSE*, 2013.
+- P. McMinn and M. Holcombe, early ACO for state-based test sequence generation, 2003 (first ACO-in-testing per later surveys).
+- H. Suri and S. Singhal, "Literature survey of ant colony optimization in software testing," *CSI* 2012 (21 ACO-in-testing studies).
+- G. Gay, T. Menzies, M. Jalali, et al., "Finding robust solutions in requirements models," *Automated Software Engineering*, 17:439–468, 2010 (MaxWalkSat on NASA requirements models).
 - Non-tournament classics: M. Dorigo, *Optimization, Learning and Natural Algorithms*, PhD thesis, 1992; H. Kautz and B. Selman, "Pushing the envelope: planning, propositional logic, and stochastic search," *AAAI*, 1996; E. Zitzler and S. Künzli, "Indicator-based selection in multiobjective search," *PPSN*, 2004; C. E. Rasmussen and C. K. I. Williams, *Gaussian Processes for Machine Learning*, MIT Press, 2006.
 
 ## Coverage check
