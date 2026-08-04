@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+for f in $1/LICENSE.md $(find $1/docs -name '*.md'); do
+  basename $f
+  sed -n '1,/^$/p' "$1/README.md" > _tmp
+  sed '1,/^$/d' $f >> _tmp
+  mv _tmp $f
+done
+
