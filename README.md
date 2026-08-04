@@ -18,23 +18,23 @@ Mondays 4:30–7:15 PM, 2201 Engineering Building 3.
 
 <div align=center>
 
-| 📅 Date | 🎓 Lecture | 🛠️ Submission <br>(due start of class) | 📝 Review |
-|:-------------:|:----------:|:---------------------------:|:---------:|
-| Aug 17 | | | |
-| Aug 24 | | | |
-| Aug 31 | | | |
-| 🟩 ${\color{green}\textsf{Sep 07 — Labor Day, no class}}$ | | | |
-| Sep 14 | | | |
-| Sep 21 | | | |
-| Sep 28 | | | |
-| Oct 05 | | | |
-| Oct 12 | 🟥 ${\color{#ff9999}\textsf{Mid-term exam}}$ | | |
-| 🟩 ${\color{green}\textsf{Oct 19 — Fall break, no class}}$ | | | |
-| Oct 26 | | | |
-| Nov 02 | | | |
-| Nov 09 | | | |
-| Nov 16 | | | |
-| Nov 23 | | | |
-| Nov 30 | | | |
-| 🟥 ${\color{#ff9999}\textsf{Dec 09 — Final exam, 3:30–6 PM}}$ | | | |
+| 📅 Date | 🎓 Lecture | 🛠️ Submission <br>(due start of class) | 🎤 Talks <br>(20 min each, ≤3/night) | 📝 Review |
+|:-------------:|:----------:|:---------------------------:|:---------:|:---------:|
+| Aug 17 | | | | |
+| Aug 24 | | | | |
+| Aug 31 | | | | |
+| 🟩 ${\color{green}\textsf{Sep 07 — Labor Day, no class}}$ | | | | |
+| Sep 14 | | | ugrad tool ×1 · grad tool ×1 | |
+| Sep 21 | | | ugrad tool ×1 · grad tool ×1 | |
+| Sep 28 | | | ugrad tool ×1 · grad tool ×1 | |
+| Oct 05 | | | ugrad tool ×1 · grad tool ×1 | |
+| Oct 12 | 🟥 ${\color{#ff9999}\textsf{Mid-term exam}}$ | | no talks | |
+| 🟩 ${\color{green}\textsf{Oct 19 — Fall break, no class}}$ | | | | |
+| Oct 26 | | | ugrad tool ×1 · grad tool ×1 | |
+| Nov 02 | | | ugrad tool ×1 · grad tool ×1 | |
+| Nov 09 | | | ugrad tool ×1 · grad tool ×1 · grad task ×1 | |
+| Nov 16 | | | ugrad tool ×1 · grad tool ×1 · grad task ×1 | |
+| Nov 23 | | | grad task ×3 | |
+| Nov 30 | | | grad task ×3 | |
+| 🟥 ${\color{#ff9999}\textsf{Dec 09 — Final exam, 3:30–6 PM}}$ | | | | |
 </div>
