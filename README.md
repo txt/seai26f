@@ -15,6 +15,7 @@
 <img src="https://raw.githubusercontent.com/txt/seai26f/refs/heads/main/etc/img/seai26f.png">
 
 Mondays 4:30–7:15 PM, 2201 Engineering Building 3.
+See [policies](docs/lect/policies.md) for grading. Every lecture night (except mid-term) has an in-class test, 1 mark each.
 
 <div align=center>
 
@@ -29,12 +30,12 @@ Mondays 4:30–7:15 PM, 2201 Engineering Building 3.
 | Sep 28 | | | utoolC · gtoolC | |
 | Oct 05 | | | utoolD · gtoolD | |
 | Oct 12 | 🟥 ${\color{#ff9999}\textsf{Mid-term exam}}$ | | no talks | |
-| 🟩 ${\color{green}\textsf{Oct 19 — Fall break, no class}}$ | | | | |
+| 🟩 ${\color{green}\textsf{Oct 19 — Fall break, no class}}$ | | **Grad project: initial deliverable** (submit online) | | |
 | Oct 26 | | | utoolE · gtoolE | |
 | Nov 02 | | | utoolF · gtoolF | |
 | Nov 09 | | | utoolG · gtoolG · gtaskA | |
 | Nov 16 | | | utoolH · gtoolH · gtaskB | |
 | Nov 23 | | | gtaskC–E | |
-| Nov 30 | | | gtaskF–H | |
+| Nov 30 | | **Grad project: final deliverable** | gtaskF–H | |
 | 🟥 ${\color{#ff9999}\textsf{Dec 09 — Final exam, 3:30–6 PM}}$ | | | | |
 </div>
