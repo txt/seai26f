@@ -25,7 +25,7 @@
 |Where  | 02201 Engineering Building 3 |
 |Discord server| [https://discord.gg/uQgTnGsfR](https://discord.gg/uQgTnGsfR) |
 |Who    | Lecturer: [Prof Tim Menzies](http://timm.fyi), <timm@ieee.org> |
-|Office hours | TBD — announced on Discord in week one |
+|Office hours | By appointment (office: 3304 Engineering Building 2) |
 |Course website | [https://github.com/txt/seai26f](https://github.com/txt/seai26f) |
 |Credit hours | 3 |
 |Textbook | None |
@@ -54,13 +54,14 @@ with appropriate notification to students.
 
 Upon completion of this course, students will be able to:
 
-1. Apply core software engineering practices (requirements, testing, build,
-   maintenance, review) to systems containing AI components.
-2. Select, evaluate, and present tools for engineering AI-based systems.
-3. Design and execute an engineering task using AI tooling, and communicate
-   the results in a technical talk.
-4. (CSC 591) Plan and deliver a substantial project, in stages, with
-   intermediate and final deliverables.
+1. Achieve a high level of expertise in SE and AI: mastery of the knowledge in
+   those fields and the ability to apply this knowledge and graduate school
+   experiences to critical research problems.
+2. Apply sound development methods/tools to problems in SE and describe the
+   methods/tools effectively.
+3. (CSC 591) Communicate their work clearly and professionally in both written
+   and oral forms appropriate to SE.
+4. (CSC 591) Conduct research as part of a team project.
 
 ## Student Performance Assessment
 
