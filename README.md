@@ -15,7 +15,7 @@
 <img src="https://raw.githubusercontent.com/txt/seai26f/refs/heads/main/etc/img/seai26f.png">
 
 Mondays 4:30–7:15 PM, 2201 Engineering Building 3.
-See [policies](docs/lect/policies.md) for grading. Every lecture night (except mid-term) has an in-class test, 1 mark each.
+See [policies](docs/lect/policies.md) for grading, [tools](docs/lect/tools.md) for the tool-talk menu, and the [talk signup sheet](https://docs.google.com/spreadsheets/d/1EsVadqssyJXaQPFjTVEfOs3Uv8DOQ0WyNlgTMcsoeBo/edit). Every lecture night (except mid-term) has an in-class test, 1 mark each.
 
 <div align=center>
 
