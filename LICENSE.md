@@ -7,7 +7,7 @@
       src="https://img.shields.io/badge/Teams-%23ffd700?style=flat-square&logo=users&logoColor=white" /></a>
   <a href="#"><img 
       src="https://img.shields.io/badge/Moodle-%23dc143c?style=flat-square&logo=moodle&logoColor=white" /></a>
-  <a href="#"><img 
+  <a href="https://discord.gg/uQgTnGsfR"><img 
       src="https://img.shields.io/badge/Chat-%23008080?style=flat-square&logo=discord&logoColor=white" /></a>
   <a href="https://github.com/txt/seai26f/blob/main/LICENSE.md"><img 
       src="https://img.shields.io/badge/©%20timm%202026-%234b4b4b?style=flat-square&logoColor=white" /></a></p>
@@ -30,7 +30,7 @@ credit. Full text: https://creativecommons.org/licenses/by/4.0/legalcode
 
 All source code in this repository is licensed under the MIT License:
 
-Copyright (c) 2026 textual stuff
+Copyright (c) 2026 Tim Menzies
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

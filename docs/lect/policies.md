@@ -7,7 +7,7 @@
       src="https://img.shields.io/badge/Teams-%23ffd700?style=flat-square&logo=users&logoColor=white" /></a>
   <a href="#"><img 
       src="https://img.shields.io/badge/Moodle-%23dc143c?style=flat-square&logo=moodle&logoColor=white" /></a>
-  <a href="#"><img 
+  <a href="https://discord.gg/uQgTnGsfR"><img 
       src="https://img.shields.io/badge/Chat-%23008080?style=flat-square&logo=discord&logoColor=white" /></a>
   <a href="https://github.com/txt/seai26f/blob/main/LICENSE.md"><img 
       src="https://img.shields.io/badge/©%20timm%202026-%234b4b4b?style=flat-square&logoColor=white" /></a></p>
@@ -22,7 +22,7 @@
 | When |Mon 4:30PM - 7:15PM    
 |Where | 02201 Engineering Building 3 |
 |Consult hours| Tuesday 2:45 to 4:45: [Booking required](https://calendar.app.google/2bPJr5kecX4QYSm56)   |
-|Disord server| [https://discord.gg/XAQZHEPt](https://discord.gg/XAQZHEPt) |
+|Disord server| [https://discord.gg/uQgTnGsfR](https://discord.gg/uQgTnGsfR) |
 |Who | Lecturer:  [Prof Tim Menzies](http://timm.fyi),  <timm@ieee.org>, "Tim Menzes" at our discord server.   <br> Tutor: Mr Srinath Srinivasan,  <ssrini27@ncsu.edu>, "Srinath" at our discord|
 
 
@@ -30,7 +30,7 @@
 
 
 - For private queries, use the above  emails
-- But or most queries, use our [discord](https://discord.gg/XAQZHEPt)
+- But or most queries, use our [discord](https://discord.gg/uQgTnGsfR)
 - IMPORTANT: If you receive a subject-related message outside of   office hours (e.g. 2am Saturday morning), do
   not feel required to answer this till the next working day (e.g. Monday morning). Exception: just before deadlines.
 
@@ -39,7 +39,7 @@
 
 
 - It is each student's responsibility to join the class Discord group "gurus".
-  - Join [here](https://discord.gg/XAQZHEPt)
+  - Join [here](https://discord.gg/uQgTnGsfR)
 - Use the Discord server
 - All class communication from staff to students will be via this Discord group.
 - Students are strongly encouraged to contribute their questions and answers to that shared resource. 

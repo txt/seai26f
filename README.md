@@ -7,7 +7,7 @@
       src="https://img.shields.io/badge/Teams-%23ffd700?style=flat-square&logo=users&logoColor=white" /></a>
   <a href="#"><img 
       src="https://img.shields.io/badge/Moodle-%23dc143c?style=flat-square&logo=moodle&logoColor=white" /></a>
-  <a href="#"><img 
+  <a href="https://discord.gg/uQgTnGsfR"><img 
       src="https://img.shields.io/badge/Chat-%23008080?style=flat-square&logo=discord&logoColor=white" /></a>
   <a href="https://github.com/txt/seai26f/blob/main/LICENSE.md"><img 
       src="https://img.shields.io/badge/©%20timm%202026-%234b4b4b?style=flat-square&logoColor=white" /></a></p>
