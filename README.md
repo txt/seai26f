@@ -28,7 +28,7 @@ Mondays 4:30–7:15 PM, 2201 Engineering Building 3.
 | Sep 21 | | | |
 | Sep 28 | | | |
 | Oct 05 | | | |
-| Oct 12 | | | |
+| Oct 12 | 🟥 ${\color{#ff9999}\textsf{Mid-term exam}}$ | | |
 | 🟩 ${\color{green}\textsf{Oct 19 — Fall break, no class}}$ | | | |
 | Oct 26 | | | |
 | Nov 02 | | | |
