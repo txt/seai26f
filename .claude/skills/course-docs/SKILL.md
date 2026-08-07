@@ -33,10 +33,13 @@ description: Use when editing any markdown in this course repo (README, docs/lec
 - Grading and NCSU-required sections: `docs/lect/policies.md`. TWO
   cohorts, each totals 100, one 4-column table (Component | 491 | 591 |
   Notes, plain numbers — no ditto marks): CSC 491 (quizzes 13, tool
-  talk 15, mid-term 36, final 36) and CSC 591 (quizzes 7 — grads stop
-  quizzing after the mid-term, tool talk 15, task talk 15, project
-  5+22, mid-term 36, NO final). NO homeworks for anyone. ALL exams
-  weigh the same (36), across exams and cohorts. Homeworks are
+  talk 15, ugrad project 24, mid-term 24, final 24) and CSC 591
+  (quizzes 7 — grads stop quizzing after the mid-term, tool talk 15,
+  task talk 15, project 5+34, mid-term 24, NO final). NO homeworks.
+  ALL exams weigh the same (24). Ugrad project = shrinking-code demos
+  (docs/submit/uproj.md): Buse Fig 6 analytics or Hoffman XAI triggers
+  on MOOT data, git-tagged steps, 5-min video, %-new-code histogram
+  that must fall, due last class, no intermediary. Homeworks are
   Split structure: ugrads = quizzes + tool talk + exams; grads =
   quizzes (pre-mid-term) + two talks + mid-term + a six-week project
   (Oct 26–Nov 30, runnable-slice initial deliverable Nov 9). Keep both
