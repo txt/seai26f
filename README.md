@@ -15,7 +15,7 @@
 <img src="https://raw.githubusercontent.com/txt/seai26f/refs/heads/main/etc/img/seai26f.png">
 
 Mondays 4:30–7:15 PM, 2201 Engineering Building 3.
-See [policies](docs/lect/policies.md) for grading, [tools](docs/lect/tools.md) for the tool-talk menu, and the [talk signup sheet](https://docs.google.com/spreadsheets/d/1EsVadqssyJXaQPFjTVEfOs3Uv8DOQ0WyNlgTMcsoeBo/edit). Every lecture night (except mid-term) has a 1-mark in-class quiz (grads: only until the mid-term). Homeworks: ugrads five, grads three then a six-week project. Talk letters are group IDs within each cohort (24+24 students, groups of three, 8 groups per cohort); talks are 30 minutes. Night shape: about one hour of lecture, then up to 90 minutes of student talks.
+See [policies](docs/lect/policies.md) for grading, [tools](docs/lect/tools.md) for the tool-talk menu, and the [talk signup sheet](https://docs.google.com/spreadsheets/d/1EsVadqssyJXaQPFjTVEfOs3Uv8DOQ0WyNlgTMcsoeBo/edit). Every lecture night (except mid-term) has a 1-mark in-class quiz (grads: only until the mid-term). Homeworks: grads only — three, then a six-week project. Talk letters are group IDs within each cohort (24+24 students, groups of three, 8 groups per cohort); talks are 30 minutes. Night shape: about one hour of lecture, then up to 90 minutes of student talks.
 
 <div align=center>
 
