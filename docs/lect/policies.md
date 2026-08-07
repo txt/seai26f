@@ -79,7 +79,7 @@ CSC 591 students will additionally be able to:
 
 Weekly in-class tests reward attendance. Talks are delivered in person
 (see the schedule on the course [README](https://github.com/txt/seai26f/blob/main/README.md)).
-The final exam mark is weighted 1.5 times the mid-term mark.
+There is no final exam.
 
 **The split structure.** Homeworks run on a two-week cycle: submit
 something one week, review another group's submission the next.
@@ -102,11 +102,10 @@ costs more than an honest low score.
 | Weekly in-class tests | 13 | " | 1 mark each, one per lecture week, none on mid-term night |
 | Tool talk | 7 | " | in-class group presentation |
 | Task talk | — | 7 | grads only |
-| Homeworks | 40 | 18 | 491: five cycles, 8 marks each (6 submit + 2 review). 591: three cycles, 6 marks each (4 + 2) |
+| Homeworks | 50 | 18 | 491: five cycles, 10 marks each (8 submit + 2 review). 591: three cycles, 6 marks each (4 + 2) |
 | Project, initial deliverable | — | 8 | Mon Nov 16, three weeks in: a runnable slice — something must work — plus the pre-registered eval: claim (metric, threshold, baseline) and instrument demonstrated on sample or synthetic data |
 | Project, final deliverable | — | 17 | last class, Mon Nov 30: results against the pre-registered claim; real data earns the top of the range; a failed claim with a recorded decision (persevere, re-plan, descope) loses nothing — an unrun or hidden eval does |
-| Mid-term exam | 16 | 12 | |
-| Final exam | 24 | 18 | 1.5 × the mid-term weight |
+| Mid-term exam | 30 | " | |
 | **Total** | **100** | **100** | |
 
 **Attendance and participation:** Classes are in person. The weekly in-class

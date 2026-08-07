@@ -37,5 +37,4 @@ See [policies](docs/lect/policies.md) for grading, [tools](docs/lect/tools.md) f
 | Nov 16 | | hw5 (ugrad) · **grad project: initial deliverable** | utoolH · gtoolH · gtaskB | |
 | Nov 23 | | hw5 review (ugrad) | gtaskC–E | |
 | Nov 30 | | **Grad project: final deliverable** | gtaskF–H | |
-| 🟥 ${\color{#ff9999}\textsf{Dec 09 — Final exam, 3:30–6 PM}}$ | | | | |
 </div>
