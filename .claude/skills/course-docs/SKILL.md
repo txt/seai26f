@@ -27,16 +27,17 @@ description: Use when editing any markdown in this course repo (README, docs/lec
   are 30 min; tool talks Sep 14–Nov 9 (2–3/night); grad task talks
   backloaded into the last three nights (3+3+2). Project deadlines live
   in the grad submit column. Night shape: ~1 hr lecture + up to 90 min
-  student talks.
+  student talks. Every lecture night carries a 1-mark quiz (marked in
+  the Lecture column; none on mid-term night) — 13 total.
 - Grading and NCSU-required sections: `docs/lect/policies.md`. TWO
   cohorts, each totals 100, one 4-column table (Component | 491 | 591 |
-  Notes, ditto marks for shared rows): CSC 491 (tests 13, tool talk 7,
-  5 homeworks ×9 = 45, mid-term 14, final 21) and CSC 591 (tests 13,
+  Notes, ditto marks for shared rows): CSC 491 (quizzes 13, tool talk 7,
+  5 homeworks ×9 = 45, mid-term 14, final 21) and CSC 591 (quizzes 13,
   talks 7+7, 3 homeworks ×6 = 18, project 6+14, mid-term 14, final 21).
   Final = 1.5 × mid-term; exams identical across cohorts. Homeworks are
   group submissions, NO peer review. Split structure: ugrads five
   homeworks all semester; grads three then a six-week project
-  (Oct 26–Nov 30, runnable-slice initial deliverable Nov 16). Keep both
+  (Oct 26–Nov 30, runnable-slice initial deliverable Nov 9). Keep both
   columns summing to 100 when anything moves.
 - Tool-talk menu: `docs/lect/tools.md` (26 optimizers with refs);
   signup lives in the linked Google Sheet.
