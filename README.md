@@ -15,27 +15,27 @@
 <img src="https://raw.githubusercontent.com/txt/seai26f/refs/heads/main/etc/img/seai26f.png">
 
 Mondays 4:30–7:15 PM, 2201 Engineering Building 3.
-See [policies](docs/lect/policies.md) for grading, [tools](docs/lect/tools.md) for the tool-talk menu, and the [talk signup sheet](https://docs.google.com/spreadsheets/d/1EsVadqssyJXaQPFjTVEfOs3Uv8DOQ0WyNlgTMcsoeBo/edit). Every lecture night (except mid-term) has an in-class test, 1 mark each. Homeworks: ugrads five, grads three then a six-week project.
+See [policies](docs/lect/policies.md) for grading, [tools](docs/lect/tools.md) for the tool-talk menu, and the [talk signup sheet](https://docs.google.com/spreadsheets/d/1EsVadqssyJXaQPFjTVEfOs3Uv8DOQ0WyNlgTMcsoeBo/edit). Every lecture night (except mid-term) has an in-class test, 1 mark each. Homeworks: ugrads five, grads three then a six-week project. Talk letters are group IDs within each cohort (24+24 students, groups of three, 8 groups per cohort); talks are 30 minutes.
 
 <div align=center>
 
-| 📅 Date | 🎓 Lecture | 🛠️ Submission <br>(due start of class) | 🎤 Talks: ugrad groups A–H, grad groups A–H <br>(20 min each, ≤3/night) | 📝 Review |
+| 📅 Date | 🎓 Lecture | 🛠️ Submission <br>(due start of class) | 🎤 ugrad talks <br>(30 min each) | 🎤 grad talks <br>(30 min each) |
 |:-------------:|:----------:|:---------------------------:|:---------:|:---------:|
 | Aug 17 | | | | |
 | Aug 24 | | | | |
 | Aug 31 | | hw1 (all) | | |
 | 🟩 ${\color{green}\textsf{Sep 07 — Labor Day, no class}}$ | | | | |
-| Sep 14 | | | utoolA · gtoolA | |
-| Sep 21 | | hw2 (all) | utoolB · gtoolB | |
-| Sep 28 | | | utoolC · gtoolC | |
-| Oct 05 | | hw3 (all) | utoolD · gtoolD | |
-| Oct 12 | 🟥 ${\color{#ff9999}\textsf{Mid-term exam}}$ | | no talks | |
+| Sep 14 | | | toolA | toolA |
+| Sep 21 | | hw2 (all) | toolB | toolB |
+| Sep 28 | | | toolC | toolC |
+| Oct 05 | | hw3 (all) | toolD | toolD |
+| Oct 12 | 🟥 ${\color{#ff9999}\textsf{Mid-term exam}}$ | | no talks | no talks |
 | 🟩 ${\color{green}\textsf{Oct 19 — Fall break, no class}}$ | | | | |
-| Oct 26 | | **grad project starts** | utoolE · gtoolE | |
-| Nov 02 | | hw4 (ugrad) | utoolF · gtoolF | |
-| Nov 09 | | | utoolG · gtoolG · gtaskA | |
-| Nov 16 | | hw5 (ugrad) · **grad project: initial deliverable** | utoolH · gtoolH · gtaskB | |
-| Nov 23 | | | gtaskC–E | |
-| Nov 30 | | **Grad project: final deliverable** | gtaskF–H | |
+| Oct 26 | | | toolE | toolE · **project starts** |
+| Nov 02 | | hw4 (ugrad) | toolF · toolG | toolF |
+| Nov 09 | | | toolH | toolG · toolH |
+| Nov 16 | | hw5 (ugrad) | | taskA–C · **project: initial deliverable** |
+| Nov 23 | | | | taskD–F |
+| Nov 30 | | | | taskG–H · **project: final deliverable** |
 | 🟥 ${\color{#ff9999}\textsf{Dec 09 — Final exam, 3:30–6 PM}}$ | | | | |
 </div>
