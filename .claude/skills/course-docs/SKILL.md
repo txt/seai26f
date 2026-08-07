@@ -25,13 +25,13 @@ description: Use when editing any markdown in this course repo (README, docs/lec
 - Grading and NCSU-required sections: `docs/lect/policies.md`. TWO
   cohorts, each totals 100, one 4-column table (Component | 491 | 591 |
   Notes, ditto marks for shared rows): CSC 491 (tests 13, tool talk 7,
-  5 homeworks ×10 = 50, mid-term 30) and CSC 591 (tests 13, talks 7+7,
-  3 homeworks ×6 = 18, project 8+17, mid-term 30). NO final exam.
-  Split structure: homeworks are
-  submit-one-week/review-next cycles; ugrads five cycles all semester,
-  grads three cycles then a six-week project (Oct 26–Nov 30, initial
-  runnable-slice deliverable Nov 16). Keep both tables summing to 100
-  when anything moves.
+  5 homeworks ×9 = 45, mid-term 14, final 21) and CSC 591 (tests 13,
+  talks 7+7, 3 homeworks ×6 = 18, project 6+14, mid-term 14, final 21).
+  Final = 1.5 × mid-term; exams identical across cohorts. Homeworks are
+  group submissions, NO peer review. Split structure: ugrads five
+  homeworks all semester; grads three then a six-week project
+  (Oct 26–Nov 30, runnable-slice initial deliverable Nov 16). Keep both
+  columns summing to 100 when anything moves.
 - Tool-talk menu: `docs/lect/tools.md` (26 optimizers with refs);
   signup lives in the linked Google Sheet.
 
