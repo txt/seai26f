@@ -15,7 +15,7 @@
 <img src="https://raw.githubusercontent.com/txt/seai26f/refs/heads/main/etc/img/seai26f.png">
 
 Mondays 4:30–7:15 PM, 2201 Engineering Building 3.
-See [policies](docs/lect/policies.md) for grading, [tools](docs/lect/tools.md) for the tool-talk menu, and the [talk signup sheet](https://docs.google.com/spreadsheets/d/1EsVadqssyJXaQPFjTVEfOs3Uv8DOQ0WyNlgTMcsoeBo/edit). Every lecture night (except mid-term) has an in-class test, 1 mark each. Homeworks: submit one week, review another group the next; ugrads five cycles, grads three then a six-week project.
+See [policies](docs/lect/policies.md) for grading, [tools](docs/lect/tools.md) for the tool-talk menu, and the [talk signup sheet](https://docs.google.com/spreadsheets/d/1EsVadqssyJXaQPFjTVEfOs3Uv8DOQ0WyNlgTMcsoeBo/edit). Every lecture night (except mid-term) has an in-class test, 1 mark each. Homeworks: ugrads five, grads three then a six-week project.
 
 <div align=center>
 
@@ -25,16 +25,17 @@ See [policies](docs/lect/policies.md) for grading, [tools](docs/lect/tools.md) f
 | Aug 24 | | | | |
 | Aug 31 | | hw1 (all) | | |
 | 🟩 ${\color{green}\textsf{Sep 07 — Labor Day, no class}}$ | | | | |
-| Sep 14 | | hw1 review (all) | utoolA · gtoolA | |
+| Sep 14 | | | utoolA · gtoolA | |
 | Sep 21 | | hw2 (all) | utoolB · gtoolB | |
-| Sep 28 | | hw2 review (all) | utoolC · gtoolC | |
+| Sep 28 | | | utoolC · gtoolC | |
 | Oct 05 | | hw3 (all) | utoolD · gtoolD | |
 | Oct 12 | 🟥 ${\color{#ff9999}\textsf{Mid-term exam}}$ | | no talks | |
 | 🟩 ${\color{green}\textsf{Oct 19 — Fall break, no class}}$ | | | | |
-| Oct 26 | | hw3 review (all) · **grad project starts** | utoolE · gtoolE | |
+| Oct 26 | | **grad project starts** | utoolE · gtoolE | |
 | Nov 02 | | hw4 (ugrad) | utoolF · gtoolF | |
-| Nov 09 | | hw4 review (ugrad) | utoolG · gtoolG · gtaskA | |
+| Nov 09 | | | utoolG · gtoolG · gtaskA | |
 | Nov 16 | | hw5 (ugrad) · **grad project: initial deliverable** | utoolH · gtoolH · gtaskB | |
-| Nov 23 | | hw5 review (ugrad) | gtaskC–E | |
+| Nov 23 | | | gtaskC–E | |
 | Nov 30 | | **Grad project: final deliverable** | gtaskF–H | |
+| 🟥 ${\color{#ff9999}\textsf{Dec 09 — Final exam, 3:30–6 PM}}$ | | | | |
 </div>
