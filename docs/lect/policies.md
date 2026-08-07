@@ -79,7 +79,9 @@ CSC 591 students will additionally be able to:
 
 Weekly in-class quizzes reward attendance. Talks are delivered in person
 (see the schedule on the course [README](https://github.com/txt/seai26f/blob/main/README.md)).
-The final exam mark is weighted 1.5 times the mid-term mark.
+Undergraduates sit a final exam, weighted 1.5 times the mid-term;
+graduate students have no final exam — their project carries that weight.
+Graduate quizzes stop after the mid-term.
 
 **The split structure.** Homeworks are group submissions, handed in at
 the start of class (no peer review). Undergraduates do homeworks all
@@ -102,14 +104,14 @@ costs more than an honest low score.
 
 | Component | CSC 491 | CSC 591 | Notes |
 |-----------|--------:|--------:|-------|
-| Weekly in-class quizzes | 13 | " | 1 mark each, one per lecture week, none on mid-term night |
-| Tool talk | 7 | " | in-class group presentation |
+| Weekly in-class quizzes | 13 | 7 | 1 mark each, one per lecture night, none on mid-term night; grads stop after the mid-term (7 quiz nights before it) |
+| Tool talk | 7 | 7 | in-class group presentation |
 | Task talk | — | 7 | grads only |
 | Homeworks | 45 | 18 | 491: five homeworks, 9 marks each. 591: three homeworks, 6 marks each |
-| Project, initial deliverable | — | 6 | Mon Nov 9, two weeks in: a runnable slice — something must work — plus the pre-registered eval: claim (metric, threshold, baseline) and instrument demonstrated on sample or synthetic data |
-| Project, final deliverable | — | 14 | last class, Mon Nov 30: results against the pre-registered claim; real data earns the top of the range; a failed claim with a recorded decision (persevere, re-plan, descope) loses nothing — an unrun or hidden eval does |
-| Mid-term exam | 14 | " | |
-| Final exam | 21 | " | 1.5 × the mid-term weight |
+| Project, initial deliverable | — | 12 | Mon Nov 9, two weeks in: a runnable slice — something must work — plus the pre-registered eval: claim (metric, threshold, baseline) and instrument demonstrated on sample or synthetic data |
+| Project, final deliverable | — | 35 | last class, Mon Nov 30: results against the pre-registered claim; real data earns the top of the range; a failed claim with a recorded decision (persevere, re-plan, descope) loses nothing — an unrun or hidden eval does |
+| Mid-term exam | 14 | 14 | |
+| Final exam | 21 | — | 491 only, 1.5 × the mid-term weight |
 | **Total** | **100** | **100** | |
 
 **Attendance and participation:** Classes are in person. The weekly in-class
