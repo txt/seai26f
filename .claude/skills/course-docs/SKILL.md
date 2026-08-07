@@ -21,8 +21,9 @@ description: Use when editing any markdown in this course repo (README, docs/lec
 ## Single sources of truth
 
 - Dates, talk slots, deliverable dates: README schedule table.
-  Mondays; holidays 🟩 green, exams 🟥 light red. Six columns: Date,
-  Lecture, ugrad submit, grad submit, ugrad talks, grad talks. Letters
+  Mondays; holidays 🟩 green, exams 🟥 light red. Five columns: Date,
+  Lecture, grad submit, ugrad talks, grad talks. No homework rows and
+  no quiz markers in the table (both live in policies prose). Letters
   are group IDs within a cohort (toolA, taskA — no u/g prefix). Talks
   are 30 min; tool talks Sep 14–Nov 9 (2–3/night); grad task talks
   backloaded into the last three nights (3+3+2). Project deadlines live
