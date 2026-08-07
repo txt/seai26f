@@ -35,7 +35,7 @@ description: Use when editing any markdown in this course repo (README, docs/lec
   Notes, plain numbers — no ditto marks): CSC 491 (quizzes 13, tool
   talk 15, mid-term 36, final 36) and CSC 591 (quizzes 7 — grads stop
   quizzing after the mid-term, tool talk 15, task talk 15, project
-  9+18, mid-term 36, NO final). NO homeworks for anyone. ALL exams
+  5+22, mid-term 36, NO final). NO homeworks for anyone. ALL exams
   weigh the same (36), across exams and cohorts. Homeworks are
   Split structure: ugrads = quizzes + tool talk + exams; grads =
   quizzes (pre-mid-term) + two talks + mid-term + a six-week project
