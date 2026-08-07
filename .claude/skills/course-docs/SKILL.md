@@ -21,10 +21,13 @@ description: Use when editing any markdown in this course repo (README, docs/lec
 ## Single sources of truth
 
 - Dates, talk slots, deliverable dates: README schedule table.
-  Mondays; holidays 🟩 green, exams 🟥 light red. Two talk columns
-  (ugrad | grad); letters are group IDs within a cohort (toolA, taskA —
-  no u/g prefix). Talks are 30 min; tool talks Sep 14–Nov 9 (2–3 per
-  night); grad task talks backloaded into the last three nights (3+3+2).
+  Mondays; holidays 🟩 green, exams 🟥 light red. Six columns: Date,
+  Lecture, ugrad submit, grad submit, ugrad talks, grad talks. Letters
+  are group IDs within a cohort (toolA, taskA — no u/g prefix). Talks
+  are 30 min; tool talks Sep 14–Nov 9 (2–3/night); grad task talks
+  backloaded into the last three nights (3+3+2). Project deadlines live
+  in the grad submit column. Night shape: ~1 hr lecture + up to 90 min
+  student talks.
 - Grading and NCSU-required sections: `docs/lect/policies.md`. TWO
   cohorts, each totals 100, one 4-column table (Component | 491 | 591 |
   Notes, ditto marks for shared rows): CSC 491 (tests 13, tool talk 7,
