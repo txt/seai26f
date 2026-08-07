@@ -83,10 +83,11 @@ Undergraduates sit a final exam, weighted 1.5 times the mid-term;
 graduate students have no final exam — their project carries that weight.
 Graduate quizzes stop after the mid-term.
 
-**The split structure.** Undergraduates are assessed by quizzes, one
-tool talk, and two exams — no homeworks. Graduate students do three
-group homeworks (handed in at the start of class, no peer review), then
-switch to a six-week team project (Oct 26 to Nov 30). The project's
+**The split structure.** There are no homeworks. Undergraduates are
+assessed by quizzes, one tool talk, and two exams. Graduate students are
+assessed by quizzes (until the mid-term), two talks, the mid-term, and a
+six-week team project (Oct 26 to Nov 30) that carries most of their
+grade. The project's
 initial deliverable, two weeks in (Mon Nov 9), must show *something
 working* — a runnable slice plus the pre-registered eval; the final
 deliverable (Nov 30) reports results against that eval. Task talks
@@ -106,9 +107,8 @@ costs more than an honest low score.
 | Weekly in-class quizzes | 13 | 7 | 1 mark each, one per lecture night, none on mid-term night; grads stop after the mid-term (7 quiz nights before it) |
 | Tool talk | 7 | 7 | in-class group presentation |
 | Task talk | — | 7 | grads only |
-| Homeworks | — | 18 | grads only: three homeworks, 6 marks each |
-| Project, initial deliverable | — | 12 | Mon Nov 9, two weeks in: a runnable slice — something must work — plus the pre-registered eval: claim (metric, threshold, baseline) and instrument demonstrated on sample or synthetic data |
-| Project, final deliverable | — | 35 | last class, Mon Nov 30: results against the pre-registered claim; real data earns the top of the range; a failed claim with a recorded decision (persevere, re-plan, descope) loses nothing — an unrun or hidden eval does |
+| Project, initial deliverable | — | 15 | Mon Nov 9, two weeks in: a runnable slice — something must work — plus the pre-registered eval: claim (metric, threshold, baseline) and instrument demonstrated on sample or synthetic data |
+| Project, final deliverable | — | 50 | last class, Mon Nov 30: results against the pre-registered claim; real data earns the top of the range; a failed claim with a recorded decision (persevere, re-plan, descope) loses nothing — an unrun or hidden eval does |
 | Mid-term exam | 32 | 14 | |
 | Final exam | 48 | — | 491 only, 1.5 × the mid-term weight |
 | **Total** | **100** | **100** | |
