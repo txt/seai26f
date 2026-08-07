@@ -77,7 +77,7 @@ CSC 591 students will additionally be able to:
 
 ## Student Performance Assessment
 
-Weekly in-class tests reward attendance. Talks are delivered in person
+Weekly in-class quizzes reward attendance. Talks are delivered in person
 (see the schedule on the course [README](https://github.com/txt/seai26f/blob/main/README.md)).
 The final exam mark is weighted 1.5 times the mid-term mark.
 
@@ -86,7 +86,7 @@ the start of class (no peer review). Undergraduates do homeworks all
 semester (five). Graduate students do the same homeworks until six weeks
 from the end (three), then switch to a six-week team project (Oct 26 to
 Nov 30). The project's
-initial deliverable, three weeks in (Nov 16), must show *something
+initial deliverable, two weeks in (Mon Nov 9), must show *something
 working* — a runnable slice plus the pre-registered eval; the final
 deliverable (Nov 30) reports results against that eval. Task talks
 (30 minutes, one per grad group) are backloaded into the last three
@@ -102,18 +102,18 @@ costs more than an honest low score.
 
 | Component | CSC 491 | CSC 591 | Notes |
 |-----------|--------:|--------:|-------|
-| Weekly in-class tests | 13 | " | 1 mark each, one per lecture week, none on mid-term night |
+| Weekly in-class quizzes | 13 | " | 1 mark each, one per lecture week, none on mid-term night |
 | Tool talk | 7 | " | in-class group presentation |
 | Task talk | — | 7 | grads only |
 | Homeworks | 45 | 18 | 491: five homeworks, 9 marks each. 591: three homeworks, 6 marks each |
-| Project, initial deliverable | — | 6 | Mon Nov 16, three weeks in: a runnable slice — something must work — plus the pre-registered eval: claim (metric, threshold, baseline) and instrument demonstrated on sample or synthetic data |
+| Project, initial deliverable | — | 6 | Mon Nov 9, two weeks in: a runnable slice — something must work — plus the pre-registered eval: claim (metric, threshold, baseline) and instrument demonstrated on sample or synthetic data |
 | Project, final deliverable | — | 14 | last class, Mon Nov 30: results against the pre-registered claim; real data earns the top of the range; a failed claim with a recorded decision (persevere, re-plan, descope) loses nothing — an unrun or hidden eval does |
 | Mid-term exam | 14 | " | |
 | Final exam | 21 | " | 1.5 × the mid-term weight |
 | **Total** | **100** | **100** | |
 
 **Attendance and participation:** Classes are in person. The weekly in-class
-tests can only be taken in class; a missed test scores zero unless the absence
+quizzes can only be taken in class; a missed quiz scores zero unless the absence
 is excused under NCSU REG 02.20.03 (Attendance Regulations), in which case a
 makeup will be arranged. Talks must be delivered in person at the scheduled
 slot.
