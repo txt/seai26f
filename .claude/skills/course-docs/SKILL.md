@@ -23,10 +23,11 @@ description: Use when editing any markdown in this course repo (README, docs/lec
 - Dates, talk slots (utoolA–H, gtoolA–H, gtaskA–H), deliverable dates:
   README schedule table. Mondays; holidays 🟩 green, exams 🟥 light red.
 - Grading and NCSU-required sections: `docs/lect/policies.md`. TWO
-  cohorts, each totals 100: CSC 491 (ugrad: tests 13, tool talk 7,
-  5 homeworks ×8 = 40, mid-term 16, final 24) and CSC 591 (grad:
-  tests 13, talks 7+7, 3 homeworks ×6 = 18, project 8+17, mid-term 12,
-  final 18). Final = 1.5 × mid-term. Split structure: homeworks are
+  cohorts, each totals 100, one 4-column table (Component | 491 | 591 |
+  Notes, ditto marks for shared rows): CSC 491 (tests 13, tool talk 7,
+  5 homeworks ×10 = 50, mid-term 30) and CSC 591 (tests 13, talks 7+7,
+  3 homeworks ×6 = 18, project 8+17, mid-term 30). NO final exam.
+  Split structure: homeworks are
   submit-one-week/review-next cycles; ugrads five cycles all semester,
   grads three cycles then a six-week project (Oct 26–Nov 30, initial
   runnable-slice deliverable Nov 16). Keep both tables summing to 100
