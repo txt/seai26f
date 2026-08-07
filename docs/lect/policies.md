@@ -105,12 +105,12 @@ costs more than an honest low score.
 | Component | CSC 491 | CSC 591 | Notes |
 |-----------|--------:|--------:|-------|
 | Weekly in-class quizzes | 13 | 7 | 1 mark each, one per lecture night, none on mid-term night; grads stop after the mid-term (7 quiz nights before it) |
-| Tool talk | 7 | 7 | in-class group presentation |
+| Tool talk | 12 | 12 | in-class group presentation |
 | Task talk | — | 7 | grads only |
 | Project, initial deliverable | — | 12 | Mon Nov 9, two weeks in: a runnable slice — something must work — plus the pre-registered eval: claim (metric, threshold, baseline) and instrument demonstrated on sample or synthetic data |
-| Project, final deliverable | — | 35 | last class, Mon Nov 30: results against the pre-registered claim; real data earns the top of the range; a failed claim with a recorded decision (persevere, re-plan, descope) loses nothing — an unrun or hidden eval does |
-| Mid-term exam | 32 | 32 | |
-| Final exam | 48 | — | 491 only, 1.5 × the mid-term weight |
+| Project, final deliverable | — | 32 | last class, Mon Nov 30: results against the pre-registered claim; real data earns the top of the range; a failed claim with a recorded decision (persevere, re-plan, descope) loses nothing — an unrun or hidden eval does |
+| Mid-term exam | 30 | 30 | |
+| Final exam | 45 | — | 491 only, 1.5 × the mid-term weight |
 | **Total** | **100** | **100** | |
 
 **Attendance and participation:** Classes are in person. The weekly in-class

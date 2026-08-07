@@ -33,10 +33,10 @@ description: Use when editing any markdown in this course repo (README, docs/lec
 - Grading and NCSU-required sections: `docs/lect/policies.md`. TWO
   cohorts, each totals 100, one 4-column table (Component | 491 | 591 |
   Notes, plain numbers — no ditto marks): CSC 491 (quizzes 13, tool
-  talk 7, mid-term 32, final 48) and CSC 591 (quizzes 7 — grads stop
-  quizzing after the mid-term, talks 7+7, project 12+35, mid-term 32,
-  NO final). NO homeworks for anyone. Ugrad final = 1.5 × mid-term;
-  mid-term is 32 for BOTH cohorts. Homeworks are
+  talk 12, mid-term 30, final 45) and CSC 591 (quizzes 7 — grads stop
+  quizzing after the mid-term, tool talk 12, task talk 7, project
+  12+32, mid-term 30, NO final). NO homeworks for anyone. Ugrad final =
+  1.5 × mid-term; mid-term is 30 for BOTH cohorts. Homeworks are
   Split structure: ugrads = quizzes + tool talk + exams; grads =
   quizzes (pre-mid-term) + two talks + mid-term + a six-week project
   (Oct 26–Nov 30, runnable-slice initial deliverable Nov 9). Keep both
