@@ -34,9 +34,9 @@ description: Use when editing any markdown in this course repo (README, docs/lec
   cohorts, each totals 100, one 4-column table (Component | 491 | 591 |
   Notes, plain numbers — no ditto marks): CSC 491 (quizzes 13, tool
   talk 7, mid-term 32, final 48) and CSC 591 (quizzes 7 — grads stop
-  quizzing after the mid-term, talks 7+7, project 15+50, mid-term 14,
+  quizzing after the mid-term, talks 7+7, project 12+35, mid-term 32,
   NO final). NO homeworks for anyone. Ugrad final = 1.5 × mid-term;
-  mids differ across cohorts. Homeworks are
+  mid-term is 32 for BOTH cohorts. Homeworks are
   Split structure: ugrads = quizzes + tool talk + exams; grads =
   quizzes (pre-mid-term) + two talks + mid-term + a six-week project
   (Oct 26–Nov 30, runnable-slice initial deliverable Nov 9). Keep both
