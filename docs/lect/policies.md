@@ -88,7 +88,10 @@ from the end (three), then switch to a six-week team project (Oct 26 to
 Nov 30). The project's
 initial deliverable, three weeks in (Nov 16), must show *something
 working* — a runnable slice plus the pre-registered eval; the final
-deliverable (Nov 30) reports results against that eval.
+deliverable (Nov 30) reports results against that eval. Task talks
+(30 minutes, one per grad group) are backloaded into the last three
+lecture nights, beside the project deliverables; tool talks (30
+minutes, every group) run Sep 14 to Nov 9, two or three per night.
 
 Talks make measurable claims: where feasible, a tool talk shows the tool
 running against a baseline, not just slides about it. Failures are
