@@ -62,12 +62,22 @@ Upon completion of this course, students will be able to:
 3. (CSC 591) Communicate their work clearly and professionally in both written
    and oral forms appropriate to SE.
 4. (CSC 591) Conduct research as part of a team project.
+5. Work with AI assistants and AI methods critically: state measurable
+   claims (metric, threshold, baseline), verify outputs against evidence,
+   and catch and document errors.
+6. (CSC 591) Pre-register and execute a project evaluation: a claim, a
+   runnable instrument, and honest reporting of what failed.
 
 ## Student Performance Assessment
 
 Weekly in-class tests reward attendance. Talks are delivered in person
 (see the schedule on the course [README](https://github.com/txt/seai26f/blob/main/README.md)).
 The final exam mark is weighted 1.5 times the mid-term mark.
+
+Talks make measurable claims: where feasible, a tool talk shows the tool
+running against a baseline, not just slides about it. Failures are
+findings: an honest negative result, explained, scores; a hidden failure
+costs more than an honest low score.
 
 **CSC 491 (undergraduate), total 100 marks:**
 
@@ -85,8 +95,8 @@ The final exam mark is weighted 1.5 times the mid-term mark.
 | 13 | Weekly in-class tests (1 mark each, one per lecture week, none on mid-term night) |
 |  7 | Tool talk (in-class presentation) |
 |  7 | Task talk (in-class presentation) |
-|  5 | Project, initial deliverable (due week 10: Oct 19–23, submit online — fall break week) |
-| 18 | Project, final deliverable (due last class, Mon Nov 30) |
+|  5 | Project, initial deliverable (due week 10: Oct 19–23, submit online — fall break week): proposal plus a pre-registered eval — the claim (metric, threshold, baseline) and a runnable instrument demonstrated on sample or synthetic data |
+| 18 | Project, final deliverable (due last class, Mon Nov 30): results against the pre-registered claim; real data earns the top of the range; a failed claim with a recorded decision (persevere, re-plan, descope) loses nothing — an unrun or hidden eval does |
 | 20 | Mid-term exam |
 | 30 | Final exam |
 
