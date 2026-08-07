@@ -67,16 +67,28 @@ alternatives. Upon completion of this course, students will be able to:
 4. Work with AI assistants critically: state measurable claims (metric,
    threshold, baseline), verify outputs against evidence, and catch and
    document errors.
-5. (CSC 591) Pre-register and execute a project evaluation: a claim, a
-   runnable instrument, and honest reporting of what failed.
-6. (CSC 591) Communicate research clearly and professionally, in both
-   written and oral forms, as part of a team project.
+
+CSC 591 students will additionally be able to:
+
+5. Pre-register and execute a project evaluation: a claim, a runnable
+   instrument, and honest reporting of what failed.
+6. Communicate research clearly and professionally, in both written and
+   oral forms, as part of a team project.
 
 ## Student Performance Assessment
 
 Weekly in-class tests reward attendance. Talks are delivered in person
 (see the schedule on the course [README](https://github.com/txt/seai26f/blob/main/README.md)).
 The final exam mark is weighted 1.5 times the mid-term mark.
+
+**The split structure.** Homeworks run on a two-week cycle: submit
+something one week, review another group's submission the next.
+Undergraduates do homeworks all semester (five cycles). Graduate students
+do the same homeworks until six weeks from the end (three cycles), then
+switch to a six-week team project (Oct 26 to Nov 30). The project's
+initial deliverable, three weeks in (Nov 16), must show *something
+working* — a runnable slice plus the pre-registered eval; the final
+deliverable (Nov 30) reports results against that eval.
 
 Talks make measurable claims: where feasible, a tool talk shows the tool
 running against a baseline, not just slides about it. Failures are
@@ -89,8 +101,9 @@ costs more than an honest low score.
 |------:|-----------|
 | 13 | Weekly in-class tests (1 mark each, one per lecture week, none on mid-term night) |
 |  7 | Tool talk (in-class presentation) |
-| 32 | Mid-term exam |
-| 48 | Final exam |
+| 40 | Five homeworks, 8 marks each: 6 for the submission, 2 for reviewing another group's submission the following week |
+| 16 | Mid-term exam |
+| 24 | Final exam |
 
 **CSC 591 (graduate), total 100 marks:**
 
@@ -99,10 +112,11 @@ costs more than an honest low score.
 | 13 | Weekly in-class tests (1 mark each, one per lecture week, none on mid-term night) |
 |  7 | Tool talk (in-class presentation) |
 |  7 | Task talk (in-class presentation) |
-|  5 | Project, initial deliverable (due week 10: Oct 19–23, submit online — fall break week): proposal plus a pre-registered eval — the claim (metric, threshold, baseline) and a runnable instrument demonstrated on sample or synthetic data |
-| 18 | Project, final deliverable (due last class, Mon Nov 30): results against the pre-registered claim; real data earns the top of the range; a failed claim with a recorded decision (persevere, re-plan, descope) loses nothing — an unrun or hidden eval does |
-| 20 | Mid-term exam |
-| 30 | Final exam |
+| 18 | Three homeworks, 6 marks each: 4 for the submission, 2 for the review |
+|  8 | Project, initial deliverable (Mon Nov 16, three weeks in): a runnable slice — something must work — plus the pre-registered eval: claim (metric, threshold, baseline) and instrument demonstrated on sample or synthetic data |
+| 17 | Project, final deliverable (last class, Mon Nov 30): results against the pre-registered claim; real data earns the top of the range; a failed claim with a recorded decision (persevere, re-plan, descope) loses nothing — an unrun or hidden eval does |
+| 12 | Mid-term exam |
+| 18 | Final exam |
 
 **Attendance and participation:** Classes are in person. The weekly in-class
 tests can only be taken in class; a missed test scores zero unless the absence
