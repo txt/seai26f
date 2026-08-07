@@ -79,7 +79,7 @@ CSC 591 students will additionally be able to:
 
 Weekly in-class quizzes reward attendance. Talks are delivered in person
 (see the schedule on the course [README](https://github.com/txt/seai26f/blob/main/README.md)).
-Undergraduates sit a final exam, weighted about 1.5 times the mid-term;
+Undergraduates sit a final exam, weighted the same as the mid-term;
 graduate students have no final exam — their project carries that weight.
 Graduate quizzes stop after the mid-term.
 
@@ -105,12 +105,12 @@ costs more than an honest low score.
 | Component | CSC 491 | CSC 591 | Notes |
 |-----------|--------:|--------:|-------|
 | Weekly in-class quizzes | 13 | 7 | 1 mark each, one per lecture night, none on mid-term night; grads stop after the mid-term (7 quiz nights before it) |
-| Tool talk | 10 | 10 | in-class group presentation |
-| Task talk | — | 10 | grads only |
-| Project, initial deliverable | — | 12 | Mon Nov 9, two weeks in: a runnable slice — something must work — plus the pre-registered eval: claim (metric, threshold, baseline) and instrument demonstrated on sample or synthetic data |
-| Project, final deliverable | — | 31 | last class, Mon Nov 30: results against the pre-registered claim; real data earns the top of the range; a failed claim with a recorded decision (persevere, re-plan, descope) loses nothing — an unrun or hidden eval does |
-| Mid-term exam | 30 | 30 | |
-| Final exam | 47 | — | 491 only, about 1.5 × the mid-term weight |
+| Tool talk | 15 | 15 | in-class group presentation |
+| Task talk | — | 15 | grads only |
+| Project, initial deliverable | — | 9 | Mon Nov 9, two weeks in: a runnable slice — something must work — plus the pre-registered eval: claim (metric, threshold, baseline) and instrument demonstrated on sample or synthetic data |
+| Project, final deliverable | — | 18 | last class, Mon Nov 30: results against the pre-registered claim; real data earns the top of the range; a failed claim with a recorded decision (persevere, re-plan, descope) loses nothing — an unrun or hidden eval does |
+| Mid-term exam | 36 | 36 | |
+| Final exam | 36 | — | 491 only, same weight as the mid-term |
 | **Total** | **100** | **100** | |
 
 **Attendance and participation:** Classes are in person. The weekly in-class
