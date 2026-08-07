@@ -88,8 +88,8 @@ assessed by quizzes, one tool talk, two exams, and one project — the
 [shrinking-code demos](../submit/uproj.md), a scripted build over a
 fixed corpus, due in one piece on the last class. Graduate students are
 assessed by quizzes (until the mid-term), two talks, the mid-term, and a
-six-week team project (Oct 26 to Nov 30) that carries most of their
-grade. The grad project must be far more creative than the undergrad
+six-week team [research project](../submit/gproj.md) (Oct 26 to Nov
+30) that carries most of their grade. The grad project must be far more creative than the undergrad
 one: undergrads execute a defined corpus; grads must invent the problem,
 pre-register its eval, and defend the results. The project's
 initial deliverable, two weeks in (Mon Nov 9), must show *something
@@ -112,8 +112,8 @@ costs more than an honest low score.
 | Tool talk | 15 | 15 | in-class group presentation |
 | Task talk | — | 15 | grads only |
 | Ugrad project | 24 | — | the [shrinking-code demos](../submit/uproj.md): one deliverable, due last class (Mon Nov 30) — repo + 5-minute video + %-new-code histogram |
-| Project, initial deliverable | — | 5 | Mon Nov 9, two weeks in: a runnable slice — something must work — plus the pre-registered eval: claim (metric, threshold, baseline) and instrument demonstrated on sample or synthetic data |
-| Project, final deliverable | — | 34 | last class, Mon Nov 30: results against the pre-registered claim; real data earns the top of the range; a failed claim with a recorded decision (persevere, re-plan, descope) loses nothing — an unrun or hidden eval does |
+| [Grad project](../submit/gproj.md), initial deliverable | — | 5 | Mon Nov 9, two weeks in: a runnable slice — something must work — plus the pre-registered eval: claim (metric, threshold, baseline) and instrument demonstrated on sample or synthetic data |
+| [Grad project](../submit/gproj.md), final deliverable | — | 34 | last class, Mon Nov 30: results against the pre-registered claim; real data earns the top of the range; a failed claim with a recorded decision (persevere, re-plan, descope) loses nothing — an unrun or hidden eval does |
 | Mid-term exam | 24 | 24 | |
 | Final exam | 24 | — | 491 only, same weight as the mid-term |
 | **Total** | **100** | **100** | |

@@ -31,11 +31,11 @@ See [policies](docs/lect/policies.md) for grading, [tools](docs/lect/tools.md) f
 | Oct 05 | | | toolD | toolD |
 | Oct 12 | 🟥 ${\color{#ff9999}\textsf{Mid-term exam}}$ | | no talks | no talks |
 | 🟩 ${\color{green}\textsf{Oct 19 — Fall break, no class}}$ | | | | |
-| Oct 26 | | **grad project starts** | toolE | toolE |
+| Oct 26 | | **[grad project](docs/submit/gproj.md) starts** | toolE | toolE |
 | Nov 02 | | | toolF · toolG | toolF |
-| Nov 09 | | **grad project: initial** | toolH | toolG · toolH |
+| Nov 09 | | **[grad project](docs/submit/gproj.md): initial** | toolH | toolG · toolH |
 | Nov 16 | | | | taskA–C |
 | Nov 23 | | | | taskD–F |
-| Nov 30 | | **grad project: final** · **[ugrad project](docs/submit/uproj.md)** | | taskG–H |
+| Nov 30 | | **[grad project](docs/submit/gproj.md): final** · **[ugrad project](docs/submit/uproj.md)** | | taskG–H |
 | 🟥 ${\color{#ff9999}\textsf{Dec 09 — Final exam (491 only), 3:30–6 PM}}$ | | | | |
 </div>

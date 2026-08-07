@@ -39,7 +39,11 @@ description: Use when editing any markdown in this course repo (README, docs/lec
   ALL exams weigh the same (24). Ugrad project = shrinking-code demos
   (docs/submit/uproj.md): Buse Fig 6 analytics or Hoffman XAI triggers
   on MOOT data, git-tagged steps, 5-min video, %-new-code histogram
-  that must fall, due last class, no intermediary. Homeworks are
+  that must fall, due last class, no intermediary. Grad project = research paper
+  (docs/submit/gproj.md): citation-knee lit review, reproduction-package
+  baseline, pre-registered eval, sigconf paper 3-5pp; initial 5 marks
+  (Nov 9: knee evidence 2, running package 2, claim 1), final 34 marks
+  (rubric in file). Homeworks are
   Split structure: ugrads = quizzes + tool talk + exams; grads =
   quizzes (pre-mid-term) + two talks + mid-term + a six-week project
   (Oct 26–Nov 30, runnable-slice initial deliverable Nov 9). Keep both
