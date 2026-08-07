@@ -95,28 +95,19 @@ running against a baseline, not just slides about it. Failures are
 findings: an honest negative result, explained, scores; a hidden failure
 costs more than an honest low score.
 
-**CSC 491 (undergraduate), total 100 marks:**
+**Marks (each cohort totals 100):**
 
-| Marks | Component |
-|------:|-----------|
-| 13 | Weekly in-class tests (1 mark each, one per lecture week, none on mid-term night) |
-|  7 | Tool talk (in-class presentation) |
-| 40 | Five homeworks, 8 marks each: 6 for the submission, 2 for reviewing another group's submission the following week |
-| 16 | Mid-term exam |
-| 24 | Final exam |
-
-**CSC 591 (graduate), total 100 marks:**
-
-| Marks | Component |
-|------:|-----------|
-| 13 | Weekly in-class tests (1 mark each, one per lecture week, none on mid-term night) |
-|  7 | Tool talk (in-class presentation) |
-|  7 | Task talk (in-class presentation) |
-| 18 | Three homeworks, 6 marks each: 4 for the submission, 2 for the review |
-|  8 | Project, initial deliverable (Mon Nov 16, three weeks in): a runnable slice — something must work — plus the pre-registered eval: claim (metric, threshold, baseline) and instrument demonstrated on sample or synthetic data |
-| 17 | Project, final deliverable (last class, Mon Nov 30): results against the pre-registered claim; real data earns the top of the range; a failed claim with a recorded decision (persevere, re-plan, descope) loses nothing — an unrun or hidden eval does |
-| 12 | Mid-term exam |
-| 18 | Final exam |
+| Component | CSC 491 | CSC 591 | Notes |
+|-----------|--------:|--------:|-------|
+| Weekly in-class tests | 13 | " | 1 mark each, one per lecture week, none on mid-term night |
+| Tool talk | 7 | " | in-class group presentation |
+| Task talk | — | 7 | grads only |
+| Homeworks | 40 | 18 | 491: five cycles, 8 marks each (6 submit + 2 review). 591: three cycles, 6 marks each (4 + 2) |
+| Project, initial deliverable | — | 8 | Mon Nov 16, three weeks in: a runnable slice — something must work — plus the pre-registered eval: claim (metric, threshold, baseline) and instrument demonstrated on sample or synthetic data |
+| Project, final deliverable | — | 17 | last class, Mon Nov 30: results against the pre-registered claim; real data earns the top of the range; a failed claim with a recorded decision (persevere, re-plan, descope) loses nothing — an unrun or hidden eval does |
+| Mid-term exam | 16 | 12 | |
+| Final exam | 24 | 18 | 1.5 × the mid-term weight |
+| **Total** | **100** | **100** | |
 
 **Attendance and participation:** Classes are in person. The weekly in-class
 tests can only be taken in class; a missed test scores zero unless the absence
