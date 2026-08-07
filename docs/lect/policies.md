@@ -52,21 +52,25 @@ with appropriate notification to students.
 
 ## Student Learning Outcomes
 
-Upon completion of this course, students will be able to:
+This course is about generating and assessing alternate technologies for
+AI: given a task now handed by default to a large language model, find,
+build, and fairly measure the cheaper, faster, more explainable
+alternatives. Upon completion of this course, students will be able to:
 
-1. Achieve a high level of expertise in SE and AI: mastery of the knowledge in
-   those fields and the ability to apply this knowledge and graduate school
-   experiences to critical research problems.
-2. Apply sound development methods/tools to problems in SE and describe the
-   methods/tools effectively.
-3. (CSC 591) Communicate their work clearly and professionally in both written
-   and oral forms appropriate to SE.
-4. (CSC 591) Conduct research as part of a team project.
-5. Work with AI assistants and AI methods critically: state measurable
-   claims (metric, threshold, baseline), verify outputs against evidence,
-   and catch and document errors.
-6. (CSC 591) Pre-register and execute a project evaluation: a claim, a
+1. Given an SE task, generate alternative AI technologies for it — LLMs,
+   optimizers, active learners, retrieval, symbolic methods — and defend
+   the choice with measured cost and quality.
+2. Benchmark an AI method against at least one cheaper baseline, over
+   repeated runs, reporting variance and honest negative results.
+3. Learn a new tool from its documentation and originating paper alone,
+   and demonstrate it running.
+4. Work with AI assistants critically: state measurable claims (metric,
+   threshold, baseline), verify outputs against evidence, and catch and
+   document errors.
+5. (CSC 591) Pre-register and execute a project evaluation: a claim, a
    runnable instrument, and honest reporting of what failed.
+6. (CSC 591) Communicate research clearly and professionally, in both
+   written and oral forms, as part of a team project.
 
 ## Student Performance Assessment
 

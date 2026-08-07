@@ -42,9 +42,13 @@ description: Use when editing any markdown in this course repo (README, docs/lec
   failures cost more than honest low scores.
 - Talks make measurable claims — show the tool running against a
   baseline where feasible.
-- Policies lists exactly six learning outcomes; add one ONLY if a
-  graded deliverable provably assesses it. Long outcome lists are
-  hubris.
+- Course thesis: generate and assess ALTERNATE technologies for AI —
+  cheaper/faster/explainable rivals to default-LLM solutions, measured
+  against baselines. Outcomes, talks, and project all serve this.
+- Policies lists exactly six learning outcomes (generate alternatives,
+  benchmark vs baselines, learn-from-docs, critical AI use, 591
+  pre-registered eval, 591 communication); add one ONLY if a graded
+  deliverable provably assesses it. Long outcome lists are hubris.
 
 ## Style
 
