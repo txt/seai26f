@@ -63,6 +63,20 @@ backwards to 1976 and forwards to 2026.
 | 38 | Portfolio: 20 optimizers, budget-aware | Which optimizer, at what budget? (106 SE tasks) | [Ganguly & Menzies, 2026](https://arxiv.org/abs/2607.11705) |
 | 39 | Classical-then-LLM hybrid (SNAP2) | SE configuration optimisation: seed the LLM with cheap classical search | [Srinivasan & Menzies, 2026](https://arxiv.org/abs/2607.02583) |
 
+## One map of all these technologies
+
+A repertory grid over the optimizers in the table: 10 bipolar
+constructs, each tool rated 1 (left pole) to 5 (right pole), rows
+and columns clustered so similar tools and similar distinctions sit
+together. Note the four families the element dendrogram finds:
+exact+local search; the evolutionary/Pareto bloc; the costly
+LLM/quantum newcomers; and the frugal model-builders (active
+learning, random projections) — which are *not* a small flavor of
+the evolutionary family. Ratings are judgments: argue them in class.
+Regenerate with `python3 etc/repgrid.py`.
+
+<img src="https://raw.githubusercontent.com/txt/seai26f/refs/heads/main/etc/img/repgrid.png">
+
 ## Data for your experiments
 
 Most rows can be re-run, or at least sanity-checked, against
