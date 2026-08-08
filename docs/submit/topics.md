@@ -59,6 +59,17 @@ backwards to 1976 and forwards to 2026.
 | 34 | Exact assignment + LLM cost model | Routing queries across LLMs (OptLLM) | [Liu et al., ICWS 2024](https://doi.org/10.1109/icws62655.2024.00098) |
 | 35 | ILP / exact formulations, revisited | Next release problem, generalised | [del Águila et al., 2025](https://arxiv.org/abs/2502.08139) |
 | 36 | LLM-driven search | Testing LLM applications (STELLAR) | [Sorokin et al., 2026](https://arxiv.org/abs/2601.00497) |
+| 37 | Portfolio: 20 optimizers, budget-aware | Which optimizer, at what budget? (106 SE tasks) | [Ganguly & Menzies, 2026](https://arxiv.org/abs/2607.11705) |
+| 38 | Classical-then-LLM hybrid (SNAP2) | SE configuration optimisation: seed the LLM with cheap classical search | [Srinivasan & Menzies, 2026](https://arxiv.org/abs/2607.02583) |
+
+## Data for your experiments
+
+Most rows can be re-run, or at least sanity-checked, against
+[MOOT](https://github.com/timm/moot): 100+ SE multi-objective
+optimisation tasks (configuration, effort, process, cloud tuning)
+in one csv format. Rows 37–38 were benchmarked on it. If your talk
+ends with "and here is that tool's idea, tried on a MOOT task",
+you have earned the value discussion.
 
 ## Read these regardless of your row
 
