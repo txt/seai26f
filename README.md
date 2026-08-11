@@ -15,6 +15,7 @@
 <img src="https://raw.githubusercontent.com/txt/seai26f/refs/heads/main/etc/img/seai26f.png">
 
 Mondays 4:30–7:15 PM, 2201 Engineering Building 3.
+
 **Lectures:** boot |
 [columns](https://txt.github.io/seai26f/ezr-eg1.html) |
 dist | cluster | trees | acquire | stats | apps | optimize | dtlz
@@ -32,19 +33,19 @@ See [lecture notes](docs/lect/front.md) for the course intro and weekly demos, [
 
 | 📅 Date | 🎓 Lecture | 🛠️ submit <br>(due start of class) | 🎤 ugrad talks <br>(30 min each) | 🎤 grad talks <br>(30 min each) |
 |:-------------:|:----------:|:---------:|:---------:|:---------:|
-| Aug 17 | | | | |
-| Aug 24 | | | | |
-| Aug 31 | | | | |
+| Aug 17 | intro + boot | | | |
+| Aug 24 | [columns](https://txt.github.io/seai26f/ezr-eg1.html) | | | |
+| Aug 31 | dist | | | |
 | 🟩 ${\color{green}\textsf{Sep 07 — Labor Day, no class}}$ | | | | |
-| Sep 14 | | | toolA | toolA |
-| Sep 21 | | | toolB | toolB |
-| Sep 28 | | | toolC | toolC |
-| Oct 05 | | | toolD | toolD |
+| Sep 14 | cluster | | toolA | toolA |
+| Sep 21 | trees | | toolB | toolB |
+| Sep 28 | acquire | | toolC | toolC |
+| Oct 05 | stats | | toolD | toolD |
 | Oct 12 | 🟥 ${\color{#ff9999}\textsf{Mid-term exam}}$ | | no talks | no talks |
 | 🟩 ${\color{green}\textsf{Oct 19 — Fall break, no class}}$ | | | | |
-| Oct 26 | | **[grad project](docs/submit/gproj.md) starts** | toolE | toolE |
-| Nov 02 | | | toolF · toolG | toolF |
-| Nov 09 | | **[grad project](docs/submit/gproj.md): initial** | toolH | toolG · toolH |
+| Oct 26 | apps | **[grad project](docs/submit/gproj.md) starts** | toolE | toolE |
+| Nov 02 | optimize | | toolF · toolG | toolF |
+| Nov 09 | dtlz | **[grad project](docs/submit/gproj.md): initial** | toolH | toolG · toolH |
 | Nov 16 | | | | taskA–C |
 | Nov 23 | | | | taskD–F |
 | Nov 30 | | **[grad project](docs/submit/gproj.md): final** · **[ugrad project](docs/submit/uproj.md)** | | taskG–H |
