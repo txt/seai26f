@@ -77,31 +77,29 @@ CSC 591 students will additionally be able to:
 
 ## Student Performance Assessment
 
-Weekly in-class quizzes reward attendance. Talks are delivered in person
-(see the schedule on the course [README](https://github.com/txt/seai26f/blob/main/README.md)).
-There are no homeworks. Each cohort is graded out of 100 marks.
+Weekly homeworkds are score 0-1 for "you tried" and "you did try enough". Students will
+arrive in class with that homework printed on one side of a piece of papeer marked only with the alst 4 digits
+of the student id numbers. 
 
-**CSC 491 (undergraduate).** Undergrads are graded out of 100 marks
+Weekly in-class quizzes reward attendance. Weeklies start at the first minute of class (do not be late). 
+During the weeklies, use of any electronic device is banned.
+In the weeklies, you will be given practice questions
+of the kind you will see in exams. Weeklies will be answered on the back of the homework sheet. 
 
-- 13 weekly in-class quizzes worth 1 mark each (one per lecture night, none
-on mid-term night)
-- 15-mark group tool talk
-- 24-mark project (the [shrinking-code demos](../submit/uproj.md)
-- a 24-mark mid-term,
-- 24-mark final exam
+Talks are delivered in person by one person and all other members of that group are required to stand on stage
+behding their presenter.
+See the schedule on the course [README](https://github.com/txt/seai26f/blob/main/README.md).
+Each cohort is graded out of 100 marks.
 
-**CSC 591 (graduate).** Grads are graded out of 100 marks
-
-- 7 weekly in-class quizzes worth 1 mark each (quizzes stop after the mid-term —
-there are 7 quiz nights before it)
-- 15-mark group tool talk
-- 15-mark
-task talk, 
-- 24-mark mid-term, 
-- 39-mark six-week team [research
-project](../submit/gproj.md) (Oct 26 to Nov 30)
--  there is no final
-exam; the project carries that weight. 
+| Component                             |                  CSC 491 (ugrad)                   |                               CSC 591 (grad)                               |
+| ------------------------------------- | :------------------------------------------------: | :------------------------------------------------------------------------: |
+| Weekly in-class quizzes (1 mark each) | 13 (one per lecture night; none on mid-term night) |                      7 (quizzes stop after mid-term)                       |
+| Group tool talk                       |                         15                         |                                     15                                     |
+| Task talk                             |                         —                          |                                     15                                     |
+| Mid-term                              |                         24                         |                                     24                                     |
+| Project                               |  24 ([shrinking-code demos](../submit/uproj.md))   | 39 (six-week team [research project](../submit/gproj.md), Oct 26 – Nov 30) |
+| Final exam                            |                         24                         |                      — (project carries that weight)                       |
+| **Total**                             |                      **100**                       |                                  **100**                                   |
 
 The grad project must be far more
 creative than the undergrad one:
