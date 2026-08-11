@@ -136,7 +136,9 @@ function NUM.reset(i) i.n, i.mu, i.m2 = 0, 0, 0 end
 function SYM.reset(i) i.n, i.has = 0, {} end
 ```
 
-## mode
+<a name="mode"></a><a name="mean"></a>
+
+## mid (mode, mean)
 
 The most frequent symbol: a Sym's answer to `mid` ("what is
 typical here?"). The **mean is the same question asked of
@@ -154,7 +156,9 @@ function SYM.mid(i,    hi,out)
 function NUM.mid(i) return i.mu end
 ```
 
-## entropy
+<a name="entropy"></a><a name="sd"></a>
+
+## diversity (entropy, standard deviation)
 
 Shannon 1948: the spread of a symbol column, in bits — the mean
 surprise of drawing from counts $p_k = n_k/n$:
