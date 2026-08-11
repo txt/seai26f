@@ -36,6 +36,40 @@ function Col(name,at)
   return (name:find"^%l" and Sym or Num)(name,at) end
 ```
 
+<a name="pdf"></a>
+
+## pdf (probability density function)
+
+The bell curve, or any curve like it: the relative likelihood of
+each value. For a normal with mean $\mu$ and deviation $\sigma$:
+
+$$f(x) = \frac{1}{\sigma\sqrt{2\pi}}\;
+e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$
+
+This code never evaluates a pdf directly — only areas under it
+matter, and those come from the [cdf](#cdf). First met in
+[a little maths](l0.md) (Lecture 0).
+
+<a name="cdf"></a>
+
+## cdf (cumulative distribution function)
+
+The fraction of a population at or below a value: the area under
+the [pdf](#pdf) up to $x$. Monotone, 0..1 — which makes it a
+natural normalizer: `norm` maps any cell to "what fraction of
+this column sits below you?". The normal cdf has no closed form,
+so ezr uses a logistic approximation (good to about ±1%), with
+the z-score clamped to ±3:
+
+$$cdf(z) \approx \frac{1}{1 + e^{-1.702\,z}}$$
+
+```lua
+function NUM.norm(i,v,    z)
+  if v == "?" then return v end
+  z = (v - i.mu) / (i:div() + TINY)
+  return 1 / (1 + exp(-1.702 * max(-3, min(3, z)))) end
+```
+
 ## Num
 
 The summary of a numeric column: count `n`, mean `mu`, and `m2`
@@ -73,7 +107,7 @@ distance, trees, cuts) talks to the protocol, never to the type:
 | `sub`    | welford, run backwards | drop a count       |
 | `mid`    | [mean](#mode)        | [mode](#mode)      |
 | `div`    | [standard deviation](#entropy) | [entropy](#entropy) |
-| `norm`   | cdf position, 0..1   | identity           |
+| `norm`   | [cdf](#cdf) position, 0..1 | identity     |
 | `dist`   | gap of normed values | 0 if same else 1   |
 | `holds`  | `x <= v`             | `x == v`           |
 | `reset`  | zero mu, m2          | empty `has`        |
