@@ -1,0 +1,15 @@
+#### 6.1 rebuild
+srand(the.seed);
+t = Tbl(csv())
+#### 6.2 grow a tree: recursive best-cuts on disty
+tr = Tree(t, t.rows)
+tr.leafs
+#### 6.3 print it: one row per node, goal means, structure right
+tr:show(t)
+#### 6.4 predict a row's goodness by walking it to a leaf
+round(tr:leaf(t, t.rows[1]))
+round(t:disty(t.rows[1]))
+#### 6.5 prune: walk every subtree, keep the best-scoring small one
+n = 0; best = nil
+tr:walk(function(w) n = n + 1; if not best or w.val < best.val or (w.val == best.val and w.leafs < best.leafs) then best = w end end);
+show{prunings=n, full_leafs=tr.leafs, best_leafs=best.leafs, best_val=round(best.val)}

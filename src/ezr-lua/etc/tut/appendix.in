@@ -1,0 +1,59 @@
+#### A.1 tables are Lua's only data structure
+t = {10, 20, 30}
+#t
+t[1]
+t.name = "cars";
+t.name
+#### A.2 ipairs walks the list part, in order; pairs walks everything, in NO fixed order
+u = {10, 20, jump=99}
+#u
+out = ""; for _,v in ipairs(u) do out = out .. v .. " " end;
+out
+#### A.3 only nil and false are falsy; and/or return their operands
+0 and "zero is TRUE" or "zero is false"
+"" and "empty is TRUE" or "empty is false"
+nil and 1 or 2
+true and nil or "surprise"
+x = nil
+x = x or "default"
+x
+#### A.4 a table with a metatable becomes an "object"
+Animal = {}
+Animal.__index = Animal
+function Animal.new(sound) return setmetatable({sound=sound}, Animal) end
+function Animal.speak(self) return self.sound .. "!" end
+a = Animal.new("moo")
+a:speak()
+#### A.5 closures capture locals: a counter with private state
+function counter(  n) n = 0; return function() n = n + 1; return n end end
+c = counter()
+c()
+c()
+c()
+#### A.6 a for loop can drive any function; nil stops it
+function upto(n,  j) j = 0; return function() j = j + 1; if j <= n then return j end end end
+out = ""; for j in upto(3) do out = out .. j .. " " end;
+out
+#### A.7 hidden locals after the comma are the code's style
+adder = function(x,   sofar) sofar = (sofar or 0) + x; return sofar end
+adder(5)
+#### A.8 varargs and multiple returns
+function minmax(...) local t = {...}; table.sort(t); return t[1], t[#t] end
+lo, hi = minmax(3, 1, 4, 1, 5, 9, 2)
+lo
+hi
+#### A.9 parens are optional around one string or one table literal
+f = function(x) return x end
+f"hello"
+#f{1, 2}
+#### A.10 string patterns coerce the CSV cells
+("  42 "):match"^%s*(.-)%s*$"
+tonumber("3.14")
+("Mpg+"):find"[+-]$"
+("HpX"):sub(-1)
+#### A.11 assignment without local makes a global
+function leaky() leak = 1 end
+leaky()
+leak
+#### A.12 now re-read the source: this is Num(), one line
+("Lbs-"):find"-$"

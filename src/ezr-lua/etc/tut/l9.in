@@ -1,0 +1,24 @@
+#### 9.1 hand-checkable: identical lists have zero effect size
+srand(the.seed);
+round(cohen({1,2,3,4,5}, {1,2,3,4,5}))
+#### 9.2 a clear shift: +3 on unit-spread data
+round(cohen({1,2,3,4,5}, {4,5,6,7,8}))
+#### 9.3 gaussian sampler (box-muller), then the noise floor
+g = function(n, mu, u) u={}; for j=1,n do u[j]=(mu or 0)+math.sqrt(-2*math.log(1-rand()))*math.cos(2*math.pi*rand()) end; return sorted(u) end
+x = g(500, 0)
+y = g(500, 0)
+round(cohen(x, y))
+same(x, y)
+#### 9.4 the effect-size sweep: where AND(same) is stricter than OR
+x = g(256, 0)
+print("shift  cohen    ks  cliffs |  same")
+for _,mu in ipairs{0, .1, .2, .3, .35, .5, 1} do local y=map(x,function(v) return v+mu end); print(("%5.2f  %5s %5s  %5s | %5s"):format(mu, tostring(cohen(x,y)<=.35), tostring(ks(x,y)<=1.36), tostring(cliffs(x,y)<=.195), tostring(same(x,y)))) end
+#### 9.5 the sample-size flip: detection rate for a fixed 0.2 shift
+rate = function(n, u) u=0; for j=1,30 do srand(the.seed+j); local x=g(n,0); local y=map(x,function(v) return v+0.2 end); if not same(sorted(x),sorted(y)) then u=u+1 end end; return u end
+show{n=10, detected=rate(10), of=30}
+show{n=2000, detected=rate(2000), of=30}
+#### 9.6 ranks: ties share a rank, clear winners separate
+d = {a=g(20,0), b=g(20,0.05), c=g(20,2), e=g(20,4)}
+r = ranks(d)
+show(r.ranks)
+show(r.winners)

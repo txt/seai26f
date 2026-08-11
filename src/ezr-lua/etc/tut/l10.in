@@ -1,0 +1,52 @@
+#### 10.1 the Fortune Teller: knn beats the global mean
+srand(the.seed);
+t = Tbl(csv())
+y = t:Y()
+mu = adds(map(t.rows, y)).mu
+e1 = 0; e2 = 0
+for _=1,32 do local r=t.rows[rand(#t.rows)]; e1=e1+math.abs(t:knn(r)-y(r)); e2=e2+math.abs(mu-y(r)) end
+show{knn_err=round(e1/32), mean_err=round(e2/32)}
+#### 10.2 the Bouncer: anomaly scores, someone is lonely
+det = t:anomaly()
+ss = sorted(map(t.rows, det))
+show{lo=round(ss[1]), mid=round(ss[math.floor(#ss/2)+1]), hi=round(ss[#ss])}
+#### 10.3 the ER Nurse: test-then-train naive bayes on diabetes
+d = Tbl(csv"$MOOT/classify/diabetes.csv")
+seen = d:classify()
+show{acc=round(acc(seen)), guesses=#seen}
+#### 10.4 the Curator: kmeans clusters, rows conserved
+cs = t:kmeans()
+n = 0; for _,c in ipairs(cs) do n = n + #c.rows end
+show{clusters=#cs, rows=n}
+#### 10.5 kpp: seeds spread far apart
+cents = t:kpp()
+lo = 1e32
+for j=1,#cents do for k=j+1,#cents do lo=math.min(lo, t:distx(cents[j],cents[k])) end end
+show{seeds=#cents, min_gap=round(lo)}
+#### 10.6 ADVANCED: DTLZ, an external model, rows born unlabelled
+the.model
+z = Dtlz()
+#z.rows
+z.rows[1][z.cols.y[1].at]
+#### 10.7 disty labels a DTLZ row on demand
+round(z:disty(z.rows[1]))
+z.rows[1][z.cols.y[1].at] ~= "?"
+#### 10.8 optimize the black box on a label budget
+lab = z:acquirer(the.budget)
+show{labels=#lab, best=round(z:disty(lab[1]))}
+#### 10.9 domination: better on some goal, worse on none
+s = keysort(t.rows, t:Y())
+t:dominates(s[1], s[#s])
+t:dominates(s[#s], s[1])
+n = 0; for _ = 1,64 do local a,b = t.rows[rand(#t.rows)], t.rows[rand(#t.rows)]; if not (t:dominates(a,b) or t:dominates(b,a)) then n = n + 1 end end
+n .. " of 64 random pairs: neither dominates"
+#### 10.10 four racers, one lap each
+round(t:disty(t:ga()))
+round(t:disty(t:de()))
+round(t:disty(t:sa()))
+round(t:disty(t:ls()))
+#### 10.11 the drag race: five laps each, Scott-Knott ranked
+d, r = t:race()
+med = function(v) return round(sorted(v)[3]) end
+show{ga=med(d.ga), de=med(d.de), sa=med(d.sa), ls=med(d.ls), any=med(d.any)}
+show(r.winners)

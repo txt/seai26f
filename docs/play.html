@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>play.lua</title>
+  <link rel="stylesheet" href="pycco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div class='section'>
+    <div class='docs'><!-- seai26f-nav --><p align="center">
+  <a href="https://github.com/txt/seai26f/blob/main/README.md"><img 
+     src="https://img.shields.io/badge/Home-%23ff5733?style=flat-square&logo=home&logoColor=white" /></a>
+  <a href="https://github.com/txt/seai26f/blob/main/docs/lect/policies.md"><img 
+      src="https://img.shields.io/badge/Policies-%230055ff?style=flat-square&logo=openai&logoColor=white" /></a>
+  <a href="#"><img
+      src="https://img.shields.io/badge/Teams-%23ffd700?style=flat-square&logo=users&logoColor=white" /></a>
+  <a href="https://moodle-courses2527.wolfware.ncsu.edu/course/view.php?id=11951"><img 
+      src="https://img.shields.io/badge/Moodle-%23dc143c?style=flat-square&logo=moodle&logoColor=white" /></a>
+  <a href="https://discord.gg/uQgTnGsfR"><img 
+      src="https://img.shields.io/badge/Chat-%23008080?style=flat-square&logo=discord&logoColor=white" /></a>
+  <a href="https://github.com/txt/seai26f/blob/main/LICENSE.md"><img 
+      src="https://img.shields.io/badge/©%20timm%202026-%234b4b4b?style=flat-square&logoColor=white" /></a></p><p align="center"><a href="ezr.html">ezr</a> | <a href="ezr-lib.html">ezr-lib</a> | <a href="ezr-eg1.html">ezr-eg1</a> | <a href="ezr-apps.html">ezr-apps</a> | <a href="ezr-dtlz.html">ezr-dtlz</a> | <b>play</b></p><p align="center"><a href="ezr-dtlz.html">&lt; prev</a> | next &gt;</p><h1><a href="https://github.com/txt/seai26f/blob/main/src/ezr-lua/play.lua">play.lua</a></h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      <p>play.lua: a scratchpad for the tutorial. Start it with
+    lua -i play.lua
+and every name from ezr, ezr-lib, ezr-apps and ezr-dtlz is
+in scope at the prompt. Lua&rsquo;s own -i gives you arrow keys,
+history and multi-line input, so no rlwrap is needed.</p>
+<p>Why a separate file: the modules keep their definitions in
+a <code>local _ENV</code>, which <code>lua -i</code> cannot see, and each -eg
+file calls go() and exits. This file does neither. It just
+copies the names up into _G and hands you the prompt.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span></span><span class="nb">package.path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nv">arg</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nv">arg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">):</span><span class="nf">gsub</span><span class="p">(</span><span class="s2">&quot;[^/]*$&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="w">               </span><span class="o">..</span><span class="w"> </span><span class="s2">&quot;?.lua;&quot;</span><span class="w"> </span><span class="o">..</span><span class="w"> </span><span class="nb">package.path</span>
+
+<span class="kd">local</span><span class="w"> </span><span class="nv">E</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="s2">&quot;ezr-apps&quot;</span><span class="w">          </span><span class="c1">-- chains: apps -&gt; ezr -&gt; lib</span>
+<span class="kd">local</span><span class="w"> </span><span class="nv">ok</span><span class="p">,</span><span class="w"> </span><span class="nv">D</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">pcall</span><span class="p">(</span><span class="nb">require</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;ezr-dtlz&quot;</span><span class="p">)</span>
+<span class="kr">if</span><span class="w"> </span><span class="nv">ok</span><span class="w"> </span><span class="kr">then</span><span class="w"> </span><span class="nb">setmetatable</span><span class="p">(</span><span class="nv">D</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nv">__index</span><span class="o">=</span><span class="nv">E</span><span class="p">});</span><span class="w"> </span><span class="nv">E</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">D</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <p>Walk the __index chain and lift every public name into _G,
+nearest module first so the newest definition wins.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kd">local</span><span class="w"> </span><span class="nv">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">E</span>
+<span class="kr">while</span><span class="w"> </span><span class="nb">type</span><span class="p">(</span><span class="nv">t</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;table&quot;</span><span class="w"> </span><span class="kr">do</span>
+<span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="nv">k</span><span class="p">,</span><span class="w"> </span><span class="nv">v</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nb">pairs</span><span class="p">(</span><span class="nv">t</span><span class="p">)</span><span class="w"> </span><span class="kr">do</span>
+<span class="w">    </span><span class="kr">if</span><span class="w"> </span><span class="nb">type</span><span class="p">(</span><span class="nv">k</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;string&quot;</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nv">k</span><span class="p">:</span><span class="nf">sub</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">~=</span><span class="w"> </span><span class="s2">&quot;_&quot;</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nb">_G</span><span class="p">[</span><span class="nv">k</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="kr">then</span>
+<span class="w">      </span><span class="nb">_G</span><span class="p">[</span><span class="nv">k</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">v</span><span class="w"> </span><span class="kr">end</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="kd">local</span><span class="w"> </span><span class="nv">mt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">getmetatable</span><span class="p">(</span><span class="nv">t</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">mt</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nv">mt</span><span class="p">.</span><span class="py">__index</span><span class="w"> </span><span class="kr">end</span>
+
+<span class="nv">_PROMPT</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;ezr&gt; &quot;</span><span class="w">                   </span><span class="c1">-- lua -i honours these</span>
+<span class="nv">_PROMPT2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;  .. &quot;</span>
+
+<span class="nb">_G</span><span class="p">.</span><span class="nf">srand</span><span class="p">(</span><span class="nb">_G</span><span class="p">.</span><span class="nv">the</span><span class="p">.</span><span class="py">seed</span><span class="p">)</span><span class="w">                </span><span class="c1">-- same stream every start</span>
+
+<span class="nb">print</span><span class="p">((</span><span class="s2">&quot;ezr ready. Default table: %s&quot;</span><span class="p">):</span><span class="nf">format</span><span class="p">(</span><span class="nb">_G</span><span class="p">.</span><span class="nv">the</span><span class="p">.</span><span class="py">file</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;in scope: the, Tbl, csv, Num, Sym, Tree, acquirer ...&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;try:     t = Tbl(csv())   then   #t.rows&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Ctrl-D exits.&quot;</span><span class="p">)</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>

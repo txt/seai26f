@@ -1,0 +1,20 @@
+#### 5.1 rebuild
+srand(the.seed);
+t = Tbl(csv())
+#### 5.2 bestcut: the single x-column split that most purifies disty
+b = t:bestcut(t.rows, t:Y(), Num, least())
+c = t.cols.all[b[2]]
+c.name
+round(b[3])
+round(b[1])
+#### 5.3 divide: apply that cut, rows split by holds()
+yes, no = t:divide(t.rows, c, b[3])
+show{yes=#yes, no=#no, total=#yes + #no}
+#### 5.4 the two sides differ in mean goodness
+round(adds(map(yes, t:Y())).mu)
+round(adds(map(no, t:Y())).mu)
+#### 5.5 val: mean diversity of a proposed split, lower = purer
+lo = adds(map(yes, t:Y()))
+hi = adds(map(no, t:Y()))
+round(val(lo, hi))
+round(adds(map(t.rows, t:Y())):div())
