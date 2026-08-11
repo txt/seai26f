@@ -31,23 +31,28 @@ description: Use when editing any markdown in this course repo (README, docs/lec
   student talks. Every lecture night carries a 1-mark quiz (marked in
   the Lecture column; none on mid-term night) — 13 total.
 - Grading and NCSU-required sections: `docs/lect/policies.md`. TWO
-  cohorts, each totals 100, one 4-column table (Component | 491 | 591 |
-  Notes, plain numbers — no ditto marks): CSC 491 (quizzes 13, tool
-  talk 15, ugrad project 24, mid-term 24, final 24) and CSC 591
-  (quizzes 7 — grads stop quizzing after the mid-term, tool talk 15,
-  task talk 15, project 5+34, mid-term 24, NO final). NO homeworks.
-  ALL exams weigh the same (24). Ugrad project = shrinking-code demos
-  (docs/submit/uproj.md): Buse Fig 6 analytics or Hoffman XAI triggers
-  on MOOT data, git-tagged steps, 5-min video, %-new-code histogram
-  that must fall, due last class, no intermediary. Grad project = research paper
+  cohorts, each totals 100. NO marks table — the assessment section is
+  prose + one bullet list per cohort (bold **CSC 491 (undergraduate).**
+  / **CSC 591 (graduate).** lead-ins): CSC 491 = quizzes 13 (1 mark
+  each, none on mid-term night) + tool talk 15 + ugrad project 24 +
+  mid-term 24 + final 24; CSC 591 = quizzes 7 (grads stop quizzing
+  after the mid-term) + tool talk 15 + task talk 15 + mid-term 24 +
+  project 39 (initial 5 + final 34), NO final exam — project carries
+  that weight. NO homeworks. ALL exams weigh the same (24). Ugrad
+  project = shrinking-code demos (docs/submit/uproj.md): Buse Fig 6
+  analytics or Hoffman XAI triggers on MOOT data, git-tagged steps,
+  5-min video, %-new-code histogram that must fall, due last class
+  (Mon Nov 30), no intermediary. Grad project = research paper
   (docs/submit/gproj.md): citation-knee lit review, reproduction-package
   baseline, pre-registered eval, sigconf paper 3-5pp; initial 5 marks
   (Nov 9: knee evidence 2, running package 2, claim 1), final 34 marks
-  (rubric in file). Homeworks are
-  Split structure: ugrads = quizzes + tool talk + exams; grads =
-  quizzes (pre-mid-term) + two talks + mid-term + a six-week project
-  (Oct 26–Nov 30, runnable-slice initial deliverable Nov 9). Keep both
-  columns summing to 100 when anything moves.
+  (rubric in file). Split structure: ugrads = quizzes + tool talk +
+  exams; grads = quizzes (pre-mid-term) + two talks + mid-term + a
+  six-week project (Oct 26–Nov 30, runnable-slice initial deliverable
+  Nov 9). Shared blocks after the cohort lists: attendance (quizzes
+  in-class only, REG 02.20.03 excuses), late work (−1 mark/day,
+  weekend = 1 day), ten-point grading scale. Keep both cohorts
+  summing to 100 when anything moves.
 - Tool-talk menu: `docs/lect/tools.md` (26 optimizers with refs);
   signup lives in the linked Google Sheet.
 

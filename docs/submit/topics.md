@@ -1,3 +1,19 @@
+<p align="center">
+  <a href="https://github.com/txt/seai26f/blob/main/README.md"><img 
+     src="https://img.shields.io/badge/Home-%23ff5733?style=flat-square&logo=home&logoColor=white" /></a>
+  <a href="https://github.com/txt/seai26f/blob/main/docs/lect/policies.md"><img 
+      src="https://img.shields.io/badge/Policies-%230055ff?style=flat-square&logo=openai&logoColor=white" /></a>
+  <a href="#"><img
+      src="https://img.shields.io/badge/Teams-%23ffd700?style=flat-square&logo=users&logoColor=white" /></a>
+  <a href="https://moodle-courses2527.wolfware.ncsu.edu/course/view.php?id=11951"><img 
+      src="https://img.shields.io/badge/Moodle-%23dc143c?style=flat-square&logo=moodle&logoColor=white" /></a>
+  <a href="https://discord.gg/uQgTnGsfR"><img 
+      src="https://img.shields.io/badge/Chat-%23008080?style=flat-square&logo=discord&logoColor=white" /></a>
+  <a href="https://github.com/txt/seai26f/blob/main/LICENSE.md"><img 
+      src="https://img.shields.io/badge/©%20timm%202026-%234b4b4b?style=flat-square&logoColor=white" /></a></p>
+<h1 align="center">:cyclone: CSC491/591: SE for AI <br>NC State, Fall '26</h1>
+<img src="https://raw.githubusercontent.com/txt/seai26f/refs/heads/main/etc/img/seai26f.png">
+
 # Tool talks: search-based software engineering, 1976–2026
 
 Pick one row from the table below. Your talk has three parts, in this
