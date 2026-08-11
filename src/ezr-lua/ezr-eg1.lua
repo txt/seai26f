@@ -52,11 +52,14 @@ eg["--egs"] = function()
   for _,k in ipairs(keys(eg)) do
     print(("%-10s %s"):format(k, doc[k] or "")) end end
 
+doc["--repl"] = "an interactive prompt; bare names resolve"
+eg["--repl"] = function() repl(_ENV) end
+
 doc["--all"] = "all the demos; fail if any of them do"
 eg["--all"] = function(    bad)
   bad = 0
   for _,k in ipairs(keys(eg)) do
-    if k ~= "--all" and k ~= "--egs" and
+    if k ~= "--all" and k ~= "--egs" and k ~= "--repl" and
        run(eg, k) == false then bad = bad + 1 end end
   print("failures: " .. bad)
   assert(bad == 0) end

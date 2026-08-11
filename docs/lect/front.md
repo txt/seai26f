@@ -261,7 +261,7 @@ the prompt.
     cd seai26f/src/ezr-lua
     make demo      # sanity check; three runs, each "failures: 0"
 
-`src/ezr-lua` holds the five `.lua` files, `play.lua`, `tut.md`, the
+`src/ezr-lua` holds the five `.lua` files, `tut.md`, the
 sample table, and the replay harness that checks every trace below.
 The `curl … INSTALL.md | sh` line in the README is a different
 thing: it fetches the `.lua` files alone, for embedding in your own
@@ -278,21 +278,16 @@ code, and leaves out the data this course needs.
 
 **4. The prompt:**
 
-    lua -i play.lua
+    lua ezr-eg1.lua --repl
 
 That last line is the one you will type a hundred times. It drops
 you at an `ezr>` prompt with `the`, `Tbl`, `csv` and every other
-function already in scope. `play.lua` exists only to do that: it
-lifts the names out of the modules and hands you Lua's own
-interactive prompt, which brings arrow keys, history and multi-line
-input with it. Ctrl-D exits. Try it now:
+function already in scope. Type an expression and its value
+prints; Ctrl-D exits. Try it now:
 
     ezr> t = Tbl(csv())
     ezr> #t.rows          -- '#' means "length"
     398
-
-On LuaJIT and Lua 5.1, put `=` in front of anything you want printed
-(`=#t.rows`). Lua 5.2 and up print bare expressions on their own.
 
 **If you want raw speed:** `luajit` runs this code ten to fifty
 times faster than `lua`, and is worth having installed. But LuaJIT
