@@ -99,15 +99,32 @@ eg["--sub"] = function(    t,c,n1,mu1,xtra)
   print(show{n=c.n, mu=c.mu, was=mu1})
   assert(c.n == n1 and abs(c.mu - mu1) < 1e-9) end
 
---## exercises -------------------------------------------------
--- 1. (port) Rewrite this week's demos in your own language.
---    Match the printed numbers exactly (same seed, same
---    precision). Then, using that port:
--- 2. Add {10,20,30} to a Num one value at a time, printing
+--## homework 1 ------------------------------------------------
+-- 1. Install [Claude Code](https://claude.com/claude-code).
+--    Open a terminal split: Claude on the left, a shell on
+--    the right -- ideally in [Ghostty](https://ghostty.org),
+--    but [VS Code](https://code.visualstudio.com) is ok.
+-- 2. Ask Claude to find all the Lua code associated with this
+--    [ezr-eg1.lua](https://github.com/txt/seai26f/blob/main/src/ezr-lua/ezr-eg1.lua)
+--    file (it will follow the require chain into
+--    [ezr.lua](ezr.html) and [ezr-lib.lua](ezr-lib.html)).
+-- 3. Ask Claude to port that code to Python, wiring each demo
+--    to a test_ function, using
+--    [101.py](https://github.com/txt/seai26f/blob/main/src/101.py)
+--    as a basis.
+-- 4. Think, pair, share: list all the bits you do not
+--    understand. Share that list with your pair. See if,
+--    together, you can figure them out.
+-- 5. Make that Python perform like the Lua: same demos, same
+--    printed numbers (same seed, same precision).
+--
+-- Check your port:
+--
+-- 6. Add {10,20,30} to a Num one value at a time, printing
 --    mu and sd after each add. Watch Welford converge.
--- 3. What is the entropy of a Sym fed "a","a","a"? Fed
+-- 7. What is the entropy of a Sym fed "a","a","a"? Fed
 --    "a","b","c"? Predict first, then run it.
--- 4. In --sub, why must the assert use < 1e-9 rather
+-- 8. In --sub, why must the assert use < 1e-9 rather
 --    than ==? What does that say about floats?
 
 --## start-up --------------------------------------------------

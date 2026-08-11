@@ -233,11 +233,28 @@ forget them, and the first column&rsquo;s stats round-trip.</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-11'>#</a>
       </div>
-      <h2>exercises</h2>
+      <h2>homework 1</h2>
 <ol>
-<li>(port) Rewrite this week&rsquo;s demos in your own language.
-   Match the printed numbers exactly (same seed, same
-   precision). Then, using that port:</li>
+<li>Install <a href="https://claude.com/claude-code">Claude Code</a>.
+   Open a terminal split: Claude on the left, a shell on
+   the right &ndash; ideally in <a href="https://ghostty.org">Ghostty</a>,
+   but <a href="https://code.visualstudio.com">VS Code</a> is ok.</li>
+<li>Ask Claude to find all the Lua code associated with this
+   <a href="https://github.com/txt/seai26f/blob/main/src/ezr-lua/ezr-eg1.lua">ezr-eg1.lua</a>
+   file (it will follow the require chain into
+   <a href="ezr.html">ezr.lua</a> and <a href="ezr-lib.html">ezr-lib.lua</a>).</li>
+<li>Ask Claude to port that code to Python, wiring each demo
+   to a test_ function, using
+   <a href="https://github.com/txt/seai26f/blob/main/src/101.py">101.py</a>
+   as a basis.</li>
+<li>Think, pair, share: list all the bits you do not
+   understand. Share that list with your pair. See if,
+   together, you can figure them out.</li>
+<li>Make that Python perform like the Lua: same demos, same
+   printed numbers (same seed, same precision).</li>
+</ol>
+<p>Check your port:</p>
+<ol>
 <li>Add {10,20,30} to a Num one value at a time, printing
    mu and sd after each add. Watch Welford converge.</li>
 <li>What is the entropy of a Sym fed &ldquo;a&rdquo;,&rdquo;a&rdquo;,&rdquo;a&rdquo;? Fed
