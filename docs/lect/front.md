@@ -232,7 +232,7 @@ to run the experiment yourself.
 
 ## Setup
 
-Four steps: Lua, the code, the data, the prompt.
+Three steps: Lua, the code, the data.
 
 **1. Lua** (get the latest, 5.4):
 
@@ -275,19 +275,6 @@ code, and leaves out the data this course needs.
 
 `make` on its own lists the rest. `make data` pulls the whole
 126-table corpus, and `make all CORES=8` scores every table in it.
-
-**4. The prompt:**
-
-    lua ezr-eg1.lua --repl
-
-That last line is the one you will type a hundred times. It drops
-you at an `ezr>` prompt with `the`, `Tbl`, `csv` and every other
-function already in scope. Type an expression and its value
-prints; Ctrl-D exits. Try it now:
-
-    ezr> t = Tbl(csv())
-    ezr> #t.rows          -- '#' means "length"
-    398
 
 **If you want raw speed:** `luajit` runs this code ten to fifty
 times faster than `lua`, and is worth having installed. But LuaJIT
