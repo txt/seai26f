@@ -30,7 +30,8 @@
 -- talks to that protocol, never to the type.
 --
 -- ## Glossary (see tut.md#glossary)
--- Num, Sym, protocol, noir, welford, stream, mode, entropy
+-- Num, Sym, add, sub, mid, div, norm, dist, holds, reset,
+-- protocol, noir, welford, stream, mode, entropy
 --
 -- ---
 local abs = math.abs
