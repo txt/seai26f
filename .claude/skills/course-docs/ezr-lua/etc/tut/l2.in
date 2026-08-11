@@ -1,0 +1,25 @@
+#### 2.1 rebuild the table (fresh process, fresh state)
+srand(the.seed);
+t = Tbl(csv())
+#t.rows
+#### 2.2 the centroid: every column's middle at once
+show(t:mids())
+#### 2.3 clone: same header, empty summaries
+u = t:clone()
+#u.rows
+show(u.cols.names)
+#### 2.4 a Num can be forgotten with reverse Welford
+a = adds{1,2,3,4,5}
+b = adds{10,20,30}
+ab = adds({10,20,30}, adds{1,2,3,4,5})
+show{mu=ab.mu, n=ab.n}
+back = ab - b
+show{mu=back.mu, sd=round(back:div())}
+#### 2.5 add 50 rows then forget them: stats round-trip
+c = t.cols.all[1]
+show{n=c.n, mu=round(c.mu)}
+xtra = some(t.rows, 50)
+for _,r in ipairs(xtra) do t:add(r) end
+show{n=c.n, mu=round(c.mu)}
+for _,r in ipairs(xtra) do t:sub(r) end
+show{n=c.n, mu=round(c.mu)}

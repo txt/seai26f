@@ -1,0 +1,20 @@
+#### 7.1 rebuild
+srand(the.seed);
+t = Tbl(csv())
+#t.rows
+#### 7.2 the label budget: how many rows we may score
+the.budget
+#### 7.3 acquire: label few, cull the pool toward the good pole, loop
+y = t:Y()
+lab = t:acquirer(the.budget)
+#lab
+#### 7.4 50 labels (13% of rows) find a near-optimal car
+round(y(lab[1]))
+round(y(keysort(t.rows, y)[1]))
+#### 7.5 the labelled set is sorted best-first
+round(y(lab[1]))
+round(y(lab[#lab]))
+#### 7.6 more budget closes the gap to the true best
+the.budget = 100
+lab2 = t:acquirer(the.budget)
+show{labels=#lab2, best=round(y(lab2[1]))}

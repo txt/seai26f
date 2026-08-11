@@ -1,0 +1,21 @@
+#### 4.1 rebuild
+srand(the.seed);
+t = Tbl(csv())
+#### 4.2 halve: split rows on two far poles, best pole first
+a, b, lo, hi = t:halve(t.rows)
+show{lo=#lo, hi=#hi, total=#lo + #hi}
+round(t:disty(a))
+round(t:disty(b))
+#### 4.3 the good half really is better on the goals
+round(adds(map(lo, t:Y())).mu)
+round(adds(map(hi, t:Y())).mu)
+#### 4.4 Node: recurse the halving into a tree of clusters
+nd = Node(t)
+leaves = 0; rows = 0
+walk = function(x) if x.lo then walk(x.lo); walk(x.hi) else leaves = leaves + 1; rows = rows + #x.here.rows end end;
+walk(nd)
+show{leaves=leaves, rows=rows}
+#### 4.5 leaf: walk one row down to its cluster
+leaf1 = nd:leaf(t.rows[1])
+#leaf1.here.rows
+round(t:disty(leaf1.here.rows[1]))

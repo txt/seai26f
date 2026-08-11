@@ -1,0 +1,22 @@
+#### 1.1 settings live in `the`
+srand(the.seed);
+the.seed
+the.file
+#### 1.2 read a table: row 1 is the header
+t = Tbl(csv())
+#t.rows
+show(t.cols.names)
+#### 1.3 roles are read from the header names
+show(map(t.cols.y, function(c) return c.name end))
+show(map(t.cols.x, function(c) return c.name end))
+#### 1.4 a Num summarises a numeric column, one pass
+n = adds{2,4,4,4,5,5,7,9}
+show{mu=n:mid(), sd=round(n:div())}
+#### 1.5 a Sym summarises a symbolic column
+s = adds({"a","a","a","b","b","c"}, Sym())
+s:mid()
+round(s:div())
+#### 1.6 norm maps a value to its cdf position, 0..1
+round(n:norm(2))
+round(n:norm(5))
+round(n:norm(9))
