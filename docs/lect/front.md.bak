@@ -18,13 +18,13 @@
 
 # Why Look at AI a Different Way?
 
-The AI world, as we know it, will change soon. NVIDIA, Open AI, Meta, Google are in trouble
+The AI world, as we know it, will change soon. Nvidia, OpenAI, Meta, Google are in trouble
 
-- They've paid too much for technology which, if want to wait 3 months, you can get from free from China.
+- They've paid too mch for technology which, if want to wait 3 months, you can get from free from China.
 - As token costs for these new models sky-rocket, it come timely to talk cost-effective mix-and-match of cheaper and more expensive technologies [^compact].
-- The cloud-based subscription model will collapse and we discover ways to scale down LLMs to local machines.
-- The $1.2 trillion dollar data center debt will destroy them, especially since they those data centers age so quickly.
-- Dreams of replacing humans with automation will become nightmare maintenance and monitoring scones (see "AI Slop:" [^baltes]
+- The cloud-based subscrioption model will collpase and we discover ways to scale down LLMs to local machines.
+- The $1.2 tillion dollar data center debt will destroy them, especially since they those data centers age so quickly.
+- Dreams of replacing humans with automation will become nightmare maintainance and monitoring scaneios (see "AI Slop:" [^baltes]
   and "Ironies of Automation" [^bainbridge].
 
 [^baltes]: Baltes, Sebastian et al. “"An Endless Stream of AI Slop": How Developers Discuss the Burden of AI-Assisted Software Development.” (2026).
@@ -33,7 +33,7 @@ The AI world, as we know it, will change soon. NVIDIA, Open AI, Meta, Google are
 
 [^compact]: Tim Menzies. 2025. The Case for Compact AI. Commun. ACM 68, 9 (September 2025), 6–7. https://doi.org/10.1145/3746057
 
-So there is an opportunity to reshape what we mean by AI. What could we do with that?
+So there is an opprtunity to reshape what we mean by AI. What could we do with that?
 
 # Writing Reusable Skills
 
@@ -59,7 +59,7 @@ buy this one, which single change helps most.
 
 Here are ten ways an AI could help. Ask an LLM to code that second
 column and you get 10K lines of glue around 1000K lines of
-sci-kit-learn and pandas — a system you could not possibly understand.
+scikit-learn and pandas — a system you could not possibly understand.
 
 | task                                            | skill                     |     %LOC | new LOC |
 | ----------------------------------------------- | ------------------------- | -------: | ------: |
@@ -149,17 +149,17 @@ Look at what you will actually be paid to do. Fifty years of
 software engineering research — test generation, release planning,
 effort estimation, refactoring, configuration tuning, program
 repair, scheduling — is almost never generation. It is **rank,
-select, configure, schedule, estimate, prioritize**, over a table.
+select, configure, schedule, estimate, prioritise**, over a table.
 
 Every one of those jobs hits the same wall: **labels cost money.**
-Unlabeled data is cheap. Accurate labels ("this is good", "this is
+Unlabelled data is cheap. Accurate labels ("this is good", "this is
 bad") are so slow and expensive that we often face a label famine:
 
-- Human experts are slow at labeling, and get worse when rushed.
+- Human experts are slow at labelling, and get worse when rushed.
   Hours for a handful of cases.
 - Historical logs are big but unreliable. In one study, 90% of
-  labeled technical-debt "false positives" were themselves wrong.
-- Automated labeling is crude (regex) or merely assistive (LLMs).
+  labelled technical-debt "false positives" were themselves wrong.
+- Automated labelling is crude (regex) or merely assistive (LLMs).
 - Even a real oracle can be ruinous. Exhaustively exploring the
   **11** parameters of the x264 video encoder (compile each one,
   then run a large test suite) took **1,000+ hours**.
@@ -186,7 +186,7 @@ cannot afford:
     0.99   5902   69    68    37                10           30
     0.99   7937   67    65    49                10           30
 
-Pass EZR 17,737 such rows. It finds 15 rows worth labeling and
+Pass EZR 17,737 such rows. It finds 15 rows worth labelling and
 builds a model you can read:
 
          n   d2h Penalties+ Strength+
@@ -206,7 +206,7 @@ happens when a model has almost nothing in it:
 | step                            | time        |
 | ------------------------------- | ----------- |
 | read 17,737 rows                | 346 ms      |
-| choose 15 rows worth labeling  | 98 ms       |
+| choose 15 rows worth labelling  | 98 ms       |
 | **build the model**             | **11.9 ms** |
 | score 1,024 unseen rows with it | 0.3 ms      |
 
@@ -378,7 +378,7 @@ required to read it. (Aside: sure, you could use an LLM to automate
 the port. But then would you learn anything? And how would you
 perform in the exams?)
 
-**Homework, standing assignment.** Implement this system in a
+**Homework, standing assignment.** Reimplement this system in a
 language of your choice (Python recommended), paced by the lectures:
 by the end of week _k_, your program reproduces every REPL event
 through that lecture's range. The RNG is a portable 10-line

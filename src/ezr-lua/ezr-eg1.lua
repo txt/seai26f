@@ -29,9 +29,17 @@
 -- entropy). Everything downstream (tables, distance, trees)
 -- talks to that protocol, never to the type.
 --
--- ## Glossary (see tut.md#glossary)
--- Num, Sym, add, sub, mid, div, norm, dist, holds, reset,
--- protocol, noir, welford, stream, mode, entropy
+-- ## Glossary
+-- [Num](https://github.com/txt/seai26f/blob/main/docs/lect/glossary.md#num),
+-- [Sym](https://github.com/txt/seai26f/blob/main/docs/lect/glossary.md#sym),
+-- [columnProtocol](https://github.com/txt/seai26f/blob/main/docs/lect/glossary.md#columnprotocol)
+-- (add, sub, mid, div, norm, dist, holds, reset),
+-- [protocol](https://github.com/txt/seai26f/blob/main/docs/lect/glossary.md#protocol),
+-- [noir](https://github.com/txt/seai26f/blob/main/docs/lect/glossary.md#noir),
+-- [welford](https://github.com/txt/seai26f/blob/main/docs/lect/glossary.md#welford),
+-- [stream](https://github.com/txt/seai26f/blob/main/docs/lect/glossary.md#stream),
+-- [mode](https://github.com/txt/seai26f/blob/main/docs/lect/glossary.md#mode),
+-- [entropy](https://github.com/txt/seai26f/blob/main/docs/lect/glossary.md#entropy)
 --
 -- ---
 local abs = math.abs
