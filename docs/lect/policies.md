@@ -97,7 +97,7 @@ Each cohort is graded out of 100 marks.
 | Group tool talk                       |                         15                         |                                     15                                     |
 | Task talk                             |                         —                          |                                     15                                     |
 | Mid-term                              |                         24                         |                                     24                                     |
-| Project                               |  24 ([shrinking-code demos](../submit/uproj.md))   | 39 (six-week team [research project](../submit/gproj.md), Oct 26 – Nov 30) |
+| Project                               |  24 ([shrinking-code demos](../submit/uproj.md))   | 39 (six-week team [research project](../submit/gproj.md) |
 | Final exam                            |                         24                         |                      — (project carries that weight)                       |
 | **Total**                             |                      **100**                       |                                  **100**                                   |
 
