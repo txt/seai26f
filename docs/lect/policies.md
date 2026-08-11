@@ -79,44 +79,53 @@ CSC 591 students will additionally be able to:
 
 Weekly in-class quizzes reward attendance. Talks are delivered in person
 (see the schedule on the course [README](https://github.com/txt/seai26f/blob/main/README.md)).
-Undergraduates sit a final exam, weighted the same as the mid-term;
-graduate students have no final exam — their project carries that weight.
-Graduate quizzes stop after the mid-term.
+There are no homeworks. Each cohort is graded out of 100 marks.
 
-**The split structure.** There are no homeworks. Undergraduates are
-assessed by quizzes, one tool talk, two exams, and one project — the
-[shrinking-code demos](../submit/uproj.md), a scripted build over a
-fixed corpus, due in one piece on the last class. Graduate students are
-assessed by quizzes (until the mid-term), two talks, the mid-term, and a
-six-week team [research project](../submit/gproj.md) (Oct 26 to Nov
-30) that carries most of their grade. The grad project must be far more creative than the undergrad
-one: undergrads execute a defined corpus; grads must invent the problem,
-pre-register its eval, and defend the results. The project's
-initial deliverable, two weeks in (Mon Nov 9), must show *something
-working* — a runnable slice plus the pre-registered eval; the final
-deliverable (Nov 30) reports results against that eval. Task talks
-(30 minutes, one per grad group) are backloaded into the last three
-lecture nights, beside the project deliverables; tool talks (30
-minutes, every group) run Sep 14 to Nov 9, two or three per night.
+**CSC 491 (undergraduate).** Undergrads are graded out of 100 marks
 
-Talks make measurable claims: where feasible, a tool talk shows the tool
-running against a baseline, not just slides about it. Failures are
-findings: an honest negative result, explained, scores; a hidden failure
-costs more than an honest low score.
+- 13 weekly in-class quizzes worth 1 mark each (one per lecture night, none
+on mid-term night)
+- 15-mark group tool talk
+- 24-mark project (the [shrinking-code demos](../submit/uproj.md)
+- a 24-mark mid-term,
+- 24-mark final exam
 
-**Marks (each cohort totals 100):**
+**CSC 591 (graduate).** Grads are graded out of 100 marks
 
-| Component | CSC 491 | CSC 591 | Notes |
-|-----------|--------:|--------:|-------|
-| Weekly in-class quizzes | 13 | 7 | 1 mark each, one per lecture night, none on mid-term night; grads stop after the mid-term (7 quiz nights before it) |
-| Tool talk | 15 | 15 | in-class group presentation |
-| Task talk | — | 15 | grads only |
-| Ugrad project | 24 | — | the [shrinking-code demos](../submit/uproj.md): one deliverable, due last class (Mon Nov 30) — repo + 5-minute video + %-new-code histogram |
-| [Grad project](../submit/gproj.md), initial deliverable | — | 5 | Mon Nov 9, two weeks in: a runnable slice — something must work — plus the pre-registered eval: claim (metric, threshold, baseline) and instrument demonstrated on sample or synthetic data |
-| [Grad project](../submit/gproj.md), final deliverable | — | 34 | last class, Mon Nov 30: results against the pre-registered claim; real data earns the top of the range; a failed claim with a recorded decision (persevere, re-plan, descope) loses nothing — an unrun or hidden eval does |
-| Mid-term exam | 24 | 24 | |
-| Final exam | 24 | — | 491 only, same weight as the mid-term |
-| **Total** | **100** | **100** | |
+- 7 weekly in-class quizzes worth 1 mark each (quizzes stop after the mid-term —
+there are 7 quiz nights before it)
+- 15-mark group tool talk
+- 15-mark
+task talk, 
+- 24-mark mid-term, 
+- 39-mark six-week team [research
+project](../submit/gproj.md) (Oct 26 to Nov 30)
+-  there is no final
+exam; the project carries that weight. 
+
+The grad project must be far more
+creative than the undergrad one:
+
+- undergrads execute a defined corpus;
+-  grads must invent the problem, pre-register its eval, and defend the
+results. 
+
+For grad students
+- the  project's initial deliverable (5 marks), two weeks in (Mon
+Nov 9), must show *something working* — a runnable slice plus the
+pre-registered eval: claim (metric, threshold, baseline) and instrument
+demonstrated on sample or synthetic data. 
+- The final project deliverable (34
+marks), on the last class (Mon Nov 30), reports results against that
+pre-registered claim; real data earns the top of the range, and a failed
+claim with a recorded decision (persevere, re-plan, descope) loses
+nothing — an unrun or hidden eval does.
+- Task talks (30 minutes, one per
+grad group) 
+
+For all students:
+- Tool talks (30 minutes, every group) run Sep
+14 to Nov 9, two or three per night.
 
 **Attendance and participation:** Classes are in person. The weekly in-class
 quizzes can only be taken in class; a missed quiz scores zero unless the absence
