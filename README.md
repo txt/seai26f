@@ -16,10 +16,6 @@
 
 Mondays 4:30–7:15 PM, 2201 Engineering Building 3.
 
-**Lectures:** boot |
-[columns](https://txt.github.io/seai26f/ezr-eg1.html) |
-dist | cluster | trees | acquire | stats | apps | optimize | dtlz
-
 **Also:** [intro](docs/lect/front.md) |
 [policies](docs/lect/policies.md) |
 [ugrad project](docs/submit/uproj.md) |
@@ -33,7 +29,7 @@ See [lecture notes](docs/lect/front.md) for the course intro and weekly demos, [
 
 | 📅 Date | 🎓 Lecture | 🛠️ submit <br>(due start of class) | 🎤 ugrad talks <br>(30 min each) | 🎤 grad talks <br>(30 min each) |
 |:-------------:|:----------:|:---------:|:---------:|:---------:|
-| Aug 17 | intro + boot | | | |
+| Aug 17 | [intro](docs/lect/front.md) + [boot](docs/lect/front.md#setup) | | | |
 | Aug 24 | [columns](https://txt.github.io/seai26f/ezr-eg1.html) | | | |
 | Aug 31 | dist | | | |
 | 🟩 ${\color{green}\textsf{Sep 07 — Labor Day, no class}}$ | | | | |
