@@ -25,21 +25,23 @@ description: Use when editing any markdown in this course repo (README, docs/lec
   Lecture, grad submit, ugrad talks, grad talks. No homework rows and
   no quiz markers in the table (both live in policies prose). Letters
   are group IDs within a cohort (toolA, taskA — no u/g prefix). Talks
-  are 30 min; tool talks Sep 14–Nov 9 (2–3/night); grad task talks
-  backloaded into the last three nights (3+3+2). Project deadlines live
-  in the grad submit column. Night shape: ~1 hr lecture + up to 90 min
-  student talks. Every lecture night carries a 1-mark quiz (marked in
-  the Lecture column; none on mid-term night) — 13 total.
+  are 30 min; tool talks Aug 31–Nov 9, one letter per night (2 talks:
+  ugrad + grad); grad task talks Nov 16 + Nov 23, four per night.
+  Nov 30 = 1-hr 491 final + project hand-ins, no talks; no Dec slot.
+  Project deadlines live in the grad submit column. Night shape:
+  ~1 hr lecture + up to 90 min student talks. Every lecture night
+  carries a 1-mark quiz (none on exam nights) — 12 for ugrads.
 - Grading and NCSU-required sections: `docs/lect/policies.md`. TWO
   cohorts, each totals 100. NO marks table — the assessment section is
   prose + one bullet list per cohort (bold **CSC 491 (undergraduate).**
-  / **CSC 591 (graduate).** lead-ins): CSC 491 = quizzes 13 (1 mark
-  each, none on mid-term night) + tool talk 15 + ugrad project 24 +
-  mid-term 24 + final 24; CSC 591 = quizzes 7 (grads stop quizzing
+  / **CSC 591 (graduate).** lead-ins): CSC 491 = quizzes 12 (1 mark
+  each, none on exam nights) + tool talk 15 + group ugrad project 25 +
+  mid-term 24 + final 24 (in class, Nov 30, 1 hr); CSC 591 = quizzes 7 (grads stop quizzing
   after the mid-term) + tool talk 15 + task talk 15 + mid-term 24 +
   project 39 (initial 5 + final 34), NO final exam — project carries
   that weight. NO homeworks. ALL exams weigh the same (24). Ugrad
-  project = shrinking-code demos (docs/submit/uproj.md): Buse Fig 6
+  project = group-of-3 shrinking-code demos (docs/submit/uproj.md,
+  one submission per group, video capped 5 min): Buse Fig 6
   analytics or Hoffman XAI triggers on MOOT data, git-tagged steps,
   5-min video, %-new-code histogram that must fall, due last class
   (Mon Nov 30), no intermediary. Grad project = research paper
