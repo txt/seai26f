@@ -31,17 +31,17 @@ See [lecture notes](docs/lect/front.md) for the course intro and weekly demos, [
 |:-------------:|:----------:|:---------:|:---------:|:---------:|:---------:|
 | Aug 17 | [intro](docs/lect/front.md) + [someMaths](docs/lect/l0.md) + [boot](docs/lect/front.md#setup) | | | | [w0](docs/review/w0.md) |
 | Aug 24 | [columns](https://txt.github.io/seai26f/ezr-eg1.html) | | | | [eg1](https://txt.github.io/seai26f/ezr-eg1.html) |
-| Aug 31 | dist | | toolA | toolA | |
+| Aug 31 | dist | | [toolA](docs/lect/tools.md) | [toolA](docs/lect/tools.md) | |
 | 🟩 ${\color{green}\textsf{Sep 07 — Labor Day, no class}}$ | | | | | |
-| Sep 14 | cluster | | toolB | toolB | |
-| Sep 21 | trees | | toolC | toolC | |
-| Sep 28 | acquire | | toolD | toolD | |
-| Oct 05 | stats | | toolE | toolE | |
+| Sep 14 | cluster | | [toolB](docs/lect/tools.md) | [toolB](docs/lect/tools.md) | |
+| Sep 21 | trees | | [toolC](docs/lect/tools.md) | [toolC](docs/lect/tools.md) | |
+| Sep 28 | acquire | | [toolD](docs/lect/tools.md) | [toolD](docs/lect/tools.md) | |
+| Oct 05 | stats | | [toolE](docs/lect/tools.md) | [toolE](docs/lect/tools.md) | |
 | Oct 12 | 🟥 ${\color{#ff9999}\textsf{Mid-term exam}}$ | | no talks | no talks | |
 | 🟩 ${\color{green}\textsf{Oct 19 — Fall break, no class}}$ | | | | | |
-| Oct 26 | apps | **[grad project](docs/submit/gproj.md) starts** | toolF | toolF | |
-| Nov 02 | optimize | | toolG | toolG | |
-| Nov 09 | dtlz | **[grad project](docs/submit/gproj.md): initial** | toolH | toolH | |
+| Oct 26 | apps | **[grad project](docs/submit/gproj.md) starts** | [toolF](docs/lect/tools.md) | [toolF](docs/lect/tools.md) | |
+| Nov 02 | optimize | | [toolG](docs/lect/tools.md) | [toolG](docs/lect/tools.md) | |
+| Nov 09 | dtlz | **[grad project](docs/submit/gproj.md): initial** | [toolH](docs/lect/tools.md) | [toolH](docs/lect/tools.md) | |
 | Nov 16 | | | | taskA–D | |
 | Nov 23 | | | | taskE–H | |
 | Nov 30 | 🟥 ${\color{#ff9999}\textsf{Final exam (491 only, 1 hr)}}$ | **[grad project](docs/submit/gproj.md): final** · **[ugrad project](docs/submit/uproj.md)** | | | |
