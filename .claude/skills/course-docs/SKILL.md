@@ -80,3 +80,60 @@ description: Use when editing any markdown in this course repo (README, docs/lec
 
 Plain words, short sentences, no buzzwords. Rubrics say how marks are
 lost, concretely.
+
+## Pycco doc pipeline (docs/*.html)
+
+- Regen loop per lua file (run from src/ezr-lua; $S = scratchpad):
+  `awk -v ext=lua -f ~/gits/timm/src/etc/doc.awk F.lua > $S/F.lua`
+  → `python3 ~/gits/timm/src/etc/pyccot.py -d ../../docs $S/F.lua`
+  → `python3 ../../etc/nav.py ../../docs/F.html`
+- EVERY pyccot run rewrites docs/pycco.css: re-append the
+  "timm extras" CSS block after (guard: `grep -q 'timm extras'`).
+- etc/nav.py reads docs/.order (base TAB src TAB code|tests);
+  injects README badge row (SSOT = README's first
+  `<p align="center">` block), centered file-list bar, centered
+  prev|next, h1 → github source link. Idempotent via
+  `<!-- seai26f-nav -->` marker. All rows centered; no per-page
+  left/right prose alignment.
+- Lua comment conventions for pycco: `--## name ----` banner =
+  section heading; markdown links work in `-- ` prose; run-lines
+  ``-- *`lua F.lua --flag`*`` need TWO trailing spaces (hard
+  break); `-- ---` after a blank `--` line = hr.
+- GitHub Pages: enabled, main:/docs, .nojekyll present. Pages
+  live at https://txt.github.io/seai26f/<base>.html. Markdown
+  docs are linked via github blob URLs instead.
+
+## Weekly demo files (src/ezr-lua/ezr-eg0..eg9.lua)
+
+- Ten chunks (table lives in front.md "The demos, week by
+  week"): eg0 boot, eg1 columns, eg2 dist, eg3 cluster,
+  eg4 cuts+trees, eg5 acquire+holdout, eg6 stats, eg7 apps,
+  eg8 optimizers, eg9 dtlz. Old monolith parked at
+  src/ezr-lua/etc/ezr-eg.lua.
+- Each file: install header (no rlwrap), `--egs` lister with a
+  `doc` table, `--repl`, `--all` (must skip --all/--egs/--repl),
+  glossary links (github blob URLs to docs/lect/glossary.md#term),
+  homework at end. A week's file must not mention later weeks'
+  machinery (no Tbl before week 2).
+- Homework tone: weekly port is "near enough is good enough";
+  exact diff-match demanded only for the Park-Miller pair
+  (src/ezr-lua/rand.lua vs src/rand.py — verified identical).
+- The saved step-2 prompt (in eg1's homework): trace only the
+  demos' call chain through require, print the Lua split by a
+  divider — above = hand-port to Python, below = covered by a
+  Python builtin, each commented with module.function.
+- Python port basis: src/101.py (settings `the` from docstring,
+  test_* dispatch, `say()` printer: floats integral→"%d" else
+  %.{the.round}f, dicts insertion-order, "_" keys hidden).
+
+## Review files & glossary
+
+- docs/review/wN.md: easy recall questions, answers at bottom;
+  linked from the README schedule's Review column (w0 = Aug 17,
+  eg1 page = Aug 24).
+- docs/lect/glossary.md: entry per term in discovery order,
+  verbatim ezr.lua code, math in $$..$$. Fused headings —
+  "mid (mode, mean)", "diversity (entropy, standard deviation)",
+  "columnProtocol" (add sub mid div norm dist holds reset) —
+  each with explicit `<a name>` anchors so old #mode/#entropy
+  links survive.
