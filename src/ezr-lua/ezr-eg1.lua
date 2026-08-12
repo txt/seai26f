@@ -112,7 +112,7 @@ eg["--sub"] = function(    t,c,n1,mu1,xtra)
 --    Open a terminal split: Claude on the left, a shell on
 --    the right -- ideally in [Ghostty](https://ghostty.org),
 --    but [VS Code](https://code.visualstudio.com) is ok.
--- 2. Ask Claude to find all the Lua code associated with this
+-- 2. Ask Claude to list all the Lua code associated with this
 --    [ezr-eg1.lua](https://github.com/txt/seai26f/blob/main/src/ezr-lua/ezr-eg1.lua)
 --    file (it will follow the require chain into
 --    [ezr.lua](ezr.html) and [ezr-lib.lua](ezr-lib.html)).
