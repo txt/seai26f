@@ -25,7 +25,7 @@ description: Use when editing any markdown in this course repo (README, docs/lec
   Lecture, grad submit, ugrad talks, grad talks. No homework rows and
   no quiz markers in the table (both live in policies prose). Letters
   are group IDs within a cohort (toolA, taskA — no u/g prefix). Talks
-  are 30 min; tool talks Aug 31–Nov 9, one letter per night (2 talks:
+  are 20 min (15 + 5 questions); tool talks Aug 31–Nov 9, one letter per night (2 talks:
   ugrad + grad); grad task talks Nov 16 + Nov 23, four per night.
   Nov 30 = 1-hr 491 final + project hand-ins, no talks; no Dec slot.
   Project deadlines live in the grad submit column. Night shape:

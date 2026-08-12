@@ -21,15 +21,17 @@ the [README](https://github.com/txt/seai26f/blob/main/README.md)).
 One tool per group; first come, first served on the
 [signup sheet](https://docs.google.com/spreadsheets/d/1EsVadqssyJXaQPFjTVEfOs3Uv8DOQ0WyNlgTMcsoeBo/edit).
 
-The list merges the classic search/optimization canon with the 20-optimizer
-inventory of Table II in Ganguly & Menzies,
-*"Which Optimizer, At What Budget? A Tournament of Optimizers for
-Search-Based SE"*, [arXiv:2607.11705](https://arxiv.org/abs/2607.11705)
-(2026). Bracketed numbers cite that paper's bibliography (selected entries
-below); "assumption" families A1–A7 are that paper's Table III (A1 local
-continuity; A2 memory/diversification; A3 building-block decomposability;
-A4 Pareto incomparability; A5 surrogate feasible; A7 low intrinsic
-dimensionality).
+Talksa re 20 minutes long. Try to finish in 15 so we can have 5 ins for questions.
+
+A "tools" talk explores one line of the following table:
+
+- presents the SE problem (important! state this first!),
+- reviews the tool algorithm
+- discusses how (if at all) the tool addressed the problem
+
+Important: 
+- write the tatlk in google slides, public to everyone, edittable by timm@ieee.org
+- discuss the talk to the lecturer the week before so they can fill in any missing theory stuff.
 
 | # | Tool | Year | Assumption | Notes | Example SE use |
 |--:|------|------|:----:|-------|----------------|
@@ -99,7 +101,3 @@ dimensionality).
 - G. Gay, T. Menzies, M. Jalali, et al., "Finding robust solutions in requirements models," *Automated Software Engineering*, 17:439–468, 2010 (MaxWalkSat on NASA requirements models).
 - Non-tournament classics: M. Dorigo, *Optimization, Learning and Natural Algorithms*, PhD thesis, 1992; H. Kautz and B. Selman, "Pushing the envelope: planning, propositional logic, and stochastic search," *AAAI*, 1996; E. Zitzler and S. Künzli, "Indicator-based selection in multiobjective search," *PPSN*, 2004; C. E. Rasmussen and C. K. I. Williams, *Gaussian Processes for Machine Learning*, MIT Press, 2006.
 
-## Coverage check
-
-16 tool-talk slots (8 ugrad + 8 grad) versus **26 tools** above: enough for
-every group to claim a distinct tool, with 10 spares.

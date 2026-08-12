@@ -23,11 +23,11 @@ Mondays 4:30–7:15 PM, 2201 Engineering Building 3.
 [Lua-101](src/ezr-lua/tut/lua101.md) |
 [tools](docs/lect/tools.md)
 
-See [lecture notes](docs/lect/front.md) for the course intro and weekly demos, [policies](docs/lect/policies.md) for grading, [tools](docs/lect/tools.md) for the tool-talk menu, and the [talk signup sheet](https://docs.google.com/spreadsheets/d/1EsVadqssyJXaQPFjTVEfOs3Uv8DOQ0WyNlgTMcsoeBo/edit). Every lecture night (except exam nights) has a 1-mark in-class quiz (grads: only until the mid-term). Talk letters are group IDs within each cohort (24+24 students, groups of three, 8 groups per cohort); talks are 30 minutes. Night shape: about one hour of lecture, then up to 90 minutes of student talks.
+See [lecture notes](docs/lect/front.md) for the course intro and weekly demos, [policies](docs/lect/policies.md) for grading, [tools](docs/lect/tools.md) for the tool-talk menu, and the [talk signup sheet](https://docs.google.com/spreadsheets/d/1EsVadqssyJXaQPFjTVEfOs3Uv8DOQ0WyNlgTMcsoeBo/edit). Every lecture night (except exam nights) has a 1-mark in-class quiz (grads: only until the mid-term). Talk letters are group IDs within each cohort (24+24 students, groups of three, 8 groups per cohort); talks are 20 minutes (aim for 15, leaving 5 for questions). Night shape: about one hour of lecture, then up to 90 minutes of student talks.
 
 <div align=center>
 
-| 📅 Date | 🎓 Lecture | 🛠️ submit <br>(due start of class) | 🎤 ugrad talks <br>(30 min each) | 🎤 grad talks <br>(30 min each) | 🔍 Review |
+| 📅 Date | 🎓 Lecture | 🛠️ submit <br>(due start of class) | 🎤 ugrad talks <br>(20 min each) | 🎤 grad talks <br>(20 min each) | 🔍 Review |
 |:-------------:|:----------:|:---------:|:---------:|:---------:|:---------:|
 | Aug 17 | [intro](docs/lect/front.md) + [someMaths](docs/lect/l0.md) + [boot](docs/lect/front.md#setup) | | | | [w0](docs/review/w0.md) |
 | Aug 24 | [columns](https://txt.github.io/seai26f/ezr-eg1.html) | | | | [eg1](https://txt.github.io/seai26f/ezr-eg1.html) |

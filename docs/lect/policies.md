@@ -118,12 +118,12 @@ marks), on the last class (Mon Nov 30), reports results against that
 pre-registered claim; real data earns the top of the range, and a failed
 claim with a recorded decision (persevere, re-plan, descope) loses
 nothing — an unrun or hidden eval does.
-- Task talks (30 minutes, one per grad group) fill the last
+- Task talks (20 minutes, one per grad group) fill the last
 two talk nights (Nov 16 and Nov 23), four per night.
 
 
 For all students:
-- Tool talks (30 minutes, every group) run Aug 31 to Nov 9,
+- Tool talks (20 minutes, every group) run Aug 31 to Nov 9,
 two per night (one ugrad group, one grad group).
 
 **Attendance and participation:** Classes are in person. The weekly in-class
