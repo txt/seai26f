@@ -94,16 +94,17 @@ eg["--without"] = function(    a,b,w)
   assert(abs(w.mu - a.mu) < 1e-9) end
 
 -- *`lua ezr-eg1.lua --sub`*  
--- The same trick, on a whole table: add fifty random rows,
--- forget them, and the first column's stats round-trip.
+-- The same trick, one value at a time: watch a hundred
+-- numbers, remember the stats, then add fifty more and
+-- forget them again. The stats round-trip.
 doc["--sub"] = "add, then forget: the stats round-trip"
-eg["--sub"] = function(    t,c,n1,mu1,xtra)
-  t  = Tbl(csv())
-  c  = t.cols.all[1]
+eg["--sub"] = function(    c,n1,mu1,xtra)
+  c = Num()
+  for _ = 1, 100 do c:add(rand()) end
   n1, mu1 = c.n, c.mu
-  xtra = some(t.rows, 50)
-  for _,r in ipairs(xtra) do t:add(r) end
-  for _,r in ipairs(xtra) do t:sub(r) end
+  xtra = {}
+  for j = 1, 50 do xtra[j] = rand(); c:add(xtra[j]) end
+  for _,v in ipairs(xtra) do c:add(v, -1) end
   print(show{n=c.n, mu=c.mu, was=mu1})
   assert(c.n == n1 and abs(c.mu - mu1) < 1e-9) end
 
