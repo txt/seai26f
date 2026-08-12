@@ -116,7 +116,7 @@ eg["--sub"] = function(    t,c,n1,mu1,xtra)
 --    [ezr-eg1.lua](https://github.com/txt/seai26f/blob/main/src/ezr-lua/ezr-eg1.lua)
 --    file (it will follow the require chain into
 --    [ezr.lua](ezr.html) and [ezr-lib.lua](ezr-lib.html)).
--- 3. Ask Claude to port that code to Python, wiring each demo
+-- 3. Port that code to Python, wiring each demo
 --    to a test_ function, using
 --    [101.py](https://github.com/txt/seai26f/blob/main/src/101.py)
 --    as a basis.
