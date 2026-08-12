@@ -18,7 +18,9 @@
 
 # Why Look at AI a Different Way?
 
-The AI world, as we know it, will change soon. NVIDIA, Open AI, Meta, Google are in trouble
+<img  align=right width="500"   alt="image" src="https://github.com/user-attachments/assets/c83306a6-8886-482e-8341-7b2e3b9f00aa" />
+
+The AI world, as we know it, will soon change. NVIDIA, Open AI, Meta, Google are in trouble
 
 - They've paid too much for technology which, if want to wait 3 months, you can get from free from China.
 - As token costs for these new models sky-rocket, it come timely to talk cost-effective mix-and-match of cheaper and more expensive technologies [^compact].
