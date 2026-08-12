@@ -133,7 +133,9 @@ eg["--sub"] = function(    c,n1,mu1,xtra)
 -- 5. Make that Python perform like the Lua: same demos, same
 --    printed numbers (same seed, same precision).
 -- 6. Hand in: one side of one piece of paper, showing
---    your Python code for the Num and Sym classes.
+--    your Python code for the Num and Sym classes. At the
+--    end of that code, add comments answering the
+--    "check your port" questions below.
 --
 -- Check your port:
 --
