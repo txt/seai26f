@@ -132,16 +132,18 @@ eg["--sub"] = function(    c,n1,mu1,xtra)
 --    together, you can figure them out.
 -- 5. Make that Python perform like the Lua: same demos, same
 --    printed numbers (same seed, same precision).
+-- 6. Hand in: one side of one piece of paper, showing
+--    your Python code for the Num and Sym classes.
 --
 -- Check your port:
 --
--- 6. Add {10,20,30} to a Num one value at a time, printing
+-- 7. Add {10,20,30} to a Num one value at a time, printing
 --    mu and sd after each add. Watch Welford converge.
--- 7. What is the entropy of a Sym fed "a","a","a"? Fed
+-- 8. What is the entropy of a Sym fed "a","a","a"? Fed
 --    "a","b","c"? Predict first, then run it.
--- 8. In --sub, why must the assert use < 1e-9 rather
+-- 9. In --sub, why must the assert use < 1e-9 rather
 --    than ==? What does that say about floats?
--- 9. Drop the random number generator into its own file:
+-- 10. Drop the random number generator into its own file:
 --    copy `Seed`, `srand` and `rand` from
 --    [ezr-lib.lua](ezr-lib.html); start that file with
 --    `local Seed,srand,rand`; end it with
