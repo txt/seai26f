@@ -1,6 +1,5 @@
 FILES="ezr.lua
        ezr-lib.lua
-       ezr-eg.lua
        ezr-apps.lua
        ezr-dtlz.lua"
 : <<'DOCS'

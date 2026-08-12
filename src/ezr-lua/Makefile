@@ -11,7 +11,7 @@ MOOT  ?= moot
 L     ?= 1
 CSV   := $(filter-out $(MOOT)/optimize/test/%, \
            $(wildcard $(MOOT)/optimize/*/*.csv))
-FILES := ezr.lua ezr-lib.lua ezr-eg.lua ezr-apps.lua \
+FILES := ezr.lua ezr-lib.lua etc/ezr-eg.lua ezr-apps.lua \
          ezr-dtlz.lua play.lua Makefile tut.md README.md \
          data/auto93.csv etc/img/fig2-w2.png etc/tut/repl.lua \
          $(wildcard etc/tut/*.in)
@@ -26,7 +26,7 @@ repl: ## the tutorial prompt (same as: lua -i play.lua)
 	@$(LUA) -i play.lua
 
 demo: ## run every demo; each must end "failures: 0"
-	@$(LUA) ezr-eg.lua   --all
+	@$(LUA) etc/ezr-eg.lua   --all
 	@$(LUA) ezr-apps.lua --all
 	@$(LUA) ezr-dtlz.lua --all
 
@@ -35,28 +35,28 @@ apps: ## higher-level demos only: knn, nb, kmeans, ga/de/sa/ls, race, dtlz
 	@$(LUA) ezr-dtlz.lua --all
 
 csv: ## e.g. read a table; row 1 is the header
-	lua ezr-eg.lua --file=data/auto93.csv --csv
+	lua etc/ezr-eg.lua --file=data/auto93.csv --csv
 
 col: ## e.g. one Num and one Sym summary
-	lua ezr-eg.lua --file=data/auto93.csv --col
+	lua etc/ezr-eg.lua --file=data/auto93.csv --col
 
 disty: ## e.g. sort all rows by distance to heaven; show ends
-	lua ezr-eg.lua --file=data/auto93.csv --disty
+	lua etc/ezr-eg.lua --file=data/auto93.csv --disty
 
 half: ## e.g. split rows on two far poles, best half first
-	lua ezr-eg.lua --file=data/auto93.csv --half
+	lua etc/ezr-eg.lua --file=data/auto93.csv --half
 
 node: ## e.g. cluster: recursive tree of halves
-	lua ezr-eg.lua --file=data/auto93.csv --node
+	lua etc/ezr-eg.lua --file=data/auto93.csv --node
 
 show: ## e.g. grow a best-cut tree and print it
-	lua ezr-eg.lua --file=data/auto93.csv --show
+	lua etc/ezr-eg.lua --file=data/auto93.csv --show
 
 acquire: ## e.g. spend the label budget; best found vs truth
-	lua ezr-eg.lua --file=data/auto93.csv --acquire
+	lua etc/ezr-eg.lua --file=data/auto93.csv --acquire
 
 holdout: ## e.g. train on half, test on the unseen half
-	lua ezr-eg.lua --file=data/auto93.csv --holdout
+	lua etc/ezr-eg.lua --file=data/auto93.csv --holdout
 
 lecture: ## replay one lecture's trace (make lecture L=3)
 	@EZR=$$PWD $(LUA) etc/tut/repl.lua etc/tut/l$(L).in
@@ -88,14 +88,14 @@ data: ## fetch the whole moot corpus into ./moot (~200MB)
 	unzip -q moot.zip && rm moot.zip && mv moot-master $(MOOT)
 
 one: ## one table (make one F=moot/optimize/misc/auto93.csv)
-	@$(LUA) ezr-eg.lua --file=$(F) --holdout
+	@$(LUA) etc/ezr-eg.lua --file=$(F) --holdout
 
 all: ## every table, CORES at a time, into results.tsv
 	@test -n "$(CSV)" || { echo "no data: make data"; exit 1; }
 	@echo "$(words $(CSV)) tables, $(CORES) at a time ..."
 	@printf '%s\n' $(CSV) | xargs -P $(CORES) -I{} sh -c \
 	  'printf "%s\t%s\n" "$$(basename {} .csv)" \
-	     "$$($(LUA) ezr-eg.lua --file={} --holdout)"' \
+	     "$$($(LUA) etc/ezr-eg.lua --file={} --holdout)"' \
 	  | sort > results.tsv
 	@echo "$$(wc -l < results.tsv) rows -> results.tsv"
 

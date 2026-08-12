@@ -24,8 +24,8 @@ Conventions: [../etc/style.md](../etc/style.md).
 ## Install
 
     curl -fL https://raw.githubusercontent.com/timm/src/refs/heads/main/ezr-lua/INSTALL.md | sh
-    cd ezr-lua && lua ezr-eg.lua --all    # tests
-    lua ezr-eg.lua -h                 # options and demos
+    cd ezr-lua && lua etc/ezr-eg.lua --all    # tests
+    lua etc/ezr-eg.lua -h                 # options and demos
 
 Or via luarocks (installs the `ezr`, `ezr-apps` and
 `ezr-dtlz` commands, plus sample data):
