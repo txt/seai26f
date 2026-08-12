@@ -27,23 +27,23 @@ See [lecture notes](docs/lect/front.md) for the course intro and weekly demos, [
 
 <div align=center>
 
-| 📅 Date | 🎓 Lecture | 🛠️ submit <br>(due start of class) | 🎤 ugrad talks <br>(30 min each) | 🎤 grad talks <br>(30 min each) |
-|:-------------:|:----------:|:---------:|:---------:|:---------:|
-| Aug 17 | [intro](docs/lect/front.md) + [someMaths](docs/lect/l0.md) + [boot](docs/lect/front.md#setup) | | | |
-| Aug 24 | [columns](https://txt.github.io/seai26f/ezr-eg1.html) | | | |
-| Aug 31 | dist | | | |
-| 🟩 ${\color{green}\textsf{Sep 07 — Labor Day, no class}}$ | | | | |
-| Sep 14 | cluster | | toolA | toolA |
-| Sep 21 | trees | | toolB | toolB |
-| Sep 28 | acquire | | toolC | toolC |
-| Oct 05 | stats | | toolD | toolD |
-| Oct 12 | 🟥 ${\color{#ff9999}\textsf{Mid-term exam}}$ | | no talks | no talks |
-| 🟩 ${\color{green}\textsf{Oct 19 — Fall break, no class}}$ | | | | |
-| Oct 26 | apps | **[grad project](docs/submit/gproj.md) starts** | toolE | toolE |
-| Nov 02 | optimize | | toolF · toolG | toolF |
-| Nov 09 | dtlz | **[grad project](docs/submit/gproj.md): initial** | toolH | toolG · toolH |
-| Nov 16 | | | | taskA–C |
-| Nov 23 | | | | taskD–F |
-| Nov 30 | | **[grad project](docs/submit/gproj.md): final** · **[ugrad project](docs/submit/uproj.md)** | | taskG–H |
-| 🟥 ${\color{#ff9999}\textsf{Dec 09 — Final exam (491 only), 3:30–6 PM}}$ | | | | |
+| 📅 Date | 🎓 Lecture | 🛠️ submit <br>(due start of class) | 🎤 ugrad talks <br>(30 min each) | 🎤 grad talks <br>(30 min each) | 🔍 Review |
+|:-------------:|:----------:|:---------:|:---------:|:---------:|:---------:|
+| Aug 17 | [intro](docs/lect/front.md) + [someMaths](docs/lect/l0.md) + [boot](docs/lect/front.md#setup) | | | | |
+| Aug 24 | [columns](https://txt.github.io/seai26f/ezr-eg1.html) | | | | |
+| Aug 31 | dist | | | | |
+| 🟩 ${\color{green}\textsf{Sep 07 — Labor Day, no class}}$ | | | | | |
+| Sep 14 | cluster | | toolA | toolA | |
+| Sep 21 | trees | | toolB | toolB | |
+| Sep 28 | acquire | | toolC | toolC | |
+| Oct 05 | stats | | toolD | toolD | |
+| Oct 12 | 🟥 ${\color{#ff9999}\textsf{Mid-term exam}}$ | | no talks | no talks | |
+| 🟩 ${\color{green}\textsf{Oct 19 — Fall break, no class}}$ | | | | | |
+| Oct 26 | apps | **[grad project](docs/submit/gproj.md) starts** | toolE | toolE | |
+| Nov 02 | optimize | | toolF · toolG | toolF | |
+| Nov 09 | dtlz | **[grad project](docs/submit/gproj.md): initial** | toolH | toolG · toolH | |
+| Nov 16 | | | | taskA–C | |
+| Nov 23 | | | | taskD–F | |
+| Nov 30 | | **[grad project](docs/submit/gproj.md): final** · **[ugrad project](docs/submit/uproj.md)** | | taskG–H | |
+| 🟥 ${\color{#ff9999}\textsf{Dec 09 — Final exam (491 only), 3:30–6 PM}}$ | | | | | |
 </div>

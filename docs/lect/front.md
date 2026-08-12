@@ -329,11 +329,13 @@ Here is a taste: the whole random number generator, from
 course comes from these few lines:
 
 ```lua
+local Seed,srand,rand
+
 Seed = 1234567891
 
 -- Reseed with any integer; lands in 1..2^31-2.
 function srand(n)
-  Seed = floor(n or 1234567891) % 2147483647
+  Seed = math.floor(n or 1234567891) % 2147483647
   if Seed <= 0 then Seed = Seed + 2147483646 end end
 
 -- No args: a float in [0,1). One arg n: an int in 1..n.
@@ -344,6 +346,8 @@ function rand(lo,hi,    x)
   if not lo then return x end
   if not hi then lo, hi = 1, lo end
   return lo + floor(x * (hi - lo + 1)) end
+
+return {srand=srand, rand=rand}
 ```
 
 (Note the Lua idiom: names after the wide gap in an argument
