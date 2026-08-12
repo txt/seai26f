@@ -113,12 +113,18 @@ eg["--sub"] = function(    c,n1,mu1,xtra)
 --    Open a terminal split: Claude on the left, a shell on
 --    the right -- ideally in [Ghostty](https://ghostty.org),
 --    but [VS Code](https://code.visualstudio.com) is ok.
--- 2. Ask Claude to list all the Lua code associated with this
---    [ezr-eg1.lua](https://github.com/txt/seai26f/blob/main/src/ezr-lua/ezr-eg1.lua)
---    file (it will follow the require chain into
---    [ezr.lua](ezr.html) and [ezr-lib.lua](ezr-lib.html)).
--- 3. Port that code to Python, wiring each demo
---    to a test_ function, using
+-- 2. Give Claude this prompt:
+--    "Read ezr-eg1.lua. For its demos (--col, --without,
+--    --sub), trace only the functions they actually call,
+--    following the require chain into [ezr.lua](ezr.html)
+--    and [ezr-lib.lua](ezr-lib.html). Print that Lua source
+--    in two parts, split by a divider line: above it, code
+--    I must hand-port to Python; below it, code a Python
+--    builtin already handles, each function commented with
+--    the module and function that replaces it. Near enough
+--    is good enough."
+-- 3. Port the above-the-line code to Python, wiring each
+--    demo to a test_ function, using
 --    [101.py](https://github.com/txt/seai26f/blob/main/src/101.py)
 --    as a basis.
 -- 4. Think, pair, share: list all the bits you do not

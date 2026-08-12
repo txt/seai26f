@@ -248,12 +248,18 @@ forget them again. The stats round-trip.</p>
    Open a terminal split: Claude on the left, a shell on
    the right &ndash; ideally in <a href="https://ghostty.org">Ghostty</a>,
    but <a href="https://code.visualstudio.com">VS Code</a> is ok.</li>
-<li>Ask Claude to list all the Lua code associated with this
-   <a href="https://github.com/txt/seai26f/blob/main/src/ezr-lua/ezr-eg1.lua">ezr-eg1.lua</a>
-   file (it will follow the require chain into
-   <a href="ezr.html">ezr.lua</a> and <a href="ezr-lib.html">ezr-lib.lua</a>).</li>
-<li>Port that code to Python, wiring each demo
-   to a test_ function, using
+<li>Give Claude this prompt:
+   &ldquo;Read ezr-eg1.lua. For its demos (&ndash;col, &ndash;without,
+   &ndash;sub), trace only the functions they actually call,
+   following the require chain into <a href="ezr.html">ezr.lua</a>
+   and <a href="ezr-lib.html">ezr-lib.lua</a>. Print that Lua source
+   in two parts, split by a divider line: above it, code
+   I must hand-port to Python; below it, code a Python
+   builtin already handles, each function commented with
+   the module and function that replaces it. Near enough
+   is good enough.&rdquo;</li>
+<li>Port the above-the-line code to Python, wiring each
+   demo to a test_ function, using
    <a href="https://github.com/txt/seai26f/blob/main/src/101.py">101.py</a>
    as a basis.</li>
 <li>Think, pair, share: list all the bits you do not
