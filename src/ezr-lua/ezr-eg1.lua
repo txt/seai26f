@@ -130,8 +130,8 @@ eg["--sub"] = function(    c,n1,mu1,xtra)
 -- 4. Think, pair, share: list all the bits you do not
 --    understand. Share that list with your pair. See if,
 --    together, you can figure them out.
--- 5. Make that Python perform like the Lua: same demos, same
---    printed numbers (same seed, same precision).
+-- 5. Make that Python perform like the Lua: same demos,
+--    similar printed numbers. Near enough is good enough.
 -- 6. Hand in: one side of one piece of paper, showing
 --    your Python code for the Num and Sym classes. At the
 --    end of that code, add comments answering the
