@@ -21,6 +21,39 @@ the [README](https://github.com/txt/seai26f/blob/main/README.md)).
 One tool per group; first come, first served on the
 [signup sheet](https://docs.google.com/spreadsheets/d/1EsVadqssyJXaQPFjTVEfOs3Uv8DOQ0WyNlgTMcsoeBo/edit).
 
+## The talk
+
+Talks are 20 minutes long. Try to finish in 15 so we have 5
+minutes for questions.
+
+A tool talk explores one line of the table below:
+
+- presents the SE problem (important! state this first!);
+- reviews the tool algorithm;
+- discusses how (if at all) the tool addressed the problem.
+
+Important:
+
+- Write the talk in Google Slides, public to everyone, editable
+  by timm@ieee.org.
+- Discuss the talk with the lecturer the week before, so they
+  can fill in any missing theory stuff.
+
+## Rubric (15 marks)
+
+| Marks | For | Check |
+|------:|-----|-------|
+| 3 | **The problem**: the SE problem, stated first | a stranger could say why anyone cares |
+| 3 | **The algorithm**: how the tool works | key idea in your own words, not vendor prose |
+| 3 | **The verdict**: did the tool address the problem? | evidence shown; "no" with reasons scores full |
+| 2 | **Discussed with lecturer the week before** | no discussion = 0 |
+| 2 | **Timing**: done in 15, left 5 minutes for questions | running past 20 = 0 |
+| 2 | **Slides + delivery**: Google Slides public and editable by timm@ieee.org; in person, whole group on stage | |
+
+Ways to lose marks: problem stated last (or never); no verdict,
+just a feature tour; no time left for questions; slides the
+lecturer cannot open.
+
 Talksa re 20 minutes long. Try to finish in 15 so we can have 5 ins for questions.
 
 A "tools" talk explores one line of the following table:

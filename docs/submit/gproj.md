@@ -19,7 +19,30 @@
 **Team:** your grad group (three-ish).
 **Runs:** the last six weeks, Oct 26 to Nov 30.
 **Deliverables:** initial (Mon Nov 9, 5 marks) and final (Mon Nov 30,
-34 marks). Your task talk presents this work.
+34 marks). Your task talk (15 marks, Nov 16 or Nov 23) presents this
+work.
+
+## The task talk (15 marks)
+
+Twenty minutes: aim for 15, leaving 5 for questions. The talk
+reviews your project so far: the question, the pre-registered
+claim (metric, threshold, baseline), what has run, what the
+evidence says, and your verdict (persevere, re-plan, descope).
+Write it in Google Slides, public to everyone, editable by
+timm@ieee.org; discuss it with the lecturer the week before.
+
+| Marks | For | Check |
+|------:|-----|-------|
+| 3 | **The question + claim**: stated first, with metric, threshold, baseline | a stranger could rerun the bet |
+| 3 | **The evidence**: what ran, on what data | real data tops the range; synthetic clearly labelled |
+| 3 | **The verdict**: results against the claim, honestly | a failed claim with a recorded decision loses nothing; a hidden one loses everything |
+| 2 | **Discussed with lecturer the week before** | no discussion = 0 |
+| 2 | **Timing**: done in 15, left 5 minutes for questions | running past 20 = 0 |
+| 2 | **Slides + delivery**: Google Slides public and editable by timm@ieee.org; in person, whole group on stage | |
+
+Ways to lose marks: claim stated nowhere (or invented after the
+results); evidence that cannot be traced to the repo; no time
+for questions; slides the lecturer cannot open.
 
 This project must be **far more creative** than the undergrad project.
 Undergrads execute a defined corpus. You invent a question, pre-register
