@@ -16,9 +16,11 @@
 
 # Undergraduate Project: the Shrinking-Code Demos
 
+**Team:** your ugrad group (three-ish). One submission per group.
 **Due:** last class (Mon Nov 30). One deliverable, no intermediaries.
-**Hand in:** repo URL + a 5-minute video + one histogram (details below),
-as one PDF/links page to Moodle.
+**Hand in:** repo URL + a video (5 minutes MAX — watching stops at
+5:00) + one histogram (details below), as one PDF/links page to
+Moodle.
 
 ## The idea
 

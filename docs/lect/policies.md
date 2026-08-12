@@ -93,12 +93,12 @@ Each cohort is graded out of 100 marks.
 
 | Component                             |                  CSC 491 (ugrad)                   |                               CSC 591 (grad)                               |
 | ------------------------------------- | :------------------------------------------------: | :------------------------------------------------------------------------: |
-| Weekly in-class quizzes (1 mark each) | 13 (one per lecture night; none on mid-term night) |                      7 (quizzes stop after mid-term)                       |
+| Weekly in-class quizzes (1 mark each) | 12 (one per lecture night; none on exam nights) |                      7 (quizzes stop after mid-term)                       |
 | Group tool talk                       |                         15                         |                                     15                                     |
 | Task talk                             |                         —                          |                                     15                                     |
 | Mid-term                              |                         24                         |                                     24                                     |
-| Project                               |  24 ([shrinking-code demos](../submit/uproj.md))   | 39 (six-week team [research project](../submit/gproj.md) |
-| Final exam                            |                         24                         |                      — (project carries that weight)                       |
+| Project                               |  25 (group [shrinking-code demos](../submit/uproj.md)) | 39 (six-week team [research project](../submit/gproj.md) |
+| Final exam (last class, Nov 30, 1 hr) |                         24                         |                      — (project carries that weight)                       |
 | **Total**                             |                      **100**                       |                                  **100**                                   |
 
 The grad project must be far more
@@ -118,12 +118,13 @@ marks), on the last class (Mon Nov 30), reports results against that
 pre-registered claim; real data earns the top of the range, and a failed
 claim with a recorded decision (persevere, re-plan, descope) loses
 nothing — an unrun or hidden eval does.
-- Task talks (30 minutes, one per
-grad group) 
+- Task talks (30 minutes, one per grad group) fill the last
+two talk nights (Nov 16 and Nov 23), four per night.
+
 
 For all students:
-- Tool talks (30 minutes, every group) run Sep
-14 to Nov 9, two or three per night.
+- Tool talks (30 minutes, every group) run Aug 31 to Nov 9,
+two per night (one ugrad group, one grad group).
 
 **Attendance and participation:** Classes are in person. The weekly in-class
 quizzes can only be taken in class; a missed quiz scores zero unless the absence
