@@ -76,7 +76,7 @@ satisfaction scale run on three humans.
    tags (e.g. `git diff --stat step2..step3`, or cloc per tag). If your
    design is right, the bars fall.
 
-## Rubric (24 marks)
+## Rubric (25 marks)
 
 | Marks | For | 3-point check |
 |------:|-----|---------------|
@@ -84,7 +84,7 @@ satisfaction scale run on three humans.
 | 6 | **The shrink**: falling histogram, honest git tags | bars fall steadily = 6; flat = 3; rising or untagged = 0 |
 | 6 | **The video**: 5 min, every demo runs, story is clear | a stranger sees why step N was cheap = 6 |
 | 3 | **Code quality**: tests, small, readable | |
-| 3 | **AI disclosure**: what the LLM wrote, which of its errors you caught | zero caught errors reads as zero checking |
+| 4 | **AI disclosure**: what the LLM wrote, which of its errors you caught | zero caught errors reads as zero checking |
 
 Ways to lose marks: a demo that only runs in the video; a histogram not
 derivable from the repo's tags; steps that share nothing (nine little
