@@ -134,6 +134,13 @@ eg["--sub"] = function(    t,c,n1,mu1,xtra)
 --    "a","b","c"? Predict first, then run it.
 -- 8. In --sub, why must the assert use < 1e-9 rather
 --    than ==? What does that say about floats?
+-- 9. Drop the random number generator into its own file:
+--    copy `Seed`, `srand` and `rand` from
+--    [ezr-lib.lua](ezr-lib.html); start that file with
+--    `local Seed,srand,rand`; end it with
+--    `return {srand=srand, rand=rand}`. Print 20 random
+--    numbers. Then port that file to Python: same seed,
+--    SAME 20 numbers, or the port is wrong.
 
 --## start-up --------------------------------------------------
 -- Fires only when this file is the script the user ran.

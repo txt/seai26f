@@ -269,6 +269,13 @@ forget them, and the first column&rsquo;s stats round-trip.</p>
    &ldquo;a&rdquo;,&rdquo;b&rdquo;,&rdquo;c&rdquo;? Predict first, then run it.</li>
 <li>In &ndash;sub, why must the assert use &lt; 1e-9 rather
    than ==? What does that say about floats?</li>
+<li>Drop the random number generator into its own file:
+   copy <code>Seed</code>, <code>srand</code> and <code>rand</code> from
+   <a href="ezr-lib.html">ezr-lib.lua</a>; start that file with
+   <code>local Seed,srand,rand</code>; end it with
+   <code>return {srand=srand, rand=rand}</code>. Print 20 random
+   numbers. Then port that file to Python: same seed,
+   SAME 20 numbers, or the port is wrong.</li>
 </ol>
     </div>
     <div class='code'>

@@ -386,34 +386,6 @@ Park-Miller generator (`rand` in `ezr-lib.lua`), so a correct port
 prints the SAME numbers shown here — grading is diff. Match table
 contents exactly; match floats to the printed precision.
 
-## The map
-
-The mechanics: numbered REPL events (`[1]>` onward), every one
-executed against the real code by a replay harness — outputs shown
-are real, never retyped. A language appendix (numbered from `[1000]>`)
-teaches the Lua the sources use. Each lecture mixes lab blocks
-(prompts + a check question) with woven theory, and ends with
-exercises that reuse its prompts by number. One thread runs through
-all ten: reasoning from small samples — what they show, what they
-hide, how far to trust them.
-
-| #        | Lecture                    | REPL    | Ideas                                              |
-| -------- | -------------------------- | ------- | -------------------------------------------------- |
-| 0        | A taste: 20 measurements   | —       | the arithmetic, and one worked scouting problem    |
-| 1        | Orientation & columns      | 1–16    | SEED, NOIR, WEL, CDF, LOG                          |
-| 2        | Tables, roles, forgetting  | 17–36   | ROLE, STREAM                                       |
-| 3        | Distance & gap-to-heaven   | 37–53   | MINK, D2H, PARETO                                  |
-| 4        | Clustering by poles        | 54–69   | POLE, FASTMAP, HALVE                               |
-| 5        | Discretization & cuts      | 70–84   | CUT, IG, VAL                                       |
-| 6        | Trees & XAI                | 85–94   | CART, XAI, PRUNE                                   |
-| 7        | Active learning / acquire  | 95–108  | ACQ, AL, BO, TS                                    |
-| 8        | The holdout rig            | 109–124 | HOLD, WIN, BASELINE                                |
-| 9        | Statistics                 | 125–142 | COHEN, KS, CLIFF, SAME, POWER, SK                  |
-| 10       | Apps, then DTLZ (advanced) | 143–183 | KNN, ANOM, NB, KM, KPP, DTLZ, SBSE, GA, DE, SA, LS |
-| glossary | Acronyms & terms           |         |                                                    |
-| appendix | Lua-101                    | 1000–   |                                                    |
-| refs     | References                 |         |                                                    |
-
 ## The demos, week by week
 
 The demos of `ezr-eg.lua`, `ezr-apps.lua` and `ezr-dtlz.lua`
@@ -437,20 +409,5 @@ the earlier weeks, so the reading load stays flat.
 | ezr-eg7.lua                                               | apps: predict, guard, group    | `--knn` `--detect` `--nb` `--kmeans` `--kpp`                             |
 | ezr-eg8.lua                                               | classic optimizers             | `--dominate` `--ga` `--de` `--sa` `--ls` `--race`                        |
 | ezr-eg9.lua                                               | DTLZ: labels cost money        | `--fronts` `--label` `--models` `--pure` `--why` `--generalize` `--wins` |
-
-All ten lectures, the appendix, glossary, references, and the public
-exam bank are complete; every trace is machine-verified against the
-code by `src/ezr-lua/etc/tut/repl.lua`.
-
-## Exams
-
-Questions sit at the end of each lecture. Migrated questions keep a
-"(gate N)" tag: once you understand REPL prompt [N], you can answer
-every question gated at or below N. Attempt (a) parts from memory
-_before_ opening the glossary — retrieval practice beats re-reading.
-(b) parts plant exactly ONE mistake: name it, its consequence, and
-the fix, in English, not code. Answers live in `src/ezr-lua/tut/ans/`, released
-one week behind their questions. A secret set (higher gates, no
-public answers) is held outside the repo.
 
 ---
