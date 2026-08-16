@@ -30,6 +30,10 @@ Huge LLM companies dominate today's AI scene. They hold more resources than we
 can ever know or access. They sell a world view that contains only them. They
 change their technology so fast that no one can stay current.
 They are like T-rex dinosaurs: they will monster you and your career.
+Renting big AI is renting a telescope: powerful, but pointed by someone
+else. You cannot inspect it; it changes without notice, so last year's
+result may not run this year; and it is wrong in confident ways, so
+every output needs a human check.
 
 These AI dinosaurs look unstoppable, unquestionable, inevitable. It seems all
 we can do is bow down, or run away. But a meteorite is coming to wipe out
@@ -227,13 +231,18 @@ So a dozen binary choices (A=2<sup>12</sup>), at C=95% and ε=5%, needs
 9,605 samples. Much better than 10<sup>15</sup>, but still impractical
 in many domains.
 
-(Aside: do not expect LLMs to label those samples for you. For SE
-problems, Ahmed et al. warn that LLMs assist labeling but cannot
-automate it. Other methods are no better. Herbold et al. report that
-labeling tools debugged for decades still make many errors; Yu et al.
-find massive labeling errors in real-world SE data sets. Human experts
-are slow, and grow error-prone when rushed; Easterby-Smith reports
-hours of work for just a few cases.)
+(Aside: **labels cost money**, all over SE. Human experts are slow,
+and grow error-prone when rushed; Easterby-Smith reports hours of
+work for just a few cases. Historical logs are big but unreliable:
+Herbold et al. report that labeling tools debugged for decades still
+make many errors, and when Yu et al. audited real-world SE data sets,
+90% of the technical-debt comments labeled "false positive" were
+themselves mislabeled. Even a real oracle can be ruinous: exhaustively
+exploring just the 11 configuration parameters of the x264 video
+encoder &mdash; compile each variant, then run a large test suite
+&mdash; took over 1,000 hours of CPU. And do not expect LLMs to label
+those samples for you: for SE problems, Ahmed et al. warn that LLMs
+assist labeling but cannot automate it.)
 
 <img src="gauss.png" width=350 align=right>
 
@@ -260,7 +269,28 @@ This maths rests on wildly optimistic assumptions: solutions are
 evenly distributed, along one dimension, and that dimension is
 Gaussian. Yet in practice, the numbers hold.
 
-<img src="fig2-w2.png" align=right width=450 alt="wins by budget and check">
+**A tiny tutorial: the csv format.** Checking that maths needs real
+data, so meet the data. Every problem in this subject is one csv
+file. The first row names the columns, and those names are the
+entire schema. Uppercase first letter means a numeric column
+(*Volume*); lowercase means symbolic (*origin*). A trailing "-"
+or "+" marks a goal, to be minimized or maximized; a trailing "X"
+says ignore this column; a name with none of those marks is an
+input. A "?" cell is a missing value. So in the cars below, a good
+car is light (*Lbs-*), quick (*Acc+*), and economical (*Mpg+*):
+
+| Clndrs | Volume | HpX | Model | origin | Lbs- | Acc+ | Mpg+ |
+|-------:|-------:|----:|------:|-------:|-----:|-----:|-----:|
+|      4 |     90 |  48 |    80 |      2 | 2085 | 21.7 |   40 |
+|      4 |    140 |  92 |    76 |      1 | 2572 | 14.9 |   30 |
+|      4 |     91 |   ? |    82 |      3 | 1965 | 15.7 |   30 |
+|      8 |    429 | 198 |    70 |      1 | 4341 | 10.0 |   15 |
+
+Note what is cheap and what is dear here. The input columns come
+free with every row. The goal columns are the labels &mdash;
+someone must weigh, drive, and measure each car &mdash; so in
+practice most goal cells start as "?", and the game is choosing
+the few rows worth labeling.
 
 Figure 2 of [arXiv:2606.03640](https://arxiv.org/abs/2606.03640)
 built models from 10 to 200 samples, then checked the top 1 to 10

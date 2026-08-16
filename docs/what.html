@@ -179,7 +179,7 @@ sup {
 <hr>
 <img src="rats.png" width=300 align=right>
 <p>
-Huge LLM companies dominate today's AI scene. They hold more resources than we can ever know or access. They sell a world view that contains only them. They change their technology so fast that no one can stay current. They are like T-rex dinosaurs: they will monster you and your career.
+Huge LLM companies dominate today's AI scene. They hold more resources than we can ever know or access. They sell a world view that contains only them. They change their technology so fast that no one can stay current. They are like T-rex dinosaurs: they will monster you and your career. Renting big AI is renting a telescope: powerful, but pointed by someone else. You cannot inspect it; it changes without notice, so last year's result may not run this year; and it is wrong in confident ways, so every output needs a human check.
 </p>
 <p>
 These AI dinosaurs look unstoppable, unquestionable, inevitable. It seems all we can do is bow down, or run away. But a meteorite is coming to wipe out their ecosystem:
@@ -280,7 +280,7 @@ Costs fall if you know how solutions will be judged. Search then becomes the <em
 </ul>
 So a dozen binary choices (A=2<sup>12</sup>), at C=95% and ε=5%, needs 9,605 samples. Much better than 10<sup>15</sup>, but still impractical in many domains.
 <br><br>
-(Aside: do not expect LLMs to label those samples for you. For SE problems, Ahmed et al. warn that LLMs assist labeling but cannot automate it. Other methods are no better. Herbold et al. report that labeling tools debugged for decades still make many errors; Yu et al. find massive labeling errors in real-world SE data sets. Human experts are slow, and grow error-prone when rushed; Easterby-Smith reports hours of work for just a few cases.)
+(Aside: <b>labels cost money</b>, all over SE. Human experts are slow, and grow error-prone when rushed; Easterby-Smith reports hours of work for just a few cases. Historical logs are big but unreliable: Herbold et al. report that labeling tools debugged for decades still make many errors, and when Yu et al. audited real-world SE data sets, 90% of the technical-debt comments labeled "false positive" were themselves mislabeled. Even a real oracle can be ruinous: exhaustively exploring just the 11 configuration parameters of the x264 video encoder &mdash; compile each variant, then run a large test suite &mdash; took over 1,000 hours of CPU. And do not expect LLMs to label those samples for you: for SE problems, Ahmed et al. warn that LLMs assist labeling but cannot automate it.)
 <img src="gauss.png" width=350 align=right>
 <br><br>
 Costs fall again if near enough is good enough. Real solutions can vary by a small amount, so a rat may stop at any solution indistinguishable from the best. Cohen calls two solutions "small to medium" different when they are 0.2&sigma; to 0.5&sigma; apart, and a normal curve spans &plusmn;3&sigma;. So "indistinguishable" means <em>p = ((0.2+0.5)/2)/6 &approx; 6%</em>. Hamlet gives the confidence <em>C</em> of finding an event of probability <em>p</em> in <em>n</em> independent trials:
@@ -295,7 +295,16 @@ Costs fall once more with prior knowledge. Suppose those 48 samples built a mode
 <li>samples(clever) = log2(samples(NEO)) = log2(48) &approx; 6 samples.</li>
 </ul>
 This maths rests on wildly optimistic assumptions: solutions are evenly distributed, along one dimension, and that dimension is Gaussian. Yet in practice, the numbers hold.
-<img src="fig2-w2.png" align=right width=450 alt="wins by budget and check">
+<br><br>
+<b>A tiny tutorial: the csv format.</b> Checking that maths needs real data, so meet the data. Every problem in this subject is one csv file. The first row names the columns, and those names are the entire schema. Uppercase first letter means a numeric column (<em>Volume</em>); lowercase means symbolic (<em>origin</em>). A trailing "-" or "+" marks a goal, to be minimized or maximized; a trailing "X" says ignore this column; a name with none of those marks is an input. A "?" cell is a missing value. So in the cars below, a good car is light (<em>Lbs-</em>), quick (<em>Acc+</em>), and economical (<em>Mpg+</em>):
+<table>
+<tr><th>Clndrs</th><th>Volume</th><th>HpX</th><th>Model</th><th>origin</th><th>Lbs-</th><th>Acc+</th><th>Mpg+</th></tr>
+<tr><td style="text-align:right">4</td><td style="text-align:right">90</td><td style="text-align:right">48</td><td style="text-align:right">80</td><td style="text-align:right">2</td><td style="text-align:right">2085</td><td style="text-align:right">21.7</td><td style="text-align:right">40</td></tr>
+<tr><td style="text-align:right">4</td><td style="text-align:right">140</td><td style="text-align:right">92</td><td style="text-align:right">76</td><td style="text-align:right">1</td><td style="text-align:right">2572</td><td style="text-align:right">14.9</td><td style="text-align:right">30</td></tr>
+<tr><td style="text-align:right">4</td><td style="text-align:right">91</td><td style="text-align:right">?</td><td style="text-align:right">82</td><td style="text-align:right">3</td><td style="text-align:right">1965</td><td style="text-align:right">15.7</td><td style="text-align:right">30</td></tr>
+<tr><td style="text-align:right">8</td><td style="text-align:right">429</td><td style="text-align:right">198</td><td style="text-align:right">70</td><td style="text-align:right">1</td><td style="text-align:right">4341</td><td style="text-align:right">10.0</td><td style="text-align:right">15</td></tr>
+</table>
+Note what is cheap and what is dear here. The input columns come free with every row. The goal columns are the labels &mdash; someone must weigh, drive, and measure each car &mdash; so in practice most goal cells start as "?", and the game is choosing the few rows worth labeling.
 <br><br>
 Figure 2 of <a href="https://arxiv.org/abs/2606.03640">arXiv:2606.03640</a> built models from 10 to 200 samples, then checked the top 1 to 10 sorted items in a holdout set. This ran 100,000 times, picking data sets and hyperparameters at random each time, over 127 data sets from the MOOT repository. The vertical axis is the build budget <em>y</em>; the horizontal axis is the top <em>x</em> items checked. Above a budget of about 50 and a check of about 5, everything is flat at 95. The paper's own summary: at `(budget, check) = (50, 6)` the learner "usually achieves above an 85% win", and "checking beyond 7 items seems not particularly useful".
 <br><br>
