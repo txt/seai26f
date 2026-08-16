@@ -13,3 +13,10 @@ push: ## save to cloud
 
 mds: ## save all to Github
 	@$(GIT_ROOT)/sh/headers $(GIT_ROOT)
+
+PAGES := $(patsubst %.md,%.html,$(wildcard $(GIT_ROOT)/docs/*.md))
+
+html: $(PAGES) ## build docs/*.md into styled single-file html
+
+$(GIT_ROOT)/docs/%.html: $(GIT_ROOT)/docs/%.md $(GIT_ROOT)/sh/md2html.awk $(GIT_ROOT)/sh/style.css
+	awk -f $(GIT_ROOT)/sh/md2html.awk -v css=$(GIT_ROOT)/sh/style.css $< > $@
