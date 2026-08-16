@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 for f in $1/LICENSE.md $(find $1/docs -name '*.md'); do
+  head -1 "$f" | grep -q '^title:' && continue  # md2html pages keep their own frontmatter
   basename $f
   sed -n '1,/^$/p' "$1/README.md" > _tmp
   sed '1,/^$/d' $f >> _tmp

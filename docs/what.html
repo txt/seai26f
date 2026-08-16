@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Intro to SE and AI</title>
+<link rel="icon" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐀</text></svg>">
+<meta name="viewport" content="width=device-width" />
+<style>
+:root {
+    --back-color: rgb(30, 30, 30);
+    --text-color: rgb(212, 212, 212);
+}
+
+/* minimalist reset */
+* {
+    padding: 0;
+    margin: 0;
+    font-size: 1em;
+}
+
+body {
+    background-color: var(--back-color);
+    color: var(--text-color);
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+}
+
+main {
+    margin: 0 auto;
+    padding: 30px 140px 0 140px;
+    max-width: 600px;
+    min-height: 100vh;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid var(--text-color);
+    margin: 3em 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 1.2em;
+    font-weight: 700;
+    display: inline;
+    margin-right: 5px;
+    line-height: 1.2;
+}
+
+h2 {
+    margin-top: 50px;
+    font-size: 1.4em;
+}
+
+h3 {
+    margin-top: 40px;
+    font-size: 1.1em;
+    text-align: center;
+}
+
+h4 {
+    font-weight: 400;
+    margin-bottom: 40px;
+}
+
+ol {
+    counter-reset: item;
+}
+ol>li {
+    counter-increment: item;
+    list-style: none inside;
+    margin: 20px 0;
+    overflow: hidden;
+    line-height: 1.5em;
+}
+ol>li:before {
+    content: counter(item) ;
+    margin-right: 10px;
+    padding: 8px;
+    border-radius: 50%;
+    width: 25px;
+    background: var(--text-color);
+    color: var(--back-color);
+    text-align: center;
+    float: left;
+    font-weight: 700;
+}
+
+footer {
+    text-align: right;
+    margin-top: 80px;
+    padding-bottom: 20px;
+    font-size: 0.7em;
+    font-style: italic;
+}
+
+p {
+    line-height: 1.5em;
+    margin-top: 20px;
+    display: block;
+}
+
+a {
+    color: inherit;
+}
+a:hover, a:focus {
+    color: var(--back-color);
+    background-color: var(--text-color);
+}
+
+img {
+    margin: 3px;
+}
+
+ul {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-left: 1.4em;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.85em;
+    line-height: 1.35;
+}
+th, td {
+    border: 1px solid rgba(212, 212, 212, 0.35);
+    padding: 4px 9px;
+    text-align: left;
+}
+th {
+    font-weight: 700;
+}
+
+.reference {
+    font-size: 0.8rem;
+    line-height: 1.2rem;
+}
+
+.footnote {
+    font-size: 0.8rem;
+    line-height: 1.2rem;
+    margin-top: 20px;
+}
+
+sup {
+    font-size: 0.7em;
+    line-height: 0;
+}
+
+.reference > a {
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+  main {
+      max-width: 600px;
+    padding: 10px;
+  }
+  h2 {
+    font-size: 1.2em;
+  }
+  img {
+    width: 100%;
+  }
+}
+</style>
+</head>
+<body>
+<main>
+<h1>What AI skills are durable, and affordable?</h1>
+<h2>Are you an LLM dinosaur, or a rat?</h2>
+<h4>By <a href="https://timm.fyi">Tim Menzies</a>, published 2026-08-16, updated 2026-08-16</h4>
+<p>
+<b>Summary:</b> <em>Students keep asking me two questions. What can I learn about AI that will not be outdated next year? And what can I afford to practice without renting a data center? This page is an answer. Big AI is a bubble, and the bubble is leaking: data centers age fast, revenues trail spending by a trillion dollars, and the regulators are closing in. When it pops, expect a third AI winter. So do not bet your career on renting a dinosaur. Learn instead to be a rat: use small models, small data, and small tools that one person can build, test, and understand. The durable skills are four rat tricks: reuse, then refactor; keep it simple and stochastic; know when near enough is good enough; and mix old symbolic AI with new neural AI, joined at the seam that pays. The evidence below shows a few hundred lines of code keeping pace with tools that burn thousands of LLM tokens.</em>
+</p>
+<hr>
+<img src="rats.png" width=300 align=right>
+<p>
+Huge LLM companies dominate today's AI scene. They hold more resources than we can ever know or access. They sell a world view that contains only them. They change their technology so fast that no one can stay current. They are like T-rex dinosaurs: they will monster you and your career.
+</p>
+<p>
+These AI dinosaurs look unstoppable, unquestionable, inevitable. It seems all we can do is bow down, or run away. But a meteorite is coming to wipe out their ecosystem:
+</p>
+<ol>
+<li>
+<b>Data centers die young</b> &ndash; the accountants book GPUs as lasting five or six years, but the real economic life is closer to two or three. Michael Burry warns that this slow write-off <a href="https://247wallst.com/investing/2026/07/02/the-michael-burry-bear-case-for-ai-chips-is-back-and-this-gpu-math-problem-wont-go-away/">understates depreciation by some $176 billion</a>, overstating hyperscaler profits by 20% or more. And we keep running out of the <a href="https://eta.lbl.gov/publications/2024-lbnl-data-center-energy-usage-report">power and water</a> needed to drive them.
+</li>
+<li>
+<b>The benefits fall short of the promises</b> &ndash; e.g. look at the <a href="https://arxiv.org/pdf/2603.27249">AI slop</a> generated by automatic coding tools; measured carefully, AI assistants can even make experienced developers <a href="https://arxiv.org/abs/2507.09089">slower</a>. Most corporate LLM pilot projects never show a measurable profit.
+</li>
+<li>
+<b>The revenues fall short too</b> &ndash; in 2024, Sequoia Capital asked <a href="https://www.sequoiacap.com/article/ais-600b-question/">AI's $600B question</a>: where is the revenue to cover all that spending? No one answered. Instead, the gap has since doubled, to some $1.2 trillion.
+</li>
+<li>
+<b>The earnings are circular</b> &ndash; large AI companies inflate (fraudulently?) their reported earnings with <a href="https://www.linkedin.com/posts/liamdarmody_this-bloomberg-diagram-looks-like-a-bubble-share-7382537328805957632-28YB/">"I pay you to buy from me"</a> deals.
+</li>
+<li>
+<b>Local models keep getting better</b> &ndash; when the model <a href="https://ollama.com">running on your laptop</a> is good enough, the economic case for the expensive cloud disappears.
+</li>
+<li>
+<b>Open models keep getting better too</b> &ndash; as open source Chinese models such as <a href="https://github.com/deepseek-ai">DeepSeek</a> and <a href="https://github.com/QwenLM">Qwen</a> come on line, companies like OpenAI and Anthropic have less and less that only they can sell.
+</li>
+<li>
+<b>The regulators are waking up</b> &ndash; governments respond slowly, but they do respond; see the <a href="https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai">EU AI Act</a>.
+</li>
+</ol>
+<p>
+So we are heading for a <a href="https://en.wikipedia.org/wiki/AI_winter">third AI winter</a>: a steep decline in public interest, venture capital, and corporate funding for all things AI. How will you survive it? Will you move to smart hardware/software combinations? Will you jump to outer space?
+</p>
+<p>
+Here is another option. Look down. Scurrying around the feet of the LLMs are little rodents, eating the dinosaurs' eggs. The rats are small, cheap, fast, and curious. They need no data center. They run on found food: small models, small data, small tools that one person can build, test, and understand. When the meteorite lands, the dinosaurs starve while the rats inherit the earth<sup id="r-nope"><a href="#fn-nope">1</a></sup>.
+</p>
+<p>
+This subject teaches you how to be a rat. We break up AI into numerous small parts and discuss shortcuts that make each part very fast. Kautz's neurosymbolic taxonomy (discussed below) makes the same move at field scale: mix and match the best of the old AI with the best of the new. 
+</p>
+<p>
+So be a discerning user of AI technology. Assess the merits of each approach, and know when to use what. Some of the discussion is theoretical&mdash;challenge problems where you can prove me wrong. But as we shall see,  other parts are strongly supported by extensive experimental results.
+</p>
+<div class="footnote" id="fn-nope"><a href="#r-nope">1</a>. Full disclosure: my "rats ate the dinosaurs" story, while fun, is inaccurate. True rats appeared some 50 million years <em>after</em> the dinosaurs fell; the egg thieves scurrying under actual dinosaur feet were other small early mammals. And no egg thief killed the dinosaurs. An asteroid did, and that die-off struck at the same time on land and in the deep oceans, where rats cannot swim, breathe, or live (let alone eat). Also, one dinosaur lineage shrugged off the meteorite and still surrounds us: the birds. But the moral survives the fact-check. Most K-Pg survivors were small, cheap-to-run generalists; the giant specialists starved.</div>
+<hr id="rat_tricks">
+<h3>How to be a rat</h3>
+<hr>
+<p>
+Here are four rat tricks that are very useful.
+</p>
+<ol>
+<li>
+<b>Reuse, then refactor</b>: Rats poke around the ground, feeding on whatever tidbits they can find. Good software engineers do the same: we look inside the skills we ask our AI to deploy, and before writing new code for a new skill, we reuse old code. This subject demonstrates that with some domain engineering. Suppose we were trying to buy a car. Here are ten skills we might ask of our AI:
+<table>
+<tr><th>task</th><th>skill</th><th>%LOC</th><th>new LOC</th></tr>
+<tr><td>From 400 cars, find unusually great buys.</td><td>remember (representation)</td><td style="text-align:right">45%</td><td style="text-align:right">150</td></tr>
+<tr><td>Guess the fuel use before we see the sticker</td><td>guess (prediction)</td><td style="text-align:right">17%</td><td style="text-align:right">57</td></tr>
+<tr><td>Say when "better" is real, and when it is noise</td><td>certify (certification)</td><td style="text-align:right">12%</td><td style="text-align:right">40</td></tr>
+<tr><td>Decide on the spot as cars arrive one at a time</td><td>flow (streaming)</td><td style="text-align:right">8%</td><td style="text-align:right">27</td></tr>
+<tr><td>Say why the bad cars are slow, or thirsty</td><td>blame (diagnosis)</td><td style="text-align:right">6%</td><td style="text-align:right">20</td></tr>
+<tr><td>Justify any verdict to a skeptical buyer</td><td>justify (explanation)</td><td style="text-align:right">4%</td><td style="text-align:right">13</td></tr>
+<tr><td>Find the best car, test-driving very few</td><td>choose (optimization)</td><td style="text-align:right">3%</td><td style="text-align:right">10</td></tr>
+<tr><td>Find the cheapest change that fixes this car</td><td>fix (repair)</td><td style="text-align:right">3%</td><td style="text-align:right">10</td></tr>
+<tr><td>Spot a strange car: a typo, or a scam</td><td>spot (anomaly detection)</td><td style="text-align:right">2%</td><td style="text-align:right">6</td></tr>
+<tr><td>Race our skills against the field's best</td><td>race (baselining)</td><td style="text-align:right">0%</td><td style="text-align:right">0</td></tr>
+<tr><td><b>Totals</b></td><td></td><td style="text-align:right"><b>100%</b></td><td style="text-align:right"><b>333</b></td></tr>
+</table>
+As seen here, the first skill costs 45% of the code: it pays for the data structures everything shares. After that, each new skill mostly rewires old parts: prediction costs 17%, optimization 3%, anomaly detection 2%. Skill <em>i+1</em> reuses the machinery already built for skills <em>1..i</em>.
+<br><br>
+Reuse alone is not enough: rat engineers also refactor. If any fool can do it for a dollar, an engineer asks how to do it for a penny. What code can we throw away, with everything still working? The table above shows the payoff of all that redoing: a few hundred lines of code now support world-class optimization and explanation algorithms. Ganguly's FSE work shows these data-light methods matching far heavier learners. Rayegan's JSS work shows the same small toolkit generating explanations that are both shorter and clearer than those of its rivals. Reuse, then refactor, and everything gets simple, understandable, verifiable.
+<br><br><div class="reference">
+<a href="https://github.com/txt/seai26f">Menzies: Ten lectures on data-lite AI, at the REPL</a>. Tim Menzies. NCSU course notes, 2026.
+</div>
+<div class="reference">
+<a href="https://arxiv.org/abs/2512.13524">Ganguly & Menzies: How low can you go? The data-light SE challenge</a>. Kishan Kumar Ganguly, Tim Menzies. FSE 2026. arXiv:2512.13524.
+</div>
+<div class="reference">
+<a href="https://arxiv.org/abs/2509.08667">Rayegan & Menzies: Minimal data, maximum clarity: A heuristic for explaining optimization</a>. Amirali Rayegan, Tim Menzies. J. Systems and Software, 2026. arXiv:2509.08667.
+</div>
+</li>
+<li>
+<img src="pso.gif" width=350 align=right>
+<b>Keep it simple, keep it stochastic</b>: One reason EZR does so much with so little code is that it makes extensive use of random search. Such searh, while simple to implement, can be spectacularly successful. The classic example is MaxWalkSat. To solve a hard logic problem, start with a random assignment. Find a broken clause. Flip one of its variables: usually the flip that fixes most, but sometimes any variable, chosen at random. That is the whole algorithm. Selman, Kautz, and Cohen showed that this pinch of noise let a simple local search crack constraint problems that defeated the careful, systematic solvers of the day. Nature agrees. Particle swarm optimization copies a flock of birds (see the figure at right). Each particle starts with a random guess. Then it moves: partly toward its own best find, partly toward the swarm's best find, and partly at random. From those three simple pulls, the swarm circles in on the prize. The same lesson holds in machine learning: Bergstra and Bengio showed that random trials tune learners better than careful grid search.
+<br><br><div class="reference">
+<a href="https://cdn.aaai.org/AAAI/1994/AAAI94-051.pdf">Selman et al.: Noise strategies for improving local search</a>. Bart Selman, Henry Kautz, Bram Cohen. AAAI 1994, 337–343.
+</div>
+<div class="reference">
+<a href="https://doi.org/10.1109/ICNN.1995.488968">Kennedy & Eberhart: Particle swarm optimization</a>. James Kennedy, Russell Eberhart. ICNN 1995, 1942–1948. doi:10.1109/ICNN.1995.488968.
+</div>
+<div class="reference">
+<a href="https://jmlr.org/papers/v13/bergstra12a.html">Bergstra & Bengio: Random search for hyper-parameter optimization</a>. James Bergstra, Yoshua Bengio. J. Machine Learning Research 13 (2012), 281–305.
+</div>
+</li>
+<li>
+<b>Pick your battles: good enough is near enough optimization (NEO)</b>: A little maths explains the success of random search. Random search assumes that near enough is good enough. That assumption makes search cheap.
+<br><br>
+First, see what search can cost. Some tasks are inherently complex. <em>Reward-free reinforcement learning</em> for autonomous cars must learn enough to satisfy any future, as-yet-unwritten safety law. Jin et al. show that even simple versions of this task need 10<sup>15</sup> samples.
+<br><br>
+Costs fall if you know how solutions will be judged. Search then becomes the <em>Best Arm</em> problem. Hoeffding says: to distinguish <em>A</em> alternatives with accuracy ε and confidence <em>C</em>,
+<ul>
+<li>samples(best-arm)  >=  (2/ε²) · log( 2A / (1−C) )</li>
+</ul>
+So a dozen binary choices (A=2<sup>12</sup>), at C=95% and ε=5%, needs 9,605 samples. Much better than 10<sup>15</sup>, but still impractical in many domains.
+<br><br>
+(Aside: do not expect LLMs to label those samples for you. For SE problems, Ahmed et al. warn that LLMs assist labeling but cannot automate it. Other methods are no better. Herbold et al. report that labeling tools debugged for decades still make many errors; Yu et al. find massive labeling errors in real-world SE data sets. Human experts are slow, and grow error-prone when rushed; Easterby-Smith reports hours of work for just a few cases.)
+<img src="gauss.png" width=350 align=right>
+<br><br>
+Costs fall again if near enough is good enough. Real solutions can vary by a small amount, so a rat may stop at any solution indistinguishable from the best. Cohen calls two solutions "small to medium" different when they are 0.2&sigma; to 0.5&sigma; apart, and a normal curve spans &plusmn;3&sigma;. So "indistinguishable" means <em>p = ((0.2+0.5)/2)/6 &approx; 6%</em>. Hamlet gives the confidence <em>C</em> of finding an event of probability <em>p</em> in <em>n</em> independent trials:
+<ul>
+<li>C = 1 - (1-p)<sup>n</sup>,</li>
+<li>so  samples(NEO) = log(1 - C) / log(1 - p).</li>
+</ul>
+At C=0.95 and p=0.06, rats can stop after only n=48 samples.
+<br><br>
+Costs fall once more with prior knowledge. Suppose those 48 samples built a model that can guess which of two solutions is worse. A binary chop then finds good solutions in:
+<ul>
+<li>samples(clever) = log2(samples(NEO)) = log2(48) &approx; 6 samples.</li>
+</ul>
+This maths rests on wildly optimistic assumptions: solutions are evenly distributed, along one dimension, and that dimension is Gaussian. Yet in practice, the numbers hold.
+<img src="fig2-w2.png" align=right width=450 alt="wins by budget and check">
+<br><br>
+Figure 2 of <a href="https://arxiv.org/abs/2606.03640">arXiv:2606.03640</a> built models from 10 to 200 samples, then checked the top 1 to 10 sorted items in a holdout set. This ran 100,000 times, picking data sets and hyperparameters at random each time, over 127 data sets from the MOOT repository. The vertical axis is the build budget <em>y</em>; the horizontal axis is the top <em>x</em> items checked. Above a budget of about 50 and a check of about 5, everything is flat at 95. The paper's own summary: at `(budget, check) = (50, 6)` the learner "usually achieves above an 85% win", and "checking beyond 7 items seems not particularly useful".
+<br><br>
+In a result that should please every rat, those numbers (50, 6) sit very close to the (48, 6) computed above.
+<br><br><div class="reference">
+<a href="https://proceedings.mlr.press/v119/jin20d.html">Jin et al.: Reward-free exploration for reinforcement learning</a>. Chi Jin, Akshay Krishnamurthy, Max Simchowitz, Tiancheng Yu. ICML 2020.
+</div>
+<div class="reference">
+<a href="https://www.tandfonline.com/doi/abs/10.1080/01621459.1963.10500830">Hoeffding: Probability inequalities for sums of bounded random variables</a>. Wassily Hoeffding. J. Amer. Statist. Assoc. 58, 301 (1963), 13–30. doi:10.1080/01621459.1963.10500830.
+</div>
+<div class="reference">
+<a href="https://arxiv.org/abs/2408.05534">Ahmed et al.: Can LLMs Replace Manual Annotation of Software Engineering Artifacts?</a>. Toufique Ahmed, Premkumar Devanbu, Christoph Treude, Michael Pradel. MSR 2025. arXiv:2408.05534.
+</div>
+<div class="reference">
+<a href="https://doi.org/10.1007/s10664-021-10092-4">Herbold et al.: Problems with SZZ and features: An empirical study of the state of practice of defect prediction data collection</a>. Steffen Herbold, Alexander Trautsch, Fabian Trautsch, Benjamin Ledel. Empirical Softw. Engg. 27, 2 (Mar 2022). doi:10.1007/s10664-021-10092-4.
+</div>
+<div class="reference">
+<a href="https://doi.org/10.1109/TSE.2020.3031401">Yu et al.: Identifying self-admitted technical debts with Jitterbug: A two-step approach</a>. Zhe Yu, Fahmid M. Fahid, Huy Tu, Tim Menzies. IEEE Trans. Software Engineering 48, 5 (2022), 1676–1691. doi:10.1109/TSE.2020.3031401.
+</div>
+<div class="reference">
+<a href="https://doi.org/10.1016/S0020-7373(80">Easterby-Smith: The design, analysis and interpretation of repertory grids</a>80032-0). Mark Easterby-Smith. Int. J. Man-Machine Studies 13, 1 (1980), 3–24. doi:10.1016/S0020-7373(80)80032-0.
+</div>
+<div class="reference">
+<a href="https://github.com/timm/moot">Menzies et al.: MOOT: a repository of many multi-objective optimization tasks</a>. Tim Menzies, Tao Chen, Yiqi Ye, Kishan K. Ganguly, Amirali Rayegan, Suvodeep Srinivasan, Andre Lustosa. MSR 2026, 584–589.
+</div>
+</li>
+<li>
+<b>Look for the cracks between the parts</b>: AI is not one thing. It is parts, joined at seams. My challenge to you is this: we drop our little nimble rats into those seams, can we build a better faster AI?
+<br><br>
+The following table extends Henry Kautz's 2020 AAAI address, and his 2024 update of it, which together map eight ways to join old symbolic AI (logic, search, solvers) to new neural AI (deep learners, LLMs). We add two more: symbolic alone, and neural alone, for ten cells in all. Most folks who just use ChatGPT, and nothing else, do not realize they are stuck in one tiny corner of this space of possibilities. The other nine cells are where the rats can zip in and speed things up.
+<br><br>
+Kautz's notation is a little arcane, so here is a simpler one. Write <em>S</em> for a symbolic part, <em>N</em> for a neural part. Then read the joins off the table, each with an SE example:
+<table>
+<tr><th>pattern</th><th>meaning</th><th>SE example</th></tr>
+<tr><td>S</td><td>symbols alone</td><td>EZR's domain engineering (trick 1, above): optimize and explain in 333 lines</td></tr>
+<tr><td>N</td><td>a net alone</td><td>LLMs label SE optimization data; Senthilkumar's EMSE work makes those raw labels robust</td></tr>
+<tr><td>S; N; S</td><td>symbols in, net thinks, symbols out</td><td>prompt an LLM with code, read back a review; the ChatGPT cell</td></tr>
+<tr><td>S[N]</td><td>symbolic boss calls a neural helper</td><td>an issue-triage pipeline (the boss) calls a sentiment net to score each incoming report (Lin et al.); AlphaGo's tree search calling its neural scorer is Kautz's classic case</td></tr>
+<tr><td>N; S</td><td>net proposes, symbols check</td><td>LLMs translate requirements to temporal logic, then model checkers test them (nl2spec); LLM warm-starts seed a classical active learner (Senthilkumar's TOSEM work)</td></tr>
+<tr><td>S; N</td><td>symbols build the net's diet</td><td>SE knowledge builds the training pairs; rules compile away into weights (Lample & Charton; Hu et al.)</td></tr>
+<tr><td>S as N</td><td>rules are templates for the net</td><td>logic clauses shape the network's structure (Logic Tensor Networks)</td></tr>
+<tr><td>S in loss</td><td>rules graded into training</td><td>coding standards as semantic loss: breaking a rule costs the net at training time (Xu et al.)</td></tr>
+<tr><td>N[S]</td><td>neural boss calls a symbolic helper</td><td>an LLM that calls calculators, search, and solvers mid-answer (Toolformer); Kautz's own favorite, and his demo teaches GPT to call a SAT solver</td></tr>
+<tr><td>S then N</td><td>cheap symbols first, dear net second</td><td>classical search finds good seeds; the LLM polishes them (Srinivasan)</td></tr>
+</table>
+The N[S] row hides a joke at the dinosaurs' expense. When Claude's own source code recently bumped into public view, readers found much S inside that N: prompts, rules, regular expressions, and tool calls, all wrapped around the net. Even the flagship dinosaurs are secretly neurosymbolic.
+<img src="snap2-regret.png" width=600 alt="SNAP2 vs SNAP, BS_LLM, EZR across 103 data sets">
+<br><br>
+The last row is the newest trick, and the figures show why it works. Srinivasan shows that order matters: run the cheap classical optimizer first, then hand its best results to the LLM. Across 103 MOOT data sets (above), that hybrid, SNAP2, matches or beats SNAP (the LLM-heavy tool) and every other method tried. And note how well the little symbolic EZR tracks the winners.
+<img src="snap2-cost.png" width=420 alt="operational cost per repeat">
+<br><br>
+Then look at the bill (above). Per repeat, SNAP spends 8 LLM calls, 26,000 tokens, and 158 seconds. The SNAP2 hybrid spends 5 calls and 111 seconds. EZR alone spends zero calls, zero tokens, zero dollars, and 0.04 seconds. So if near enough is good enough (trick 3), the little symbolic engine does the job in a blink, with tiny code and no tokens at all.
+<br><br>
+The lesson of the whole table is the same. Do not buy one giant AI. Be a discerning shopper. Ask what each part does cheaply and well, then join the parts at the seam that pays.
+<br><br><div class="reference">
+<a href="https://doi.org/10.1002/aaai.12036">Kautz: The third AI summer: AAAI Robert S. Engelmore Memorial Lecture</a>. Henry Kautz. AI Magazine 43, 1 (2022), 105–125. doi:10.1002/aaai.12036.
+</div>
+<div class="reference">
+<a href="https://arxiv.org/abs/2603.22474">Senthilkumar & Menzies: From brittle to robust: Improving LLM annotations for SE optimization</a>. Lohith Senthilkumar, Tim Menzies. Empirical Software Engineering, 2026. arXiv:2603.22474.
+</div>
+<div class="reference">
+<a href="https://doi.org/10.1145/3180155.3180195">Lin et al.: Sentiment analysis for software engineering: How far can we go?</a>. Bin Lin, Fiorella Zampetti, Gabriele Bavota, Massimiliano Di Penta, Michele Lanza, Rocco Oliveto. ICSE 2018, 94–104. doi:10.1145/3180155.3180195.
+</div>
+<div class="reference">
+<a href="https://arxiv.org/abs/2303.04864">Cosler et al.: nl2spec: Interactively translating unstructured natural language to temporal logics with LLMs</a>. Matthias Cosler, Christopher Hahn, Daniel Mendoza, Frederik Schmitt, Caroline Trippel. CAV 2023. arXiv:2303.04864.
+</div>
+<div class="reference">
+<a href="https://arxiv.org/abs/2501.00125">Senthilkumar & Menzies: Can large language models improve SE active learning via warm-starts?</a>. Lohith Senthilkumar, Tim Menzies. ACM Trans. Software Engineering and Methodology, 2026. arXiv:2501.00125.
+</div>
+<div class="reference">
+<a href="https://arxiv.org/abs/1603.06318">Hu et al.: Harnessing deep neural networks with logic rules</a>. Zhiting Hu, Xuezhe Ma, Zhengzhong Liu, Eduard Hovy, Eric Xing. ACL 2016. arXiv:1603.06318.
+</div>
+<div class="reference">
+<a href="https://arxiv.org/abs/1912.01412">Lample & Charton: Deep learning for symbolic mathematics</a>. Guillaume Lample, François Charton. ICLR 2020. arXiv:1912.01412.
+</div>
+<div class="reference">
+<a href="https://arxiv.org/abs/1711.11157">Xu et al.: A semantic loss function for deep learning with symbolic knowledge</a>. Jingyi Xu, Zilu Zhang, Tal Friedman, Yitao Liang, Guy Van den Broeck. ICML 2018. arXiv:1711.11157.
+</div>
+<div class="reference">
+<a href="https://arxiv.org/abs/2302.04761">Schick et al.: Toolformer: Language models can teach themselves to use tools</a>. Timo Schick, Jane Dwivedi-Yu, Roberto Dessì, Roberta Raileanu, Maria Lomeli, Luke Zettlemoyer, Nicola Cancedda, Thomas Scialom. NeurIPS 2023. arXiv:2302.04761.
+</div>
+<div class="reference">
+<a href="https://arxiv.org/abs/2012.13635">Badreddine et al.: Logic tensor networks</a>. Samy Badreddine, Artur d'Avila Garcez, Luciano Serafini, Michael Spranger. Artificial Intelligence 303 (2022). arXiv:2012.13635.
+</div>
+<div class="reference">
+<a href="https://arxiv.org/abs/2607.02583">Srinivasan & Menzies: Better together, in the right order: Classical-then-LLM optimization for SE</a>. Srinath Srinivasan, Tim Menzies. arXiv:2607.02583, 2026.
+</div>
+</li>
+</ol>
+<footer>This page is <a href="http://jeffhuang.com/designed_to_last/">designed to last</a>.</footer>
+</main>
+</body>
+</html>

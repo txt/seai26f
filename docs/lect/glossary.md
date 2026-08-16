@@ -48,7 +48,7 @@ e^{-\frac{(x-\mu)^2}{2\sigma^2}}$$
 
 This code never evaluates a pdf directly — only areas under it
 matter, and those come from the [cdf](#cdf). First met in
-[a little maths](l0.md) (Lecture 0).
+[a little maths](../attic/l0.md) (Lecture 0).
 
 <a name="cdf"></a>
 

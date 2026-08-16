@@ -16,20 +16,20 @@
 
 Mondays 4:30–7:15 PM, 2201 Engineering Building 3.
 
-**Also:** [intro](docs/lect/front.md) |
+**Also:** [what?](https://txt.github.io/seai26f/what.html) |
 [policies](docs/lect/policies.md) |
 [ugrad project](docs/submit/uproj.md) |
 [grad project](docs/submit/gproj.md) |
 [Lua-101](src/ezr-lua/tut/lua101.md) |
 [tools](docs/lect/tools.md)
 
-See [lecture notes](docs/lect/front.md) for the course intro and weekly demos, [policies](docs/lect/policies.md) for grading, [tools](docs/lect/tools.md) for the tool-talk menu, and the [talk signup sheet](https://docs.google.com/spreadsheets/d/1EsVadqssyJXaQPFjTVEfOs3Uv8DOQ0WyNlgTMcsoeBo/edit). Every lecture night (except exam nights) has a 1-mark in-class quiz (grads: only until the mid-term). Talk letters are group IDs within each cohort (24+24 students, groups of three, 8 groups per cohort); talks are 20 minutes (aim for 15, leaving 5 for questions). Night shape: about one hour of lecture, then up to 90 minutes of student talks.
+See [what?](https://txt.github.io/seai26f/what.html) for the course intro, [policies](docs/lect/policies.md) for grading, [tools](docs/lect/tools.md) for the tool-talk menu, and the [talk signup sheet](https://docs.google.com/spreadsheets/d/1EsVadqssyJXaQPFjTVEfOs3Uv8DOQ0WyNlgTMcsoeBo/edit). Every lecture night (except exam nights) has a 1-mark in-class quiz (grads: only until the mid-term). Talk letters are group IDs within each cohort (24+24 students, groups of three, 8 groups per cohort); talks are 20 minutes (aim for 15, leaving 5 for questions). Night shape: about one hour of lecture, then up to 90 minutes of student talks.
 
 <div align=center>
 
 | 📅 Date | 🎓 Lecture | 🛠️ submit <br>(due start of class) | 🎤 ugrad talks <br>(20 min each) | 🎤 grad talks <br>(20 min each) | 🔍 Review |
 |:-------------:|:----------:|:---------:|:---------:|:---------:|:---------:|
-| Aug 17 | [intro](docs/lect/front.md) + [someMaths](docs/lect/l0.md) + [boot](docs/lect/front.md#setup) | | | | [w0](docs/review/w0.md) |
+| Aug 17 | [what?](https://txt.github.io/seai26f/what.html) | | | | [w0](docs/review/w0.md) |
 | Aug 24 | [columns](https://txt.github.io/seai26f/ezr-eg1.html) | | | | [eg1](https://txt.github.io/seai26f/ezr-eg1.html) |
 | Aug 31 | dist | | [toolA](docs/lect/tools.md) | [toolA](docs/lect/tools.md) | |
 | 🟩 ${\color{green}\textsf{Sep 07 — Labor Day, no class}}$ | | | | | |
@@ -46,3 +46,34 @@ See [lecture notes](docs/lect/front.md) for the course intro and weekly demos, [
 | Nov 23 | | | | taskE–H | |
 | Nov 30 | 🟥 ${\color{#ff9999}\textsf{Final exam (491 only, 1 hr)}}$ | **[grad project](docs/submit/gproj.md): final** · **[ugrad project](docs/submit/uproj.md)** | | | |
 </div>
+
+## The demos, week by week
+
+The demos of `ezr-eg.lua`, `ezr-apps.lua` and `ezr-dtlz.lua`
+are split into ten weekly files, `src/ezr-lua/ezr-eg0.lua` to
+`ezr-eg9.lua`, sorted simplest to hardest. Each file is a
+tutorial and a test suite at once: `--egs` lists that week's
+demos, `--all` runs them (want "failures: 0"), and each file
+ends with exercises. The later weeks look bigger, but each of
+their demos is short application code reusing machinery from
+the earlier weeks, so the reading load stays flat.
+
+| file                                                      | theme                          | egs                                                                      |
+| --------------------------------------------------------- | ------------------------------ | ------------------------------------------------------------------------ |
+| ezr-eg0.lua                                               | boot: run, settings, read data | `--the` `--csv` `--repl`                                                 |
+| [ezr-eg1.lua](https://txt.github.io/seai26f/ezr-eg1.html) | columns, streaming, forgetting | `--col` `--without` `--sub`                                              |
+| ezr-eg2.lua                                               | distance & gap-to-heaven       | `--distx` `--disty` `--laws`                                             |
+| ezr-eg3.lua                                               | clustering by poles            | `--half` `--node`                                                        |
+| ezr-eg4.lua                                               | cuts, trees, XAI               | `--cuts` `--tree` `--show`                                               |
+| ezr-eg5.lua                                               | active learning + holdout rig  | `--acquire` `--holdout` `--holdouts`                                     |
+| ezr-eg6.lua                                               | statistics                     | `--same` `--ranks`                                                       |
+| ezr-eg7.lua                                               | apps: predict, guard, group    | `--knn` `--detect` `--nb` `--kmeans` `--kpp`                             |
+| ezr-eg8.lua                                               | classic optimizers             | `--dominate` `--ga` `--de` `--sa` `--ls` `--race`                        |
+| ezr-eg9.lua                                               | DTLZ: labels cost money        | `--fronts` `--label` `--models` `--pure` `--why` `--generalize` `--wins` |
+
+## Applications
+
+See [topics](docs/submit/topics.md): tool-talk subjects, 1976–2026,
+every one a place these ideas get applied.
+
+See also [MOOT](http://github.com/timm/moot)
