@@ -11,7 +11,8 @@ The badge row is lifted verbatim from the README's leading
 of truth. The file list names every page in this directory;
 the current page shows bold, unlinked. The <h1> links to
 the source file on github. Idempotent: a page already
-carrying the nav marker is left alone.
+carrying the nav marker gets its nav block replaced, so
+badge edits in README propagate on re-run.
 """
 import os, re, sys
 
@@ -25,7 +26,8 @@ name = os.path.basename(page)[:-len(".html")]
 root = os.path.join(here, "..")
 
 s = open(page).read()
-if MARK in s: sys.exit(0)
+if MARK in s:                       # drop the old nav block, keep the <h1>
+  s = re.sub(re.escape(MARK) + r'.*?(?=<h1)', '', s, count=1, flags=re.S)
 
 rows  = [l.split("\t") for l in
          open(os.path.join(here, ".order"))
