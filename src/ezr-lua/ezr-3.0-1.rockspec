@@ -1,12 +1,12 @@
 package = "ezr"
 version = "3.0-1"
 source = {
-  url = "git+https://github.com/timm/src.git"
+  url = "git+https://github.com/txt/seai26f.git"
 }
 description = {
   summary  = "Multi-goal trees, XAI, active learning,"
              .. " optimization. Tiny.",
-  homepage = "https://github.com/timm/src",
+  homepage = "https://github.com/txt/seai26f",
   license  = "MIT"
 }
 dependencies = { "lua >= 5.1" }

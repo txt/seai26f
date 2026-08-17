@@ -26,7 +26,7 @@ the shared dictionary
 Install [lua 5.4+](https://lua.org) (mac:
 `brew install lua`), then fetch the code and its data:
 
-    git clone https://github.com/timm/src
+    git clone https://github.com/txt/seai26f
     git clone https://github.com/timm/moot ~/gits/moot
     cd src/xai
     lua xai-eg.lua --all      # a minute; ends "all pass"

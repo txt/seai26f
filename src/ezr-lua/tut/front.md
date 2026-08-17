@@ -224,7 +224,7 @@ the prompt.
 
 **2. The code:**
 
-    curl -fLO https://raw.githubusercontent.com/timm/src/main/ezr-lua/ezr-lua.zip
+    curl -fLO https://raw.githubusercontent.com/txt/seai26f/main/src/ezr-lua/ezr-lua.zip
     unzip ezr-lua.zip
     cd ezr-lua
     make demo      # sanity check; three runs, each "failures: 0"
