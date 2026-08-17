@@ -96,6 +96,21 @@ description: Use when editing any markdown in this course repo (README, docs/lec
   pre-registered eval, 591 communication); add one ONLY if a graded
   deliverable provably assesses it. Long outcome lists are hubris.
 
+## Self-hosting (standing rule)
+
+- NO references to github.com/timm/src or timm.github.io/src
+  anywhere in this repo — badges, curl installers, doc links,
+  rockspec, comments, and INSIDE src/ezr-lua/ezr-lua.zip. After
+  edits, verify: `grep -rn "timm/src\|timm.github.io/src" .`
+  (outside .git) must be empty. The pycco tools are vendored at
+  etc/doc.awk + etc/pyccot.py; INSTALL.md's BASE fetches from
+  raw.githubusercontent.com/txt/seai26f/refs/heads/main/src/ezr-lua.
+- When any file shipped in ezr-lua.zip changes (core .lua, eg
+  files, play, Makefile, README/INSTALL/tut.md, etc/tut, etc/img,
+  etc/ezr-eg.lua, data/auto93.csv, root LICENSE), rebuild the zip:
+  stage under scratchpad as ezr-lua/, `zip -qr`, copy back, then
+  `unzip -p ezr-lua.zip | strings | grep timm/src` must be empty.
+
 ## Style
 
 Plain words, short sentences, no buzzwords. Rubrics say how marks are
