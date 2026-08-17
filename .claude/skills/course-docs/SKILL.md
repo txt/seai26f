@@ -144,12 +144,20 @@ lost, concretely.
 
 ## Weekly demo files (src/ezr-lua/ezr-eg0..eg8.lua)
 
-- NINE chunks (table lives at the bottom of README, with an
-  Applications section after it): eg0 the-port-warm-up,
-  eg1 columns, eg2 dist, eg3 cluster, eg4 cuts+trees,
-  eg5 acquire+holdout, eg6 stats, eg7 apps, eg8 optimizers.
-  eg9 (dtlz) DELETED from the plan; its demos are unassigned.
-  Old monolith parked at src/ezr-lua/etc/ezr-eg.lua.
+- NINE files, demos spread across eg1..eg8 (table lives at the
+  bottom of README, with an Applications section after it):
+  eg0 the-port-warm-up (no demos);
+  eg1 boot+columns (--the --csv --col --without --sub);
+  eg2 dist (--distx --disty --laws);
+  eg3 cluster (--half --node);
+  eg4 cuts+trees+XAI (--cuts --tree --show --why);
+  eg5 active learning (--acquire --holdout --holdouts --label);
+  eg6 stats+ranking (--same --ranks --dominate --fronts --wins);
+  eg7 apps (--knn --detect --nb --kmeans --kpp);
+  eg8 optimizers vs DTLZ (--ga --de --sa --ls --race --models
+  --pure --generalize). eg9 DELETED; its dtlz demos absorbed
+  into eg4/eg5/eg6/eg8 as above. Old monolith parked at
+  src/ezr-lua/etc/ezr-eg.lua.
 - egs are deadlines in the README submit column, due ONE WEEK
   after their lecture (eg0 due Aug 24 .. eg8 due Nov 9),
   skipping exam/break nights.

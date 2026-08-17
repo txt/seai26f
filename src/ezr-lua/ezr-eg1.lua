@@ -72,6 +72,27 @@ eg["--all"] = function(    bad)
   print("failures: " .. bad)
   assert(bad == 0) end
 
+-- *`lua ezr-eg1.lua --the`*  
+-- One table holds every setting, parsed from the help text.
+-- The command line can update any of them before a demo runs.
+doc["--the"] = "the settings, all in one table"
+eg["--the"] = function()
+  print(show(the))
+  assert(the.seed == 1234567891 and the.round == 2) end
+
+-- *`lua ezr-eg1.lua --csv`*  
+-- Stream a table off disk, one row at a time. Row one is the
+-- header: uppercase = number, lowercase = symbol, trailing
+-- "-"/"+" = goal, "X" = ignore (see the glossary's noir).
+doc["--csv"] = "stream rows from the default csv file"
+eg["--csv"] = function(    n)
+  n = 0
+  for row in csv(the.file) do
+    n = n + 1
+    if n <= 3 then print(show(row)) end end
+  print(n .. " rows")
+  assert(n == 399) end
+
 -- *`lua ezr-eg1.lua --col`*  
 -- Five numbers in, two stats out; three symbols in, a mode
 -- and an entropy. adds() drives any column's add() in a loop.

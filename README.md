@@ -7,7 +7,7 @@
       src="https://img.shields.io/badge/Teams-%23ffd700?style=flat-square&logo=users&logoColor=white" /></a>
   <a href="https://moodle-courses2527.wolfware.ncsu.edu/course/view.php?id=11951&bp=s"><img 
       src="https://img.shields.io/badge/491%20Moodle-%23dc143c?style=flat-square&logo=moodle&logoColor=white" /></a>
-  <a href="https://moodle-courses2527.wolfware.ncsu.edu/my/"><img 
+  <a href="https://moodle-courses2527.wolfware.ncsu.edu/course/view.php?id=13665&bp=sfroge"><img 
       src="https://img.shields.io/badge/591%20Moodle-%23f98012?style=flat-square&logo=moodle&logoColor=white" /></a>
   <a href="https://discord.gg/uQgTnGsfR"><img 
       src="https://img.shields.io/badge/Chat-%23008080?style=flat-square&logo=discord&logoColor=white" /></a>
@@ -45,25 +45,27 @@ See [hello](https://txt.github.io/seai26f/hello.html) for the course intro, [pol
 ## The demos, week by week
 
 The demos of `ezr-eg.lua`, `ezr-apps.lua` and `ezr-dtlz.lua`
-are split into nine weekly files, `src/ezr-lua/ezr-eg0.lua` to
-`ezr-eg8.lua`, sorted simplest to hardest. Each file is a
-tutorial and a test suite at once: `--egs` lists that week's
-demos, `--all` runs them (want "failures: 0"), and each file
-ends with exercises. The later weeks look bigger, but each of
-their demos is short application code reusing machinery from
-the earlier weeks, so the reading load stays flat.
+are spread across eight weekly files,
+`src/ezr-lua/ezr-eg1.lua` to `ezr-eg8.lua`, sorted simplest to
+hardest (`ezr-eg0.lua` is the warm-up: no demos, just the port
+exercise). Each file is a tutorial and a test suite at once:
+`--egs` lists that week's demos, `--all` runs them (want
+"failures: 0"), and each file ends with exercises. The later
+weeks look bigger, but each of their demos is short
+application code reusing machinery from the earlier weeks, so
+the reading load stays flat.
 
-| file                                                      | theme                          | egs                                                                      |
-| --------------------------------------------------------- | ------------------------------ | ------------------------------------------------------------------------ |
-| [ezr-eg0.lua](https://txt.github.io/seai26f/ezr-eg0.html) | boot: run, settings, read data | `--the` `--csv` `--repl`                                                 |
-| [ezr-eg1.lua](https://txt.github.io/seai26f/ezr-eg1.html) | columns, streaming, forgetting | `--col` `--without` `--sub`                                              |
-| ezr-eg2.lua                                               | distance & gap-to-heaven       | `--distx` `--disty` `--laws`                                             |
-| ezr-eg3.lua                                               | clustering by poles            | `--half` `--node`                                                        |
-| ezr-eg4.lua                                               | cuts, trees, XAI               | `--cuts` `--tree` `--show`                                               |
-| ezr-eg5.lua                                               | active learning + holdout rig  | `--acquire` `--holdout` `--holdouts`                                     |
-| ezr-eg6.lua                                               | statistics                     | `--same` `--ranks`                                                       |
-| ezr-eg7.lua                                               | apps: predict, guard, group    | `--knn` `--detect` `--nb` `--kmeans` `--kpp`                             |
-| ezr-eg8.lua                                               | classic optimizers             | `--dominate` `--ga` `--de` `--sa` `--ls` `--race`                        |
+| file                                                      | theme                             | egs                                                                      |
+| --------------------------------------------------------- | --------------------------------- | ------------------------------------------------------------------------ |
+| [ezr-eg0.lua](https://txt.github.io/seai26f/ezr-eg0.html) | the port, warm-up                 | (none)                                                                   |
+| [ezr-eg1.lua](https://txt.github.io/seai26f/ezr-eg1.html) | boot; columns, streaming          | `--the` `--csv` `--col` `--without` `--sub`                              |
+| ezr-eg2.lua                                               | distance & gap-to-heaven          | `--distx` `--disty` `--laws`                                             |
+| ezr-eg3.lua                                               | clustering by poles               | `--half` `--node`                                                        |
+| ezr-eg4.lua                                               | cuts, trees, XAI                  | `--cuts` `--tree` `--show` `--why`                                       |
+| ezr-eg5.lua                                               | active learning; labels cost money | `--acquire` `--holdout` `--holdouts` `--label`                           |
+| ezr-eg6.lua                                               | statistics & ranking              | `--same` `--ranks` `--dominate` `--fronts` `--wins`                      |
+| ezr-eg7.lua                                               | apps: predict, guard, group       | `--knn` `--detect` `--nb` `--kmeans` `--kpp`                             |
+| ezr-eg8.lua                                               | classic optimizers vs DTLZ        | `--ga` `--de` `--sa` `--ls` `--race` `--models` `--pure` `--generalize`  |
 
 ## Applications
 
