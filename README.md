@@ -18,13 +18,13 @@
 
 Mondays 4:30–7:15 PM, 2201 Engineering Building 3.
 
-See [what?](https://txt.github.io/seai26f/what.html) for the course intro, [policies](docs/lect/policies.md) for grading, [tools](docs/lect/tools.md) for the tool-talk menu, and the [talk signup sheet](https://docs.google.com/spreadsheets/d/1EsVadqssyJXaQPFjTVEfOs3Uv8DOQ0WyNlgTMcsoeBo/edit). Every lecture night (except exam nights) has a 1-mark in-class quiz (grads: only until the mid-term). Each tool-talk cell names its topic (tool:sa = simulated annealing, etc.) and links to that row of the [topics list](docs/lect/tools.md); groups (8 per cohort: 491 = 25 students, seven 3s and one 4; 591 = 23 students, seven 3s and one 2) sign up one group per topic. Tool talks are 30 minutes (aim for 25, leaving 5 for questions); grad task talks are 20 minutes (15 + 5). Night shape: about one hour of lecture, then one hour of tool talks (or, on Nov 16 and Nov 23, 90 minutes of task talks).
+See [hello](https://txt.github.io/seai26f/hello.html) for the course intro, [policies](docs/lect/policies.md) for grading, [tools](docs/lect/tools.md) for the tool-talk menu, and the [talk signup sheet](https://docs.google.com/spreadsheets/d/1EsVadqssyJXaQPFjTVEfOs3Uv8DOQ0WyNlgTMcsoeBo/edit). Every lecture night (except exam nights) has a 1-mark in-class quiz (grads: only until the mid-term). Each tool-talk cell names its topic (tool:sa = simulated annealing, etc.) and links to that row of the [topics list](docs/lect/tools.md); groups (8 per cohort: 491 = 25 students, seven 3s and one 4; 591 = 23 students, seven 3s and one 2) sign up one group per topic. Tool talks are 30 minutes (aim for 25, leaving 5 for questions); grad task talks are 20 minutes (15 + 5). Night shape: about one hour of lecture, then one hour of tool talks (or, on Nov 16 and Nov 23, 90 minutes of task talks).
 
 <div align=center>
 
 | 📅 Date | 🎓 Lecture | 🛠️ submit <br>(due start of class) | 🎤 ugrad talks <br>(30 min each) | 🎤 grad talks <br>(tool 30 · task 20 min) | 🔍 Review |
 |:-------------:|:----------:|:---------:|:---------:|:---------:|:---------:|
-| Aug 17 | [what?](https://txt.github.io/seai26f/what.html) + [tools](docs/lect/tools.md) + [Lua-101](src/ezr-lua/tut/lua101.md) | [eg0](https://txt.github.io/seai26f/ezr-eg0.html) | | | [w0](docs/review/w0.md) |
+| Aug 17 | [hello](https://txt.github.io/seai26f/hello.html) + [tools](docs/lect/tools.md) + [Lua-101](src/ezr-lua/tut/lua101.md) | [eg0](https://txt.github.io/seai26f/ezr-eg0.html) | | | [w0](docs/review/w0.md) |
 | Aug 24 | [columns](https://txt.github.io/seai26f/ezr-eg1.html) | [eg1](https://txt.github.io/seai26f/ezr-eg1.html) | | | |
 | Aug 31 | dist | eg2 | [tool:ds](docs/lect/tools.md#ds) | [tool:hc](docs/lect/tools.md#hc) | |
 | 🟩 ${\color{green}\textsf{Sep 07 — Labor Day, no class}}$ | | | | | |
