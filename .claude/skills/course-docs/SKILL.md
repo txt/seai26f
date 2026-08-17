@@ -144,7 +144,7 @@ lost, concretely.
 ## Review files & glossary
 
 - docs/review/wN.md: easy recall questions, answers at bottom;
-  linked from the README schedule's Review column (w0 = Aug 17,
+  linked from the README schedule's Review column (w1 = Aug 17,
   eg1 page = Aug 24).
 - docs/lect/glossary.md: entry per term in discovery order,
   verbatim ezr.lua code, math in $$..$$. Fused headings —

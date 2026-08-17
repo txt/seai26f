@@ -24,7 +24,7 @@ See [hello](https://txt.github.io/seai26f/hello.html) for the course intro, [pol
 
 | 📅 Date | 🎓 Lecture | 🛠️ submit <br>(due start of class) | 🎤 ugrad talks <br>(30 min each) | 🎤 grad talks <br>(tool 30 · task 20 min) | 🔍 Review |
 |:-------------:|:----------:|:---------:|:---------:|:---------:|:---------:|
-| Aug 17 | [hello](https://txt.github.io/seai26f/hello.html) + [tools](docs/lect/tools.md) + [Lua-101](src/ezr-lua/tut/lua101.md) |  | | | [w0](docs/review/w0.md) |
+| Aug 17 | [hello](https://txt.github.io/seai26f/hello.html) + [tools](docs/lect/tools.md) + [Lua-101](src/ezr-lua/tut/lua101.md) |  | | | [w1](docs/review/w1.md) |
 | Aug 24 | [columns](https://txt.github.io/seai26f/ezr-eg1.html) | [eg0](https://txt.github.io/seai26f/ezr-eg0.html) | | | |
 | Aug 31 | dist | [eg1](https://txt.github.io/seai26f/ezr-eg1.html) | [tool:ds](docs/lect/tools.md#ds) | [tool:hc](docs/lect/tools.md#hc) | |
 | 🟩 ${\color{green}\textsf{Sep 07 — Labor Day, no class}}$ | | | | | |
