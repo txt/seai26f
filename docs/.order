@@ -1,5 +1,6 @@
 ezr	ezr.lua	code
 ezr-lib	ezr-lib.lua	code
+ezr-eg0	ezr-eg0.lua	tests
 ezr-eg1	ezr-eg1.lua	tests
 ezr-apps	ezr-apps.lua	code
 ezr-dtlz	ezr-dtlz.lua	code

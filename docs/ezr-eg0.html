@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>ezr-eg0.lua</title>
+  <link rel="stylesheet" href="pycco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div class='section'>
+    <div class='docs'><!-- seai26f-nav --><p align="center">
+  <a href="https://github.com/txt/seai26f/blob/main/README.md"><img 
+     src="https://img.shields.io/badge/Home-%23ff5733?style=flat-square&logo=home&logoColor=white" /></a>
+  <a href="https://github.com/txt/seai26f/blob/main/docs/lect/policies.md"><img 
+      src="https://img.shields.io/badge/Policies-%230055ff?style=flat-square&logo=openai&logoColor=white" /></a>
+  <a href="#"><img
+      src="https://img.shields.io/badge/Teams-%23ffd700?style=flat-square&logo=users&logoColor=white" /></a>
+  <a href="https://moodle-courses2527.wolfware.ncsu.edu/course/view.php?id=11951&bp=s"><img 
+      src="https://img.shields.io/badge/491%20Moodle-%23dc143c?style=flat-square&logo=moodle&logoColor=white" /></a>
+  <a href="#"><img 
+      src="https://img.shields.io/badge/591%20Moodle-%23f98012?style=flat-square&logo=moodle&logoColor=white" /></a>
+  <a href="https://discord.gg/uQgTnGsfR"><img 
+      src="https://img.shields.io/badge/Chat-%23008080?style=flat-square&logo=discord&logoColor=white" /></a>
+  <a href="https://github.com/txt/seai26f/blob/main/LICENSE.md"><img 
+      src="https://img.shields.io/badge/©%20timm%202026-%234b4b4b?style=flat-square&logoColor=white" /></a></p><p align="center"><a href="ezr.html">ezr</a> | <a href="ezr-lib.html">ezr-lib</a> | <b>ezr-eg0</b> | <a href="ezr-eg1.html">ezr-eg1</a> | <a href="ezr-apps.html">ezr-apps</a> | <a href="ezr-dtlz.html">ezr-dtlz</a> | <a href="play.html">play</a></p><p align="center"><a href="ezr-lib.html">&lt; prev</a> | <a href="ezr-eg1.html">next &gt;</a></p><h1><a href="https://github.com/txt/seai26f/blob/main/src/ezr-lua/ezr-eg0.lua">ezr-eg0.lua</a></h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      <p>ezr-eg0.lua: week 0 of ten. Boot: run, settings, read data.
+Tutorial and tests in one file: prose lives in these
+comments, each demo is one eg[] function that reseeds,
+prints, then asserts; no crash means pass.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span></span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <h2>Install</h2>
+<pre><code>sudo apt install lua5.4 luajit         # Debian, Ubuntu
+brew install lua luajit                # macOS
+sudo ln -sf /usr/bin/lua5.4 /usr/local/bin/lua # Debian
+</code></pre>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      <h2>Run</h2>
+<pre><code>lua ezr-eg0.lua --egs     # list this week's demos
+lua ezr-eg0.lua --all     # run them all; "failures: 0"
+lua ezr-eg0.lua --the     # run just one
+luajit ezr-eg0.lua --all  # 10-50x faster, same output
+</code></pre>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      <h2>This week&rsquo;s story</h2>
+<p>Nothing clever yet: this week just proves your toolchain
+works. Three things boot everything that follows. Settings
+live in one table <code>the</code>, parsed from the help text at the
+top of each file (change them from the shell:
+<code>--seed=1 --round=3</code>). Data arrives as a csv stream, one
+row at a time, never all in memory. And a REPL lets you
+poke at both.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      <h2>Glossary</h2>
+<p><a href="https://github.com/txt/seai26f/blob/main/docs/lect/glossary.md#noir">noir</a></p>
+<hr />
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="nb">package.path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nv">arg</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nv">arg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">):</span><span class="nf">gsub</span><span class="p">(</span><span class="s2">&quot;[^/]*$&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="w">               </span><span class="o">..</span><span class="w"> </span><span class="s2">&quot;?.lua;&quot;</span><span class="w"> </span><span class="o">..</span><span class="w"> </span><span class="nb">package.path</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      <p>all defs below land here; reads fall through to ezr
+(and, through it, to lib and _G)</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kd">local</span><span class="w"> </span><span class="nv">_ENV</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">setmetatable</span><span class="p">({},</span><span class="w"> </span><span class="p">{</span><span class="nv">__index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="s2">&quot;ezr&quot;</span><span class="p">})</span>
+<span class="kr">if</span><span class="w"> </span><span class="nv">setfenv</span><span class="w"> </span><span class="kr">then</span><span class="w"> </span><span class="nf">setfenv</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nv">_ENV</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      <h2>demos</h2>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="nv">eg</span><span class="p">,</span><span class="w"> </span><span class="nv">doc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="nv">doc</span><span class="p">[</span><span class="s2">&quot;--egs&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;list this week&#39;s demos&quot;</span>
+<span class="nv">eg</span><span class="p">[</span><span class="s2">&quot;--egs&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">function</span><span class="p">()</span>
+<span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="nv">_</span><span class="p">,</span><span class="nv">k</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nb">ipairs</span><span class="p">(</span><span class="nf">keys</span><span class="p">(</span><span class="nv">eg</span><span class="p">))</span><span class="w"> </span><span class="kr">do</span>
+<span class="w">    </span><span class="nb">print</span><span class="p">((</span><span class="s2">&quot;%-10s %s&quot;</span><span class="p">):</span><span class="nf">format</span><span class="p">(</span><span class="nv">k</span><span class="p">,</span><span class="w"> </span><span class="nv">doc</span><span class="p">[</span><span class="nv">k</span><span class="p">]</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">))</span><span class="w"> </span><span class="kr">end</span><span class="w"> </span><span class="kr">end</span>
+
+<span class="nv">doc</span><span class="p">[</span><span class="s2">&quot;--repl&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;an interactive prompt; bare names resolve&quot;</span>
+<span class="nv">eg</span><span class="p">[</span><span class="s2">&quot;--repl&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">function</span><span class="p">()</span><span class="w"> </span><span class="nf">repl</span><span class="p">(</span><span class="nv">_ENV</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span>
+
+<span class="nv">doc</span><span class="p">[</span><span class="s2">&quot;--all&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;all the demos; fail if any of them do&quot;</span>
+<span class="nv">eg</span><span class="p">[</span><span class="s2">&quot;--all&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="w">    </span><span class="nv">bad</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">bad</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="nv">_</span><span class="p">,</span><span class="nv">k</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nb">ipairs</span><span class="p">(</span><span class="nf">keys</span><span class="p">(</span><span class="nv">eg</span><span class="p">))</span><span class="w"> </span><span class="kr">do</span>
+<span class="w">    </span><span class="kr">if</span><span class="w"> </span><span class="nv">k</span><span class="w"> </span><span class="o">~=</span><span class="w"> </span><span class="s2">&quot;--all&quot;</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nv">k</span><span class="w"> </span><span class="o">~=</span><span class="w"> </span><span class="s2">&quot;--egs&quot;</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nv">k</span><span class="w"> </span><span class="o">~=</span><span class="w"> </span><span class="s2">&quot;--repl&quot;</span><span class="w"> </span><span class="ow">and</span>
+<span class="w">       </span><span class="nf">run</span><span class="p">(</span><span class="nv">eg</span><span class="p">,</span><span class="w"> </span><span class="nv">k</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="kr">then</span><span class="w"> </span><span class="nv">bad</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">bad</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="kr">end</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;failures: &quot;</span><span class="w"> </span><span class="o">..</span><span class="w"> </span><span class="nv">bad</span><span class="p">)</span>
+<span class="w">  </span><span class="nb">assert</span><span class="p">(</span><span class="nv">bad</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-7'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-7'>#</a>
+      </div>
+      <p><em><code>lua ezr-eg0.lua --the</code></em><br />
+One table holds every setting, parsed from the help text.
+The command line can update any of them before a demo runs.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="nv">doc</span><span class="p">[</span><span class="s2">&quot;--the&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;the settings, all in one table&quot;</span>
+<span class="nv">eg</span><span class="p">[</span><span class="s2">&quot;--the&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">function</span><span class="p">()</span>
+<span class="w">  </span><span class="nb">print</span><span class="p">(</span><span class="nf">show</span><span class="p">(</span><span class="nv">the</span><span class="p">))</span>
+<span class="w">  </span><span class="nb">assert</span><span class="p">(</span><span class="nv">the</span><span class="p">.</span><span class="py">seed</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1234567891</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nv">the</span><span class="p">.</span><span class="py">round</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-8'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-8'>#</a>
+      </div>
+      <p><em><code>lua ezr-eg0.lua --csv</code></em><br />
+Stream a table off disk, one row at a time. Row one is the
+header: uppercase = number, lowercase = symbol, trailing
+&ldquo;-&ldquo;/&rdquo;+&rdquo; = goal, &ldquo;X&rdquo; = ignore (see the glossary&rsquo;s noir).</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="nv">doc</span><span class="p">[</span><span class="s2">&quot;--csv&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;stream rows from the default csv file&quot;</span>
+<span class="nv">eg</span><span class="p">[</span><span class="s2">&quot;--csv&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="w">    </span><span class="nv">n</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="nv">row</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nf">csv</span><span class="p">(</span><span class="nv">the</span><span class="p">.</span><span class="py">file</span><span class="p">)</span><span class="w"> </span><span class="kr">do</span>
+<span class="w">    </span><span class="nv">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="kr">if</span><span class="w"> </span><span class="nv">n</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="kr">then</span><span class="w"> </span><span class="nb">print</span><span class="p">(</span><span class="nf">show</span><span class="p">(</span><span class="nv">row</span><span class="p">))</span><span class="w"> </span><span class="kr">end</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="nb">print</span><span class="p">(</span><span class="nv">n</span><span class="w"> </span><span class="o">..</span><span class="w"> </span><span class="s2">&quot; rows&quot;</span><span class="p">)</span>
+<span class="w">  </span><span class="nb">assert</span><span class="p">(</span><span class="nv">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">399</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-9'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-9'>#</a>
+      </div>
+      <h2>homework 0</h2>
+<p>Nothing to hand in. This week only checks that your Lua AND
+your Python both run, so the real work can start next week.</p>
+<ol>
+<li>Install Lua and LuaJIT (see Install, above). Then:
+   <code>lua ezr-eg0.lua --all</code> must end &ldquo;failures: 0&rdquo;.
+   Run it again under <code>luajit</code>: SAME output, byte for byte.</li>
+<li>Install Python 3. Run
+   <code>python3 ../101.py -h</code>
+   (<a href="https://github.com/txt/seai26f/blob/main/src/101.py">101.py</a>
+   is the basis for the port you start next week); you
+   should see its options: file, seed, round.</li>
+<li>The two languages must agree on &ldquo;random&rdquo;. Run
+   <code>lua rand.lua</code> and <code>python3 ../rand.py</code>: each prints 20
+   numbers, and they must be the SAME 20
+   (<code>diff &lt;(lua rand.lua) &lt;(python3 ../rand.py)</code> prints
+   nothing). That diff is how ports get graded all
+   semester.</li>
+<li>Install <a href="https://claude.com/claude-code">Claude Code</a>.
+   Open a terminal split: Claude on the left, a shell on
+   the right &ndash; ideally in <a href="https://ghostty.org">Ghostty</a>,
+   but <a href="https://code.visualstudio.com">VS Code</a> is ok.</li>
+<li>Bring the working laptop to class.</li>
+</ol>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-10'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-10'>#</a>
+      </div>
+      <h2>start-up</h2>
+<p>Fires only when this file is the script the user ran.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="nf">go</span><span class="p">(</span><span class="nv">eg</span><span class="p">)</span>
+
+<span class="kr">return</span><span class="w"> </span><span class="nv">_ENV</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>

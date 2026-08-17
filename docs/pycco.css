@@ -188,6 +188,7 @@ body .vc { color: #19469D }                     /* Name.Variable.Class */
 body .vg { color: #19469D }                     /* Name.Variable.Global */
 body .vi { color: #19469D }                     /* Name.Variable.Instance */
 body .il { color: #666666 }                     /* Literal.Number.Integer.Long */
+
 /* timm extras */
 .docs pre { font-size: .65em; line-height: 1.45; }
 .docs em code { font-style: normal; font-size: .92em;

@@ -62,7 +62,7 @@ the earlier weeks, so the reading load stays flat.
 
 | file                                                      | theme                          | egs                                                                      |
 | --------------------------------------------------------- | ------------------------------ | ------------------------------------------------------------------------ |
-| ezr-eg0.lua                                               | boot: run, settings, read data | `--the` `--csv` `--repl`                                                 |
+| [ezr-eg0.lua](https://txt.github.io/seai26f/ezr-eg0.html) | boot: run, settings, read data | `--the` `--csv` `--repl`                                                 |
 | [ezr-eg1.lua](https://txt.github.io/seai26f/ezr-eg1.html) | columns, streaming, forgetting | `--col` `--without` `--sub`                                              |
 | ezr-eg2.lua                                               | distance & gap-to-heaven       | `--distx` `--disty` `--laws`                                             |
 | ezr-eg3.lua                                               | clustering by poles            | `--half` `--node`                                                        |
