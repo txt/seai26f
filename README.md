@@ -23,7 +23,7 @@ Mondays 4:30–7:15 PM, 2201 Engineering Building 3.
 [Lua-101](src/ezr-lua/tut/lua101.md) |
 [tools](docs/lect/tools.md)
 
-See [what?](https://txt.github.io/seai26f/what.html) for the course intro, [policies](docs/lect/policies.md) for grading, [tools](docs/lect/tools.md) for the tool-talk menu, and the [talk signup sheet](https://docs.google.com/spreadsheets/d/1EsVadqssyJXaQPFjTVEfOs3Uv8DOQ0WyNlgTMcsoeBo/edit). Every lecture night (except exam nights) has a 1-mark in-class quiz (grads: only until the mid-term). Talk letters are group IDs within each cohort (24+24 students, groups of three, 8 groups per cohort); talks are 20 minutes (aim for 15, leaving 5 for questions). Night shape: about one hour of lecture, then up to 90 minutes of student talks.
+See [what?](https://txt.github.io/seai26f/what.html) for the course intro, [policies](docs/lect/policies.md) for grading, [tools](docs/lect/tools.md) for the tool-talk menu, and the [talk signup sheet](https://docs.google.com/spreadsheets/d/1EsVadqssyJXaQPFjTVEfOs3Uv8DOQ0WyNlgTMcsoeBo/edit). Every lecture night (except exam nights) has a 1-mark in-class quiz (grads: only until the mid-term). Each tool-talk cell names its topic (tool:sa = simulated annealing, etc.) and links to that row of the [topics list](docs/submit/topics.md); groups (8 per cohort) sign up one group per topic. Talks are 20 minutes (aim for 15, leaving 5 for questions). Night shape: about one hour of lecture, then up to 90 minutes of student talks.
 
 <div align=center>
 
@@ -31,17 +31,17 @@ See [what?](https://txt.github.io/seai26f/what.html) for the course intro, [poli
 |:-------------:|:----------:|:---------:|:---------:|:---------:|:---------:|
 | Aug 17 | [what?](https://txt.github.io/seai26f/what.html) | | | | [w0](docs/review/w0.md) |
 | Aug 24 | [columns](https://txt.github.io/seai26f/ezr-eg1.html) | | | | [eg1](https://txt.github.io/seai26f/ezr-eg1.html) |
-| Aug 31 | dist | | [toolA](docs/lect/tools.md) | [toolA](docs/lect/tools.md) | |
+| Aug 31 | dist | | [tool:ds](docs/submit/topics.md#ds) | [tool:hc](docs/submit/topics.md#hc) | |
 | 🟩 ${\color{green}\textsf{Sep 07 — Labor Day, no class}}$ | | | | | |
-| Sep 14 | cluster | | [toolB](docs/lect/tools.md) | [toolB](docs/lect/tools.md) | |
-| Sep 21 | trees | | [toolC](docs/lect/tools.md) | [toolC](docs/lect/tools.md) | |
-| Sep 28 | acquire | | [toolD](docs/lect/tools.md) | [toolD](docs/lect/tools.md) | |
-| Oct 05 | stats | | [toolE](docs/lect/tools.md) | [toolE](docs/lect/tools.md) | |
+| Sep 14 | cluster | | [tool:ga](docs/submit/topics.md#ga) | [tool:sa](docs/submit/topics.md#sa) | |
+| Sep 21 | trees | | [tool:gp](docs/submit/topics.md#gp) | [tool:nsga2](docs/submit/topics.md#nsga2) | |
+| Sep 28 | acquire | | [tool:nov](docs/submit/topics.md#nov) | [tool:ibea](docs/submit/topics.md#ibea) | |
+| Oct 05 | stats | | [tool:moead](docs/submit/topics.md#moead) | [tool:al](docs/submit/topics.md#al) | |
 | Oct 12 | 🟥 ${\color{#ff9999}\textsf{Mid-term exam}}$ | | no talks | no talks | |
 | 🟩 ${\color{green}\textsf{Oct 19 — Fall break, no class}}$ | | | | | |
-| Oct 26 | apps | **[grad project](docs/submit/gproj.md) starts** | [toolF](docs/lect/tools.md) | [toolF](docs/lect/tools.md) | |
-| Nov 02 | optimize | | [toolG](docs/lect/tools.md) | [toolG](docs/lect/tools.md) | |
-| Nov 09 | dtlz | **[grad project](docs/submit/gproj.md): initial** | [toolH](docs/lect/tools.md) | [toolH](docs/lect/tools.md) | |
+| Oct 26 | apps | **[grad project](docs/submit/gproj.md) starts** | [tool:sway](docs/submit/topics.md#sway) | [tool:nsga3](docs/submit/topics.md#nsga3) | |
+| Nov 02 | optimize | | [tool:qaoa](docs/submit/topics.md#qaoa) | [tool:mosa](docs/submit/topics.md#mosa) | |
+| Nov 09 | dtlz | **[grad project](docs/submit/gproj.md): initial** | [tool:port](docs/submit/topics.md#port) | [tool:llm](docs/submit/topics.md#llm) | |
 | Nov 16 | | | | taskA–D | |
 | Nov 23 | | | | taskE–H | |
 | Nov 30 | 🟥 ${\color{#ff9999}\textsf{Final exam (491 only, 1 hr)}}$ | **[grad project](docs/submit/gproj.md): final** · **[ugrad project](docs/submit/uproj.md)** | | | |
