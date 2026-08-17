@@ -53,9 +53,7 @@ Python. Warm up here. The demos of
 <a href="ezr-eg1.html">ezr-eg1.lua</a> lean on the
 <a href="ezr-lib.html">ezr-lib.lua</a> functions at right, and every
 one is covered by a Python builtin. For each, write the
-Python equivalent &ndash; most are one line. Check your answers
-against
-<a href="https://github.com/txt/seai26f/blob/main/src/101.py">101.py</a>.</p>
+Python equivalent &ndash; most are one line.</p>
     </div>
     <div class='code'>
       <div class="highlight"><pre><span class="kd">local</span><span class="w"> </span><span class="nv">floor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">math.floor</span>
@@ -146,28 +144,28 @@ nothing. That diff is how ports get graded all semester.</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-3'>#</a>
       </div>
-      <p><strong>Part 2.</strong> Settings drive the randoms. In your copy of
-<a href="https://github.com/txt/seai26f/blob/main/src/101.py">101.py</a>,
-add a test that prints ten random numbers:</p>
+      <p><strong>Part 2.</strong> Settings drive the randoms. Start a Python file
+for your port. Give it a settings table <code>the</code> (fields: file,
+seed, round), let <code>--key=val</code> flags on the command line
+update it, and add a test that prints ten random numbers:</p>
 <pre><code>def test_rand():
   for _ in range(10): print(f"{random.random():.6f}")
 </code></pre>
 <p>Then run it three times:</p>
-<pre><code>python3 101.py rand
-python3 101.py --seed=42 rand
-python3 101.py --seed=42 rand
+<pre><code>python3 port.py rand
+python3 port.py --seed=42 rand
+python3 port.py --seed=42 rand
 </code></pre>
-<p>Same seed, same ten numbers; new seed, new numbers. (Read
-<code>main</code> in 101.py to see why: it calls <code>random.seed(the.seed)</code>
-before every test, and <code>--seed=42</code> resets <code>the.seed</code> first.)
-That reset-and-replay is how every experiment in this course
-is made repeatable.</p>
+<p>Same seed, same ten numbers; new seed, new numbers. (Call
+<code>random.seed(the.seed)</code> before every test, after the flags
+have updated <code>the</code>.) That reset-and-replay is how every
+experiment in this course is made repeatable.</p>
 <p><strong>Part 3.</strong> Future weeks hand in code on paper: two columns,
 tiny font, syntax highlighted. Prove your
 <a href="https://claude.com/claude-code">Claude Code</a> can typeset
 that now. Give it this prompt, then open the result in a
 browser and print to PDF:
-&ldquo;Read 101.py. Write print.html: my code syntax-highlighted
+&ldquo;Read port.py. Write print.html: my code syntax-highlighted
 (no external CDNs), two CSS columns (column-count:2), 6pt
 monospace, about 70 chars per column, black on white. I
 will open it in a browser and print it.&rdquo;</p>

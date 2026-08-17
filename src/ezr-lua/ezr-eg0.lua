@@ -13,9 +13,7 @@ if setfenv then setfenv(1, _ENV) end
 -- [ezr-eg1.lua](ezr-eg1.html) lean on the
 -- [ezr-lib.lua](ezr-lib.html) functions at right, and every
 -- one is covered by a Python builtin. For each, write the
--- Python equivalent -- most are one line. Check your answers
--- against
--- [101.py](https://github.com/txt/seai26f/blob/main/src/101.py).
+-- Python equivalent -- most are one line.
 local floor = math.floor
 
 function new(kl,t)
@@ -88,31 +86,31 @@ function rand(lo,hi,    x)
   if not hi then lo, hi = 1, lo end
   return lo + floor(x * (hi - lo + 1)) end
 
--- **Part 2.** Settings drive the randoms. In your copy of
--- [101.py](https://github.com/txt/seai26f/blob/main/src/101.py),
--- add a test that prints ten random numbers:
+-- **Part 2.** Settings drive the randoms. Start a Python file
+-- for your port. Give it a settings table `the` (fields: file,
+-- seed, round), let `--key=val` flags on the command line
+-- update it, and add a test that prints ten random numbers:
 --
 --     def test_rand():
 --       for _ in range(10): print(f"{random.random():.6f}")
 --
 -- Then run it three times:
 --
---     python3 101.py rand
---     python3 101.py --seed=42 rand
---     python3 101.py --seed=42 rand
+--     python3 port.py rand
+--     python3 port.py --seed=42 rand
+--     python3 port.py --seed=42 rand
 --
--- Same seed, same ten numbers; new seed, new numbers. (Read
--- `main` in 101.py to see why: it calls `random.seed(the.seed)`
--- before every test, and `--seed=42` resets `the.seed` first.)
--- That reset-and-replay is how every experiment in this course
--- is made repeatable.
+-- Same seed, same ten numbers; new seed, new numbers. (Call
+-- `random.seed(the.seed)` before every test, after the flags
+-- have updated `the`.) That reset-and-replay is how every
+-- experiment in this course is made repeatable.
 --
 -- **Part 3.** Future weeks hand in code on paper: two columns,
 -- tiny font, syntax highlighted. Prove your
 -- [Claude Code](https://claude.com/claude-code) can typeset
 -- that now. Give it this prompt, then open the result in a
 -- browser and print to PDF:
--- "Read 101.py. Write print.html: my code syntax-highlighted
+-- "Read port.py. Write print.html: my code syntax-highlighted
 -- (no external CDNs), two CSS columns (column-count:2), 6pt
 -- monospace, about 70 chars per column, black on white. I
 -- will open it in a browser and print it."
