@@ -24,19 +24,19 @@ See [hello](https://txt.github.io/seai26f/hello.html) for the course intro, [pol
 
 | 📅 Date | 🎓 Lecture | 🛠️ submit <br>(due start of class) | 🎤 ugrad talks <br>(30 min each) | 🎤 grad talks <br>(tool 30 · task 20 min) | 🔍 Review |
 |:-------------:|:----------:|:---------:|:---------:|:---------:|:---------:|
-| Aug 17 | [hello](https://txt.github.io/seai26f/hello.html) + [tools](docs/lect/tools.md) + [Lua-101](src/ezr-lua/tut/lua101.md) | [eg0](https://txt.github.io/seai26f/ezr-eg0.html) | | | [w0](docs/review/w0.md) |
-| Aug 24 | [columns](https://txt.github.io/seai26f/ezr-eg1.html) | [eg1](https://txt.github.io/seai26f/ezr-eg1.html) | | | |
-| Aug 31 | dist | eg2 | [tool:ds](docs/lect/tools.md#ds) | [tool:hc](docs/lect/tools.md#hc) | |
+| Aug 17 | [hello](https://txt.github.io/seai26f/hello.html) + [tools](docs/lect/tools.md) + [Lua-101](src/ezr-lua/tut/lua101.md) |  | | | [w0](docs/review/w0.md) |
+| Aug 24 | [columns](https://txt.github.io/seai26f/ezr-eg1.html) | [eg0](https://txt.github.io/seai26f/ezr-eg0.html) | | | |
+| Aug 31 | dist | [eg1](https://txt.github.io/seai26f/ezr-eg1.html) | [tool:ds](docs/lect/tools.md#ds) | [tool:hc](docs/lect/tools.md#hc) | |
 | 🟩 ${\color{green}\textsf{Sep 07 — Labor Day, no class}}$ | | | | | |
-| Sep 14 | cluster | eg3 | [tool:ga](docs/lect/tools.md#ga) | [tool:sa](docs/lect/tools.md#sa) | |
-| Sep 21 | trees | eg4 | [tool:gp](docs/lect/tools.md#gp) | [tool:nsga2](docs/lect/tools.md#nsga2) | |
-| Sep 28 | acquire | eg5 | [tool:nov](docs/lect/tools.md#nov) | [tool:ibea](docs/lect/tools.md#ibea) | |
-| Oct 05 | stats | eg6 | [tool:moead](docs/lect/tools.md#moead) | [tool:al](docs/lect/tools.md#al) | |
+| Sep 14 | cluster | eg2 | [tool:ga](docs/lect/tools.md#ga) | [tool:sa](docs/lect/tools.md#sa) | |
+| Sep 21 | trees | eg3 | [tool:gp](docs/lect/tools.md#gp) | [tool:nsga2](docs/lect/tools.md#nsga2) | |
+| Sep 28 | acquire | eg4 | [tool:nov](docs/lect/tools.md#nov) | [tool:ibea](docs/lect/tools.md#ibea) | |
+| Oct 05 | stats | eg5 | [tool:moead](docs/lect/tools.md#moead) | [tool:al](docs/lect/tools.md#al) | |
 | Oct 12 | 🟥 ${\color{#ff9999}\textsf{Mid-term exam}}$ | | no talks | no talks | |
 | 🟩 ${\color{green}\textsf{Oct 19 — Fall break, no class}}$ | | | | | |
-| Oct 26 | apps | eg7 · **[grad project](docs/submit/gproj.md) starts** | [tool:sway](docs/lect/tools.md#sway) | [tool:nsga3](docs/lect/tools.md#nsga3) | |
-| Nov 02 | optimize | eg8 | [tool:qaoa](docs/lect/tools.md#qaoa) | [tool:mosa](docs/lect/tools.md#mosa) | |
-| Nov 09 | dtlz | eg9 · **[grad project](docs/submit/gproj.md): initial** | [tool:port](docs/lect/tools.md#port) | [tool:llm](docs/lect/tools.md#llm) | |
+| Oct 26 | apps | eg6 · **[grad project](docs/submit/gproj.md) starts** | [tool:sway](docs/lect/tools.md#sway) | [tool:nsga3](docs/lect/tools.md#nsga3) | |
+| Nov 02 | optimize | eg7 | [tool:qaoa](docs/lect/tools.md#qaoa) | [tool:mosa](docs/lect/tools.md#mosa) | |
+| Nov 09 | dtlz | eg8 · **[grad project](docs/submit/gproj.md): initial** | [tool:port](docs/lect/tools.md#port) | [tool:llm](docs/lect/tools.md#llm) | |
 | Nov 16 | | | | [taskA–D](docs/submit/gproj.md#the-task-talk-15-marks) | |
 | Nov 23 | | | | [taskE–H](docs/submit/gproj.md#the-task-talk-15-marks) | |
 | Nov 30 | 🟥 ${\color{#ff9999}\textsf{Final exam (491 only, 1 hr)}}$ | **[grad project](docs/submit/gproj.md): final** · **[ugrad project](docs/submit/uproj.md)** | | | |
@@ -45,8 +45,8 @@ See [hello](https://txt.github.io/seai26f/hello.html) for the course intro, [pol
 ## The demos, week by week
 
 The demos of `ezr-eg.lua`, `ezr-apps.lua` and `ezr-dtlz.lua`
-are split into ten weekly files, `src/ezr-lua/ezr-eg0.lua` to
-`ezr-eg9.lua`, sorted simplest to hardest. Each file is a
+are split into nine weekly files, `src/ezr-lua/ezr-eg0.lua` to
+`ezr-eg8.lua`, sorted simplest to hardest. Each file is a
 tutorial and a test suite at once: `--egs` lists that week's
 demos, `--all` runs them (want "failures: 0"), and each file
 ends with exercises. The later weeks look bigger, but each of
@@ -64,7 +64,6 @@ the earlier weeks, so the reading load stays flat.
 | ezr-eg6.lua                                               | statistics                     | `--same` `--ranks`                                                       |
 | ezr-eg7.lua                                               | apps: predict, guard, group    | `--knn` `--detect` `--nb` `--kmeans` `--kpp`                             |
 | ezr-eg8.lua                                               | classic optimizers             | `--dominate` `--ga` `--de` `--sa` `--ls` `--race`                        |
-| ezr-eg9.lua                                               | DTLZ: labels cost money        | `--fronts` `--label` `--models` `--pure` `--why` `--generalize` `--wins` |
 
 ## Applications
 
