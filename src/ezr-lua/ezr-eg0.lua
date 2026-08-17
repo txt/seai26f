@@ -117,4 +117,9 @@ function rand(lo,hi,    x)
 -- monospace, about 70 chars per column, black on white. I
 -- will open it in a browser and print it."
 
+--## start-up --------------------------------------------------
+-- Fires only when this file is the script the user ran.
+eg = {}
+go(eg)
+
 return _ENV
