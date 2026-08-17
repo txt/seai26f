@@ -246,7 +246,12 @@ Here are five tricks that rats can use to sneak around, and tame, hard Ai proble
 As seen here, the first skill costs 45% of the code: it pays for the data structures everything shares. After that, each new skill mostly rewires old parts: prediction costs 17%, optimization 3%, anomaly detection 2%. Skill <em>i+1</em> reuses the machinery already built for skills <em>1..i</em>.
 <br><br>
 Reuse alone is not enough: rat engineers also refactor. If any fool can do it for a dollar, an engineer asks how to do it for a penny. What code can we throw away, with everything still working? The table above shows the payoff of all that redoing: a few hundred lines of code now support world-class optimization and explanation algorithms. Ganguly's FSE work shows these data-light methods matching far heavier learners. Rayegan's JSS work shows the same small toolkit generating explanations that are both shorter and clearer than those of its rivals. Reuse, then refactor, and everything gets simple, understandable, verifiable.
+<br><br>
+(Aside: this is a first example of an important idea: neurosymbolic systems. Here I am proposing that humans and LLMs work together to specify the skill; then, under the hood, we implement that skill with highly optimized symbolic algorithms. Neural helps humans say what they want; symbolic actually does it. This mix-and-match is the subject of <a href="https://doi.org/10.1002/aaai.12036">Kautz's 2020 AAAI address</a> on neurosymbolic AI; more on that below.)
 <br><br><div class="reference">
+<a href="https://doi.org/10.1002/aaai.12036">Kautz: The third AI summer: AAAI Robert S. Engelmore Memorial Lecture, AAAI 2020</a>. Henry Kautz. AI Magazine 43, 1 (2022), 105–125. doi:10.1002/aaai.12036.
+</div>
+<div class="reference">
 <a href="https://github.com/txt/seai26f">Menzies: Ten lectures on data-lite AI, at the REPL</a>. Tim Menzies. NCSU course notes, 2026.
 </div>
 <div class="reference">
@@ -344,7 +349,7 @@ Kautz's notation is a little arcane, so here is a simpler one. Write <em>S</em> 
 <tr><td>N</td><td>a net alone</td><td>LLMs label SE optimization data; Senthilkumar's EMSE work makes those raw labels robust</td></tr>
 <tr><td>S; N; S</td><td>symbols in, net thinks, symbols out</td><td>prompt an LLM with code, read back a review; the ChatGPT cell</td></tr>
 <tr><td>S[N]</td><td>symbolic boss calls a neural helper</td><td>an issue-triage pipeline (the boss) calls a sentiment net to score each incoming report (Lin et al.); AlphaGo's tree search calling its neural scorer is Kautz's classic case</td></tr>
-<tr><td>N; S</td><td>net proposes, symbols check</td><td>LLMs translate requirements to temporal logic, then model checkers test them (nl2spec); LLM warm-starts seed a classical active learner (Senthilkumar's TOSEM work)</td></tr>
+<tr><td>N; S</td><td>net proposes, symbols check</td><td>LLMs translate requirements to temporal logic, then model checkers test them (nl2spec); LLM warm-starts seed a classical active learner (Senthilkumar's TOSEM work). See also, the above ppint (1) on domain engineering the car yard.</td></tr>
 <tr><td>S; N</td><td>symbols build the net's diet</td><td>SE knowledge builds the training pairs; rules compile away into weights (Lample & Charton; Hu et al.)</td></tr>
 <tr><td>S as N</td><td>rules are templates for the net</td><td>logic clauses shape the network's structure (Logic Tensor Networks)</td></tr>
 <tr><td>S in loss</td><td>rules graded into training</td><td>coding standards as semantic loss: breaking a rule costs the net at training time (Xu et al.)</td></tr>

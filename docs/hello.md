@@ -175,6 +175,17 @@ generating explanations that are both shorter and clearer than those
 of its rivals. Reuse, then refactor, and everything gets simple,
 understandable, verifiable.
 
+(Aside: this is a first example of an important idea: neurosymbolic
+systems. Here I am proposing that humans and LLMs work together to
+specify the skill; then, under the hood, we implement that skill
+with highly optimized symbolic algorithms. Neural helps humans say
+what they want; symbolic actually does it. This mix-and-match is
+the subject of
+[Kautz's 2020 AAAI address](https://doi.org/10.1002/aaai.12036) on
+neurosymbolic AI; more on that below.)
+
+@ [Kautz: The third AI summer: AAAI Robert S. Engelmore Memorial Lecture, AAAI 2020](https://doi.org/10.1002/aaai.12036). Henry Kautz. AI Magazine 43, 1 (2022), 105–125. doi:10.1002/aaai.12036.
+
 @ [Menzies: Ten lectures on data-lite AI, at the REPL](https://github.com/txt/seai26f). Tim Menzies. NCSU course notes, 2026.
 
 @ [Ganguly & Menzies: How low can you go? The data-light SE challenge](https://arxiv.org/abs/2512.13524). Kishan Kumar Ganguly, Tim Menzies. FSE 2026. arXiv:2512.13524.
@@ -348,7 +359,7 @@ off the table, each with an SE example:
 | N         | a net alone                            | LLMs label SE optimization data; Senthilkumar's EMSE work makes those raw labels robust             |
 | S; N; S   | symbols in, net thinks, symbols out    | prompt an LLM with code, read back a review; the ChatGPT cell                                       |
 | S[N]      | symbolic boss calls a neural helper    | an issue-triage pipeline (the boss) calls a sentiment net to score each incoming report (Lin et al.); AlphaGo's tree search calling its neural scorer is Kautz's classic case |
-| N; S      | net proposes, symbols check            | LLMs translate requirements to temporal logic, then model checkers test them (nl2spec); LLM warm-starts seed a classical active learner (Senthilkumar's TOSEM work) |
+| N; S      | net proposes, symbols check            | LLMs translate requirements to temporal logic, then model checkers test them (nl2spec); LLM warm-starts seed a classical active learner (Senthilkumar's TOSEM work). See also, the above ppint (1) on domain engineering the car yard. |
 | S; N      | symbols build the net's diet           | SE knowledge builds the training pairs; rules compile away into weights (Lample & Charton; Hu et al.) |
 | S as N    | rules are templates for the net        | logic clauses shape the network's structure (Logic Tensor Networks)                                 |
 | S in loss | rules graded into training             | coding standards as semantic loss: breaking a rule costs the net at training time (Xu et al.)       |
