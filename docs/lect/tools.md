@@ -14,12 +14,15 @@
 <h1 align="center">:cyclone: CSC491/591: SE for AI <br>NC State, Fall '26</h1>
 <img src="https://raw.githubusercontent.com/txt/seai26f/refs/heads/main/etc/img/seai26f.png">
 
-# Tools to Explore (for tool talks)
+# Tool talks: 16 topics, 1976–2026
 
-Each group signs up for **one** tool for its *tool talk* (see the schedule on
-the [README](https://github.com/txt/seai26f/blob/main/README.md)).
-One tool per group; first come, first served on the
+Each group signs up for **one** topic below; one topic per group,
+first come, first served on the
 [signup sheet](https://docs.google.com/spreadsheets/d/1EsVadqssyJXaQPFjTVEfOs3Uv8DOQ0WyNlgTMcsoeBo/edit).
+The schedule on the
+[README](https://github.com/txt/seai26f/blob/main/README.md) assigns
+each topic its night (the tool:xx cells link back to rows here), so
+picking a topic also picks your talk date.
 
 ## The talk
 
@@ -54,71 +57,58 @@ Ways to lose marks: problem stated last (or never); no verdict,
 just a feature tour; no time left for questions; slides the
 lecturer cannot open.
 
-| # | Tool | Year | Assumption | Notes | Example SE use |
-|--:|------|------|:----:|-------|----------------|
-| 1 | Random Search | 1950s | floor | baseline sanity check; surprisingly strong in high dimensions; blind probing | baseline for hyper-parameter tuning [38]; matched far heavier search in SBSE [36] |
-| 2 | Hill Climbing | 1950s | A1 | local improvement, greedy trajectory; easily trapped in local optima | search-based test generation, local vs global search [9]; real-time API recommendation (Pyart) [11] |
-| 3 | Genetic Algorithms (GA) | 1975 | A3 | evolutionary search using selection, crossover, mutation | automatic program repair (GenProg) [24]; multi-objective release planning [25] |
-| 4 | (1+1) Evolution Strategy | 1973 | A1 | single incumbent, self-adaptive Gaussian step (1/5 rule) | many-independent-objective (MIO) test-suite generation [16] |
-| 5 | Simulated Annealing (SA) | 1983 | A1 | probabilistic escape from local optima via temperature | search-based fault localization [14]; SBSE surveys [13] |
-| 6 | Tabu Search | 1986 | A2 | memory-based search to avoid cycling | structural software testing [20]; cross-company defect-prediction transfer [21] |
-| 7 | Iterated Local Search (ILS) | 2003 | A2 | restart escape: kick incumbent to new region, re-optimize | software project scheduling [18] |
-| 8 | Genetic Programming (GP) | 1992 | A3 | evolves programs or parse trees | automatic patch evolution in GenProg [24][74] |
-| 9 | Ant Colony Optimization (ACO) | 1992 | A3 | pheromone-based path exploration | test sequence/test data generation, first by McMinn & Holcombe 2003; 21+ testing studies surveyed by Suri & Singhal 2012 |
-| 10 | Particle Swarm Optimization (PSO) | 1995 | A3 | flocking-based continuous optimization; velocity swarm | seed scheduling for greybox fuzzing [29] |
-| 11 | MaxWalkSat | 1996 | A2 | greedy + random walk SAT solver | finding robust solutions in NASA requirements models (Gay, Menzies et al., ASE J 2010) |
-| 12 | EDA (estimation of distribution) | 1996 | A3 | replaces crossover with a probability model fit to the best-so-far | test generation for mutation testing [27] |
-| 13 | Differential Evolution (DE) | 1997 | A3 | vector-based evolutionary optimization; tournament winner at large budgets | tuning learners for SE text mining ("easy over hard") [31] |
-| 14 | SPEA2 | 2001 | A4 | strength-based multi-objective optimization, external archive | multi-objective mutation testing of feature models [41] |
-| 15 | NSGA-II | 2002 | A4 | non-dominated sorting with crowding distance; widely recommended, needs many evals | many-objective software remodularization [40]; feature-model testing [41] |
-| 16 | IBEA | 2004 | A4 | indicator-based multi-objective optimization | software product-line configuration with user preferences (Sayyad et al., ICSE 2013 [48]) |
-| 17 | SMS-EMOA | 2007 | A4 | hypervolume-contribution selection | Pareto-based feature selection for defect prediction [44] |
-| 18 | MOEA/D | 2007 | A4 | decomposes MOO into scalar subproblems | compared on software remodularization [40] |
-| 19 | Gaussian Process Models (GPM) | 2010s | A5 | probabilistic surrogates for expensive functions | Bayesian compiler autotuning [35]; DBMS knob tuning (OtterTune) [47] |
-| 20 | SMAC / SMBO | 2011 | A5 | sequential surrogate-based optimization; random-forest surrogate handles categorical spaces | software configuration tuning [3][33] |
-| 21 | TPE | 2011 | A5 | Bayesian optimization via density estimation of good vs ordinary configs | efficient compiler autotuning (BOCA) [35] |
-| 22 | FLASH | 2017 | A5 | CART-based SMBO for SE configuration | finding faster software configurations [7] |
-| 23 | SWAY | 2016 | A7 | recursive median-distance bisection down to a few representatives | "sampling" as baseline SBSE optimizer [36]; surrogate-accuracy study [37] |
-| 24 | DODGE | 2019 | A7 | epsilon-pruning: discard configs falling in same epsilon-bin | tuning defect prediction and text mining pipelines [22] |
-| 25 | LINE (kpp) | 2026 | A7 | centroid sampling (k-means++ style) from budget | data-light SE optimization [33][1] |
-| 26 | EZR | 2026 | A7 | distance-based proximity active learning; tournament winner at tight budgets | explainable minimal-data optimization [1][33] |
+## Topics
 
-## Selected references (from arXiv:2607.11705 bibliography)
+Sixteen topics, one per distinct technology, sorted by the *birth
+date of the algorithm* (not the SE paper) — so the semester walks
+the field from direct search, through genetic algorithms and
+Pareto-based evolution, to active learning, quantum circuits, and
+LLM hybrids. The middle rows follow [Ramírez, Romero & Ventura's
+2019 survey of many-objective
+SBSE](https://doi.org/10.1016/j.jss.2018.12.015); the ends extend
+it backwards to 1976 and forwards to 2026. (A longer, unpruned
+list sits in
+[the attic](https://github.com/txt/seai26f/blob/main/docs/attic/topics.md).)
 
-- [1] A. Rayegan and T. Menzies, "Minimal data, maximum clarity: A heuristic for explaining optimization," *Journal of Systems and Software*, 2026.
-- [3] P. Chen and T. Chen, "Promisetune: Unveiling causally promising and explainable configuration tuning," *ICSE*, 2026.
-- [7] V. Nair, Z. Yu, T. Menzies, N. Siegmund, and S. Apel, "Finding faster configurations using flash," *IEEE TSE*, 46(7):794–811, 2018.
-- [8] S. Russell and P. Norvig, *Artificial Intelligence: A Modern Approach, 4/E*. Pearson, 2021.
-- [9] M. Harman and P. McMinn, "A theoretical and empirical study of search-based testing: Local, global, and hybrid search," *IEEE TSE*, 36(2):226–247, 2009.
-- [10] M. Harman, S. A. Mansouri, and Y. Zhang, "Search-based software engineering: Trends, techniques and applications," *ACM CSUR*, 45(1):1–61, 2012.
-- [12] S. Kirkpatrick, C. D. Gelatt Jr, and M. P. Vecchi, "Optimization by simulated annealing," *Science*, 220:671–680, 1983.
-- [15] I. Rechenberg, *Evolutionsstrategie*. 1973.
-- [17] H. R. Lourenço, O. C. Martin, and T. Stützle, "Iterated local search," in *Handbook of Metaheuristics*. Springer, 2003.
-- [19] F. Glover, "Tabu search—part i," *ORSA Journal on Computing*, 1(3):190–206, 1989.
-- [22] A. Agrawal, W. Fu, D. Chen, X. Shen, and T. Menzies, "How to 'dodge' complex software analytics," *IEEE TSE*, 47(10):2182–2194, 2019.
-- [23] J. H. Holland, *Adaptation in Natural and Artificial Systems*. MIT Press, 1992.
-- [24] C. Le Goues, T. Nguyen, S. Forrest, and W. Weimer, "Genprog: A generic method for automatic software repair," *IEEE TSE*, 38(1):54–72, 2011.
-- [26] H. Mühlenbein and G. Paass, "From recombination of genes to the estimation of distributions i," *PPSN*, 1996.
-- [28] J. Kennedy and R. Eberhart, "Particle swarm optimization," *ICNN'95*, 1995.
-- [30] R. Storn and K. Price, "Differential evolution—a simple and efficient heuristic for global optimization over continuous spaces," *J. Global Optimization*, 11:341–359, 1997.
-- [32] F. Hutter, H. H. Hoos, and K. Leyton-Brown, "Sequential model-based optimization for general algorithm configuration," *LION*, 2011.
-- [33] K. K. Ganguly and T. Menzies, "How low can you go? the data-light SE challenge," *FSE*, 2026.
-- [34] J. Bergstra, R. Bardenet, Y. Bengio, and B. Kégl, "Algorithms for hyper-parameter optimization," *NeurIPS*, 2011.
-- [36] J. Chen, V. Nair, R. Krishna, and T. Menzies, "'Sampling' as a baseline optimizer for search-based software engineering," *IEEE TSE*, 46(6):597–614, 2018.
-- [38] J. Bergstra and Y. Bengio, "Random search for hyper-parameter optimization," *JMLR*, 13(1):281–305, 2012.
-- [39] K. Deb, A. Pratap, S. Agarwal, and T. Meyarivan, "A fast and elitist multiobjective genetic algorithm: Nsga-ii," *IEEE Trans. Evol. Comput.*, 6(2):182–197, 2002.
-- [42] E. Zitzler, M. Laumanns, and L. Thiele, "Spea2: Improving the strength pareto evolutionary algorithm," *TIK report*, 103, 2001.
-- [43] N. Beume, B. Naujoks, and M. Emmerich, "Sms-emoa: Multiobjective selection based on dominated hypervolume," *EJOR*, 181(3):1653–1669, 2007.
-- [45] Q. Zhang and H. Li, "Moea/d: A multiobjective evolutionary algorithm based on decomposition," *IEEE Trans. Evol. Comput.*, 11(6):712–731, 2007.
-- [74] J. R. Koza, "Genetic programming as a means for programming computers by natural selection," *Statistics and Computing*, 4:87–112, 1994.
-- [37] P. Chen, J. Gong, and T. Chen, "Accuracy can lie: On the impact of surrogate model in configuration tuning," *IEEE TSE*, 51(2):548–580, 2025.
-- [40] W. Mkaouer et al., "Many-objective software remodularization using nsga-iii," *ACM TOSEM*, 24(3):1–45, 2015.
-- [41] R. A. Matnei Filho and S. R. Vergilio, "A multi-objective test data generation approach for mutation testing of feature models," *J. Softw. Eng. Res. Dev.*, 4(1):4, 2016.
-- [44] C. Ni, X. Chen, F. Wu, Y. Shen, and Q. Gu, "An empirical study on pareto based multi-objective feature selection for software defect prediction," *J. Syst. Softw.*, 152:215–238, 2019.
-- [47] D. Van Aken, A. Pavlo, G. J. Gordon, and B. Zhang, "Automatic database management system tuning through large-scale machine learning," *SIGMOD*, 2017.
-- [48] A. S. Sayyad, T. Menzies, and H. Ammar, "On the value of user preferences in search-based software engineering: A case study in software product lines," *ICSE*, 2013.
-- P. McMinn and M. Holcombe, early ACO for state-based test sequence generation, 2003 (first ACO-in-testing per later surveys).
-- H. Suri and S. Singhal, "Literature survey of ant colony optimization in software testing," *CSI* 2012 (21 ACO-in-testing studies).
-- G. Gay, T. Menzies, M. Jalali, et al., "Finding robust solutions in requirements models," *Automated Software Engineering*, 17:439–468, 2010 (MaxWalkSat on NASA requirements models).
-- Non-tournament classics: M. Dorigo, *Optimization, Learning and Natural Algorithms*, PhD thesis, 1992; H. Kautz and B. Selman, "Pushing the envelope: planning, propositional logic, and stochastic search," *AAAI*, 1996; E. Zitzler and S. Künzli, "Indicator-based selection in multiobjective search," *PPSN*, 2004; C. E. Rasmussen and C. K. I. Williams, *Gaussian Processes for Machine Learning*, MIT Press, 2006.
+| tag | Algorithm (born) | SE application | Paper |
+|-----|------------------|----------------|-------|
+| <a name="ds"></a>tool:ds | Numerical / direct search (1960s) | Test-data generation — the founding SBSE paper | [Miller & Spooner, TSE 1976](https://doi.org/10.1109/tse.1976.233818) |
+| <a name="hc"></a>tool:hc | Hill climbing | Software modularisation (Bunch) | [Mancoridis et al., IWPC 1998](https://doi.org/10.1109/wpc.1998.693283); [Mitchell & Mancoridis, TSE 2006](https://doi.org/10.1109/tse.2006.31) |
+| <a name="ga"></a>tool:ga | [Genetic algorithms (Holland 1975)](https://doi.org/10.7551/mitpress/1090.001.0001) | Unit test generation (EvoSuite) | [Fraser & Arcuri, ESEC/FSE 2011](https://doi.org/10.1145/2025113.2025179) |
+| <a name="sa"></a>tool:sa | [Simulated annealing (Kirkpatrick et al. 1983)](https://doi.org/10.1126/science.220.4598.671) | Search-based maintenance / refactoring | [O'Keeffe & Ó Cinnéide, CSMR 2006](https://doi.org/10.1109/csmr.2006.49) |
+| <a name="gp"></a>tool:gp | [Genetic programming (Koza 1992)](https://doi.org/10.1007/bf00175355) | Automated program repair (GenProg) | [Weimer et al., ICSE 2009](https://doi.org/10.1109/icse.2009.5070536) |
+| <a name="nsga2"></a>tool:nsga2 | [NSGA-II (Deb et al. 2002)](https://doi.org/10.1109/4235.996017) | Pareto test-suite minimisation | [Yoo & Harman, ISSTA 2007](https://doi.org/10.1145/1273463.1273483) |
+| <a name="nov"></a>tool:nov | NSGA-II + [novelty search (Lehman & Stanley 2011)](https://doi.org/10.1162/evco_a_00025) | DNN behaviour-frontier testing (DeepJanus) | [Riccio & Tonella, ESEC/FSE 2020](https://doi.org/10.1145/3368089.3409730) |
+| <a name="ibea"></a>tool:ibea | [IBEA (Zitzler & Künzli 2004)](https://doi.org/10.1007/978-3-540-30217-9_84) | SPL feature selection, 5 objectives | [Sayyad, Menzies & Ammar, ICSE 2013](https://doi.org/10.1109/icse.2013.6606595) |
+| <a name="moead"></a>tool:moead | [MOEA/D (Zhang & Li 2007)](https://doi.org/10.1109/tevc.2007.892759) | Multi-objective regression testing | [Zheng et al., Inf. Sci. 2016](https://doi.org/10.1016/j.ins.2015.11.027) |
+| <a name="al"></a>tool:al | [Active learning (Settles 2009)](https://burrsettles.com/pub/settles.activelearning.pdf) + clustering | Cheap config/model optimisation (GALE) | [Krall et al., TSE 2015](https://doi.org/10.1109/tse.2015.2432024) |
+| <a name="sway"></a>tool:sway | Recursive random projection (SWAY) | Sampling as a baseline optimizer | [Chen et al., TSE 2019](https://doi.org/10.1109/tse.2018.2790925) |
+| <a name="nsga3"></a>tool:nsga3 | [NSGA-III (Deb & Jain 2014)](https://doi.org/10.1109/tevc.2013.2281535) | Refactoring with 15 objectives | [Mkaouer et al., GECCO 2014](https://doi.org/10.1145/2576768.2598366) |
+| <a name="qaoa"></a>tool:qaoa | [QAOA (Farhi et al. 2014)](https://arxiv.org/abs/1411.4028) | Quantum test-case optimisation | [Wang, Ali, Yue & Arcaini, TSE 2024](https://doi.org/10.1109/tse.2024.3479421) |
+| <a name="mosa"></a>tool:mosa | MOSA / DynaMOSA | Unit test generation, many-objective | [Panichella, Kifetew & Tonella, TSE 2018](https://doi.org/10.1109/tse.2017.2663435) |
+| <a name="port"></a>tool:port | Portfolio: 20 optimizers, budget-aware | Which optimizer, at what budget? (106 SE tasks) | [Ganguly & Menzies, 2026](https://arxiv.org/abs/2607.11705) |
+| <a name="llm"></a>tool:llm | Classical-then-LLM hybrid (SNAP2) | SE configuration optimisation: seed the LLM with cheap classical search | [Srinivasan & Menzies, 2026](https://arxiv.org/abs/2607.02583) |
 
+## Data for your experiments
+
+Most rows can be re-run, or at least sanity-checked, against
+[MOOT](https://github.com/timm/moot): 100+ SE multi-objective
+optimisation tasks (configuration, effort, process, cloud tuning)
+in one csv format. tool:port and tool:llm were benchmarked on it.
+If your talk ends with "and here is that tool's idea, tried on a
+MOOT task", you have earned the value discussion.
+
+## Read these regardless of your row
+
+- The manifesto: [Harman & Jones, *Search-based software
+  engineering*, IST 2001](https://doi.org/10.1016/s0950-5849(01)00189-6)
+- The testing survey: [McMinn, STVR 2004](https://doi.org/10.1002/stvr.294)
+- The many-objective survey this list grew from:
+  [Ramírez et al., JSS 2019](https://doi.org/10.1016/j.jss.2018.12.015)
+- How to evaluate Pareto results:
+  [Li, Chen & Yao, TSE 2022](https://doi.org/10.1109/tse.2020.3036108)
+- Why weighted sums can mislead:
+  [Chen & Li, TOSEM 2023](https://doi.org/10.1145/3514233)
+
+Every link above resolves as of 2026-08-07 (checked against the DOI
+handle registry and arXiv).

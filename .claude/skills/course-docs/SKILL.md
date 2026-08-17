@@ -25,7 +25,7 @@ description: Use when editing any markdown in this course repo (README, docs/lec
   Lecture, grad submit, ugrad talks, grad talks. No homework rows and
   no quiz markers in the table (both live in policies prose). Tool
   cells name their topic as tool:acronym (tool:ds .. tool:llm) and
-  deep-link to <a name> anchors on rows of docs/submit/topics.md,
+  deep-link to <a name> anchors on rows of docs/lect/tools.md,
   assigned chronologically (ugrad cell = earlier tech each night);
   task cells (taskA–D, taskE–H) link gproj.md's task-talk section.
   Tool talks are 30 min (25 + 5 questions), Aug 31–Nov 9, 2 per
@@ -61,8 +61,13 @@ description: Use when editing any markdown in this course repo (README, docs/lec
   in-class only, REG 02.20.03 excuses), late work (−1 mark/day,
   weekend = 1 day), ten-point grading scale. Keep both cohorts
   summing to 100 when anything moves.
-- Tool-talk menu: `docs/lect/tools.md` (26 optimizers with refs);
-  signup lives in the linked Google Sheet.
+- Tool talks SSOT: `docs/lect/tools.md` — ONE page holding the talk
+  spec (30 min), the 15-mark rubric, and the 16-topic SBSE table
+  (rows tagged tool:ds .. tool:llm with <a name> anchors the README
+  schedule cells deep-link). Signup lives in the linked Google
+  Sheet. Retired to docs/attic/: topics.md (the unpruned 39-row
+  list) and tools-26menu.md (the old 26-optimizer tournament menu
+  with numbered refs).
 
 ## Course doctrine (keep consistent when editing)
 
