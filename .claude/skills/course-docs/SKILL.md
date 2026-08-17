@@ -104,8 +104,8 @@ lost, concretely.
 ## Pycco doc pipeline (docs/*.html)
 
 - Regen loop per lua file (run from src/ezr-lua; $S = scratchpad):
-  `awk -v ext=lua -f ~/gits/timm/src/etc/doc.awk F.lua > $S/F.lua`
-  → `python3 ~/gits/timm/src/etc/pyccot.py -d ../../docs $S/F.lua`
+  `awk -v ext=lua -f ../../etc/doc.awk F.lua > $S/F.lua`
+  → `python3 ../../etc/pyccot.py -d ../../docs $S/F.lua`
   → `python3 ../../etc/nav.py ../../docs/F.html`
 - EVERY pyccot run rewrites docs/pycco.css: re-append the
   "timm extras" CSS block after (guard: `grep -q 'timm extras'`).

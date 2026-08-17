@@ -17,11 +17,8 @@
 ### How to run this course
 
 (Easier read: this file, rendered --
-[xai-eg.html](https://timm.github.io/src/xai/docs/xai-eg.html);
 its library
-[xai.html](https://timm.github.io/src/xai/docs/xai.html);
 the shared dictionary
-[glossary](https://timm.github.io/src/glossary.html).)
 
 Install [lua 5.4+](https://lua.org) (mac:
 `brew install lua`), then fetch the code and its data:
