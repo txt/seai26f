@@ -305,6 +305,7 @@ This maths rests on wildly optimistic assumptions: solutions are evenly distribu
 <tr><td style="text-align:right">8</td><td style="text-align:right">429</td><td style="text-align:right">198</td><td style="text-align:right">70</td><td style="text-align:right">1</td><td style="text-align:right">4341</td><td style="text-align:right">10.0</td><td style="text-align:right">15</td></tr>
 </table>
 Note what is cheap and what is dear here. The input columns come free with every row. The goal columns are the labels &mdash; someone must weigh, drive, and measure each car &mdash; so in practice most goal cells start as "?", and the game is choosing the few rows worth labeling.
+<img src="fig2-w2.png" align=right width=450 alt="wins by budget and check">
 <br><br>
 Figure 2 of <a href="https://arxiv.org/abs/2606.03640">arXiv:2606.03640</a> built models from 10 to 200 samples, then checked the top 1 to 10 sorted items in a holdout set. This ran 100,000 times, picking data sets and hyperparameters at random each time, over 127 data sets from the MOOT repository. The vertical axis is the build budget <em>y</em>; the horizontal axis is the top <em>x</em> items checked. Above a budget of about 50 and a check of about 5, everything is flat at 95. The paper's own summary: at `(budget, check) = (50, 6)` the learner "usually achieves above an 85% win", and "checking beyond 7 items seems not particularly useful".
 <br><br>

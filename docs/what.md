@@ -292,6 +292,8 @@ someone must weigh, drive, and measure each car &mdash; so in
 practice most goal cells start as "?", and the game is choosing
 the few rows worth labeling.
 
+<img src="fig2-w2.png" align=right width=450 alt="wins by budget and check">
+
 Figure 2 of [arXiv:2606.03640](https://arxiv.org/abs/2606.03640)
 built models from 10 to 200 samples, then checked the top 1 to 10
 sorted items in a holdout set. This ran 100,000 times, picking data
