@@ -21,9 +21,14 @@ description: Use when editing any markdown in this course repo (README, docs/lec
 ## Single sources of truth
 
 - Dates, talk slots, deliverable dates: README schedule table.
-  Mondays; holidays 🟩 green, exams 🟥 light red. Five columns: Date,
-  Lecture, grad submit, ugrad talks, grad talks. No homework rows and
-  no quiz markers in the table (both live in policies prose). Tool
+  Mondays; holidays 🟩 green, exams 🟥 light red. Six columns: Date,
+  Lecture, submit (due start of class — holds the weekly egs AND
+  project deadlines), ugrad talks, grad talks, Review. No separate
+  homework column; no quiz markers in the table (quizzes live in
+  policies prose). No "Also:" row — intro links live in the Aug 17
+  Lecture cell (hello + tools + Lua-101); the course intro is
+  docs/hello.md → https://txt.github.io/seai26f/hello.html
+  (front.md and l0.md retired to docs/attic/). Tool
   cells name their topic as tool:acronym (tool:ds .. tool:llm) and
   deep-link to <a name> anchors on rows of docs/lect/tools.md,
   assigned chronologically (ugrad cell = earlier tech each night);
@@ -117,19 +122,52 @@ lost, concretely.
 - GitHub Pages: enabled, main:/docs, .nojekyll present. Pages
   live at https://txt.github.io/seai26f/<base>.html. Markdown
   docs are linked via github blob URLs instead.
+- nav.py REFRESHES: on re-run it strips the old marker block
+  and re-injects, so after any README badge edit run make mds
+  AND nav.py over every docs/*.html except hello.html.
 
-## Weekly demo files (src/ezr-lua/ezr-eg0..eg9.lua)
+## Single-file html pages (md2html)
 
-- Ten chunks (table lives in front.md "The demos, week by
-  week"): eg0 boot, eg1 columns, eg2 dist, eg3 cluster,
-  eg4 cuts+trees, eg5 acquire+holdout, eg6 stats, eg7 apps,
-  eg8 optimizers, eg9 dtlz. Old monolith parked at
-  src/ezr-lua/etc/ezr-eg.lua.
-- Each file: install header (no rlwrap), `--egs` lister with a
-  `doc` table, `--repl`, `--all` (must skip --all/--egs/--repl),
-  glossary links (github blob URLs to docs/lect/glossary.md#term),
-  homework at end. A week's file must not mention later weeks'
-  machinery (no Tbl before week 2).
+- docs/hello.md (the course intro, "dinosaurs vs rats") is NOT
+  a pycco or header-propagated page. It starts with
+  title:/icon:/footer: frontmatter and renders to
+  docs/hello.html via `make html` (sh/md2html.awk +
+  sh/style.css inlined). sh/headers skips any docs md whose
+  first line starts "title:" — NEVER paste the badge header
+  into these files.
+- md2html has no code blocks and no backticks: use tables for
+  tabular/code-ish content, `-` alone = numbered item, `- x` =
+  bullet, `@ [T](url)...` = reference div, `.` ends a list.
+- hello.md images live in docs/ (rats.png, pso.gif, gauss.png,
+  fig2-w2.png, snap2-*.png) — keep them local (designed to
+  last), no hotlinks.
+
+## Weekly demo files (src/ezr-lua/ezr-eg0..eg8.lua)
+
+- NINE chunks (table lives at the bottom of README, with an
+  Applications section after it): eg0 the-port-warm-up,
+  eg1 columns, eg2 dist, eg3 cluster, eg4 cuts+trees,
+  eg5 acquire+holdout, eg6 stats, eg7 apps, eg8 optimizers.
+  eg9 (dtlz) DELETED from the plan; its demos are unassigned.
+  Old monolith parked at src/ezr-lua/etc/ezr-eg.lua.
+- egs are deadlines in the README submit column, due ONE WEEK
+  after their lecture (eg0 due Aug 24 .. eg8 due Nov 9),
+  skipping exam/break nights.
+- eg0 is special: no demos, no go(eg), no install header, never
+  mentions 101.py. Just the require chain plus "the port,
+  warm-up": Part 1 = the builtin-covered ezr-lib functions as
+  real code (pycco RHS) with NO Python answers on the prose
+  side (that is the exercise); one kept rule = exact
+  Park-Miller RNG parity via diff. Part 2 = build port.py
+  (settings `the`, --key=val flags, test_rand, seed
+  reset-and-replay). Part 3 = Claude typesets the paper
+  hand-in (print.html: 2 CSS columns, 6pt mono, ~70 chars).
+- eg1-style files: install header (no rlwrap), `--egs` lister
+  with a `doc` table, `--repl`, `--all` (must skip
+  --all/--egs/--repl), glossary links (github blob URLs to
+  docs/lect/glossary.md#term), homework at end. A week's file
+  must not mention later weeks' machinery (no Tbl before
+  week 2).
 - Homework tone: weekly port is "near enough is good enough";
   exact diff-match demanded only for the Park-Miller pair
   (src/ezr-lua/rand.lua vs src/rand.py — verified identical).
