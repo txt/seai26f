@@ -29,24 +29,24 @@ See [what?](https://txt.github.io/seai26f/what.html) for the course intro, [poli
 
 <div align=center>
 
-| 📅 Date | 🎓 Lecture | 🛠️ submit <br>(due start of class) | 🎤 ugrad talks <br>(30 min each) | 🎤 grad talks <br>(tool 30 · task 20 min) | 🔍 Review |
-|:-------------:|:----------:|:---------:|:---------:|:---------:|:---------:|
-| Aug 17 | [what?](https://txt.github.io/seai26f/what.html) | | | | [w0](docs/review/w0.md) |
-| Aug 24 | [columns](https://txt.github.io/seai26f/ezr-eg1.html) | | | | [eg1](https://txt.github.io/seai26f/ezr-eg1.html) |
-| Aug 31 | dist | | [tool:ds](docs/lect/tools.md#ds) | [tool:hc](docs/lect/tools.md#hc) | |
-| 🟩 ${\color{green}\textsf{Sep 07 — Labor Day, no class}}$ | | | | | |
-| Sep 14 | cluster | | [tool:ga](docs/lect/tools.md#ga) | [tool:sa](docs/lect/tools.md#sa) | |
-| Sep 21 | trees | | [tool:gp](docs/lect/tools.md#gp) | [tool:nsga2](docs/lect/tools.md#nsga2) | |
-| Sep 28 | acquire | | [tool:nov](docs/lect/tools.md#nov) | [tool:ibea](docs/lect/tools.md#ibea) | |
-| Oct 05 | stats | | [tool:moead](docs/lect/tools.md#moead) | [tool:al](docs/lect/tools.md#al) | |
-| Oct 12 | 🟥 ${\color{#ff9999}\textsf{Mid-term exam}}$ | | no talks | no talks | |
-| 🟩 ${\color{green}\textsf{Oct 19 — Fall break, no class}}$ | | | | | |
-| Oct 26 | apps | **[grad project](docs/submit/gproj.md) starts** | [tool:sway](docs/lect/tools.md#sway) | [tool:nsga3](docs/lect/tools.md#nsga3) | |
-| Nov 02 | optimize | | [tool:qaoa](docs/lect/tools.md#qaoa) | [tool:mosa](docs/lect/tools.md#mosa) | |
-| Nov 09 | dtlz | **[grad project](docs/submit/gproj.md): initial** | [tool:port](docs/lect/tools.md#port) | [tool:llm](docs/lect/tools.md#llm) | |
-| Nov 16 | | | | [taskA–D](docs/submit/gproj.md#the-task-talk-15-marks) | |
-| Nov 23 | | | | [taskE–H](docs/submit/gproj.md#the-task-talk-15-marks) | |
-| Nov 30 | 🟥 ${\color{#ff9999}\textsf{Final exam (491 only, 1 hr)}}$ | **[grad project](docs/submit/gproj.md): final** · **[ugrad project](docs/submit/uproj.md)** | | | |
+| 📅 Date | 🎓 Lecture | 🏋️ homework | 🛠️ submit <br>(due start of class) | 🎤 ugrad talks <br>(30 min each) | 🎤 grad talks <br>(tool 30 · task 20 min) | 🔍 Review |
+|:-------------:|:----------:|:---------:|:---------:|:---------:|:---------:|:---------:|
+| Aug 17 | [what?](https://txt.github.io/seai26f/what.html) | [eg0](https://txt.github.io/seai26f/ezr-eg0.html) | | | | [w0](docs/review/w0.md) |
+| Aug 24 | [columns](https://txt.github.io/seai26f/ezr-eg1.html) | [eg1](https://txt.github.io/seai26f/ezr-eg1.html) | | | | [eg1](https://txt.github.io/seai26f/ezr-eg1.html) |
+| Aug 31 | dist | eg2 | | [tool:ds](docs/lect/tools.md#ds) | [tool:hc](docs/lect/tools.md#hc) | |
+| 🟩 ${\color{green}\textsf{Sep 07 — Labor Day, no class}}$ | |  | | | | |
+| Sep 14 | cluster | eg3 | | [tool:ga](docs/lect/tools.md#ga) | [tool:sa](docs/lect/tools.md#sa) | |
+| Sep 21 | trees | eg4 | | [tool:gp](docs/lect/tools.md#gp) | [tool:nsga2](docs/lect/tools.md#nsga2) | |
+| Sep 28 | acquire | eg5 | | [tool:nov](docs/lect/tools.md#nov) | [tool:ibea](docs/lect/tools.md#ibea) | |
+| Oct 05 | stats | eg6 | | [tool:moead](docs/lect/tools.md#moead) | [tool:al](docs/lect/tools.md#al) | |
+| Oct 12 | 🟥 ${\color{#ff9999}\textsf{Mid-term exam}}$ |  | | no talks | no talks | |
+| 🟩 ${\color{green}\textsf{Oct 19 — Fall break, no class}}$ | |  | | | | |
+| Oct 26 | apps | eg7 | **[grad project](docs/submit/gproj.md) starts** | [tool:sway](docs/lect/tools.md#sway) | [tool:nsga3](docs/lect/tools.md#nsga3) | |
+| Nov 02 | optimize | eg8 | | [tool:qaoa](docs/lect/tools.md#qaoa) | [tool:mosa](docs/lect/tools.md#mosa) | |
+| Nov 09 | dtlz | eg9 | **[grad project](docs/submit/gproj.md): initial** | [tool:port](docs/lect/tools.md#port) | [tool:llm](docs/lect/tools.md#llm) | |
+| Nov 16 | |  | | | [taskA–D](docs/submit/gproj.md#the-task-talk-15-marks) | |
+| Nov 23 | |  | | | [taskE–H](docs/submit/gproj.md#the-task-talk-15-marks) | |
+| Nov 30 | 🟥 ${\color{#ff9999}\textsf{Final exam (491 only, 1 hr)}}$ |  | **[grad project](docs/submit/gproj.md): final** · **[ugrad project](docs/submit/uproj.md)** | | | |
 </div>
 
 ## The demos, week by week
