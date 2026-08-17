@@ -98,7 +98,16 @@ eg["--csv"] = function(    n)
 --    Open a terminal split: Claude on the left, a shell on
 --    the right -- ideally in [Ghostty](https://ghostty.org),
 --    but [VS Code](https://code.visualstudio.com) is ok.
--- 5. Bring the working laptop to class.
+-- 5. Future weeks hand in code on paper: two columns, tiny
+--    font, syntax highlighted. Prove your Claude can typeset
+--    that now. Give it this prompt, then open the result in a
+--    browser and print to PDF:
+--    "Read 101.py. Write print.html: my code
+--    syntax-highlighted (no external CDNs), two CSS columns
+--    (column-count:2), 6pt monospace, about 70 chars per
+--    column, black on white. I will open it in a browser and
+--    print it."
+-- 6. Bring the working laptop to class.
 
 --## the port, warm-up -----------------------------------------
 -- **Part 1.** Next week you start porting this system to
