@@ -133,7 +133,7 @@ generalists; the giant specialists starved.
 
 ---
 
-Here are four rat tricks that are very useful.
+Here are five tricks that rats can use to sneak around, and tame, hard Ai problems.
 
 -
 
@@ -231,7 +231,8 @@ So a dozen binary choices (A=2<sup>12</sup>), at C=95% and ε=5%, needs
 9,605 samples. Much better than 10<sup>15</sup>, but still impractical
 in many domains.
 
-(Aside: **labels cost money**, all over SE. Human experts are slow,
+(Aside: **labeled samples cost money**, all over SE, is is hard
+to find good labeled data. Human experts are slow at labeling
 and grow error-prone when rushed; Easterby-Smith reports hours of
 work for just a few cases. Historical logs are big but unreliable:
 Herbold et al. report that labeling tools debugged for decades still
@@ -246,7 +247,7 @@ assist labeling but cannot automate it.)
 
 <img src="gauss.png" width=350 align=right>
 
-Costs fall again if near enough is good enough. Real solutions can
+Costs fall again if we can assume that near enough is good enough. Real solutions can
 vary by a small amount, so a rat may stop at any solution
 indistinguishable from the best. Cohen calls two solutions "small to
 medium" different when they are 0.2&sigma; to 0.5&sigma; apart, and a

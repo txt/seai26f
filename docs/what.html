@@ -224,7 +224,7 @@ So be a discerning user of AI technology. Assess the merits of each approach, an
 <h3>How to be a rat</h3>
 <hr>
 <p>
-Here are four rat tricks that are very useful.
+Here are five tricks that rats can use to sneak around, and tame, hard Ai problems.
 </p>
 <ol>
 <li>
@@ -280,10 +280,10 @@ Costs fall if you know how solutions will be judged. Search then becomes the <em
 </ul>
 So a dozen binary choices (A=2<sup>12</sup>), at C=95% and ε=5%, needs 9,605 samples. Much better than 10<sup>15</sup>, but still impractical in many domains.
 <br><br>
-(Aside: <b>labels cost money</b>, all over SE. Human experts are slow, and grow error-prone when rushed; Easterby-Smith reports hours of work for just a few cases. Historical logs are big but unreliable: Herbold et al. report that labeling tools debugged for decades still make many errors, and when Yu et al. audited real-world SE data sets, 90% of the technical-debt comments labeled "false positive" were themselves mislabeled. Even a real oracle can be ruinous: exhaustively exploring just the 11 configuration parameters of the x264 video encoder &mdash; compile each variant, then run a large test suite &mdash; took over 1,000 hours of CPU. And do not expect LLMs to label those samples for you: for SE problems, Ahmed et al. warn that LLMs assist labeling but cannot automate it.)
+(Aside: <b>labeled samples cost money</b>, all over SE, is is hard to find good labeled data. Human experts are slow at labeling and grow error-prone when rushed; Easterby-Smith reports hours of work for just a few cases. Historical logs are big but unreliable: Herbold et al. report that labeling tools debugged for decades still make many errors, and when Yu et al. audited real-world SE data sets, 90% of the technical-debt comments labeled "false positive" were themselves mislabeled. Even a real oracle can be ruinous: exhaustively exploring just the 11 configuration parameters of the x264 video encoder &mdash; compile each variant, then run a large test suite &mdash; took over 1,000 hours of CPU. And do not expect LLMs to label those samples for you: for SE problems, Ahmed et al. warn that LLMs assist labeling but cannot automate it.)
 <img src="gauss.png" width=350 align=right>
 <br><br>
-Costs fall again if near enough is good enough. Real solutions can vary by a small amount, so a rat may stop at any solution indistinguishable from the best. Cohen calls two solutions "small to medium" different when they are 0.2&sigma; to 0.5&sigma; apart, and a normal curve spans &plusmn;3&sigma;. So "indistinguishable" means <em>p = ((0.2+0.5)/2)/6 &approx; 6%</em>. Hamlet gives the confidence <em>C</em> of finding an event of probability <em>p</em> in <em>n</em> independent trials:
+Costs fall again if we can assume that near enough is good enough. Real solutions can vary by a small amount, so a rat may stop at any solution indistinguishable from the best. Cohen calls two solutions "small to medium" different when they are 0.2&sigma; to 0.5&sigma; apart, and a normal curve spans &plusmn;3&sigma;. So "indistinguishable" means <em>p = ((0.2+0.5)/2)/6 &approx; 6%</em>. Hamlet gives the confidence <em>C</em> of finding an event of probability <em>p</em> in <em>n</em> independent trials:
 <ul>
 <li>C = 1 - (1-p)<sup>n</sup>,</li>
 <li>so  samples(NEO) = log(1 - C) / log(1 - p).</li>
