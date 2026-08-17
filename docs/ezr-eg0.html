@@ -219,7 +219,6 @@ your Python both run, so the real work can start next week.</p>
    but <a href="https://code.visualstudio.com">VS Code</a> is ok.</li>
 <li>Bring the working laptop to class.</li>
 </ol>
-<hr />
     </div>
     <div class='code'>
       <div class="highlight"><pre></pre></div>
@@ -231,100 +230,18 @@ your Python both run, so the real work can start next week.</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-10'>#</a>
       </div>
-      <h2>The port, warm-up</h2>
-<p>Next week you start porting this system to Python. Warm up
-here. The demos of
+      <h2>the port, warm-up</h2>
+<p><strong>Part 1.</strong> Next week you start porting this system to
+Python. Warm up here. The demos of
 <a href="ezr-eg1.html">ezr-eg1.lua</a> lean on the
-<a href="ezr-lib.html">ezr-lib.lua</a> functions below, and every one
-is already covered by a Python builtin (named in each
-comment). For each Lua function, write the Python
-equivalent &ndash; most are one line. Check your answers against
+<a href="ezr-lib.html">ezr-lib.lua</a> functions at right, and every
+one is covered by a Python builtin. For each, write the
+Python equivalent &ndash; most are one line. Check your answers
+against
 <a href="https://github.com/txt/seai26f/blob/main/src/101.py">101.py</a>.</p>
-<pre><code>-- Python: class Num: ... (a class table IS the class;
--- __init__ and __repr__ do what new wires up here)
-function new(kl,t)
-  kl.__index=kl; kl.__tostring=show
-  return setmetatable(t,kl) end
-
--- Python: builtins.iter (lists and generators already
--- share one loop protocol)
-function iter(src,    at)
-  if type(src) == "function" then return src end
-  at = 0
-  return function() at = at + 1; return src[at] end end
-
--- Python: operator.methodcaller / operator.itemgetter,
--- or just a lambda
-function fun(f)
-  if type(f)=="string" then
-    return function(v,...) return v[f](v,...) end end
-  if type(f)=="number" then
-    return function(v) return v[f] end end
-  return f end
-
--- Python: builtins.map, or [f(v) for v in t]
-function map(t,f,    u)
-  f = fun(f)
-  u = {}
-  for _,v in ipairs(t) do u[1+#u]=f(v) end
-  return u end
-
--- Python: [f(k,v) for k,v in t.items()]
-function kap(t,f,    u)
-  u = {}
-  for k,v in pairs(t) do u[1+#u] = f(k,v) end
-  return u end
-
--- Python: list(t)
-function copy(t)
-  return map(t, function(v) return v end) end
-
--- Python: builtins.sum(f(v) for v in t.values())
-function sum(t,f,    n)
-  n = 0
-  for _, v in pairs(t) do n = n + f(v) end
-  return n end
-
--- Python: builtins.sorted (also a stable sort)
-function sorted(t,f,    s)
-  s = copy(t); table.sort(s, f); return s end
-
--- Python: builtins.round; f-strings do the printing
-function round(v,n)
-  if v % 1 == 0 then return floor(v) end
-  n = 10 ^ (n or the.round)
-  v = floor(v * n + 0.5) / n
-  return v % 1 == 0 and floor(v) or v end
-
--- Python: print + f-strings (101.py spells it say)
-function show(t,    u)
-  if type(t) ~= "table" then
-    return tostring(type(t)=="number" and round(t) or t) end
-  u = #t &gt; 0 and map(t, show) or
-      sorted(kap(t, function(k,v)
-        if tostring(k):sub(1,1) ~= "_" then
-          return ":"..k.." "..show(v) end end))
-  return "{"..table.concat(u, " ").."}" end
-
--- Python: random.seed / random.random -- near enough is
--- good enough, EXCEPT where part 3 above demands the
--- SAME numbers: then port Park-Miller exactly (rand.py)
-Seed = 1234567891
-
-function srand(n)
-  Seed = floor(n or 1234567891) % 2147483647
-  if Seed &lt;= 0 then Seed = Seed + 2147483646 end end
-
-function rand(lo,hi,    x)
-  Seed = (16807 * Seed) % 2147483647
-  x = Seed / 2147483647
-  if not lo then return x end
-  if not hi then lo, hi = 1, lo end
-  return lo + floor(x * (hi - lo + 1)) end
-</code></pre>
     </div>
     <div class='code'>
-      <div class="highlight"><pre></pre></div>
+      <div class="highlight"><pre><span class="kd">local</span><span class="w"> </span><span class="nv">floor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">math.floor</span></pre></div>
     </div>
   </div>
   <div class='clearall'></div>
@@ -332,6 +249,213 @@ function rand(lo,hi,    x)
     <div class='docs'>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-11'>#</a>
+      </div>
+      <p>Python: a class. <code>__init__</code> builds it; <code>__repr__</code> prints it.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span><span class="w"> </span><span class="nf">new</span><span class="p">(</span><span class="nv">kl</span><span class="p">,</span><span class="nv">t</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">kl</span><span class="p">.</span><span class="py">__index</span><span class="o">=</span><span class="nv">kl</span><span class="p">;</span><span class="w"> </span><span class="nv">kl</span><span class="p">.</span><span class="py">__tostring</span><span class="o">=</span><span class="nv">show</span>
+<span class="w">  </span><span class="kr">return</span><span class="w"> </span><span class="nb">setmetatable</span><span class="p">(</span><span class="nv">t</span><span class="p">,</span><span class="nv">kl</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-12'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-12'>#</a>
+      </div>
+      <p>Python: <code>builtins.iter</code> (lists and generators already share
+one loop protocol).</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span><span class="w"> </span><span class="nf">iter</span><span class="p">(</span><span class="nv">src</span><span class="p">,</span><span class="w">    </span><span class="nv">at</span><span class="p">)</span>
+<span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="nb">type</span><span class="p">(</span><span class="nv">src</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;function&quot;</span><span class="w"> </span><span class="kr">then</span><span class="w"> </span><span class="kr">return</span><span class="w"> </span><span class="nv">src</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="nv">at</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">  </span><span class="kr">return</span><span class="w"> </span><span class="kr">function</span><span class="p">()</span><span class="w"> </span><span class="nv">at</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">at</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="kr">return</span><span class="w"> </span><span class="nv">src</span><span class="p">[</span><span class="nv">at</span><span class="p">]</span><span class="w"> </span><span class="kr">end</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-13'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-13'>#</a>
+      </div>
+      <p>Python: <code>operator.methodcaller</code>, <code>operator.itemgetter</code>, or
+just a lambda.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span><span class="w"> </span><span class="nf">fun</span><span class="p">(</span><span class="nv">f</span><span class="p">)</span>
+<span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="nb">type</span><span class="p">(</span><span class="nv">f</span><span class="p">)</span><span class="o">==</span><span class="s2">&quot;string&quot;</span><span class="w"> </span><span class="kr">then</span>
+<span class="w">    </span><span class="kr">return</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="nv">v</span><span class="p">,...)</span><span class="w"> </span><span class="kr">return</span><span class="w"> </span><span class="nv">v</span><span class="p">[</span><span class="nv">f</span><span class="p">](</span><span class="nv">v</span><span class="p">,...)</span><span class="w"> </span><span class="kr">end</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="nb">type</span><span class="p">(</span><span class="nv">f</span><span class="p">)</span><span class="o">==</span><span class="s2">&quot;number&quot;</span><span class="w"> </span><span class="kr">then</span>
+<span class="w">    </span><span class="kr">return</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="nv">v</span><span class="p">)</span><span class="w"> </span><span class="kr">return</span><span class="w"> </span><span class="nv">v</span><span class="p">[</span><span class="nv">f</span><span class="p">]</span><span class="w"> </span><span class="kr">end</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="kr">return</span><span class="w"> </span><span class="nv">f</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-14'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-14'>#</a>
+      </div>
+      <p>Python: <code>builtins.map</code>, or <code>[f(v) for v in t]</code>.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span><span class="w"> </span><span class="nf">map</span><span class="p">(</span><span class="nv">t</span><span class="p">,</span><span class="nv">f</span><span class="p">,</span><span class="w">    </span><span class="nv">u</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">fun</span><span class="p">(</span><span class="nv">f</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="nv">_</span><span class="p">,</span><span class="nv">v</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nb">ipairs</span><span class="p">(</span><span class="nv">t</span><span class="p">)</span><span class="w"> </span><span class="kr">do</span><span class="w"> </span><span class="nv">u</span><span class="p">[</span><span class="mi">1</span><span class="o">+#</span><span class="nv">u</span><span class="p">]</span><span class="o">=</span><span class="nf">f</span><span class="p">(</span><span class="nv">v</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="kr">return</span><span class="w"> </span><span class="nv">u</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-15'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-15'>#</a>
+      </div>
+      <p>Python: <code>[f(k,v) for k,v in t.items()]</code>.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span><span class="w"> </span><span class="nf">kap</span><span class="p">(</span><span class="nv">t</span><span class="p">,</span><span class="nv">f</span><span class="p">,</span><span class="w">    </span><span class="nv">u</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="nv">k</span><span class="p">,</span><span class="nv">v</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nb">pairs</span><span class="p">(</span><span class="nv">t</span><span class="p">)</span><span class="w"> </span><span class="kr">do</span><span class="w"> </span><span class="nv">u</span><span class="p">[</span><span class="mi">1</span><span class="o">+#</span><span class="nv">u</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="nv">k</span><span class="p">,</span><span class="nv">v</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="kr">return</span><span class="w"> </span><span class="nv">u</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-16'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-16'>#</a>
+      </div>
+      <p>Python: <code>list(t)</code>.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span><span class="nv">t</span><span class="p">)</span>
+<span class="w">  </span><span class="kr">return</span><span class="w"> </span><span class="nf">map</span><span class="p">(</span><span class="nv">t</span><span class="p">,</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="nv">v</span><span class="p">)</span><span class="w"> </span><span class="kr">return</span><span class="w"> </span><span class="nv">v</span><span class="w"> </span><span class="kr">end</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-17'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-17'>#</a>
+      </div>
+      <p>Python: <code>sum(f(v) for v in t.values())</code>.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="nv">t</span><span class="p">,</span><span class="nv">f</span><span class="p">,</span><span class="w">    </span><span class="nv">n</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="nv">_</span><span class="p">,</span><span class="w"> </span><span class="nv">v</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nb">pairs</span><span class="p">(</span><span class="nv">t</span><span class="p">)</span><span class="w"> </span><span class="kr">do</span><span class="w"> </span><span class="nv">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="nv">v</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="kr">return</span><span class="w"> </span><span class="nv">n</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-18'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-18'>#</a>
+      </div>
+      <p>Python: <code>builtins.sorted</code> (also a stable sort).</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span><span class="w"> </span><span class="nf">sorted</span><span class="p">(</span><span class="nv">t</span><span class="p">,</span><span class="nv">f</span><span class="p">,</span><span class="w">    </span><span class="nv">s</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span><span class="nv">t</span><span class="p">);</span><span class="w"> </span><span class="nb">table.sort</span><span class="p">(</span><span class="nv">s</span><span class="p">,</span><span class="w"> </span><span class="nv">f</span><span class="p">);</span><span class="w"> </span><span class="kr">return</span><span class="w"> </span><span class="nv">s</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-19'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-19'>#</a>
+      </div>
+      <p>Python: <code>builtins.round</code>; f-strings do the printing.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span><span class="w"> </span><span class="nf">round</span><span class="p">(</span><span class="nv">v</span><span class="p">,</span><span class="nv">n</span><span class="p">)</span>
+<span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="nv">v</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="kr">then</span><span class="w"> </span><span class="kr">return</span><span class="w"> </span><span class="nf">floor</span><span class="p">(</span><span class="nv">v</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="nv">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="p">(</span><span class="nv">n</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="nv">the</span><span class="p">.</span><span class="py">round</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">floor</span><span class="p">(</span><span class="nv">v</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nv">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">0.5</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nv">n</span>
+<span class="w">  </span><span class="kr">return</span><span class="w"> </span><span class="nv">v</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nf">floor</span><span class="p">(</span><span class="nv">v</span><span class="p">)</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="nv">v</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-20'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-20'>#</a>
+      </div>
+      <p>Python: <code>print</code> + f-strings (101.py spells it <code>say</code>).</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span><span class="nv">t</span><span class="p">,</span><span class="w">    </span><span class="nv">u</span><span class="p">)</span>
+<span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="nb">type</span><span class="p">(</span><span class="nv">t</span><span class="p">)</span><span class="w"> </span><span class="o">~=</span><span class="w"> </span><span class="s2">&quot;table&quot;</span><span class="w"> </span><span class="kr">then</span>
+<span class="w">    </span><span class="kr">return</span><span class="w"> </span><span class="nb">tostring</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="nv">t</span><span class="p">)</span><span class="o">==</span><span class="s2">&quot;number&quot;</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nf">round</span><span class="p">(</span><span class="nv">t</span><span class="p">)</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="nv">t</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="nv">u</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">#</span><span class="nv">t</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nf">map</span><span class="p">(</span><span class="nv">t</span><span class="p">,</span><span class="w"> </span><span class="nv">show</span><span class="p">)</span><span class="w"> </span><span class="ow">or</span>
+<span class="w">      </span><span class="nf">sorted</span><span class="p">(</span><span class="nf">kap</span><span class="p">(</span><span class="nv">t</span><span class="p">,</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="nv">k</span><span class="p">,</span><span class="nv">v</span><span class="p">)</span>
+<span class="w">        </span><span class="kr">if</span><span class="w"> </span><span class="nb">tostring</span><span class="p">(</span><span class="nv">k</span><span class="p">):</span><span class="nf">sub</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">~=</span><span class="w"> </span><span class="s2">&quot;_&quot;</span><span class="w"> </span><span class="kr">then</span>
+<span class="w">          </span><span class="kr">return</span><span class="w"> </span><span class="s2">&quot;:&quot;</span><span class="o">..</span><span class="nv">k</span><span class="o">..</span><span class="s2">&quot; &quot;</span><span class="o">..</span><span class="nf">show</span><span class="p">(</span><span class="nv">v</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span><span class="w"> </span><span class="kr">end</span><span class="p">))</span>
+<span class="w">  </span><span class="kr">return</span><span class="w"> </span><span class="s2">&quot;{&quot;</span><span class="o">..</span><span class="nb">table.concat</span><span class="p">(</span><span class="nv">u</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot; &quot;</span><span class="p">)..</span><span class="s2">&quot;}&quot;</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-21'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-21'>#</a>
+      </div>
+      <p>Python: <code>random.seed</code> / <code>random.random</code> &ndash; near enough is
+good enough, EXCEPT where part 3 above demands the SAME
+numbers: then port Park-Miller exactly (see rand.py).</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="nv">Seed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1234567891</span>
+
+<span class="kr">function</span><span class="w"> </span><span class="nf">srand</span><span class="p">(</span><span class="nv">n</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">Seed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">floor</span><span class="p">(</span><span class="nv">n</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="mi">1234567891</span><span class="p">)</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2147483647</span>
+<span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="nv">Seed</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="kr">then</span><span class="w"> </span><span class="nv">Seed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">Seed</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2147483646</span><span class="w"> </span><span class="kr">end</span><span class="w"> </span><span class="kr">end</span>
+
+<span class="kr">function</span><span class="w"> </span><span class="nf">rand</span><span class="p">(</span><span class="nv">lo</span><span class="p">,</span><span class="nv">hi</span><span class="p">,</span><span class="w">    </span><span class="nv">x</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">Seed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">16807</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nv">Seed</span><span class="p">)</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2147483647</span>
+<span class="w">  </span><span class="nv">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">Seed</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">2147483647</span>
+<span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="nv">lo</span><span class="w"> </span><span class="kr">then</span><span class="w"> </span><span class="kr">return</span><span class="w"> </span><span class="nv">x</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="ow">not</span><span class="w"> </span><span class="nv">hi</span><span class="w"> </span><span class="kr">then</span><span class="w"> </span><span class="nv">lo</span><span class="p">,</span><span class="w"> </span><span class="nv">hi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nv">lo</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="kr">return</span><span class="w"> </span><span class="nv">lo</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">floor</span><span class="p">(</span><span class="nv">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="nv">hi</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">lo</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-22'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-22'>#</a>
+      </div>
+      <p><strong>Part 2.</strong> Settings drive the randoms. In your copy of
+<a href="https://github.com/txt/seai26f/blob/main/src/101.py">101.py</a>,
+add a test that prints ten random numbers:</p>
+<pre><code>def test_rand():
+  for _ in range(10): print(f"{random.random():.6f}")
+</code></pre>
+<p>Then run it three times:</p>
+<pre><code>python3 101.py rand
+python3 101.py --seed=42 rand
+python3 101.py --seed=42 rand
+</code></pre>
+<p>Same seed, same ten numbers; new seed, new numbers. (Read
+<code>main</code> in 101.py to see why: it calls <code>random.seed(the.seed)</code>
+before every test, and <code>--seed=42</code> resets <code>the.seed</code> first.)
+That reset-and-replay is how every experiment in this course
+is made repeatable.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-23'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-23'>#</a>
       </div>
       <h2>start-up</h2>
 <p>Fires only when this file is the script the user ran.</p>
