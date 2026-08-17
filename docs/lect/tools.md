@@ -23,7 +23,7 @@ One tool per group; first come, first served on the
 
 ## The talk
 
-Talks are 20 minutes long. Try to finish in 15 so we have 5
+Talks are 30 minutes long. Try to finish in 25 so we have 5
 minutes for questions.
 
 A tool talk explores one line of the table below:
@@ -47,24 +47,12 @@ Important:
 | 3 | **The algorithm**: how the tool works | key idea in your own words, not vendor prose |
 | 3 | **The verdict**: did the tool address the problem? | evidence shown; "no" with reasons scores full |
 | 2 | **Discussed with lecturer the week before** | no discussion = 0 |
-| 2 | **Timing**: done in 15, left 5 minutes for questions | running past 20 = 0 |
+| 2 | **Timing**: done in 25, left 5 minutes for questions | running past 30 = 0 |
 | 2 | **Slides + delivery**: Google Slides public and editable by timm@ieee.org; in person, whole group on stage | |
 
 Ways to lose marks: problem stated last (or never); no verdict,
 just a feature tour; no time left for questions; slides the
 lecturer cannot open.
-
-Talksa re 20 minutes long. Try to finish in 15 so we can have 5 ins for questions.
-
-A "tools" talk explores one line of the following table:
-
-- presents the SE problem (important! state this first!),
-- reviews the tool algorithm
-- discusses how (if at all) the tool addressed the problem
-
-Important: 
-- write the tatlk in google slides, public to everyone, edittable by timm@ieee.org
-- discuss the talk to the lecturer the week before so they can fill in any missing theory stuff.
 
 | # | Tool | Year | Assumption | Notes | Example SE use |
 |--:|------|------|:----:|-------|----------------|

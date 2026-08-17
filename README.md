@@ -23,11 +23,11 @@ Mondays 4:30–7:15 PM, 2201 Engineering Building 3.
 [Lua-101](src/ezr-lua/tut/lua101.md) |
 [tools](docs/lect/tools.md)
 
-See [what?](https://txt.github.io/seai26f/what.html) for the course intro, [policies](docs/lect/policies.md) for grading, [tools](docs/lect/tools.md) for the tool-talk menu, and the [talk signup sheet](https://docs.google.com/spreadsheets/d/1EsVadqssyJXaQPFjTVEfOs3Uv8DOQ0WyNlgTMcsoeBo/edit). Every lecture night (except exam nights) has a 1-mark in-class quiz (grads: only until the mid-term). Each tool-talk cell names its topic (tool:sa = simulated annealing, etc.) and links to that row of the [topics list](docs/submit/topics.md); groups (8 per cohort) sign up one group per topic. Talks are 20 minutes (aim for 15, leaving 5 for questions). Night shape: about one hour of lecture, then up to 90 minutes of student talks.
+See [what?](https://txt.github.io/seai26f/what.html) for the course intro, [policies](docs/lect/policies.md) for grading, [tools](docs/lect/tools.md) for the tool-talk menu, and the [talk signup sheet](https://docs.google.com/spreadsheets/d/1EsVadqssyJXaQPFjTVEfOs3Uv8DOQ0WyNlgTMcsoeBo/edit). Every lecture night (except exam nights) has a 1-mark in-class quiz (grads: only until the mid-term). Each tool-talk cell names its topic (tool:sa = simulated annealing, etc.) and links to that row of the [topics list](docs/submit/topics.md); groups (8 per cohort: 491 = 25 students, seven 3s and one 4; 591 = 23 students, seven 3s and one 2) sign up one group per topic. Tool talks are 30 minutes (aim for 25, leaving 5 for questions); grad task talks are 20 minutes (15 + 5). Night shape: about one hour of lecture, then one hour of tool talks (or, on Nov 16 and Nov 23, 90 minutes of task talks).
 
 <div align=center>
 
-| 📅 Date | 🎓 Lecture | 🛠️ submit <br>(due start of class) | 🎤 ugrad talks <br>(20 min each) | 🎤 grad talks <br>(20 min each) | 🔍 Review |
+| 📅 Date | 🎓 Lecture | 🛠️ submit <br>(due start of class) | 🎤 ugrad talks <br>(30 min each) | 🎤 grad talks <br>(tool 30 · task 20 min) | 🔍 Review |
 |:-------------:|:----------:|:---------:|:---------:|:---------:|:---------:|
 | Aug 17 | [what?](https://txt.github.io/seai26f/what.html) | | | | [w0](docs/review/w0.md) |
 | Aug 24 | [columns](https://txt.github.io/seai26f/ezr-eg1.html) | | | | [eg1](https://txt.github.io/seai26f/ezr-eg1.html) |
@@ -42,8 +42,8 @@ See [what?](https://txt.github.io/seai26f/what.html) for the course intro, [poli
 | Oct 26 | apps | **[grad project](docs/submit/gproj.md) starts** | [tool:sway](docs/submit/topics.md#sway) | [tool:nsga3](docs/submit/topics.md#nsga3) | |
 | Nov 02 | optimize | | [tool:qaoa](docs/submit/topics.md#qaoa) | [tool:mosa](docs/submit/topics.md#mosa) | |
 | Nov 09 | dtlz | **[grad project](docs/submit/gproj.md): initial** | [tool:port](docs/submit/topics.md#port) | [tool:llm](docs/submit/topics.md#llm) | |
-| Nov 16 | | | | taskA–D | |
-| Nov 23 | | | | taskE–H | |
+| Nov 16 | | | | [taskA–D](docs/submit/gproj.md#the-task-talk-15-marks) | |
+| Nov 23 | | | | [taskE–H](docs/submit/gproj.md#the-task-talk-15-marks) | |
 | Nov 30 | 🟥 ${\color{#ff9999}\textsf{Final exam (491 only, 1 hr)}}$ | **[grad project](docs/submit/gproj.md): final** · **[ugrad project](docs/submit/uproj.md)** | | | |
 </div>
 

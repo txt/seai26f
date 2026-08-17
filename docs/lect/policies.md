@@ -89,6 +89,10 @@ of the kind you will see in exams. Weeklies will be answered on the back of the 
 Talks are delivered in person by one person and all other members of that group are required to stand on stage
 behding their presenter.
 See the schedule on the course [README](https://github.com/txt/seai26f/blob/main/README.md).
+
+Groups: 8 per cohort. CSC 491 (25 students): seven groups of 3, one
+group of 4. CSC 591 (23 students): seven groups of 3, one group of 2.
+
 Each cohort is graded out of 100 marks.
 
 | Component                             |                  CSC 491 (ugrad)                   |                               CSC 591 (grad)                               |
@@ -118,13 +122,15 @@ marks), on the last class (Mon Nov 30), reports results against that
 pre-registered claim; real data earns the top of the range, and a failed
 claim with a recorded decision (persevere, re-plan, descope) loses
 nothing — an unrun or hidden eval does.
-- Task talks (20 minutes, one per grad group) fill the last
-two talk nights (Nov 16 and Nov 23), four per night.
+- Task talks (20 minutes: aim for 15, leaving 5 for questions;
+one per grad group) fill the last two talk nights (Nov 16 and
+Nov 23), four per night in a 90-minute window.
 
 
 For all students:
-- Tool talks (20 minutes, every group) run Aug 31 to Nov 9,
-two per night (one ugrad group, one grad group).
+- Tool talks (30 minutes: aim for 25, leaving 5 for questions;
+every group) run Aug 31 to Nov 9, two per night (one ugrad
+group, one grad group), one hour per night in all.
 
 **Attendance and participation:** Classes are in person. The weekly in-class
 quizzes can only be taken in class; a missed quiz scores zero unless the absence

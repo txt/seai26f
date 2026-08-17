@@ -23,14 +23,20 @@ description: Use when editing any markdown in this course repo (README, docs/lec
 - Dates, talk slots, deliverable dates: README schedule table.
   Mondays; holidays 🟩 green, exams 🟥 light red. Five columns: Date,
   Lecture, grad submit, ugrad talks, grad talks. No homework rows and
-  no quiz markers in the table (both live in policies prose). Letters
-  are group IDs within a cohort (toolA, taskA — no u/g prefix). Talks
-  are 20 min (15 + 5 questions); tool talks Aug 31–Nov 9, one letter per night (2 talks:
-  ugrad + grad); grad task talks Nov 16 + Nov 23, four per night.
+  no quiz markers in the table (both live in policies prose). Tool
+  cells name their topic as tool:acronym (tool:ds .. tool:llm) and
+  deep-link to <a name> anchors on rows of docs/submit/topics.md,
+  assigned chronologically (ugrad cell = earlier tech each night);
+  task cells (taskA–D, taskE–H) link gproj.md's task-talk section.
+  Tool talks are 30 min (25 + 5 questions), Aug 31–Nov 9, 2 per
+  night (one ugrad group, one grad group, 1 hr in all); grad task
+  talks are 20 min (15 + 5), Nov 16 + Nov 23, four per night in a
+  90-min window.
   Nov 30 = 1-hr 491 final + project hand-ins, no talks; no Dec slot.
   Project deadlines live in the grad submit column. Night shape:
-  ~1 hr lecture + up to 90 min student talks. Every lecture night
-  carries a 1-mark quiz (none on exam nights) — 12 for ugrads.
+  ~1 hr lecture + 1 hr tool talks (90 min task talks on Nov 16/23).
+  Every lecture night carries a 1-mark quiz (none on exam nights) —
+  12 for ugrads.
 - Grading and NCSU-required sections: `docs/lect/policies.md`. TWO
   cohorts, each totals 100. NO marks table — the assessment section is
   prose + one bullet list per cohort (bold **CSC 491 (undergraduate).**
@@ -60,8 +66,10 @@ description: Use when editing any markdown in this course repo (README, docs/lec
 
 ## Course doctrine (keep consistent when editing)
 
-- Groups of ~3 within each cohort: 8 ugrad groups (one tool talk each),
-  8 grad groups (tool talk + task talk + semester project).
+- Groups of ~3 within each cohort: 8 ugrad groups (491 = 25 students:
+  seven 3s + one 4; one tool talk each), 8 grad groups (591 = 23
+  students: seven 3s + one 2; tool talk + task talk + semester
+  project).
 - Grad project = pre-registered eval: initial deliverable (week 10)
   carries the claim (metric, threshold, baseline) plus a runnable
   instrument on sample/synthetic data; final deliverable (last class)
