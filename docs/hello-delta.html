@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>hello.md delta — notes for the next rewrite</title>
+<link rel="icon" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📝</text></svg>">
+<meta name="viewport" content="width=device-width" />
+<style>
+:root {
+    --back-color: rgb(30, 30, 30);
+    --text-color: rgb(212, 212, 212);
+}
+
+/* minimalist reset */
+* {
+    padding: 0;
+    margin: 0;
+    font-size: 1em;
+}
+
+body {
+    background-color: var(--back-color);
+    color: var(--text-color);
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+}
+
+main {
+    margin: 0 auto;
+    padding: 30px 140px 0 140px;
+    max-width: 600px;
+    min-height: 100vh;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid var(--text-color);
+    margin: 3em 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 1.2em;
+    font-weight: 700;
+    display: inline;
+    margin-right: 5px;
+    line-height: 1.2;
+}
+
+h2 {
+    margin-top: 50px;
+    font-size: 1.4em;
+}
+
+h3 {
+    margin-top: 40px;
+    font-size: 1.1em;
+    text-align: center;
+}
+
+h4 {
+    font-weight: 400;
+    margin-bottom: 40px;
+}
+
+ol {
+    counter-reset: item;
+}
+ol>li {
+    counter-increment: item;
+    list-style: none inside;
+    margin: 20px 0;
+    overflow: hidden;
+    line-height: 1.5em;
+}
+ol>li:before {
+    content: counter(item) ;
+    margin-right: 10px;
+    padding: 8px;
+    border-radius: 50%;
+    width: 25px;
+    background: var(--text-color);
+    color: var(--back-color);
+    text-align: center;
+    float: left;
+    font-weight: 700;
+}
+
+footer {
+    text-align: right;
+    margin-top: 80px;
+    padding-bottom: 20px;
+    font-size: 0.7em;
+    font-style: italic;
+}
+
+p {
+    line-height: 1.5em;
+    margin-top: 20px;
+    display: block;
+}
+
+a {
+    color: inherit;
+}
+a:hover, a:focus {
+    color: var(--back-color);
+    background-color: var(--text-color);
+}
+
+img {
+    margin: 3px;
+}
+
+ul {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-left: 1.4em;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.85em;
+    line-height: 1.35;
+}
+th, td {
+    border: 1px solid rgba(212, 212, 212, 0.35);
+    padding: 4px 9px;
+    text-align: left;
+}
+th {
+    font-weight: 700;
+}
+
+.reference {
+    font-size: 0.8rem;
+    line-height: 1.2rem;
+}
+
+.footnote {
+    font-size: 0.8rem;
+    line-height: 1.2rem;
+    margin-top: 20px;
+}
+
+sup {
+    font-size: 0.7em;
+    line-height: 0;
+}
+
+.reference > a {
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+  main {
+      max-width: 600px;
+    padding: 10px;
+  }
+  h2 {
+    font-size: 1.2em;
+  }
+  img {
+    width: 100%;
+  }
+}
+</style>
+</head>
+<body>
+<main>
+<h1>hello.md delta</h1>
+<p>
+What the Aug 17 2026 lecture said that hello.md does not. Source: Panopto transcript, compared against hello.md. Fold these in next time hello.md is rewritten.
+</p>
+<hr>
+<h3>New rat trick: active learning (label less, learn more)</h3>
+<p>
+Do not learn from all the data. Build a tiny model, then use it to carefully select what to label next. This way we get to ignore the uninformative, noisy, superfluous, redundant data — which, in practice, is most of the data. Active learners build competent models from just a handful of examples (the ~50 from the maths below), even when exploring tens of thousands of variables. In class this got a long riff (the used-car lot: X values are free to see, Y values cost a test drive) that the current "Pick your battles" section only hints at. Promote it to a trick of its own.
+</p>
+<hr>
+<h3>New rat trick: check the straw men</h3>
+<p>
+Always baseline the sophisticated thing against the dumbest possible thing. "My career is my straw men": again and again the simple baseline turns out to be good enough, and the ceremony of the complex method was not worth it. Related to, but distinct from, reuse-then-refactor: that trick shrinks code you keep; this trick deletes methods you never needed.
+</p>
+<hr>
+<h3>New SE rat trick: exploit the repeated structure of SE data</h3>
+<p>
+Why does simple keep winning on software data? Because software is built to be maintained by someone else, so it is written in expected patterns — it has nothing like the variability of natural phenomena (for a truly natural process, go to the center of the sun). Quote Prem on the naturalness hypothesis (<a href="https://earlbarr.com/publications/naturalness_cacm.pdf">Hindle, Barr, Su, Gabel & Devanbu, CACM 2016</a>):
+</p>
+<p>
+"Programming languages, in theory, are complex, flexible and powerful, but, 'natural' programs, the ones that real people actually write, are mostly simple and rather repetitive; thus they have usefully predictable statistical properties that can be captured in statistical language models and leveraged for software engineering tasks."
+</p>
+<hr>
+<h3>Intro additions</h3>
+<ul>
+<li>The 1986 origin story: Australia, second AI winter, farm-herd   profitability in dollars per square meter per day; experts   running fingers down columns of abnormal runs; the   runs-language whose output beat the experts who fed it their   knowledge. Hooked ever since.</li>
+<li>Bainbridge, Ironies of Automation (1983): automate the easy   parts and humans keep the hard residue plus a monitoring role   they are cognitively bad at (~30 minutes of useful attention).   Modern form: "Have you watched a Claude loop run? You are now   a Bainbridge person."</li>
+<li>The junior-programmer pipeline: LLMs replace juniors, not   seniors; ask any company how it will find seniors in ten years   if nobody trains juniors — no answer. Train the reviewers, not   the reviewed.</li>
+<li>Jevons paradox, the "even if you reject every bubble argument"   closer: cheaper coal burned more coal; the new expressway is   the new traffic jam; cheap AI ends up scarce.</li>
+</ul>
+<hr>
+<h3>"Keep it simple, keep it stochastic" additions</h3>
+<ul>
+<li>Random does not mean crazy: a random variable comes from a   known distribution with a mean and a variance — structure you   can exploit.</li>
+<li>PSO as a maintenance model: the particles never stop, so when   the world changes the swarm re-converges. That is the   interesting property, not the flocking.</li>
+<li>Augment with the surprise result: trees learned from ~50   carefully selected examples, converted into a tree less than   20 lines long, tame problems with thousands of columns and   tens of thousands of rows.</li>
+</ul>
+<hr>
+<h3>"Near enough" maths-section additions</h3>
+<ul>
+<li>Reward-free RL made concrete: an autonomous car with a 20-year   life must satisfy laws not yet written — that is why it costs   10^15 samples.</li>
+<li>Best-arm made concrete: Las Vegas, one slot machine slightly   biased; knowing the goal is what collapses 10^15 to ~10^4.</li>
+<li>Label cost made concrete: human experts label about ten   examples an hour, then get called away; rush them and the   labels rot.</li>
+</ul>
+<hr>
+<h3>Meteorite-list additions</h3>
+<p>
+EU specifics beyond the AI Act link: moving data between France and Germany is already a regulated act; Europe pulling back from US clouds on the fear that Microsoft hands German data to the American government.
+</p>
+<hr>
+<h3>New section after the intro: a sampler of the methods</h3>
+<p>
+Show, do not promise. The live demo: `lua ezr-eg.lua --show` on auto93 — 398 cars, baseline means on row one, best row marked with an up-arrow, worst with a down-arrow, constraints accumulating down the tree, each split holding half the data. Then the 5,000-row configuration data set where 3 of 17 choices control everything. "In 30 years of software analytics: a small number of variables matter, and the rest can go to hell." Screenshot saved at <a href="tree-demo.png">tree-demo.png</a>:
+</p>
+<img src="tree-demo.png" width=500>
+<p>
+(This content lived in the retired l0.md; nothing on the current site teaches how to read the tree.)
+</p>
+<hr>
+<h3>Bookkeeping when rewriting</h3>
+<ul>
+<li>"Four rat tricks" becomes seven (reuse/refactor; simple and   stochastic; near enough; seams; + active learning; check the   straw men; exploit SE structure). Fix the summary paragraph   and the "here are four rat tricks" line.</li>
+<li>Separate note: in class the 491 project was described as a   neurosymbolic coding task (combine symbolic and neural at a   seam; few histograms; no report). uproj.md still says   shrinking-code demos. Reconcile.</li>
+</ul>
+</main>
+</body>
+</html>
