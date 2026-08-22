@@ -11,7 +11,7 @@ OPTIONS: (defaults below are parsed into `the`):
   --round  decimals shown        = 3
   -h       print this help
 """
-import os, re, sys, random
+import os, re, random, sys; sys.dont_write_bytecode = True
 from math import floor
 from types import SimpleNamespace as o
 

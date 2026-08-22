@@ -27,10 +27,10 @@ See [hello](https://txt.github.io/seai26f/hello.html) for the course intro, [pol
 | 📅 Date | 🎓 Lecture | 🛠️ submit <br>(due start of class) | 🎤 ugrad talks <br>(30 min each) | 🎤 grad talks <br>(tool 30 · task 20 min) | 🔍 Review |
 |:-------------:|:----------:|:---------:|:---------:|:---------:|:---------:|
 | Aug 17 | [hello](https://txt.github.io/seai26f/hello.html) + [tools](docs/lect/tools.md) + [Lua-101](src/ezr-lua/tut/lua101.md) |  | | | [w1](docs/review/w1.md) + [w1-delta](docs/review/w1-delta.md) |
-| Aug 24 | [columns](https://txt.github.io/seai26f/ezr-eg1.html) | [eg0](https://txt.github.io/seai26f/ezr-eg0.html) | | | |
+| Aug 24 | [gloss1](https://txt.github.io/seai26f/gloss1.html) | [eg0](https://txt.github.io/seai26f/ezr-eg0.html) | | | |
 | Aug 31 | dist | [eg1](https://txt.github.io/seai26f/ezr-eg1.html) | [tool:ds](docs/lect/tools.md#ds) | [tool:hc](docs/lect/tools.md#hc) | |
 | 🟩 ${\color{green}\textsf{Sep 07 — Labor Day, no class}}$ | | | | | |
-| Sep 14 | cluster | eg2 | [tool:ga](docs/lect/tools.md#ga) | [tool:sa](docs/lect/tools.md#sa) | |
+| Sep 14 | cluster | [eg2](https://txt.github.io/seai26f/ezr-eg2.html) | [tool:ga](docs/lect/tools.md#ga) | [tool:sa](docs/lect/tools.md#sa) | |
 | Sep 21 | trees | eg3 | [tool:gp](docs/lect/tools.md#gp) | [tool:nsga2](docs/lect/tools.md#nsga2) | |
 | Sep 28 | acquire | eg4 | [tool:nov](docs/lect/tools.md#nov) | [tool:ibea](docs/lect/tools.md#ibea) | |
 | Oct 05 | stats | eg5 | [tool:moead](docs/lect/tools.md#moead) | [tool:al](docs/lect/tools.md#al) | |
@@ -61,7 +61,7 @@ the reading load stays flat.
 | --------------------------------------------------------- | --------------------------------- | ------------------------------------------------------------------------ |
 | [ezr-eg0.lua](https://txt.github.io/seai26f/ezr-eg0.html) | the port, warm-up                 | (none)                                                                   |
 | [ezr-eg1.lua](https://txt.github.io/seai26f/ezr-eg1.html) | boot; columns, streaming          | `--the` `--csv` `--col` `--without` `--sub`                              |
-| ezr-eg2.lua                                               | distance & gap-to-heaven          | `--distx` `--disty` `--laws`                                             |
+| [ezr-eg2.lua](https://txt.github.io/seai26f/ezr-eg2.html) | distance & gap-to-heaven          | `--distx` `--disty` `--laws`                                             |
 | ezr-eg3.lua                                               | clustering by poles               | `--half` `--node`                                                        |
 | ezr-eg4.lua                                               | cuts, trees, XAI                  | `--cuts` `--tree` `--show` `--why`                                       |
 | ezr-eg5.lua                                               | active learning; labels cost money | `--acquire` `--holdout` `--holdouts` `--label`                           |

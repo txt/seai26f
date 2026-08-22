@@ -20,29 +20,267 @@
 
 # Glossary
 
-Terms from the weekly demo files, in discovery order: the order
-week 1 first meets each idea. Code samples are verbatim from
-[ezr.lua](https://github.com/txt/seai26f/blob/main/src/ezr-lua/ezr.lua)
+Every entry is a tiny lecture — 30 seconds to five minutes: a
+hook, the idea, the math if any, then the code. General theory
+comes first (Principles), then the weekly terms in temporal
+order, each week opening with its new acronyms. Code samples
+are verbatim from
+[ezr.lua](https://github.com/txt/seai26f/blob/main/src/ezr-lua/ezr.lua),
+[ezr-lib.lua](https://github.com/txt/seai26f/blob/main/src/ezr-lua/ezr-lib.lua)
 and
-[ezr-lib.lua](https://github.com/txt/seai26f/blob/main/src/ezr-lua/ezr-lib.lua).
+[101.py](https://github.com/txt/seai26f/blob/main/src/101.py).
 
-## noir
+## Principles
 
-Nominal, Ordinal, Interval, Ratio (Stevens 1946): the four scales
-of measurement. This code collapses them to two: symbols you can
-only count (nominal) and numbers you can subtract (interval and
-up). One header letter decides which:
+New acronyms: [SSOT](#ssot).
 
-```lua
--- Column kind from the first letter: lowercase makes a SYM,
--- uppercase a NUM.
-function Col(name,at)
-  return (name:find"^%l" and Sym or Num)(name,at) end
+### mechanism-policy
+
+Separate the *what* (policy: small, declarative, easy to change)
+from the *how* (mechanism: code that obeys any policy). Then one
+mechanism serves a thousand policies. Everywhere in this course:
+
+| policy (a little data)              | mechanism (code)          |
+| ----------------------------------- | ------------------------- |
+| `__doc__` options text in 101.py    | the regx that parses it   |
+| row 1 of a csv (`Lbs-`, `Acc+`...)  | the csv reader + `Cols`   |
+| a `-`/`+` suffix on a goal's name   | `heaven`, `disty`         |
+| keys of the `eg` demo table         | the `go()` dispatcher     |
+| `the` settings table                | every function reading it |
+
+Change the policy line, never the mechanism: a new dataset is a
+new header row, not new code.
+
+<a name="ssot"></a>
+
+### SSOT (single source of truth)
+
+Say each fact once; derive everything else. E.g. define the
+options ONCE, in a help string; parse settings out of that
+string; then code and documentation can never drift apart:
+
+```python
+def settings(doc):
+  pat = r"--(\w+)\s+[^=\n]*=\s*(\S+)"
+  return o(**{k: thing(v) for k,v in re.findall(pat, doc)})
+
+the = settings(__doc__)
 ```
+
+Other SSOTs here: the README schedule (all dates), row 1 of a
+csv (all column roles). SSOT is
+[mechanism-policy](#mechanism-policy)'s best friend: the single
+source is the policy.
+
+<a name="ducktype"></a>
+
+### protocol (duck typing)
+
+A set of method names that many types agree to answer, so
+callers need never ask which type they hold ("if it quacks like
+a duck..."). Duck typing with a contract. The
+[columnProtocol](#columnprotocol) is this course's main one;
+`dist` alone is another (any object answering `dist` can sit in
+a cluster).
+
+### Pareto frontier
+
+With many goals there is rarely one best row — lighter cars
+brake worse. Row `a` *dominates* `b` if `a` is at least as good
+on every goal and better on one. The frontier (`o`) is whatever
+nothing dominates:
+
+```
+  y2 (less is better)
+  |  .        .     . = dominated
+  |     .  .    .
+  | o  .    .
+  |   o   .  .
+  |     o    .
+  |       o o   o
+  +----------------- y1 (less is better)
+```
+
+Report the frontier and let the customer pick their trade-off.
+
+### Pareto evolve
+
+The classic way to find frontiers: evolutionary search. Keep a
+population; rank rows by domination (frontier = rank 1, peel it
+off, next frontier = rank 2, ...); prefer low ranks, break ties
+by staying spread out; breed the survivors; repeat. NSGA-II and
+SPEA2 (see the tool talks) are this loop with different
+tie-breakers.
+
+### Pareto eval (HV, Spread, IGD)
+
+How good is a found frontier? Three usual scores:
+
+| metric | asks                                        | want |
+| ------ | ------------------------------------------- | ---- |
+| HV     | hypervolume dominated (area behind frontier, up to a reference point) | big  |
+| IGD    | mean gap from the TRUE frontier's points to yours | small |
+| Spread | how evenly your points cover the frontier   | small |
+
+Note the trap: HV and IGD need the very thing search is looking
+for (a reference point or the true frontier), so they are
+research-report scores, not steering signals.
+
+### Pareto zoom effect
+
+Ganguly & Menzies, ["Zoom, Don't Wander"
+(2026)](https://arxiv.org/abs/2605.09658): across 100+ SE
+optimization tasks, Pareto-optimal solutions are RARE (about
+0.6% of configurations) and CLUMPED — a tiny island, tight in
+decision space (85% of datasets) and huddled near the ideal
+corner of objective space (88%):
+
+```
+  y2 |  . .  .   .  .        . = wanderers' samples
+     |    .    .    .
+     | .    .     .     one tiny island
+     |   .     .       /
+     | oo  .      .   .
+     |____________________ y1
+```
+
+So frontier-chasing evolvers and global Bayesian methods spend
+most of a small labelling budget wandering the huge ungood
+region; a greedy regional search that zooms toward the island
+wins or ties in 84-89% of cases, running 2-3 orders of magnitude
+faster. The opposite of frontier reasoning is an *aggregation
+function* — collapse all goals to one number and chase that.
+[disty](#disty) is this course's aggregation function: zoom,
+don't wander.
+
+## Week 0: the port, warm-up
+
+New acronyms: [regx](#regx),
+[pdf](#pdf-probability-density-function),
+[cdf](#cdf-cumulative-distribution-function).
+
+### python slices
+
+`x[lo:hi]` is items `lo` to `hi-1`; blanks mean "from the start"
+or "to the end"; negatives count from the end:
+
+```
+x = [a, b, c, d, e]
+     0  1  2  3  4      <- index
+    -5 -4 -3 -2 -1      <- negative index
+
+x[:2]  = [a, b]         x[2:]  = [c, d, e]
+x[-2:] = [d, e]         x[1:3] = [b, c]
+x[:]   = a copy of x
+```
+
+In 101.py: `s[:1]=="-"` (first char), `s[1:]` (the rest),
+`a[2:]` (strip a leading `--`).
+
+### python f-strings
+
+`f"..."` runs the `{...}` parts as code; after a `:` comes a
+format spec, which may itself be `{computed}`:
+
+```python
+f"{x:.0f}"           # x, zero decimals
+f"{x:.{the.round}f}" # x, the.round decimals
+f":{k} {say(v)}"     # any expression allowed
+```
+
+That second line is why `--round=4` changes every number 101.py
+prints: one policy value, one printing mechanism.
+
+### python docstrings (__doc__)
+
+A string as the first statement of a file (or def) is stored,
+not executed: `__doc__`. 101.py's docstring is its usage
+message (`-h` just prints it) AND its settings table —
+`settings(__doc__)` regx-scrapes the defaults out of the help
+text. One string: help, defaults, documentation. That is
+[SSOT](#ssot) and [mechanism-policy](#mechanism-policy) in
+thirteen lines of Python.
+
+### python environ
+
+`os.environ` is a dict of the shell's variables. Lets one
+default live outside the code, per machine:
+
+```python
+MOOT = (os.environ.get("MOOT") or
+        os.path.expanduser("~/gits/moot"))
+```
+
+Set `MOOT=/somewhere` in your shell and 101.py finds your data;
+set nothing and a sane default fires.
+
+### python argv
+
+`sys.argv` is the command line, split on spaces: `argv[0]` the
+script name, the rest yours. 101.py walks it twice — first pass
+updates settings from `--key=val`, second runs any named tests:
+
+```python
+for a in sys.argv[1:]:
+  if a[:2]=="--" and "=" in a:
+    k,v = a[2:].split("=",1)
+    if k in vars(the): setattr(the, k, thing(v))
+for a in sys.argv[1:]:
+  if (n := "test_"+a) in funs:
+    random.seed(the.seed); funs[n]()
+```
+
+Note the reseed before every test: reset-and-replay is how every
+experiment here is repeatable.
+
+<a name="regx"></a>
+
+### regx (regular expressions)
+
+Little languages for matching text. Just enough for 101.py and
+the Lua at its side (Lua patterns use `%` where Python uses
+`\`, and `-` where Python uses `*?`):
+
+| means                    | python      | lua        |
+| ------------------------ | ----------- | ---------- |
+| word char (letter/digit) | `\w`        | `%w`       |
+| whitespace / non-space   | `\s` `\S`   | `%s` `%S`  |
+| letter / lowercase       | `[a-zA-Z]`  | `%a` `%l`  |
+| any chars, lazy          | `.*?`       | `.-`       |
+| start / end of string    | `^` `$`     | `^` `$`    |
+| one char from a set      | `[^=\n]`    | `[+-]`     |
+| capture a group          | `( )`       | `( )`      |
+| all matches              | `re.findall`| `s:gmatch` |
+| find / replace           | `re.search`, `re.sub` | `s:find`, `s:gsub` |
+| a literal `.`            | `\.`        | `%.`       |
+
+The two worked examples, one per language — 101.py scraping
+`--key ... = default` pairs from its docstring, ezr picking a
+column's kind off its first letter:
+
+```python
+pat = r"--(\w+)\s+[^=\n]*=\s*(\S+)"    # 101.py
+```
+```lua
+return (name:find"^%l" and Sym or Num)(name,at)  -- ezr.lua
+```
+
+### gaussian (mean, second moment)
+
+The bell curve, summarized by two moments: the first moment
+$\mu$ (the mean, `mu`) and, from the second moment, the spread
+(`m2` = sum of squared deviations, so $sd=\sqrt{m_2/(n-1)}$).
+Two tricks make these course-critical: both update
+*incrementally*, one value at a time ([welford](#welford)); and
+two summaries *subtract* without resampling. From ezr-eg1's
+`--without`: pour `{10,20,30}` into a summary of `{1,2,3,4,5}`,
+subtract a summary of `{10,20,30}`, and mu and sd of `{1..5}`
+come back exactly. Learn, unlearn, in O(1) — no stored data (see
+[stream](#stream)).
 
 <a name="pdf"></a>
 
-## pdf (probability density function)
+### pdf (probability density function)
 
 The bell curve, or any curve like it: the relative likelihood of
 each value. For a normal with mean $\mu$ and deviation $\sigma$:
@@ -56,7 +294,7 @@ matter, and those come from the [cdf](#cdf). First met in
 
 <a name="cdf"></a>
 
-## cdf (cumulative distribution function)
+### cdf (cumulative distribution function)
 
 The fraction of a population at or below a value: the area under
 the [pdf](#pdf) up to $x$. Monotone, 0..1 — which makes it a
@@ -74,7 +312,25 @@ function NUM.norm(i,v,    z)
   return 1 / (1 + exp(-1.702 * max(-3, min(3, z)))) end
 ```
 
-## Num
+## Week 1: columns, streaming, forgetting
+
+New acronyms: [noir](#noir).
+
+### noir
+
+Nominal, Ordinal, Interval, Ratio (Stevens 1946): the four scales
+of measurement. This code collapses them to two: symbols you can
+only count (nominal) and numbers you can subtract (interval and
+up). One header letter decides which:
+
+```lua
+-- Column kind from the first letter: lowercase makes a SYM,
+-- uppercase a NUM.
+function Col(name,at)
+  return (name:find"^%l" and Sym or Num)(name,at) end
+```
+
+### Num
 
 The summary of a numeric column: count `n`, mean `mu`, and `m2`
 (the sum of squared deviations from the mean, from which the
@@ -89,7 +345,7 @@ function Num(name,at)
                    heaven = name:find"-$" and 0 or 1}) end
 ```
 
-## Sym
+### Sym
 
 The summary of a symbolic column: count `n` and a table of counts
 `has`. Again, no data kept — just the histogram.
@@ -99,11 +355,12 @@ function Sym(name,at)
   return new(SYM, {at=at or 1, name=name or "", n=0, has={}}) end
 ```
 
-## columnProtocol
+### columnProtocol
 
 Num and Sym answer the same eight questions — one polymorphic
-protocol, two implementations. Everything downstream (tables,
-distance, trees, cuts) talks to the protocol, never to the type:
+[protocol](#protocol-duck-typing), two implementations.
+Everything downstream (tables, distance, trees, cuts) talks to
+the protocol, never to the type:
 
 | question | Num answers          | Sym answers        |
 | -------- | -------------------- | ------------------ |
@@ -140,15 +397,7 @@ Note the shared conventions: `"?"` (missing) is ignored on the way
 in, and `inc=-1` runs the summary backwards (see
 [stream](#stream)).
 
-## protocol
-
-A set of method names that many types agree to answer, so callers
-need never ask which type they hold. Duck typing with a contract.
-The [columnProtocol](#columnprotocol) is this course's main one;
-`dist` alone is another (any object answering `dist` can sit in a
-cluster).
-
-## welford
+### welford
 
 Welford's 1962 one-pass update: mean and variance from a stream,
 no stored data, no catastrophic cancellation. After each value
@@ -161,7 +410,7 @@ then $sd = \sqrt{m_2/(n-1)}$. The `NUM.add` code above is exactly
 these four lines. Run with `inc=-1` the algebra inverts, which is
 what makes summaries subtractable.
 
-## stream
+### stream
 
 A summary you can update — and un-update — one datum at a time,
 in constant memory. Adding costs O(1); so does forgetting
@@ -176,7 +425,7 @@ function SYM.reset(i) i.n, i.has = 0, {} end
 
 <a name="mode"></a><a name="mean"></a>
 
-## mid (mode, mean)
+### mid (mode, mean)
 
 The most frequent symbol: a Sym's answer to `mid` ("what is
 typical here?"). The **mean is the same question asked of
@@ -196,7 +445,7 @@ function NUM.mid(i) return i.mu end
 
 <a name="entropy"></a><a name="sd"></a>
 
-## diversity (entropy, standard deviation)
+### diversity (entropy, standard deviation)
 
 Shannon 1948: the spread of a symbol column, in bits — the mean
 surprise of drawing from counts $p_k = n_k/n$:
@@ -223,3 +472,107 @@ a question; each type answers in its own dialect. Central
 tendency: mean, mode. Diversity: sd, entropy. Trees built on
 `div` therefore handle numeric and symbolic goals with the same
 code.
+
+## Week 2: tables, distance, gap to heaven
+
+New acronyms: none. New terms: [Tbl](#tbl),
+[minkowski](#minkowski), [distx](#distx), [heaven](#heaven),
+[disty](#disty).
+
+### Tbl
+
+Rows, plus the column summaries those rows built. Row 1 of any
+source is the header, and the header alone decides each column's
+kind ([noir](#noir)) and role: a trailing `!` is the class, `+`
+or `-` a goal (a y column), `X` is ignored, the rest are the x
+(independent) columns.
+
+```lua
+function Tbl(src)
+  src = iter(src)
+  return adds(src, new(TBL, {rows={}, mid=nil,
+                             cols=Cols(src())})) end
+
+function Cols(names,    all,x,y,klass)
+  all, x, y = {}, {}, {}
+  for at, s in ipairs(names) do
+    all[at] = Col(s, at)
+    if s:find"!$" then klass = all[at]
+    elseif s:find"[+-]$" then y[#y+1] = all[at]
+    elseif s:sub(-1) ~= "X" then x[#x+1] = all[at] end end
+  return new(COLS, {names=names,all=all,x=x,y=y,klass=klass}) end
+```
+
+### minkowski
+
+Minkowski's p-norm, folding many per-column gaps $g_c$ (each
+0..1) into one 0..1 number:
+
+$$d = \left(\frac{1}{n}\sum_c g_c^{\,p}\right)^{1/p}$$
+
+$p=1$ is the Manhattan distance (all gaps count equally), $p=2$
+Euclidean; as $p$ grows, the largest single gap dominates. `the.p`
+defaults to 2.
+
+```lua
+function minkowski(cols,f,    d,n)
+  d, n = 0, TINY
+  for _, c in ipairs(cols) do n, d = n+1, d + f(c) ^ the.p end
+  return (d / n) ^ (1 / the.p) end
+```
+
+### distx
+
+The gap between two rows, over the x columns only: each column
+measures its own 0..1 gap (`dist` in the
+[columnProtocol](#columnprotocol)), and [minkowski](#minkowski)
+folds them. An unknown `"?"` assumes the worst: symbols that
+might differ, do; a missing number is pushed to whichever end is
+further away.
+
+```lua
+function SYM.dist(i,a,b)
+  if a == "?" and b == "?" then return 1 end
+  return a ~= b and 1 or 0 end
+
+function NUM.dist(i,a,b)
+  if a == "?" and b == "?" then return 1 end
+  a, b = i:norm(a), i:norm(b)
+  if a == "?" then a = b > 0.5 and 0 or 1 end
+  if b == "?" then b = a > 0.5 and 0 or 1 end
+  return abs(a - b) end
+
+function TBL.distx(i,row1,row2)
+  return minkowski(i.cols.x, function(c)
+           return c:dist(row1[c.at], row2[c.at]) end) end
+```
+
+### heaven
+
+The best value a goal column can hope for, in normalized 0..1
+space: 0 for a minimize goal (trailing `-`), 1 for a maximize
+goal (trailing `+`). Decided in one line, at column birth:
+
+```lua
+heaven = name:find"-$" and 0 or 1
+```
+
+### disty
+
+The gap from a row's goals to [heaven](#heaven): each y column
+measures $|norm(v) - heaven|$, and [minkowski](#minkowski) folds
+them. 0 = best possible row, 1 = worst. No model, no weights, no
+training — sort rows by disty and the best float to the top
+(`--disty` in ezr-eg2). disty is an *aggregation function*, the
+zooming rival to frontier-chasing (see
+[Pareto zoom effect](#pareto-zoom-effect)). Later weeks make
+disty the thing that costs money: it reads the goal columns, and
+goals are labels.
+
+```lua
+function TBL.disty(i,row)
+  if i.model and row[i.cols.y[1].at] == "?" then
+    i:label(row) end
+  return minkowski(i.cols.y, function(y)
+           return abs(y:norm(row[y.at]) - y.heaven) end) end
+```

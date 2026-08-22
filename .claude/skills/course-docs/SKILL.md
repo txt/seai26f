@@ -207,9 +207,21 @@ lost, concretely.
 - docs/review/wN.md: easy recall questions, answers at bottom;
   linked from the README schedule's Review column (w1 = Aug 17,
   eg1 page = Aug 24).
-- docs/lect/glossary.md: entry per term in discovery order,
-  verbatim ezr.lua code, math in $$..$$. Fused headings —
+- docs/lect/glossary.md: "## Principles" first (general theory
+  before specifics: mechanism-policy, SSOT, protocol/duck-typing,
+  Pareto frontier/evolve/eval/zoom — zoom cites Ganguly & Menzies
+  arXiv:2605.09658, aggregation=disty as its opposite), then
+  grouped by week (## Week N: theme, matching the eg-file
+  themes), entries as ### headings in temporal order within each
+  week; each week opens with a "New acronyms:" line. Week 0
+  holds the python-port terms (slices, f-strings, __doc__,
+  environ, argv), regx (python-vs-lua 2-col table), gaussian
+  (moments; cross-links welford/stream, no repeats), pdf, cdf.
+  Every entry is a tiny lecture, 30 sec to 5 min: hook, idea,
+  math in $$..$$ if any, then verbatim code (ezr.lua, ezr-lib.lua
+  or 101.py); tiny ascii diagrams welcome. Fused headings —
   "mid (mode, mean)", "diversity (entropy, standard deviation)",
+  "protocol (duck typing)" (absorbs ducktype, anchor #ducktype),
   "columnProtocol" (add sub mid div norm dist holds reset) —
   each with explicit `<a name>` anchors so old #mode/#entropy
   links survive.
