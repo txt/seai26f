@@ -204,6 +204,16 @@ lost, concretely.
 
 ## Review files & glossary
 
+- docs/gloss1.md is the same glossary re-authored in the
+  hello.md md2html layout (title:/icon: 📖/footer: frontmatter,
+  numbered-circle entries, @ refs, code as one-line <pre> blocks
+  with <br>, python hand-highlighted via span classes k/s/c/f,
+  navy --back-color override in an inline <style>). Builds to
+  docs/gloss1.html via make html; linked from the Aug 24 Lecture
+  cell. KEEP gloss1.md AND docs/lect/glossary.md IN SYNC — every
+  content change lands in both. Fig for Pareto zoom =
+  docs/promisetune-fig1.png (cropped from arXiv:2507.05995 p1).
+
 - docs/review/wN.md: easy recall questions, answers at bottom;
   linked from the README schedule's Review column (w1 = Aug 17,
   eg1 page = Aug 24).
