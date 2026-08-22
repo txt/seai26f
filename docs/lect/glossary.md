@@ -43,8 +43,7 @@ mechanism serves a thousand policies. Everywhere in this course:
 | policy (a little data)              | mechanism (code)          |
 | ----------------------------------- | ------------------------- |
 | `__doc__` options text in 101.py    | the regx that parses it   |
-| row 1 of a csv (`Lbs-`, `Acc+`...)  | the csv reader + `Cols`   |
-| a `-`/`+` suffix on a goal's name   | `heaven`, `disty`         |
+| row 1 of a csv (`Lbs-`, `Acc+`...)  | the csv reader, `Cols`, `heaven`, `disty` |
 | keys of the `eg` demo table         | the `go()` dispatcher     |
 | `the` settings table                | every function reading it |
 
@@ -91,14 +90,18 @@ on every goal and better on one. The frontier (`o`) is whatever
 nothing dominates:
 
 ```
-  y2 (less is better)
-  |  .        .     . = dominated
-  |     .  .    .
-  | o  .    .
-  |   o   .  .
-  |     o    .
-  |       o o   o
-  +----------------- y1 (less is better)
+y2 (less is better)
+|
+|      .            .          .
+|           .               .        . = dominated
+|   o             .     .
+|                .            .
+|      o               .
+|         o        .        .
+|            o          .
+|              o   o         .
+|                    o    o      o
++---------------------------------------- y1 (less is better)
 ```
 
 Report the frontier and let the customer pick their trade-off.
@@ -108,22 +111,68 @@ Report the frontier and let the customer pick their trade-off.
 The classic way to find frontiers: evolutionary search. Keep a
 population; rank rows by domination (frontier = rank 1, peel it
 off, next frontier = rank 2, ...); prefer low ranks, break ties
-by staying spread out; breed the survivors; repeat. NSGA-II and
-SPEA2 (see the tool talks) are this loop with different
-tie-breakers.
+by staying spread out; breed the survivors; repeat. Three
+generations, each frontier pushing closer to heaven at the
+origin:
 
-### Pareto eval (HV, Spread, IGD)
+```
+y2
+|  1               1
+|     2                  1     1 = generation 1's frontier
+|  3     2                     2 = generation 2, bred from 1
+|    3       2         1       3 = generation 3, bred from 2
+|      3        2
+|       3   3       2     1
+|            3   3      2
++------------------------------ y1
+        each generation marches toward (0,0)
+```
 
-How good is a found frontier? Three usual scores:
+NSGA-II and SPEA2 (see the tool talks) are this loop with
+different tie-breakers.
+
+### Pareto eval (HV, Spread, GD, IGD)
+
+How good is a found frontier? Four usual scores:
 
 | metric | asks                                        | want |
 | ------ | ------------------------------------------- | ---- |
 | HV     | hypervolume dominated (area behind frontier, up to a reference point) | big  |
-| IGD    | mean gap from the TRUE frontier's points to yours | small |
 | Spread | how evenly your points cover the frontier   | small |
+| GD     | mean gap from YOUR points to the true frontier (are you close?) | small |
+| IGD    | mean gap from the TRUE frontier's points to yours (did you cover it all?) | small |
 
-Note the trap: HV and IGD need the very thing search is looking
-for (a reference point or the true frontier), so they are
+HV and Spread read off one picture — the colon region is the
+hypervolume; the gaps between neighboring o's, scored for
+evenness, are the Spread:
+
+```
+y2
+| o::::::::::::R      R = reference point
+|    o::::::::::      : = hypervolume HV (bigger = better)
+| <--> o::::::::
+|         o:::::      <--> = gaps between neighbors;
+| <----->   o:::             Spread scores their evenness
+|             o::
++------------------- y1
+```
+
+GD and IGD are the same arrow, pointed opposite ways:
+
+```
+     x = TRUE frontier    o = your points
+y2
+| x                  GD:  each o walks to its nearest x
+|   x   <--- o            (how close are YOUR points?)
+|     x
+|  o ---> x          IGD: each x walks to its nearest o
+|       x    x  <--- o    (how much truth did you COVER?
+|                          one clump of o's scores well on
++------------------- y1    GD but terribly on IGD)
+```
+
+Note the trap: HV, GD and IGD need the very thing search is
+looking for (a reference point or the true frontier), so they are
 research-report scores, not steering signals.
 
 ### Pareto zoom effect
@@ -133,16 +182,15 @@ Ganguly & Menzies, ["Zoom, Don't Wander"
 optimization tasks, Pareto-optimal solutions are RARE (about
 0.6% of configurations) and CLUMPED — a tiny island, tight in
 decision space (85% of datasets) and huddled near the ideal
-corner of objective space (88%):
+corner of objective space (88%). Real example, the Redis
+configuration landscape (from
+[PromiseTune](https://arxiv.org/abs/2507.05995), Chen & Chen,
+ICSE 2026): the dark-red good region is a small fraction of a
+rugged space, and tuners that wander it (SMAC, random search)
+plateau far below the optimum:
 
-```
-  y2 |  . .  .   .  .        . = wanderers' samples
-     |    .    .    .
-     | .    .     .     one tiny island
-     |   .     .       /
-     | oo  .      .   .
-     |____________________ y1
-```
+<img src="../promisetune-fig1.png" width=600
+     alt="PromiseTune Fig 1: Redis configuration landscape and tuning trajectories">
 
 So frontier-chasing evolvers and global Bayesian methods spend
 most of a small labelling budget wandering the huge ungood
@@ -155,7 +203,7 @@ don't wander.
 
 ## Week 0: the port, warm-up
 
-New acronyms: [regx](#regx),
+New acronyms: [RNG](#rng), [regx](#regx),
 [pdf](#pdf-probability-density-function),
 [cdf](#cdf-cumulative-distribution-function).
 
@@ -230,8 +278,33 @@ for a in sys.argv[1:]:
     random.seed(the.seed); funs[n]()
 ```
 
-Note the reseed before every test: reset-and-replay is how every
-experiment here is repeatable.
+Note that last line; see [RNG](#rng), next.
+
+<a name="rng"></a>
+
+### RNG (random number generator)
+
+Computers do not roll dice. An RNG is a deterministic formula
+that *looks* random; from the same seed, the same stream,
+forever. This course uses the Park-Miller minimal standard (one
+multiply, one modulo):
+
+```lua
+Seed = (16807 * Seed) % 2147483647
+```
+
+The point of need: RESET the seed before every run. Then every
+experiment replays exactly — same seed, same "random" numbers,
+same result — on your machine, your grader's, and in Lua or
+Python alike (ports are graded by diff-ing the two streams).
+101.py does this before every test:
+
+```python
+random.seed(the.seed); funs[n]()   # reset, then run
+```
+
+Forget the reset and your "bug" changes every run. Reset, and
+science becomes repeatable.
 
 <a name="regx"></a>
 
@@ -267,7 +340,23 @@ return (name:find"^%l" and Sym or Num)(name,at)  -- ezr.lua
 
 ### gaussian (mean, second moment)
 
-The bell curve, summarized by two moments: the first moment
+The bell curve:
+
+```
+                *  *
+             *        *
+           *            *
+          *              *
+        *                  *
+     *                        *
+*  *                             *  *
+--------+-----------+-----------+----
+      mu-sd        mu         mu+sd
+         (68% of the data falls
+          within mu +/- 1*sd)
+```
+
+Summarized by two moments: the first moment
 $\mu$ (the mean, `mu`) and, from the second moment, the spread
 (`m2` = sum of squared deviations, so $sd=\sqrt{m_2/(n-1)}$).
 Two tricks make these course-critical: both update
@@ -312,6 +401,12 @@ function NUM.norm(i,v,    z)
   return 1 / (1 + exp(-1.702 * max(-3, min(3, z)))) end
 ```
 
+A bonus, for later: discretization rides on this for free. To
+turn any number into a small bin id, take
+`floor(the.bins * num:norm(23))` — since norm is the cdf,
+equal-width slices of 0..1 give (roughly) equal-frequency bins
+of the data.
+
 ## Week 1: columns, streaming, forgetting
 
 New acronyms: [noir](#noir).
@@ -343,6 +438,13 @@ function Num(name,at)
   name = name or ""
   return new(NUM, {at=at or 1, name=name, n=0, mu=0, m2=0,
                    heaven = name:find"-$" and 0 or 1}) end
+```
+
+That last line, in Python, uses the True/False-is-1/0 trick
+(bools ARE ints, so arithmetic on a test needs no if):
+
+```python
+heaven = 1 - (name[-1] == "-")   # True==1, False==0
 ```
 
 ### Sym
@@ -413,10 +515,14 @@ what makes summaries subtractable.
 ### stream
 
 A summary you can update — and un-update — one datum at a time,
-in constant memory. Adding costs O(1); so does forgetting
-(`sub`). That is why a Tbl can watch data flow past, and why
-`(a+b)-b == a` is a testable law (`--without`, `--sub` in
-ezr-eg1).
+in constant memory. The `inc` argument (+1 or -1) means adding
+is O(1) and so is deleting, so any add-and-forget sweep over $n$
+items runs in linear time. Remember that: it matters later.
+Trees will score EVERY possible split of a sorted column in one
+linear pass — adding each row to the summary on one side of the
+cut while forgetting it from the other — where naive rebuilding
+would cost $O(n^2)$. It is also why `(a+b)-b == a` is a testable
+law (`--without`, `--sub` in ezr-eg1).
 
 ```lua
 function NUM.reset(i) i.n, i.mu, i.m2 = 0, 0, 0 end
@@ -519,6 +625,18 @@ function minkowski(cols,f,    d,n)
   d, n = 0, TINY
   for _, c in ipairs(cols) do n, d = n+1, d + f(c) ^ the.p end
   return (d / n) ^ (1 / the.p) end
+```
+
+Note the design: minkowski never touches the data. It takes a
+function `f` and calls `f(c)` per column, on demand — a
+higher-order, lazy style. Each caller passes its own little
+lambda (distx measures row gaps, disty measures gaps to heaven),
+and no intermediate list of gaps is ever built. The Python
+analog is a generator expression, computing each term only as it
+is summed:
+
+```python
+d = (sum(f(c)**p for c in cols) / len(cols)) ** (1/p)
 ```
 
 ### distx

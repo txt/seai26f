@@ -170,7 +170,7 @@ sup {
 </head>
 <body>
 <main>
-<style>:root { --back-color: rgb(24, 31, 43); } pre { background: rgba(212,212,212,0.07); border: 1px solid rgba(212,212,212,0.25); padding: 10px 14px; margin: 20px 0; font-size: 0.85em; line-height: 1.4; overflow-x: auto; }</style>
+<style>:root { --back-color: rgb(24, 31, 43); } pre { background: rgba(212,212,212,0.07); border: 1px solid rgba(212,212,212,0.25); padding: 10px 14px; margin: 20px 0; font-size: 0.85em; line-height: 1.4; overflow-x: auto; } pre .k { color: #79b8ff; } pre .s { color: #e0b06a; } pre .c { color: #8ac28a; font-style: italic; } pre .f { color: #d2a8ff; }</style>
 <h1>A glossary of tiny lectures</h1>
 <h2>Every entry: 30 seconds to five minutes</h2>
 <h4>By <a href="https://timm.fyi">Tim Menzies</a>, published 2026-08-22, updated 2026-08-22</h4>
@@ -189,8 +189,7 @@ General theory, before any specifics. New acronyms: SSOT.
 <table>
 <tr><th>policy (a little data)</th><th>mechanism (code)</th></tr>
 <tr><td>the doc string options text in 101.py</td><td>the regx that parses it</td></tr>
-<tr><td>row 1 of a csv (<em>Lbs-</em>, <em>Acc+</em> ...)</td><td>the csv reader plus <em>Cols</em></td></tr>
-<tr><td>a "-" or "+" suffix on a goal's name</td><td><em>heaven</em>, <em>disty</em></td></tr>
+<tr><td>row 1 of a csv (<em>Lbs-</em>, <em>Acc+</em> ...)</td><td>the csv reader, <em>Cols</em>, <em>heaven</em>, <em>disty</em></td></tr>
 <tr><td>keys of the <em>eg</em> demo table</td><td>the <em>go()</em> dispatcher</td></tr>
 <tr><td>the settings table <em>the</em></td><td>every function reading it</td></tr>
 </table>
@@ -198,7 +197,7 @@ Change the policy line, never the mechanism: a new dataset is a new header row, 
 </li>
 <li>
 <b>SSOT (single source of truth)</b>: Say each fact once; derive everything else. E.g. define the options ONCE, in a help string; parse settings out of that string; then code and documentation can never drift apart:
-<pre>def settings(doc):<br>  pat = r"--(\w+)\s+[^=\n]*=\s*(\S+)"<br>  return o(**{k: thing(v) for k,v in re.findall(pat, doc)})<br><br>the = settings(__doc__)</pre>
+<pre><span class=k>def</span> <span class=f>settings</span>(doc):<br>  pat = <span class=s>r"--(\w+)\s+[^=\n]*=\s*(\S+)"</span><br>  <span class=k>return</span> o(**{k: thing(v) <span class=k>for</span> k,v <span class=k>in</span> re.findall(pat, doc)})<br><br>the = settings(__doc__)</pre>
 <br><br>
 Other SSOTs here: the README schedule (all dates), row 1 of a csv (all column roles). SSOT is mechanism-policy's best friend: the single source is the policy.
 </li>
@@ -207,30 +206,43 @@ Other SSOTs here: the README schedule (all dates), row 1 of a csv (all column ro
 </li>
 <li>
 <b>Pareto frontier</b>: With many goals there is rarely one best row &mdash; lighter cars brake worse. Row <em>a</em> <em>dominates</em> <em>b</em> if <em>a</em> is at least as good on every goal and better on one. The frontier (the o's) is whatever nothing dominates:
-<pre>y2 (less is better)<br>|  .        .     . = dominated<br>|     .  .    .<br>| o  .    .<br>|   o   .  .<br>|     o    .<br>|       o o   o<br>+----------------- y1 (less is better)</pre>
+<pre>y2 (less is better)<br>|<br>|      .            .          .<br>|           .               .        . = dominated<br>|   o             .     .<br>|                .            .<br>|      o               .<br>|         o        .        .<br>|            o          .<br>|              o   o         .<br>|                    o    o      o<br>+---------------------------------------- y1 (less is better)</pre>
 <br><br>
 Report the frontier and let the customer pick their trade-off.
 </li>
 <li>
-<b>Pareto evolve</b>: The classic way to find frontiers: evolutionary search. Keep a population; rank rows by domination (frontier = rank 1, peel it off, next frontier = rank 2, ...); prefer low ranks, break ties by staying spread out; breed the survivors; repeat. NSGA-II and SPEA2 (see the tool talks) are this loop with different tie-breakers.
+<b>Pareto evolve</b>: The classic way to find frontiers: evolutionary search. Keep a population; rank rows by domination (frontier = rank 1, peel it off, next frontier = rank 2, ...); prefer low ranks, break ties by staying spread out; breed the survivors; repeat. Three generations, each frontier pushing closer to heaven at the origin:
+<pre>y2<br>|  1               1<br>|     2                  1     1 = generation 1's frontier<br>|  3     2                     2 = generation 2, bred from 1<br>|    3       2         1       3 = generation 3, bred from 2<br>|      3        2<br>|       3   3       2     1<br>|            3   3      2<br>+------------------------------ y1<br>        each generation marches toward (0,0)</pre>
+<br><br>
+NSGA-II and SPEA2 (see the tool talks) are this loop with different tie-breakers.
 </li>
 <li>
-<b>Pareto eval (HV, Spread, IGD)</b>: How good is a found frontier? Three usual scores:
+<b>Pareto eval (HV, Spread, GD, IGD)</b>: How good is a found frontier? Four usual scores:
 <table>
 <tr><th>metric</th><th>asks</th><th>want</th></tr>
 <tr><td>HV</td><td>hypervolume dominated (area behind the frontier, up to a reference point)</td><td>big</td></tr>
-<tr><td>IGD</td><td>mean gap from the TRUE frontier's points to yours</td><td>small</td></tr>
 <tr><td>Spread</td><td>how evenly your points cover the frontier</td><td>small</td></tr>
+<tr><td>GD</td><td>mean gap from YOUR points to the true frontier (are you close?)</td><td>small</td></tr>
+<tr><td>IGD</td><td>mean gap from the TRUE frontier's points to yours (did you cover it all?)</td><td>small</td></tr>
 </table>
-Note the trap: HV and IGD need the very thing search is looking for (a reference point or the true frontier), so they are research-report scores, not steering signals.
+HV and Spread read off one picture &mdash; the colon region is the hypervolume; the gaps between neighboring o's, scored for evenness, are the Spread:
+<pre>y2<br>| o::::::::::::R      R = reference point<br>|    o::::::::::      : = hypervolume HV (bigger = better)<br>| &lt;--&gt; o::::::::<br>|         o:::::      &lt;--&gt; = gaps between neighbors;<br>| &lt;-----&gt;   o:::             Spread scores their evenness<br>|             o::<br>+------------------- y1</pre>
+<br><br>
+GD and IGD are the same arrow, pointed opposite ways:
+<pre>     x = TRUE frontier    o = your points<br>y2<br>| x                  GD:  each o walks to its nearest x<br>|   x   &lt;--- o            (how close are YOUR points?)<br>|     x<br>|  o ---&gt; x          IGD: each x walks to its nearest o<br>|       x    x  &lt;--- o    (how much truth did you COVER?<br>|                          one clump of o's scores well on<br>+------------------- y1    GD but terribly on IGD)</pre>
+<br><br>
+Note the trap: HV, GD and IGD need the very thing search is looking for (a reference point or the true frontier), so they are research-report scores, not steering signals.
 </li>
 <li>
-<b>Pareto zoom effect</b>: Across 100+ SE optimization tasks, Pareto-optimal solutions are RARE (about 0.6% of configurations) and CLUMPED &mdash; a tiny island, tight in decision space (85% of datasets) and huddled near the ideal corner of objective space (88% of datasets):
-<pre>y2 |  . .  .   .  .        . = wanderers' samples<br>   |    .    .    .<br>   | .    .     .     one tiny island<br>   |   .     .       /<br>   | oo  .      .   .<br>   |____________________ y1</pre>
+<b>Pareto zoom effect</b>: Across 100+ SE optimization tasks, Pareto-optimal solutions are RARE (about 0.6% of configurations) and CLUMPED &mdash; a tiny island, tight in decision space (85% of datasets) and huddled near the ideal corner of objective space (88% of datasets). Real example, the Redis configuration landscape (from the PromiseTune paper): the dark-red good region is a small fraction of a rugged space, and tuners that wander it (SMAC, random search) plateau far below the optimum:
+<img src="promisetune-fig1.png" width=600 alt="PromiseTune Fig 1: Redis configuration landscape and tuning trajectories">
 <br><br>
 So frontier-chasing evolvers and global Bayesian methods spend most of a small labelling budget wandering the huge ungood region; a greedy regional search that zooms toward the island wins or ties in 84-89% of cases, running 2-3 orders of magnitude faster. The opposite of frontier reasoning is an <em>aggregation function</em> &mdash; collapse all goals to one number and chase that. <em>disty</em> (week 2) is this course's aggregation function: zoom, don't wander.
 <br><br><div class="reference">
 <a href="https://arxiv.org/abs/2605.09658">Ganguly & Menzies: Zoom, don't wander: Why regional search outperforms Pareto reasoning and global optimization in budget-constrained SBSE</a>. Kishan Kumar Ganguly, Tim Menzies. arXiv:2605.09658, 2026.
+</div>
+<div class="reference">
+<a href="https://arxiv.org/abs/2507.05995">Chen & Chen: PromiseTune: Unveiling causally promising and explainable configuration tuning</a>. Pengzhou Chen, Tao Chen. ICSE 2026. arXiv:2507.05995.
 </div>
 </li>
 </ol>
@@ -238,7 +250,7 @@ So frontier-chasing evolvers and global Bayesian methods spend most of a small l
 <h3>Week 0: the port, warm-up</h3>
 <hr>
 <p>
-New acronyms: regx, pdf, cdf.
+New acronyms: RNG, regx, pdf, cdf.
 </p>
 <ol>
 <li>
@@ -262,15 +274,24 @@ That second row is why <em>--round=4</em> changes every number 101.py prints: on
 </li>
 <li>
 <b>Python environ</b>: <em>os.environ</em> is a dict of the shell's variables. Lets one default live outside the code, per machine:
-<pre>MOOT = (os.environ.get("MOOT") or<br>        os.path.expanduser("~/gits/moot"))</pre>
+<pre>MOOT = (os.environ.get(<span class=s>"MOOT"</span>) <span class=k>or</span><br>        os.path.expanduser(<span class=s>"~/gits/moot"</span>))</pre>
 <br><br>
 Set MOOT in your shell and 101.py finds your data; set nothing and a sane default fires.
 </li>
 <li>
 <b>Python argv</b>: <em>sys.argv</em> is the command line, split on spaces: <em>argv[0]</em> the script name, the rest yours. 101.py walks it twice &mdash; first pass updates settings from <em>--key=val</em>, second runs any named tests:
-<pre>for a in sys.argv[1:]:<br>  if a[:2]=="--" and "=" in a:<br>    k,v = a[2:].split("=",1)<br>    if k in vars(the): setattr(the, k, thing(v))<br>for a in sys.argv[1:]:<br>  if (n := "test_"+a) in funs:<br>    random.seed(the.seed); funs[n]()</pre>
+<pre><span class=k>for</span> a <span class=k>in</span> sys.argv[1:]:<br>  <span class=k>if</span> a[:2]==<span class=s>"--"</span> <span class=k>and</span> <span class=s>"="</span> <span class=k>in</span> a:<br>    k,v = a[2:].split(<span class=s>"="</span>,1)<br>    <span class=k>if</span> k <span class=k>in</span> vars(the): setattr(the, k, thing(v))<br><span class=k>for</span> a <span class=k>in</span> sys.argv[1:]:<br>  <span class=k>if</span> (n := <span class=s>"test_"</span>+a) <span class=k>in</span> funs:<br>    random.seed(the.seed); funs[n]()</pre>
 <br><br>
-Note the reseed before every test: reset-and-replay is how every experiment here is repeatable.
+Note that last line; see RNG, next.
+</li>
+<li>
+<b>RNG (random number generator)</b>: Computers do not roll dice. An RNG is a deterministic formula that <em>looks</em> random; from the same seed, the same stream, forever. This course uses the Park-Miller minimal standard (one multiply, one modulo):
+<pre>Seed = (16807 * Seed) % 2147483647</pre>
+<br><br>
+The point of need: RESET the seed before every run. Then every experiment replays exactly &mdash; same seed, same "random" numbers, same result &mdash; on your machine, your grader's, and in Lua or Python alike (ports are graded by diff-ing the two streams). 101.py does this before every test:
+<pre>random.seed(the.seed); funs[n]()   <span class=c># reset, then run</span></pre>
+<br><br>
+Forget the reset and your "bug" changes every run. Reset, and science becomes repeatable.
 </li>
 <li>
 <b>regx (regular expressions)</b>: Little languages for matching text. Just enough for 101.py and the Lua at its side (Lua patterns use "%" where Python uses "\", and "-" where Python uses "*?"):
@@ -288,10 +309,13 @@ Note the reseed before every test: reset-and-replay is how every experiment here
 <tr><td>a literal dot</td><td>\.</td><td>%.</td></tr>
 </table>
 The two worked examples, one per language &mdash; 101.py scraping its <em>--key ... = default</em> pairs from its doc string, ezr picking a column's kind off its first letter:
-<pre>pat = r"--(\w+)\s+[^=\n]*=\s*(\S+)"              # 101.py<br>return (name:find"^%l" and Sym or Num)(name,at)  -- ezr.lua</pre>
+<pre>pat = <span class=s>r"--(\w+)\s+[^=\n]*=\s*(\S+)"</span>              <span class=c># 101.py</span><br>return (name:find"^%l" and Sym or Num)(name,at)  -- ezr.lua</pre>
 </li>
 <li>
-<b>Gaussian (mean, second moment)</b>: The bell curve, summarized by two moments: the first moment &mu; (the mean, <em>mu</em>) and, from the second moment, the spread (<em>m2</em> = sum of squared deviations, so <em>sd = &radic;(m2/(n-1))</em>). Two tricks make these course-critical: both update <em>incrementally</em>, one value at a time (welford, week 1); and two summaries <em>subtract</em> without resampling. From ezr-eg1's <em>--without</em> demo: pour {10,20,30} into a summary of {1,2,3,4,5}, subtract a summary of {10,20,30}, and mu and sd of {1..5} come back exactly. Learn, unlearn, in O(1) &mdash; no stored data (see stream, week 1).
+<b>Gaussian (mean, second moment)</b>: The bell curve:
+<pre>                *  *<br>             *        *<br>           *            *<br>          *              *<br>        *                  *<br>     *                        *<br>*  *                             *  *<br>--------+-----------+-----------+----<br>      mu-sd        mu         mu+sd<br>         (68% of the data falls<br>          within mu +/- 1*sd)</pre>
+<br><br>
+Summarized by two moments: the first moment &mu; (the mean, <em>mu</em>) and, from the second moment, the spread (<em>m2</em> = sum of squared deviations, so <em>sd = &radic;(m2/(n-1))</em>). Two tricks make these course-critical: both update <em>incrementally</em>, one value at a time (welford, week 1); and two summaries <em>subtract</em> without resampling. From ezr-eg1's <em>--without</em> demo: pour {10,20,30} into a summary of {1,2,3,4,5}, subtract a summary of {10,20,30}, and mu and sd of {1..5} come back exactly. Learn, unlearn, in O(1) &mdash; no stored data (see stream, week 1).
 </li>
 <li>
 <b>pdf (probability density function)</b>: The bell curve, or any curve like it: the relative likelihood of each value. For a normal with mean &mu; and deviation &sigma;, the likelihood of <em>x</em> falls off as the square of its distance from the mean:
@@ -306,6 +330,8 @@ This code never evaluates a pdf directly &mdash; only areas under it matter, and
 <li>cdf(z) &approx; 1 / (1 + e<sup>-1.702z</sup>)</li>
 </ul>
 <pre>function NUM.norm(i,v,    z)<br>  if v == "?" then return v end<br>  z = (v - i.mu) / (i:div() + TINY)<br>  return 1 / (1 + exp(-1.702 * max(-3, min(3, z)))) end</pre>
+<br><br>
+A bonus, for later: discretization rides on this for free. To turn any number into a small bin id, take <em>floor(the.bins &middot; num:norm(23))</em> &mdash; since norm is the cdf, equal-width slices of 0..1 give (roughly) equal-frequency bins of the data.
 </li>
 </ol>
 <hr id="week1">
@@ -325,6 +351,9 @@ New acronyms: noir.
 <li>
 <b>Num</b>: The summary of a numeric column: count <em>n</em>, mean <em>mu</em>, and <em>m2</em> (the sum of squared deviations from the mean, from which the standard deviation falls out). Nothing else is stored &mdash; not the data, just three numbers. A trailing "-" in the name means "goal: minimize".
 <pre>function Num(name,at)<br>  name = name or ""<br>  return new(NUM, {at=at or 1, name=name, n=0, mu=0, m2=0,<br>                   heaven = name:find"-$" and 0 or 1}) end</pre>
+<br><br>
+That last line, in Python, uses the True/False-is-1/0 trick (bools ARE ints, so arithmetic on a test needs no if):
+<pre>heaven = 1 - (name[-1] == <span class=s>"-"</span>)   <span class=c># True==1, False==0</span></pre>
 </li>
 <li>
 <b>Sym</b>: The summary of a symbolic column: count <em>n</em> and a table of counts <em>has</em>. Again, no data kept &mdash; just the histogram.
@@ -360,7 +389,7 @@ then <em>sd = &radic;(m2/(n-1))</em>. The NUM.add code above is exactly these fo
 </div>
 </li>
 <li>
-<b>stream</b>: A summary you can update &mdash; and un-update &mdash; one datum at a time, in constant memory. Adding costs O(1); so does forgetting (<em>sub</em>). That is why a Tbl can watch data flow past, and why <em>(a+b)-b == a</em> is a testable law (<em>--without</em>, <em>--sub</em> in ezr-eg1).
+<b>stream</b>: A summary you can update &mdash; and un-update &mdash; one datum at a time, in constant memory. The <em>inc</em> argument (+1 or -1) means adding is O(1) and so is deleting, so any add-and-forget sweep over <em>n</em> items runs in linear time. Remember that: it matters later. Trees will score EVERY possible split of a sorted column in one linear pass &mdash; adding each row to the summary on one side of the cut while forgetting it from the other &mdash; where naive rebuilding would cost O(n&sup2;). It is also why <em>(a+b)-b == a</em> is a testable law (<em>--without</em>, <em>--sub</em> in ezr-eg1).
 <pre>function NUM.reset(i) i.n, i.mu, i.m2 = 0, 0, 0 end<br>function SYM.reset(i) i.n, i.has = 0, {} end</pre>
 </li>
 <li>
@@ -399,6 +428,9 @@ New acronyms: none. New terms: Tbl, minkowski, distx, heaven, disty.
 </ul>
 p=1 is the Manhattan distance (all gaps count equally), p=2 Euclidean; as p grows, the largest single gap dominates. <em>the.p</em> defaults to 2.
 <pre>function minkowski(cols,f,    d,n)<br>  d, n = 0, TINY<br>  for _, c in ipairs(cols) do n, d = n+1, d + f(c) ^ the.p end<br>  return (d / n) ^ (1 / the.p) end</pre>
+<br><br>
+Note the design: minkowski never touches the data. It takes a function <em>f</em> and calls <em>f(c)</em> per column, on demand &mdash; a higher-order, lazy style. Each caller passes its own little lambda (distx measures row gaps, disty measures gaps to heaven), and no intermediate list of gaps is ever built. The Python analog is a generator expression, computing each term only as it is summed:
+<pre>d = (sum(f(c)**p <span class=k>for</span> c <span class=k>in</span> cols) / len(cols)) ** (1/p)</pre>
 </li>
 <li>
 <b>distx</b>: The gap between two rows, over the x columns only: each column measures its own 0..1 gap (<em>dist</em> in the columnProtocol), and minkowski folds them. An unknown "?" assumes the worst: symbols that might differ, do; a missing number is pushed to whichever end is further away.

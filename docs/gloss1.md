@@ -2,7 +2,7 @@ title: Glossary: SE for AI
 icon: 📖
 footer: This page is [designed to last](http://jeffhuang.com/designed_to_last/).
 
-<style>:root { --back-color: rgb(24, 31, 43); } pre { background: rgba(212,212,212,0.07); border: 1px solid rgba(212,212,212,0.25); padding: 10px 14px; margin: 20px 0; font-size: 0.85em; line-height: 1.4; overflow-x: auto; }</style>
+<style>:root { --back-color: rgb(24, 31, 43); } pre { background: rgba(212,212,212,0.07); border: 1px solid rgba(212,212,212,0.25); padding: 10px 14px; margin: 20px 0; font-size: 0.85em; line-height: 1.4; overflow-x: auto; } pre .k { color: #79b8ff; } pre .s { color: #e0b06a; } pre .c { color: #8ac28a; font-style: italic; } pre .f { color: #d2a8ff; }</style>
 
 # A glossary of tiny lectures
 
@@ -38,8 +38,7 @@ Everywhere in this course:
 | policy (a little data)              | mechanism (code)           |
 |-------------------------------------|----------------------------|
 | the doc string options text in 101.py | the regx that parses it  |
-| row 1 of a csv (*Lbs-*, *Acc+* ...) | the csv reader plus *Cols* |
-| a "-" or "+" suffix on a goal's name | *heaven*, *disty*         |
+| row 1 of a csv (*Lbs-*, *Acc+* ...) | the csv reader, *Cols*, *heaven*, *disty* |
 | keys of the *eg* demo table         | the *go()* dispatcher      |
 | the settings table *the*            | every function reading it  |
 
@@ -53,7 +52,7 @@ everything else. E.g. define the options ONCE, in a help string;
 parse settings out of that string; then code and documentation
 can never drift apart:
 
-<pre>def settings(doc):<br>  pat = r"--(\w+)\s+[^=\n]*=\s*(\S+)"<br>  return o(**{k: thing(v) for k,v in re.findall(pat, doc)})<br><br>the = settings(__doc__)</pre>
+<pre><span class=k>def</span> <span class=f>settings</span>(doc):<br>  pat = <span class=s>r"--(\w+)\s+[^=\n]*=\s*(\S+)"</span><br>  <span class=k>return</span> o(**{k: thing(v) <span class=k>for</span> k,v <span class=k>in</span> re.findall(pat, doc)})<br><br>the = settings(__doc__)</pre>
 
 Other SSOTs here: the README schedule (all dates), row 1 of a csv
 (all column roles). SSOT is mechanism-policy's best friend: the
@@ -74,7 +73,7 @@ is another (any object answering *dist* can sit in a cluster).
 is at least as good on every goal and better on one. The frontier
 (the o's) is whatever nothing dominates:
 
-<pre>y2 (less is better)<br>|  .        .     . = dominated<br>|     .  .    .<br>| o  .    .<br>|   o   .  .<br>|     o    .<br>|       o o   o<br>+----------------- y1 (less is better)</pre>
+<pre>y2 (less is better)<br>|<br>|      .            .          .<br>|           .               .        . = dominated<br>|   o             .     .<br>|                .            .<br>|      o               .<br>|         o        .        .<br>|            o          .<br>|              o   o         .<br>|                    o    o      o<br>+---------------------------------------- y1 (less is better)</pre>
 
 Report the frontier and let the customer pick their trade-off.
 
@@ -84,22 +83,38 @@ Report the frontier and let the customer pick their trade-off.
 evolutionary search. Keep a population; rank rows by domination
 (frontier = rank 1, peel it off, next frontier = rank 2, ...);
 prefer low ranks, break ties by staying spread out; breed the
-survivors; repeat. NSGA-II and SPEA2 (see the tool talks) are
-this loop with different tie-breakers.
+survivors; repeat. Three generations, each frontier pushing
+closer to heaven at the origin:
+
+<pre>y2<br>|  1               1<br>|     2                  1     1 = generation 1's frontier<br>|  3     2                     2 = generation 2, bred from 1<br>|    3       2         1       3 = generation 3, bred from 2<br>|      3        2<br>|       3   3       2     1<br>|            3   3      2<br>+------------------------------ y1<br>        each generation marches toward (0,0)</pre>
+
+NSGA-II and SPEA2 (see the tool talks) are this loop with
+different tie-breakers.
 
 -
 
-**Pareto eval (HV, Spread, IGD)**: How good is a found frontier?
-Three usual scores:
+**Pareto eval (HV, Spread, GD, IGD)**: How good is a found
+frontier? Four usual scores:
 
 | metric | asks                                                    | want  |
 |--------|---------------------------------------------------------|-------|
 | HV     | hypervolume dominated (area behind the frontier, up to a reference point) | big   |
-| IGD    | mean gap from the TRUE frontier's points to yours       | small |
 | Spread | how evenly your points cover the frontier               | small |
+| GD     | mean gap from YOUR points to the true frontier (are you close?) | small |
+| IGD    | mean gap from the TRUE frontier's points to yours (did you cover it all?) | small |
 
-Note the trap: HV and IGD need the very thing search is looking
-for (a reference point or the true frontier), so they are
+HV and Spread read off one picture &mdash; the colon region is
+the hypervolume; the gaps between neighboring o's, scored for
+evenness, are the Spread:
+
+<pre>y2<br>| o::::::::::::R      R = reference point<br>|    o::::::::::      : = hypervolume HV (bigger = better)<br>| &lt;--&gt; o::::::::<br>|         o:::::      &lt;--&gt; = gaps between neighbors;<br>| &lt;-----&gt;   o:::             Spread scores their evenness<br>|             o::<br>+------------------- y1</pre>
+
+GD and IGD are the same arrow, pointed opposite ways:
+
+<pre>     x = TRUE frontier    o = your points<br>y2<br>| x                  GD:  each o walks to its nearest x<br>|   x   &lt;--- o            (how close are YOUR points?)<br>|     x<br>|  o ---&gt; x          IGD: each x walks to its nearest o<br>|       x    x  &lt;--- o    (how much truth did you COVER?<br>|                          one clump of o's scores well on<br>+------------------- y1    GD but terribly on IGD)</pre>
+
+Note the trap: HV, GD and IGD need the very thing search is
+looking for (a reference point or the true frontier), so they are
 research-report scores, not steering signals.
 
 -
@@ -108,9 +123,12 @@ research-report scores, not steering signals.
 Pareto-optimal solutions are RARE (about 0.6% of configurations)
 and CLUMPED &mdash; a tiny island, tight in decision space (85%
 of datasets) and huddled near the ideal corner of objective space
-(88% of datasets):
+(88% of datasets). Real example, the Redis configuration
+landscape (from the PromiseTune paper): the dark-red good region
+is a small fraction of a rugged space, and tuners that wander it
+(SMAC, random search) plateau far below the optimum:
 
-<pre>y2 |  . .  .   .  .        . = wanderers' samples<br>   |    .    .    .<br>   | .    .     .     one tiny island<br>   |   .     .       /<br>   | oo  .      .   .<br>   |____________________ y1</pre>
+<img src="promisetune-fig1.png" width=600 alt="PromiseTune Fig 1: Redis configuration landscape and tuning trajectories">
 
 So frontier-chasing evolvers and global Bayesian methods spend
 most of a small labelling budget wandering the huge ungood
@@ -123,6 +141,8 @@ zoom, don't wander.
 
 @ [Ganguly & Menzies: Zoom, don't wander: Why regional search outperforms Pareto reasoning and global optimization in budget-constrained SBSE](https://arxiv.org/abs/2605.09658). Kishan Kumar Ganguly, Tim Menzies. arXiv:2605.09658, 2026.
 
+@ [Chen & Chen: PromiseTune: Unveiling causally promising and explainable configuration tuning](https://arxiv.org/abs/2507.05995). Pengzhou Chen, Tao Chen. ICSE 2026. arXiv:2507.05995.
+
 .
 
 --- #week0
@@ -131,7 +151,7 @@ zoom, don't wander.
 
 ---
 
-New acronyms: regx, pdf, cdf.
+New acronyms: RNG, regx, pdf, cdf.
 
 -
 
@@ -172,7 +192,7 @@ SSOT and mechanism-policy in thirteen lines of Python.
 **Python environ**: *os.environ* is a dict of the shell's
 variables. Lets one default live outside the code, per machine:
 
-<pre>MOOT = (os.environ.get("MOOT") or<br>        os.path.expanduser("~/gits/moot"))</pre>
+<pre>MOOT = (os.environ.get(<span class=s>"MOOT"</span>) <span class=k>or</span><br>        os.path.expanduser(<span class=s>"~/gits/moot"</span>))</pre>
 
 Set MOOT in your shell and 101.py finds your data; set nothing
 and a sane default fires.
@@ -184,10 +204,29 @@ and a sane default fires.
 &mdash; first pass updates settings from *--key=val*, second runs
 any named tests:
 
-<pre>for a in sys.argv[1:]:<br>  if a[:2]=="--" and "=" in a:<br>    k,v = a[2:].split("=",1)<br>    if k in vars(the): setattr(the, k, thing(v))<br>for a in sys.argv[1:]:<br>  if (n := "test_"+a) in funs:<br>    random.seed(the.seed); funs[n]()</pre>
+<pre><span class=k>for</span> a <span class=k>in</span> sys.argv[1:]:<br>  <span class=k>if</span> a[:2]==<span class=s>"--"</span> <span class=k>and</span> <span class=s>"="</span> <span class=k>in</span> a:<br>    k,v = a[2:].split(<span class=s>"="</span>,1)<br>    <span class=k>if</span> k <span class=k>in</span> vars(the): setattr(the, k, thing(v))<br><span class=k>for</span> a <span class=k>in</span> sys.argv[1:]:<br>  <span class=k>if</span> (n := <span class=s>"test_"</span>+a) <span class=k>in</span> funs:<br>    random.seed(the.seed); funs[n]()</pre>
 
-Note the reseed before every test: reset-and-replay is how every
-experiment here is repeatable.
+Note that last line; see RNG, next.
+
+-
+
+**RNG (random number generator)**: Computers do not roll dice.
+An RNG is a deterministic formula that *looks* random; from the
+same seed, the same stream, forever. This course uses the
+Park-Miller minimal standard (one multiply, one modulo):
+
+<pre>Seed = (16807 * Seed) % 2147483647</pre>
+
+The point of need: RESET the seed before every run. Then every
+experiment replays exactly &mdash; same seed, same "random"
+numbers, same result &mdash; on your machine, your grader's, and
+in Lua or Python alike (ports are graded by diff-ing the two
+streams). 101.py does this before every test:
+
+<pre>random.seed(the.seed); funs[n]()   <span class=c># reset, then run</span></pre>
+
+Forget the reset and your "bug" changes every run. Reset, and
+science becomes repeatable.
 
 -
 
@@ -213,20 +252,23 @@ The two worked examples, one per language &mdash; 101.py scraping
 its *--key ... = default* pairs from its doc string, ezr picking
 a column's kind off its first letter:
 
-<pre>pat = r"--(\w+)\s+[^=\n]*=\s*(\S+)"              # 101.py<br>return (name:find"^%l" and Sym or Num)(name,at)  -- ezr.lua</pre>
+<pre>pat = <span class=s>r"--(\w+)\s+[^=\n]*=\s*(\S+)"</span>              <span class=c># 101.py</span><br>return (name:find"^%l" and Sym or Num)(name,at)  -- ezr.lua</pre>
 
 -
 
-**Gaussian (mean, second moment)**: The bell curve, summarized by
-two moments: the first moment &mu; (the mean, *mu*) and, from the
-second moment, the spread (*m2* = sum of squared deviations, so
-*sd = &radic;(m2/(n-1))*). Two tricks make these course-critical:
-both update *incrementally*, one value at a time (welford, week
-1); and two summaries *subtract* without resampling. From
-ezr-eg1's *--without* demo: pour {10,20,30} into a summary of
-{1,2,3,4,5}, subtract a summary of {10,20,30}, and mu and sd of
-{1..5} come back exactly. Learn, unlearn, in O(1) &mdash; no
-stored data (see stream, week 1).
+**Gaussian (mean, second moment)**: The bell curve:
+
+<pre>                *  *<br>             *        *<br>           *            *<br>          *              *<br>        *                  *<br>     *                        *<br>*  *                             *  *<br>--------+-----------+-----------+----<br>      mu-sd        mu         mu+sd<br>         (68% of the data falls<br>          within mu +/- 1*sd)</pre>
+
+Summarized by two moments: the first moment &mu; (the mean,
+*mu*) and, from the second moment, the spread (*m2* = sum of
+squared deviations, so *sd = &radic;(m2/(n-1))*). Two tricks make
+these course-critical: both update *incrementally*, one value at
+a time (welford, week 1); and two summaries *subtract* without
+resampling. From ezr-eg1's *--without* demo: pour {10,20,30}
+into a summary of {1,2,3,4,5}, subtract a summary of {10,20,30},
+and mu and sd of {1..5} come back exactly. Learn, unlearn, in
+O(1) &mdash; no stored data (see stream, week 1).
 
 -
 
@@ -253,6 +295,12 @@ clamped to &plusmn;3:
 - cdf(z) &approx; 1 / (1 + e<sup>-1.702z</sup>)
 
 <pre>function NUM.norm(i,v,    z)<br>  if v == "?" then return v end<br>  z = (v - i.mu) / (i:div() + TINY)<br>  return 1 / (1 + exp(-1.702 * max(-3, min(3, z)))) end</pre>
+
+A bonus, for later: discretization rides on this for free. To
+turn any number into a small bin id, take
+*floor(the.bins &middot; num:norm(23))* &mdash; since norm is the
+cdf, equal-width slices of 0..1 give (roughly) equal-frequency
+bins of the data.
 
 .
 
@@ -284,6 +332,11 @@ not the data, just three numbers. A trailing "-" in the name
 means "goal: minimize".
 
 <pre>function Num(name,at)<br>  name = name or ""<br>  return new(NUM, {at=at or 1, name=name, n=0, mu=0, m2=0,<br>                   heaven = name:find"-$" and 0 or 1}) end</pre>
+
+That last line, in Python, uses the True/False-is-1/0 trick
+(bools ARE ints, so arithmetic on a test needs no if):
+
+<pre>heaven = 1 - (name[-1] == <span class=s>"-"</span>)   <span class=c># True==1, False==0</span></pre>
 
 -
 
@@ -336,9 +389,14 @@ what makes summaries subtractable.
 -
 
 **stream**: A summary you can update &mdash; and un-update
-&mdash; one datum at a time, in constant memory. Adding costs
-O(1); so does forgetting (*sub*). That is why a Tbl can watch
-data flow past, and why *(a+b)-b == a* is a testable law
+&mdash; one datum at a time, in constant memory. The *inc*
+argument (+1 or -1) means adding is O(1) and so is deleting, so
+any add-and-forget sweep over *n* items runs in linear time.
+Remember that: it matters later. Trees will score EVERY possible
+split of a sorted column in one linear pass &mdash; adding each
+row to the summary on one side of the cut while forgetting it
+from the other &mdash; where naive rebuilding would cost
+O(n&sup2;). It is also why *(a+b)-b == a* is a testable law
 (*--without*, *--sub* in ezr-eg1).
 
 <pre>function NUM.reset(i) i.n, i.mu, i.m2 = 0, 0, 0 end<br>function SYM.reset(i) i.n, i.has = 0, {} end</pre>
@@ -410,6 +468,16 @@ Euclidean; as p grows, the largest single gap dominates. *the.p*
 defaults to 2.
 
 <pre>function minkowski(cols,f,    d,n)<br>  d, n = 0, TINY<br>  for _, c in ipairs(cols) do n, d = n+1, d + f(c) ^ the.p end<br>  return (d / n) ^ (1 / the.p) end</pre>
+
+Note the design: minkowski never touches the data. It takes a
+function *f* and calls *f(c)* per column, on demand &mdash; a
+higher-order, lazy style. Each caller passes its own little
+lambda (distx measures row gaps, disty measures gaps to heaven),
+and no intermediate list of gaps is ever built. The Python
+analog is a generator expression, computing each term only as
+it is summed:
+
+<pre>d = (sum(f(c)**p <span class=k>for</span> c <span class=k>in</span> cols) / len(cols)) ** (1/p)</pre>
 
 -
 
