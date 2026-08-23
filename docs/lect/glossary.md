@@ -32,7 +32,8 @@ and
 
 ## Principles
 
-New acronyms: [SSOT](#ssot).
+New acronyms: [SSOT](#ssot),
+[TDD](#tdd-test-driven-development).
 
 ### mechanism-policy
 
@@ -200,6 +201,36 @@ faster. The opposite of frontier reasoning is an *aggregation
 function* — collapse all goals to one number and chase that.
 [disty](#disty) is this course's aggregation function: zoom,
 don't wander.
+
+### TDD (test-driven development)
+
+Red, green, refactor: write a failing test (red), write just
+enough code to pass (green), then clean up with the tests as a
+safety net (refactor). This code's dialect: every demo in the eg
+files reseeds, prints, then asserts — no crash means pass — and
+the harness never dies mid-suite. `run` traps a failing demo and
+prints its stack dump, so `--all` can count failures and keep
+going:
+
+```lua
+function run(funs,w,    ok,msg)
+  srand(the.seed)
+  if funs[w] then
+    ok, msg = xpcall(funs[w], debug.traceback)
+    if not ok then print(msg) end
+    return ok end end
+```
+
+But beware: test suites are code, with their own maintenance
+bill — suites of 30 to 50 percent of total code size are not
+uncommon. So be choosy:
+
+- A test with zero assertions tests nothing. Keep the assert.
+- Mere line coverage can mislead: touching a line is not
+  checking its meaning. Prefer a few detailed checks on the
+  code's semantics over many shallow ones.
+- Keep long-running tests out of the suite. Slow suites do not
+  get run, and an unrun suite protects nothing.
 
 ## Week 0: the port, warm-up
 

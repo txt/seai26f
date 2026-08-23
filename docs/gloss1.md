@@ -26,7 +26,7 @@ and
 
 ---
 
-General theory, before any specifics. New acronyms: SSOT.
+General theory, before any specifics. New acronyms: SSOT, TDD.
 
 -
 
@@ -147,6 +147,27 @@ zoom, don't wander.
 
 --- #week0
 
+-
+
+**TDD (test-driven development)**: Red, green, refactor: write a
+failing test (red), write just enough code to pass (green), then
+clean up with the tests as a safety net (refactor). This code's
+dialect: every demo reseeds, prints, then asserts — no crash means
+pass — and the harness never dies mid-suite. *run* traps a failing
+demo and prints its stack dump, so *--all* can count failures and
+keep going:
+
+<pre><span class=k>function</span> <span class=f>run</span>(funs,w,    ok,msg)<br>  srand(the.seed)<br>  <span class=k>if</span> funs[w] <span class=k>then</span><br>    ok, msg = xpcall(funs[w], debug.traceback)<br>    <span class=k>if</span> <span class=k>not</span> ok <span class=k>then</span> print(msg) <span class=k>end</span><br>    <span class=k>return</span> ok <span class=k>end</span> <span class=k>end</span></pre>
+
+But beware: test suites are code, with their own maintenance bill —
+suites of 30 to 50 percent of total code size are not uncommon. So
+be choosy. A test with zero assertions tests nothing: keep the
+assert. Mere line coverage can mislead — touching a line is not
+checking its meaning; prefer a few detailed checks on the code's
+semantics over many shallow ones. And keep long-running tests out
+of the suite: slow suites do not get run, and an unrun suite
+protects nothing.
+
 ### Week 0: the port, warm-up
 
 ---
@@ -252,7 +273,7 @@ The two worked examples, one per language &mdash; 101.py scraping
 its *--key ... = default* pairs from its doc string, ezr picking
 a column's kind off its first letter:
 
-<pre>pat = <span class=s>r"--(\w+)\s+[^=\n]*=\s*(\S+)"</span>              <span class=c># 101.py</span><br>return (name:find"^%l" and Sym or Num)(name,at)  -- ezr.lua</pre>
+<pre>pat = <span class=s>r"--(\w+)\s+[^=\n]*=\s*(\S+)"</span>              <span class=c># 101.py</span><br><span class=k>return</span> (name:find<span class=s>"^%l"</span> <span class=k>and</span> Sym <span class=k>or</span> Num)(name,at)  <span class=c>-- ezr.lua</span></pre>
 
 -
 
@@ -294,7 +315,7 @@ clamped to &plusmn;3:
 
 - cdf(z) &approx; 1 / (1 + e<sup>-1.702z</sup>)
 
-<pre>function NUM.norm(i,v,    z)<br>  if v == "?" then return v end<br>  z = (v - i.mu) / (i:div() + TINY)<br>  return 1 / (1 + exp(-1.702 * max(-3, min(3, z)))) end</pre>
+<pre><span class=k>function</span> <span class=f>NUM.norm</span>(i,v,    z)<br>  <span class=k>if</span> v == <span class=s>"?"</span> <span class=k>then</span> <span class=k>return</span> v <span class=k>end</span><br>  z = (v - i.mu) / (i:div() + TINY)<br>  <span class=k>return</span> 1 / (1 + exp(-1.702 * max(-3, min(3, z)))) <span class=k>end</span></pre>
 
 A bonus, for later: discretization rides on this for free. To
 turn any number into a small bin id, take
@@ -319,7 +340,7 @@ four scales of measurement. This code collapses them to two:
 symbols you can only count (nominal) and numbers you can subtract
 (interval and up). One header letter decides which:
 
-<pre>-- Column kind from the first letter: lowercase makes a SYM,<br>-- uppercase a NUM.<br>function Col(name,at)<br>  return (name:find"^%l" and Sym or Num)(name,at) end</pre>
+<pre><span class=c>-- Column kind from the first letter: lowercase makes a SYM,</span><br><span class=c>-- uppercase a NUM.</span><br><span class=k>function</span> <span class=f>Col</span>(name,at)<br>  <span class=k>return</span> (name:find<span class=s>"^%l"</span> <span class=k>and</span> Sym <span class=k>or</span> Num)(name,at) <span class=k>end</span></pre>
 
 @ [Stevens: On the theory of scales of measurement](https://www.science.org/doi/10.1126/science.103.2684.677). S.S. Stevens. Science 103, 2684 (1946), 677-680.
 
@@ -331,7 +352,7 @@ the standard deviation falls out). Nothing else is stored &mdash;
 not the data, just three numbers. A trailing "-" in the name
 means "goal: minimize".
 
-<pre>function Num(name,at)<br>  name = name or ""<br>  return new(NUM, {at=at or 1, name=name, n=0, mu=0, m2=0,<br>                   heaven = name:find"-$" and 0 or 1}) end</pre>
+<pre><span class=k>function</span> <span class=f>Num</span>(name,at)<br>  name = name <span class=k>or</span> <span class=s>""</span><br>  <span class=k>return</span> new(NUM, {at=at <span class=k>or</span> 1, name=name, n=0, mu=0, m2=0,<br>                   heaven = name:find<span class=s>"-$"</span> <span class=k>and</span> 0 <span class=k>or</span> 1}) <span class=k>end</span></pre>
 
 That last line, in Python, uses the True/False-is-1/0 trick
 (bools ARE ints, so arithmetic on a test needs no if):
@@ -343,7 +364,7 @@ That last line, in Python, uses the True/False-is-1/0 trick
 **Sym**: The summary of a symbolic column: count *n* and a table
 of counts *has*. Again, no data kept &mdash; just the histogram.
 
-<pre>function Sym(name,at)<br>  return new(SYM, {at=at or 1, name=name or "", n=0, has={}}) end</pre>
+<pre><span class=k>function</span> <span class=f>Sym</span>(name,at)<br>  <span class=k>return</span> new(SYM, {at=at <span class=k>or</span> 1, name=name <span class=k>or</span> <span class=s>""</span>, n=0, has={}}) <span class=k>end</span></pre>
 
 -
 
@@ -367,7 +388,7 @@ Two samples, both sides of *add*. Note the shared conventions:
 "?" (missing) is ignored on the way in, and *inc=-1* runs the
 summary backwards (see stream):
 
-<pre>function NUM.add(i,v,inc,    d)<br>  if v == "?" then return v end<br>  inc  = inc or 1<br>  i.n  = i.n + inc<br>  d    = v - i.mu<br>  i.mu = i.mu + inc * d / i.n<br>  i.m2 = i.m2 + inc * d * (v - i.mu); return v end<br><br>function SYM.add(i,v,inc)<br>  if v == "?" then return v end<br>  inc = inc or 1<br>  i.n = i.n + inc<br>  i.has[v] = inc + (i.has[v] or 0)<br>  if i.has[v] &lt;= 0 then i.has[v] = nil end<br>  return v end</pre>
+<pre><span class=k>function</span> <span class=f>NUM.add</span>(i,v,inc,    d)<br>  <span class=k>if</span> v == <span class=s>"?"</span> <span class=k>then</span> <span class=k>return</span> v <span class=k>end</span><br>  inc  = inc <span class=k>or</span> 1<br>  i.n  = i.n + inc<br>  d    = v - i.mu<br>  i.mu = i.mu + inc * d / i.n<br>  i.m2 = i.m2 + inc * d * (v - i.mu); <span class=k>return</span> v <span class=k>end</span><br><br><span class=k>function</span> <span class=f>SYM.add</span>(i,v,inc)<br>  <span class=k>if</span> v == <span class=s>"?"</span> <span class=k>then</span> <span class=k>return</span> v <span class=k>end</span><br>  inc = inc <span class=k>or</span> 1<br>  i.n = i.n + inc<br>  i.has[v] = inc + (i.has[v] <span class=k>or</span> 0)<br>  <span class=k>if</span> i.has[v] &lt;= 0 <span class=k>then</span> i.has[v] = <span class=k>nil</span> <span class=k>end</span><br>  <span class=k>return</span> v <span class=k>end</span></pre>
 
 -
 
@@ -399,7 +420,7 @@ from the other &mdash; where naive rebuilding would cost
 O(n&sup2;). It is also why *(a+b)-b == a* is a testable law
 (*--without*, *--sub* in ezr-eg1).
 
-<pre>function NUM.reset(i) i.n, i.mu, i.m2 = 0, 0, 0 end<br>function SYM.reset(i) i.n, i.has = 0, {} end</pre>
+<pre><span class=k>function</span> <span class=f>NUM.reset</span>(i) i.n, i.mu, i.m2 = 0, 0, 0 <span class=k>end</span><br><span class=k>function</span> <span class=f>SYM.reset</span>(i) i.n, i.has = 0, {} <span class=k>end</span></pre>
 
 -
 
@@ -409,7 +430,7 @@ asked of numbers** &mdash; both are one value standing in for the
 whole column. That is why *mid* is one protocol slot, not two
 functions with different names:
 
-<pre>function SYM.mid(i,    hi,out)<br>  hi = -1<br>  for k, n in pairs(i.has) do<br>    if n &gt; hi then hi, out = n, k end end<br>  return out end<br><br>function NUM.mid(i) return i.mu end</pre>
+<pre><span class=k>function</span> <span class=f>SYM.mid</span>(i,    hi,out)<br>  hi = -1<br>  <span class=k>for</span> k, n <span class=k>in</span> pairs(i.has) <span class=k>do</span><br>    <span class=k>if</span> n &gt; hi <span class=k>then</span> hi, out = n, k <span class=k>end</span> <span class=k>end</span><br>  <span class=k>return</span> out <span class=k>end</span><br><br><span class=k>function</span> <span class=f>NUM.mid</span>(i) <span class=k>return</span> i.mu <span class=k>end</span></pre>
 
 -
 
@@ -425,7 +446,7 @@ asked of numbers** &mdash; "how far is this column from settled?"
 &mdash; which is why *div* ("diversity") is one protocol slot
 with two spellings:
 
-<pre>function SYM.div(i)<br>  return sum(i.has, function(n,    p)<br>    p = n / i.n<br>    return -p * log(p) / log(2) end) end<br><br>function NUM.div(i)<br>  return i.n &lt; 2 and 0 or sqrt(max(i.m2,0) / (i.n-1)) end</pre>
+<pre><span class=k>function</span> <span class=f>SYM.div</span>(i)<br>  <span class=k>return</span> sum(i.has, <span class=k>function</span>(n,    p)<br>    p = n / i.n<br>    <span class=k>return</span> -p * log(p) / log(2) <span class=k>end</span>) <span class=k>end</span><br><br><span class=k>function</span> <span class=f>NUM.div</span>(i)<br>  <span class=k>return</span> i.n &lt; 2 <span class=k>and</span> 0 <span class=k>or</span> sqrt(max(i.m2,0) / (i.n-1)) <span class=k>end</span></pre>
 
 The two analogies are one design rule: every protocol slot names
 a question; each type answers in its own dialect. Central
@@ -454,7 +475,7 @@ column's kind (noir) and role: a trailing "!" is the class, "+"
 or "-" a goal (a y column), "X" is ignored, the rest are the x
 (independent) columns.
 
-<pre>function Tbl(src)<br>  src = iter(src)<br>  return adds(src, new(TBL, {rows={}, mid=nil,<br>                             cols=Cols(src())})) end<br><br>function Cols(names,    all,x,y,klass)<br>  all, x, y = {}, {}, {}<br>  for at, s in ipairs(names) do<br>    all[at] = Col(s, at)<br>    if s:find"!$" then klass = all[at]<br>    elseif s:find"[+-]$" then y[#y+1] = all[at]<br>    elseif s:sub(-1) ~= "X" then x[#x+1] = all[at] end end<br>  return new(COLS, {names=names,all=all,x=x,y=y,klass=klass}) end</pre>
+<pre><span class=k>function</span> <span class=f>Tbl</span>(src)<br>  src = iter(src)<br>  <span class=k>return</span> adds(src, new(TBL, {rows={}, mid=<span class=k>nil</span>,<br>                             cols=Cols(src())})) <span class=k>end</span><br><br><span class=k>function</span> <span class=f>Cols</span>(names,    all,x,y,klass)<br>  all, x, y = {}, {}, {}<br>  <span class=k>for</span> at, s <span class=k>in</span> ipairs(names) <span class=k>do</span><br>    all[at] = Col(s, at)<br>    <span class=k>if</span> s:find<span class=s>"!$"</span> <span class=k>then</span> klass = all[at]<br>    <span class=k>elseif</span> s:find<span class=s>"[+-]$"</span> <span class=k>then</span> y[#y+1] = all[at]<br>    <span class=k>elseif</span> s:sub(-1) ~= <span class=s>"X"</span> <span class=k>then</span> x[#x+1] = all[at] <span class=k>end</span> <span class=k>end</span><br>  <span class=k>return</span> new(COLS, {names=names,all=all,x=x,y=y,klass=klass}) <span class=k>end</span></pre>
 
 -
 
@@ -467,7 +488,7 @@ p=1 is the Manhattan distance (all gaps count equally), p=2
 Euclidean; as p grows, the largest single gap dominates. *the.p*
 defaults to 2.
 
-<pre>function minkowski(cols,f,    d,n)<br>  d, n = 0, TINY<br>  for _, c in ipairs(cols) do n, d = n+1, d + f(c) ^ the.p end<br>  return (d / n) ^ (1 / the.p) end</pre>
+<pre><span class=k>function</span> <span class=f>minkowski</span>(cols,f,    d,n)<br>  d, n = 0, TINY<br>  <span class=k>for</span> _, c <span class=k>in</span> ipairs(cols) <span class=k>do</span> n, d = n+1, d + f(c) ^ the.p <span class=k>end</span><br>  <span class=k>return</span> (d / n) ^ (1 / the.p) <span class=k>end</span></pre>
 
 Note the design: minkowski never touches the data. It takes a
 function *f* and calls *f(c)* per column, on demand &mdash; a
@@ -487,7 +508,7 @@ columnProtocol), and minkowski folds them. An unknown "?" assumes
 the worst: symbols that might differ, do; a missing number is
 pushed to whichever end is further away.
 
-<pre>function SYM.dist(i,a,b)<br>  if a == "?" and b == "?" then return 1 end<br>  return a ~= b and 1 or 0 end<br><br>function NUM.dist(i,a,b)<br>  if a == "?" and b == "?" then return 1 end<br>  a, b = i:norm(a), i:norm(b)<br>  if a == "?" then a = b &gt; 0.5 and 0 or 1 end<br>  if b == "?" then b = a &gt; 0.5 and 0 or 1 end<br>  return abs(a - b) end<br><br>function TBL.distx(i,row1,row2)<br>  return minkowski(i.cols.x, function(c)<br>           return c:dist(row1[c.at], row2[c.at]) end) end</pre>
+<pre><span class=k>function</span> <span class=f>SYM.dist</span>(i,a,b)<br>  <span class=k>if</span> a == <span class=s>"?"</span> <span class=k>and</span> b == <span class=s>"?"</span> <span class=k>then</span> <span class=k>return</span> 1 <span class=k>end</span><br>  <span class=k>return</span> a ~= b <span class=k>and</span> 1 <span class=k>or</span> 0 <span class=k>end</span><br><br><span class=k>function</span> <span class=f>NUM.dist</span>(i,a,b)<br>  <span class=k>if</span> a == <span class=s>"?"</span> <span class=k>and</span> b == <span class=s>"?"</span> <span class=k>then</span> <span class=k>return</span> 1 <span class=k>end</span><br>  a, b = i:norm(a), i:norm(b)<br>  <span class=k>if</span> a == <span class=s>"?"</span> <span class=k>then</span> a = b &gt; 0.5 <span class=k>and</span> 0 <span class=k>or</span> 1 <span class=k>end</span><br>  <span class=k>if</span> b == <span class=s>"?"</span> <span class=k>then</span> b = a &gt; 0.5 <span class=k>and</span> 0 <span class=k>or</span> 1 <span class=k>end</span><br>  <span class=k>return</span> abs(a - b) <span class=k>end</span><br><br><span class=k>function</span> <span class=f>TBL.distx</span>(i,row1,row2)<br>  <span class=k>return</span> minkowski(i.cols.x, <span class=k>function</span>(c)<br>           <span class=k>return</span> c:dist(row1[c.at], row2[c.at]) <span class=k>end</span>) <span class=k>end</span></pre>
 
 -
 
@@ -509,6 +530,6 @@ zooming rival to frontier-chasing (see the Pareto zoom effect,
 above). Later weeks make disty the thing that costs money: it
 reads the goal columns, and goals are labels.
 
-<pre>function TBL.disty(i,row)<br>  if i.model and row[i.cols.y[1].at] == "?" then<br>    i:label(row) end<br>  return minkowski(i.cols.y, function(y)<br>           return abs(y:norm(row[y.at]) - y.heaven) end) end</pre>
+<pre><span class=k>function</span> <span class=f>TBL.disty</span>(i,row)<br>  <span class=k>if</span> i.model <span class=k>and</span> row[i.cols.y[1].at] == <span class=s>"?"</span> <span class=k>then</span><br>    i:label(row) <span class=k>end</span><br>  <span class=k>return</span> minkowski(i.cols.y, <span class=k>function</span>(y)<br>           <span class=k>return</span> abs(y:norm(row[y.at]) - y.heaven) <span class=k>end</span>) <span class=k>end</span></pre>
 
 .
