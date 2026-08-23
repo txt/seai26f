@@ -85,6 +85,10 @@ a cluster).
 
 ### Pareto frontier
 
+> "Give me the fruitful error any time, full of seeds, bursting
+> with its own corrections. You can keep your sterile truth for
+> yourself." — Vilfredo Pareto
+
 With many goals there is rarely one best row — lighter cars
 brake worse. Row `a` *dominates* `b` if `a` is at least as good
 on every goal and better on one. The frontier (`o`) is whatever
