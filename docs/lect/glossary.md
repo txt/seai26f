@@ -32,8 +32,7 @@ and
 
 ## Principles
 
-New acronyms: [SSOT](#ssot),
-[TDD](#tdd-test-driven-development).
+New acronyms: [SSOT](#ssot).
 
 ### mechanism-policy
 
@@ -206,6 +205,13 @@ function* — collapse all goals to one number and chase that.
 [disty](#disty) is this course's aggregation function: zoom,
 don't wander.
 
+## Week 0: the port, warm-up
+
+New acronyms: [TDD](#tdd-test-driven-development),
+[RNG](#rng), [regx](#regx),
+[pdf](#pdf-probability-density-function),
+[cdf](#cdf-cumulative-distribution-function).
+
 ### TDD (test-driven development)
 
 Red, green, refactor: write a failing test (red), write just
@@ -225,6 +231,25 @@ function run(funs,w,    ok,msg)
     return ok end end
 ```
 
+The eg table is the whole test framework: demos are just entries,
+so adding a test is one assignment, no registration ceremony:
+
+```lua
+eg = {}                        -- the demo table
+
+eg["--col"] = function(    n)  -- green: watch, then lock in
+  n = adds{1,2,3,4,5}
+  print(show{mu=n:mid(), sd=n:div()})
+  assert(n:mid() == 3) end
+
+eg["--ent"] = function(    s)
+  s = adds({"a","a","b"}, Sym())
+  assert(abs(s:div() - 0.918) < 0.01) end
+
+eg["--broke"] = function()     -- red: prints a stack dump;
+  assert(2 + 2 == 5) end       -- --all counts it, moves on
+```
+
 But beware: test suites are code, with their own maintenance
 bill — suites of 30 to 50 percent of total code size are not
 uncommon. So be choosy:
@@ -235,12 +260,6 @@ uncommon. So be choosy:
   code's semantics over many shallow ones.
 - Keep long-running tests out of the suite. Slow suites do not
   get run, and an unrun suite protects nothing.
-
-## Week 0: the port, warm-up
-
-New acronyms: [RNG](#rng), [regx](#regx),
-[pdf](#pdf-probability-density-function),
-[cdf](#cdf-cumulative-distribution-function).
 
 ### python slices
 

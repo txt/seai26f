@@ -26,7 +26,7 @@ and
 
 ---
 
-General theory, before any specifics. New acronyms: SSOT, TDD.
+General theory, before any specifics. New acronyms: SSOT.
 
 -
 
@@ -151,6 +151,12 @@ zoom, don't wander.
 
 --- #week0
 
+### Week 0: the port, warm-up
+
+---
+
+New acronyms: TDD, RNG, regx, pdf, cdf.
+
 -
 
 **TDD (test-driven development)**: Red, green, refactor: write a
@@ -163,6 +169,12 @@ keep going:
 
 <pre><span class=k>function</span> <span class=f>run</span>(funs,w,    ok,msg)<br>  srand(the.seed)<br>  <span class=k>if</span> funs[w] <span class=k>then</span><br>    ok, msg = xpcall(funs[w], debug.traceback)<br>    <span class=k>if</span> <span class=k>not</span> ok <span class=k>then</span> print(msg) <span class=k>end</span><br>    <span class=k>return</span> ok <span class=k>end</span> <span class=k>end</span></pre>
 
+The *eg* table is the whole test framework: demos are just
+entries, so adding a test is one assignment, no registration
+ceremony:
+
+<pre>eg = {}                        <span class=c>-- the demo table</span><br><br>eg[<span class=s>"--col"</span>] = <span class=k>function</span>(    n)  <span class=c>-- green: watch, then lock in</span><br>  n = adds{1,2,3,4,5}<br>  print(show{mu=n:mid(), sd=n:div()})<br>  assert(n:mid() == 3) <span class=k>end</span><br><br>eg[<span class=s>"--ent"</span>] = <span class=k>function</span>(    s)<br>  s = adds({<span class=s>"a"</span>,<span class=s>"a"</span>,<span class=s>"b"</span>}, Sym())<br>  assert(abs(s:div() - 0.918) &lt; 0.01) <span class=k>end</span><br><br>eg[<span class=s>"--broke"</span>] = <span class=k>function</span>()     <span class=c>-- red: prints a stack dump;</span><br>  assert(2 + 2 == 5) <span class=k>end</span>       <span class=c>-- --all counts it, moves on</span></pre>
+
 But beware: test suites are code, with their own maintenance bill —
 suites of 30 to 50 percent of total code size are not uncommon. So
 be choosy. A test with zero assertions tests nothing: keep the
@@ -171,12 +183,6 @@ checking its meaning; prefer a few detailed checks on the code's
 semantics over many shallow ones. And keep long-running tests out
 of the suite: slow suites do not get run, and an unrun suite
 protects nothing.
-
-### Week 0: the port, warm-up
-
----
-
-New acronyms: RNG, regx, pdf, cdf.
 
 -
 

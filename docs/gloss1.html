@@ -181,7 +181,7 @@ sup {
 <h3>Principles</h3>
 <hr>
 <p>
-General theory, before any specifics. New acronyms: SSOT, TDD.
+General theory, before any specifics. New acronyms: SSOT.
 </p>
 <ol>
 <li>
@@ -249,18 +249,21 @@ So frontier-chasing evolvers and global Bayesian methods spend most of a small l
 </li>
 </ol>
 <hr id="week0">
+<h3>Week 0: the port, warm-up</h3>
+<hr>
+<p>
+New acronyms: TDD, RNG, regx, pdf, cdf.
+</p>
 <ol>
 <li>
 <b>TDD (test-driven development)</b>: Red, green, refactor: write a failing test (red), write just enough code to pass (green), then clean up with the tests as a safety net (refactor). This code's dialect: every demo reseeds, prints, then asserts — no crash means pass — and the harness never dies mid-suite. <em>run</em> traps a failing demo and prints its stack dump, so <em>--all</em> can count failures and keep going:
 <pre><span class=k>function</span> <span class=f>run</span>(funs,w,    ok,msg)<br>  srand(the.seed)<br>  <span class=k>if</span> funs[w] <span class=k>then</span><br>    ok, msg = xpcall(funs[w], debug.traceback)<br>    <span class=k>if</span> <span class=k>not</span> ok <span class=k>then</span> print(msg) <span class=k>end</span><br>    <span class=k>return</span> ok <span class=k>end</span> <span class=k>end</span></pre>
 <br><br>
+The <em>eg</em> table is the whole test framework: demos are just entries, so adding a test is one assignment, no registration ceremony:
+<pre>eg = {}                        <span class=c>-- the demo table</span><br><br>eg[<span class=s>"--col"</span>] = <span class=k>function</span>(    n)  <span class=c>-- green: watch, then lock in</span><br>  n = adds{1,2,3,4,5}<br>  print(show{mu=n:mid(), sd=n:div()})<br>  assert(n:mid() == 3) <span class=k>end</span><br><br>eg[<span class=s>"--ent"</span>] = <span class=k>function</span>(    s)<br>  s = adds({<span class=s>"a"</span>,<span class=s>"a"</span>,<span class=s>"b"</span>}, Sym())<br>  assert(abs(s:div() - 0.918) &lt; 0.01) <span class=k>end</span><br><br>eg[<span class=s>"--broke"</span>] = <span class=k>function</span>()     <span class=c>-- red: prints a stack dump;</span><br>  assert(2 + 2 == 5) <span class=k>end</span>       <span class=c>-- --all counts it, moves on</span></pre>
+<br><br>
 But beware: test suites are code, with their own maintenance bill — suites of 30 to 50 percent of total code size are not uncommon. So be choosy. A test with zero assertions tests nothing: keep the assert. Mere line coverage can mislead — touching a line is not checking its meaning; prefer a few detailed checks on the code's semantics over many shallow ones. And keep long-running tests out of the suite: slow suites do not get run, and an unrun suite protects nothing.
-<h3>Week 0: the port, warm-up</h3>
 </li>
-<hr>
-<p>
-New acronyms: RNG, regx, pdf, cdf.
-</p>
 <li>
 <b>Python slices</b>: <em>x[lo:hi]</em> is items <em>lo</em> to <em>hi-1</em>; blanks mean "from the start" or "to the end"; negatives count from the end:
 <pre>x = [a, b, c, d, e]<br>     0  1  2  3  4      &lt;- index<br>    -5 -4 -3 -2 -1      &lt;- negative index<br><br>x[:2]  = [a, b]         x[2:]  = [c, d, e]<br>x[-2:] = [d, e]         x[1:3] = [b, c]<br>x[:]   = a copy of x</pre>
