@@ -444,15 +444,14 @@ max/min clamp to ±3 sd tames crazy tails ("dude, chill").
 Later, discretization rides free: floor(bins * norm(x)) gives
 roughly equal-frequency bins.
 
-**L16. csv, five lines — the homework.**
+**L16. csv, under ten lines — the homework.**
 
 ```lua
 function csv(file,    f)
-  f = io.lines(pathname(file))
+  f = io.lines(file)
   return function(    t,l)
     for line in f do
-      l = line:gsub("\239\187\191","")   -- strip any BOM
-              :gsub("%%.*",""):match"^%s*(.-)%s*$"
+      l = line:gsub("%%.*",""):match"^%s*(.-)%s*$"
       if l ~= "" then
         t={}                        -- (.-), keeps empty cells
         for s in (l..","):gmatch"(.-)," do t[#t+1]=thing(s) end
