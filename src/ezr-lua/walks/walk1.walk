@@ -1,0 +1,79 @@
+-- Column kind from the first letter: lowercase makes
+-- a SYM, uppercase a NUM.
+function Col(name,at)
+  return (name:find"^%l" and Sym or Num)(name,at) end -- #:noir
+
+function Num(name,at)
+  name = name or ""
+  return new(NUM, {at=at or 1, name=name, n=0, mu=0, m2=0,
+                   heaven = name:find"-$" and 0 or 1}) end -- #:heaven
+
+function Sym(name,at)
+  return new(SYM, {at=at or 1, name=name or "", n=0, has={}}) end
+
+function SYM.add(i,v,inc)
+  if v == "?" then return v end -- #:missing
+  inc = inc or 1
+  i.n = i.n + inc
+  i.has[v] = inc + (i.has[v] or 0)
+  if i.has[v] <= 0 then i.has[v] = nil end
+  return v end
+
+function NUM.add(i,v,inc,    d) -- #:protocol
+  if v == "?" then return v end
+  inc  = inc or 1
+  i.n  = i.n + inc
+  d    = v - i.mu
+  i.mu = i.mu + inc * d / i.n -- #:welford
+  i.m2 = i.m2 + inc * d * (v - i.mu); return v end -- #:stream
+
+:noir noir
+Nominal, Ordinal, Interval, Ratio (Stevens 1946): the four
+scales of measurement, collapsed here to two -- symbols you can
+only count (nominal) and numbers you can subtract. One header
+letter decides which: lowercase first letter makes a Sym,
+uppercase a Num. The header row is the entire schema: policy as
+one line of data, mechanism in the code.
+
+:heaven heaven
+A goal's best normalized value: 0 for a minimized goal (`Lbs-`),
+1 for a maximized one (`Mpg+`). `disty` is each row's distance
+to heaven; the tree's best mark is the row nearest it.
+
+Careful: flip this one token (`and 1 or 0`) and nothing crashes,
+every test passes -- and the optimizer hunts the heaviest,
+thirstiest car. Goal-encoding bugs steer perfect machinery
+toward the wrong objective; only eyeballing output catches them.
+
+:missing missing values
+`"?"` means missing, and it is ignored on the way in -- the
+summary only ever learns from what was seen. In this course's
+data most goal cells start as "?", since labels are the thing we
+cannot afford.
+
+:protocol columnProtocol
+Num and Sym answer the same eight questions -- add, sub, mid,
+div, norm, dist, holds, reset -- one polymorphic protocol, two
+implementations (mid is mean or mode; div is sd or entropy).
+Everything downstream (tables, distance, trees) talks to the
+protocol, never to the type. Duck typing with a contract.
+
+:welford welford
+Welford's 1962 one-pass update: mean and variance from a stream,
+no stored data, no catastrophic cancellation. After each value v:
+
+    n' = n+1
+    d  = v - mu
+    mu'= mu + d/n'
+    m2'= m2 + d*(v - mu')
+
+then sd = sqrt(m2/(n-1)). These four lines are exactly the code
+at left.
+
+:stream stream (and forgetting)
+A summary you can update -- and un-update -- one datum at a
+time, in constant memory. Run with `inc=-1` the Welford algebra
+inverts: subtract a value and the stats roll back. That is why a
+table can forget rows as cheaply as it learned them, and why
+`(a+b)-b == a` is a testable law (`--without`, `--sub` in
+ezr-eg1).
