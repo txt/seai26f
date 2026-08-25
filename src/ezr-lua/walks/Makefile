@@ -31,7 +31,7 @@ slide-%:
 	@mkdir -p $(S) $(TOP)/docs/slides
 	python3 $(TOP)/etc/slides.py $(wildcard $*.lua $*.py) > $(S)/$*-s.md
 	pandoc -t beamer --pdf-engine=tectonic --slide-level=2 \
-	  -V fontsize=8pt -V aspectratio=169 -V theme=default \
+	  -V fontsize=10pt -V aspectratio=169 -V theme=default \
 	  -V colortheme=dove $(S)/$*-s.md -o $(TOP)/docs/slides/$*.pdf \
 	  2>/dev/null
 

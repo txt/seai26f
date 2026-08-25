@@ -92,7 +92,17 @@ def strip_code(c):
 t = head[0].rstrip(".") if head else "walkthru"
 print("---")
 print(f"title: '{t}'")
-print("---\n")
+print("""header-includes:
+  - |
+    ```{=latex}
+    \\usepackage{tgpagella}
+    \\usefonttheme{serif}
+    \\setbeamertemplate{footline}[frame number]
+    \\setbeamertemplate{navigation symbols}{}
+    \\setbeamerfont{frametitle}{size=\\large,series=\\bfseries}
+    ```
+---
+""")
 
 head = [re.sub(r"\s*\(click a &#9654; to open one\)", "", h) for h in head]
 story = [l for l in head[1:] if not l.startswith("## ")]
@@ -113,14 +123,14 @@ for markers, code in segs:
     titles = [entry(k)[0] for k in markers]
     print(f"## {', '.join(titles)} {{.allowframebreaks}}\n")
     print("::::: {.columns}")
-    print('::: {.column width=47%}')
-    print("\\scriptsize\n")
+    print('::: {.column width=40%}')
+    print("\\footnotesize\n")
     for k in markers:
         _, b = entry(k)
         print("\n".join(clean(b, lang)).strip(), "\n")
     print(":::")
-    print('::: {.column width=53%}')
-    print("\\scriptsize")
+    print('::: {.column width=60%}')
+    print("\\small")
     print(f"```{lang}")
     print("\n".join(code))
     print("```")
