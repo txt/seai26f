@@ -1,8 +1,7 @@
 # ezr, week 0: the port, warm-up
 
 All of [101.py](https://github.com/txt/seai26f/blob/main/src/101.py),
-verbatim, with glossary notes folded in (click a &#9654; to open
-one) and this week's exercises at the bottom.
+verbatim, with glossary notes folded in, and this week's exercises at the bottom.
 
 Nothing clever yet: one small Python shell — settings from a help
 string, tests run from the command line, seeds reset before every
