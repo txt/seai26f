@@ -1,7 +1,7 @@
 # ezr, week 1: columns, streaming, forgetting
 
 One weekly-sized chunk of [ezr.lua](https://txt.github.io/seai26f/ezr.html), verbatim, with
-glossary notes folded in and this
+glossary notes folded in, and this
 week's exercises at the bottom.
 
 A column watches values stream past and keeps a tiny summary:

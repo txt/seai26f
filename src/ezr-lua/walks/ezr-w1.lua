@@ -1,6 +1,6 @@
 -- ezr, week 1: columns, streaming, forgetting.
 -- One weekly-sized chunk of [ezr.lua](ezr.html), verbatim, with
--- glossary notes folded in (click a &#9654; to open one) and this
+-- glossary notes folded in, and this
 -- week's exercises at the bottom.
 --
 -- ## This week's story
