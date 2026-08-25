@@ -287,6 +287,11 @@ window.addEventListener("beforeprint", () =>
 window.addEventListener("afterprint", () =>
   document.querySelectorAll("details").forEach(d => {
     d.open = d.dataset.was === "true"; }));
+document.addEventListener("keydown", e => {
+  if (e.key !== "a" || e.metaKey || e.ctrlKey) return;
+  const ds = [...document.querySelectorAll("details")];
+  const any = ds.some(d => !d.open);
+  ds.forEach(d => d.open = any); });
 </script>
 <style media=print>
   body { font-size: 8pt; }

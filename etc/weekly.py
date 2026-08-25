@@ -148,6 +148,11 @@ print(f"""{cmt} <script>
 {cmt} window.addEventListener("afterprint", () =>
 {cmt}   document.querySelectorAll("details").forEach(d => {{
 {cmt}     d.open = d.dataset.was === "true"; }}));
+{cmt} document.addEventListener("keydown", e => {{
+{cmt}   if (e.key !== "a" || e.metaKey || e.ctrlKey) return;
+{cmt}   const ds = [...document.querySelectorAll("details")];
+{cmt}   const any = ds.some(d => !d.open);
+{cmt}   ds.forEach(d => d.open = any); }});
 {cmt} </script>
 {cmt} <style media=print>
 {cmt}   body {{ font-size: 8pt; }}
