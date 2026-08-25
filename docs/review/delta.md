@@ -183,6 +183,41 @@ os.environ.get("MOOT")
 Never hardwire `/Users/timm`; talk to `$HOME`, `$PATH`, `$MOOT`.
 One default can live per-machine, outside the code.
 
+**P13. The self-registering main: reflection, walrus, shield.**
+
+```python
+def test_tree():
+  "recursive contrast splits; leaves show row counts"
+  show(tree(Tbl(csv(the.file))))
+
+eg = {"-" + k[5:]: f for k, f in globals().items()
+      if k.startswith("test_")}
+
+def run(f): # reseed, call f, catch crashes
+  seed(the.seed)
+  try: f()
+  except Exception: traceback.print_exc()
+
+if __name__ == "__main__":
+  for j, s in enumerate(sys.argv):
+    if f := eg.get("-" + s.lstrip("-")): run(f)
+    elif (k := s.lstrip("-")) in the:
+      the[k] = atom(sys.argv[j + 1])
+```
+
+P11's machine, shrunk further. The dict comprehension scans
+`globals()`, keeps every `test_` name, strips the prefix
+(`k[5:]`): writing `def test_x` IS the registration of flag
+`-x`, and the docstring rides along as its help text.
+`run` reseeds first (reset-and-replay), then try/except: a
+crashing test prints its stack and the loop moves on, so one
+failure cannot hide the rest. The `__main__` guard keeps
+imports silent. In the argv pass, the walrus `:=` names a
+value inside the test; `lstrip("-")` accepts `-tree` or
+`--tree`; a flag naming a settings key takes the NEXT argument
+(`sys.argv[j + 1]`), coerced by `atom`. Order matters:
+`-seed 42 -tree` reseeds before the test fires.
+
 ## Lua examples
 
 **L1. Append, the Lua way.**
