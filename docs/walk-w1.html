@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang=en><head><meta charset=utf-8>
+<title>ezr-w1.lua</title>
+<meta name=viewport content="width=device-width">
+<style>
+ body { font-family:"Courier New",Courier,monospace; font-size:14px;
+        line-height:1.5; color:#111; background:#fff;
+        margin:0; padding:20px 16px 80px 10px; max-width:76ch; }
+ a { color:#00e; }
+ p  { margin:14px 0; }
+ b  { font-weight:bold; }
+ code { background:#f2f2f2; padding:0 3px; }
+ .h1 { margin:28px 0; font-weight:bold; }
+ .hd { margin:26px 0 12px 0; font-weight:bold; }
+ .note { margin:18px 0; }
+ pre.code { margin:14px 0 14px 2ch; padding:8px 10px;
+        background:#f7f7f7; border-left:3px solid #bbb;
+        overflow-x:auto; }
+ .k { color:#00c; font-weight:bold; }
+ .s { color:#a11; }
+ .c { color:#777; font-style:italic; }
+ table { border-collapse:collapse; margin:14px 0; }
+ th,td { border:1px solid #999; padding:3px 8px; text-align:left; }
+ th { background:#eee; }
+ img { max-width:100%; }
+ ul { margin:14px 0; padding-left:3ch; }
+</style></head><body>
+<pre class=h1>----------------------------------------------------------------
+
+          EZR, WEEK 1: COLUMNS, STREAMING, FORGETTING           
+
+----------------------------------------------------------------</pre>
+<p>One weekly-sized chunk of <a href="ezr.html">ezr.lua</a>, verbatim, with glossary notes folded in, and this week's exercises at the bottom.</p>
+<div class=hd>This week's story<br>=================</div>
+<p>A column watches values stream past and keeps a tiny summary: a Num holds mean and standard deviation, a Sym holds counts, mode and entropy. Nothing stores the values themselves. The stats also run backwards: subtract a value and they roll back, so a table can forget rows as cheaply as it learned them.</p>
+<pre class=h1>----------------------------------------------------------------</pre>
+<div class=note><div class=hd>① noir<br>------</div><p>Nominal, Ordinal, Interval, Ratio (Stevens 1946): the four scales of measurement. This code collapses them to two: symbols you can only count (nominal) and numbers you can subtract (interval and up). One header letter decides which:</p>
+<pre class=code><span class=c>-- Column kind from the first letter: lowercase makes a SYM,</span>
+<span class=c>-- uppercase a NUM.</span>
+<span class=k>function</span> Col(name,at)
+  <span class=k>return</span> (name:find<span class=s>&quot;^%l&quot;</span> <span class=k>and</span> Sym <span class=k>or</span> Num)(name,at) <span class=k>end</span></pre></div>
+<pre class=code><span class=k>function</span> Col(name,at)
+  <span class=k>return</span> (name:find<span class=s>&quot;^%l&quot;</span> <span class=k>and</span> Sym <span class=k>or</span> Num)(name,at) <span class=k>end</span></pre>
+<div class=note><div class=hd>② Num<br>-----</div><p>The summary of a numeric column: count <code>n</code>, mean <code>mu</code>, and <code>m2</code> (the sum of squared deviations from the mean, from which the standard deviation falls out). Nothing else is stored — not the data, just three numbers. A trailing <code>-</code> in the name means "goal: minimize".</p>
+<pre class=code><span class=k>function</span> Num(name,at)
+  name = name <span class=k>or</span> <span class=s>&quot;&quot;</span>
+  <span class=k>return</span> new(NUM, {at=at <span class=k>or</span> 1, name=name, n=0, mu=0, m2=0,
+                   heaven = name:find<span class=s>&quot;-$&quot;</span> <span class=k>and</span> 0 <span class=k>or</span> 1}) <span class=k>end</span></pre>
+<p>That last line, in Python, uses the True/False-is-1/0 trick (bools ARE ints, so arithmetic on a test needs no if):</p>
+<pre class=code>heaven = 1 - (name[-1] == <span class=s>&quot;-&quot;</span>)   <span class=c># True==1, False==0</span></pre></div>
+<div class=note><div class=hd>③ Sym<br>-----</div><p>The summary of a symbolic column: count <code>n</code> and a table of counts <code>has</code>. Again, no data kept — just the histogram.</p>
+<pre class=code><span class=k>function</span> Sym(name,at)
+  <span class=k>return</span> new(SYM, {at=at <span class=k>or</span> 1, name=name <span class=k>or</span> <span class=s>&quot;&quot;</span>, n=0, has={}}) <span class=k>end</span></pre></div>
+<pre class=code><span class=k>function</span> Num(name,at)
+  name = name <span class=k>or</span> <span class=s>&quot;&quot;</span>
+  <span class=k>return</span> new(NUM, {at=at <span class=k>or</span> 1, name=name, n=0, mu=0, m2=0,
+                   heaven = name:find<span class=s>&quot;-$&quot;</span> <span class=k>and</span> 0 <span class=k>or</span> 1}) <span class=k>end</span>
+
+<span class=k>function</span> Sym(name,at)
+  <span class=k>return</span> new(SYM, {at=at <span class=k>or</span> 1, name=name <span class=k>or</span> <span class=s>&quot;&quot;</span>, n=0, has={}}) <span class=k>end</span></pre>
+<div class=note><div class=hd>④ columnProtocol<br>----------------</div><p>Num and Sym answer the same eight questions — one polymorphic <a href="#protocol-duck-typing">protocol</a>, two implementations. Everything downstream (tables, distance, trees, cuts) talks to the protocol, never to the type:</p>
+<table><tr><th>question</th><th>Num answers</th><th>Sym answers</th></tr><tr><td><code>add</code></td><td><a href="#welford">welford</a> update of mu, m2</td><td>bump a count in <code>has</code></td></tr><tr><td><code>sub</code></td><td>welford, run backwards</td><td>drop a count</td></tr><tr><td><code>mid</code></td><td><a href="#mode">mean</a></td><td><a href="#mode">mode</a></td></tr><tr><td><code>div</code></td><td><a href="#entropy">standard deviation</a></td><td><a href="#entropy">entropy</a></td></tr><tr><td><code>norm</code></td><td><a href="#cdf">cdf</a> position, 0..1</td><td>identity</td></tr><tr><td><code>dist</code></td><td>gap of normed values</td><td>0 if same else 1</td></tr><tr><td><code>holds</code></td><td><code>x &lt;= v</code></td><td><code>x == v</code></td></tr><tr><td><code>reset</code></td><td>zero mu, m2</td><td>empty <code>has</code></td></tr></table>
+<p>Two samples, both sides of <code>add</code>:</p>
+<pre class=code><span class=k>function</span> NUM.add(i,v,inc,    d)
+  <span class=k>if</span> v == <span class=s>&quot;?&quot;</span> <span class=k>then</span> <span class=k>return</span> v <span class=k>end</span>
+  inc  = inc <span class=k>or</span> 1
+  i.n  = i.n + inc
+  d    = v - i.mu
+  i.mu = i.mu + inc * d / i.n
+  i.m2 = i.m2 + inc * d * (v - i.mu); <span class=k>return</span> v <span class=k>end</span>
+
+<span class=k>function</span> SYM.add(i,v,inc)
+  <span class=k>if</span> v == <span class=s>&quot;?&quot;</span> <span class=k>then</span> <span class=k>return</span> v <span class=k>end</span>
+  inc = inc <span class=k>or</span> 1
+  i.n = i.n + inc
+  i.has[v] = inc + (i.has[v] <span class=k>or</span> 0)
+  <span class=k>if</span> i.has[v] &lt;= 0 <span class=k>then</span> i.has[v] = <span class=k>nil</span> <span class=k>end</span>
+  <span class=k>return</span> v <span class=k>end</span></pre>
+<p>Note the shared conventions: <code>"?"</code> (missing) is ignored on the way in, and <code>inc=-1</code> runs the summary backwards (see <a href="#stream">stream</a>).</p></div>
+<div class=note><div class=hd>⑤ welford<br>---------</div><p>Welford's 1962 one-pass update: mean and variance from a stream, no stored data, no catastrophic cancellation. After each value <i>v</i>:</p>
+<pre class=code>n&#x27; = n+1,    d = v - μ,    μ&#x27; = μ + d/n&#x27;,    m2&#x27; = m2 + d (v - μ&#x27;)</pre>
+<p>then <i>sd = √(m2/(n-1))</i>. The <code>NUM.add</code> code above is exactly these four lines. Run with <code>inc=-1</code> the algebra inverts, which is what makes summaries subtractable.</p></div>
+<pre class=code><span class=k>function</span> SYM.add(i,v,inc)
+  <span class=k>if</span> v == <span class=s>&quot;?&quot;</span> <span class=k>then</span> <span class=k>return</span> v <span class=k>end</span>
+  inc = inc <span class=k>or</span> 1
+  i.n = i.n + inc
+  i.has[v] = inc + (i.has[v] <span class=k>or</span> 0)
+  <span class=k>if</span> i.has[v] &lt;= 0 <span class=k>then</span> i.has[v] = <span class=k>nil</span> <span class=k>end</span>
+  <span class=k>return</span> v <span class=k>end</span>
+
+<span class=k>function</span> NUM.add(i,v,inc,    d)
+  <span class=k>if</span> v == <span class=s>&quot;?&quot;</span> <span class=k>then</span> <span class=k>return</span> v <span class=k>end</span>
+  inc  = inc <span class=k>or</span> 1
+  i.n  = i.n + inc
+  d    = v - i.mu
+  i.mu = i.mu + inc * d / i.n
+  i.m2 = i.m2 + inc * d * (v - i.mu); <span class=k>return</span> v <span class=k>end</span></pre>
+<div class=note><div class=hd>⑥ mid (mode, mean)<br>------------------</div><p>The most frequent symbol: a Sym's answer to <code>mid</code> ("what is typical here?"). The <b>mean is the same question asked of numbers</b> — both are one value standing in for the whole column. That is why <code>mid</code> is one protocol slot, not two functions with different names:</p>
+<pre class=code><span class=k>function</span> SYM.mid(i,    hi,out)
+  hi = -1
+  <span class=k>for</span> k, n <span class=k>in</span> pairs(i.has) <span class=k>do</span>
+    <span class=k>if</span> n &gt; hi <span class=k>then</span> hi, out = n, k <span class=k>end</span> <span class=k>end</span>
+  <span class=k>return</span> out <span class=k>end</span>
+
+<span class=k>function</span> NUM.mid(i) <span class=k>return</span> i.mu <span class=k>end</span></pre></div>
+<div class=note><div class=hd>⑦ diversity (entropy, standard deviation)<br>-----------------------------------------</div><p>Shannon 1948: the spread of a symbol column, in bits — the mean surprise of drawing from counts <i>pₖ = nₖ/n</i>:</p>
+<pre class=code>e = -Σₖ pₖ log₂ pₖ</pre>
+<p>All-same symbols: 0 bits. Uniform over <i>k</i> symbols: <i>log₂ k</i> bits. <b>Variance (or sd) is the same question asked of numbers</b> — "how far is this column from settled?" — which is why <code>div</code> ("diversity") is one protocol slot with two spellings:</p>
+<pre class=code><span class=k>function</span> SYM.div(i)
+  <span class=k>return</span> sum(i.has, <span class=k>function</span>(n,    p)
+    p = n / i.n
+    <span class=k>return</span> -p * log(p) / log(2) <span class=k>end</span>) <span class=k>end</span>
+
+<span class=k>function</span> NUM.div(i)
+  <span class=k>return</span> i.n &lt; 2 <span class=k>and</span> 0 <span class=k>or</span> sqrt(max(i.m2,0) / (i.n-1)) <span class=k>end</span></pre>
+<p>The two analogies are one design rule: every protocol slot names a question; each type answers in its own dialect. Central tendency: mean, mode. Diversity: sd, entropy. Trees built on <code>div</code> therefore handle numeric and symbolic goals with the same code.</p></div>
+<pre class=code><span class=k>function</span> SYM.mid(i,    hi,out)
+  hi = -1
+  <span class=k>for</span> k, n <span class=k>in</span> pairs(i.has) <span class=k>do</span>
+    <span class=k>if</span> n &gt; hi <span class=k>then</span> hi, out = n, k <span class=k>end</span> <span class=k>end</span>
+  <span class=k>return</span> out <span class=k>end</span>
+
+<span class=k>function</span> NUM.mid(i) <span class=k>return</span> i.mu <span class=k>end</span>
+
+<span class=k>function</span> SYM.div(i)
+  <span class=k>return</span> sum(i.has, <span class=k>function</span>(n,    p)
+    p = n / i.n
+    <span class=k>return</span> -p * log(p) / log(2) <span class=k>end</span>) <span class=k>end</span>
+
+<span class=k>function</span> NUM.div(i)
+  <span class=k>return</span> i.n &lt; 2 <span class=k>and</span> 0 <span class=k>or</span> sqrt(max(i.m2,0) / (i.n-1)) <span class=k>end</span></pre>
+<div class=note><div class=hd>⑧ gaussian (mean, second moment)<br>--------------------------------</div><p>The bell curve:</p>
+<pre class=code>                *  *
+             *        *
+           *            *
+          *              *
+        *                  *
+     *                        *
+*  *                             *  *
+<span class=c>--------+-----------+-----------+----</span>
+      mu-sd        mu         mu+sd
+         (68% of the data falls
+          within mu +/- 1*sd)</pre>
+<p>Summarized by two moments: the first moment <i>μ</i> (the mean, <code>mu</code>) and, from the second moment, the spread (<code>m2</code> = sum of squared deviations, so <i>sd=√(m2/(n-1))</i>). Two tricks make these course-critical: both update *incrementally*, one value at a time (<a href="#welford">welford</a>); and two summaries *subtract* without resampling. From ezr-eg1's <code>--without</code>: pour <code>{10,20,30}</code> into a summary of <code>{1,2,3,4,5}</code>, subtract a summary of <code>{10,20,30}</code>, and mu and sd of <code>{1..5}</code> come back exactly. Learn, unlearn, in O(1) — no stored data (see <a href="#stream">stream</a>).</p></div>
+<div class=note><div class=hd>⑨ cdf (cumulative distribution function)<br>----------------------------------------</div><p>The fraction of a population at or below a value: the area under the <a href="#pdf">pdf</a> up to <i>x</i>. Monotone, 0..1 — which makes it a natural normalizer: <code>norm</code> maps any cell to "what fraction of this column sits below you?". The normal cdf has no closed form, so ezr uses a logistic approximation (good to about ±1%), with the z-score clamped to ±3:</p>
+<pre class=code>cdf(z) ≈ (1)/(1 + e^(-1.702 z))</pre>
+<pre class=code><span class=k>function</span> NUM.norm(i,v,    z)
+  <span class=k>if</span> v == <span class=s>&quot;?&quot;</span> <span class=k>then</span> <span class=k>return</span> v <span class=k>end</span>
+  z = (v - i.mu) / (i:div() + TINY)
+  <span class=k>return</span> 1 / (1 + exp(-1.702 * max(-3, min(3, z)))) <span class=k>end</span></pre>
+<p>A bonus, for later: discretization rides on this for free. To turn any number into a small bin id, take <code>floor(the.bins * num:norm(23))</code> — since norm is the cdf, equal-width slices of 0..1 give (roughly) equal-frequency bins of the data.</p></div>
+<pre class=code><span class=k>function</span> NUM.norm(i,v,    z)
+  <span class=k>if</span> v == <span class=s>&quot;?&quot;</span> <span class=k>then</span> <span class=k>return</span> v <span class=k>end</span>
+  z = (v - i.mu) / (i:div() + TINY)
+  <span class=k>return</span> 1 / (1 + exp(-1.702 * max(-3, min(3, z)))) <span class=k>end</span></pre>
+<div class=note><div class=hd>⑩ stream<br>--------</div><p>A summary you can update — and un-update — one datum at a time, in constant memory. The <code>inc</code> argument (+1 or -1) means adding is O(1) and so is deleting, so any add-and-forget sweep over <i>n</i> items runs in linear time. Remember that: it matters later. Trees will score EVERY possible split of a sorted column in one linear pass — adding each row to the summary on one side of the cut while forgetting it from the other — where naive rebuilding would cost <i>O(n^2)</i>. It is also why <code>(a+b)-b == a</code> is a testable law (<code>--without</code>, <code>--sub</code> in ezr-eg1).</p>
+<pre class=code><span class=k>function</span> NUM.reset(i) i.n, i.mu, i.m2 = 0, 0, 0 <span class=k>end</span>
+<span class=k>function</span> SYM.reset(i) i.n, i.has = 0, {} <span class=k>end</span></pre></div>
+<pre class=code><span class=k>function</span> NUM.__sub(i,j,    n,d)
+  n = i.n - j.n
+  <span class=k>if</span> n &lt; 1 <span class=k>then</span> <span class=k>return</span> Num(i.name, i.at) <span class=k>end</span>
+  d = j.mu - i.mu
+  <span class=k>return</span> new(NUM, {name=i.name, at=i.at, heaven=i.heaven,
+                   n=n, mu=(i.n*i.mu - j.n*j.mu) / n,
+                   m2=max(0, i.m2 - j.m2
+                             - d*d*i.n*j.n/n)}) <span class=k>end</span>
+
+<span class=k>function</span> NUM.reset(i) i.n, i.mu, i.m2 = 0, 0, 0 <span class=k>end</span>
+<span class=k>function</span> SYM.reset(i) i.n, i.has = 0, {} <span class=k>end</span></pre>
+<div class=hd>exercises<br>=========</div>
+<p><b>Exercises, week 1</b></p>
+<p>1. Port this page's code to Python, wiring each demo of <a href="ezr-eg1.html">ezr-eg1</a> to a test_ function.</p>
+<p>2. Add {10,20,30} to a Num one value at a time, printing mu and sd after each add. Watch Welford converge.</p>
+<p>3. What is the entropy of a Sym fed "a","a","a"? Fed "a","b","c"? Predict first, then run it.</p>
+<p>4. In <code>NUM.__sub</code>, why does <code>m2</code> get clamped with <code>max(0,...)</code>? What does that say about floats?</p>
+<p>5. Flip <code>heaven</code> to <code>and 1 or 0</code>. Every test still passes. What breaks, and how would you ever notice?</p>
+</body></html>
