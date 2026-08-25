@@ -18,7 +18,7 @@
 <h1 align="center">:cyclone: CSC491/591: SE for AI <br>NC State, Fall '26</h1>
 <img src="https://raw.githubusercontent.com/txt/seai26f/refs/heads/main/etc/img/seai26f.png">
 
-# Week 2 lecture: every code example, with notes
+# Delta, week 2: lecture code examples + exam questions\n\n## Every code example, with notes
 
 Reconstructed from the Aug 24 transcript. Two sections: the
 Python examples, then the Lua. Each: the code as spoken (or as
@@ -415,3 +415,200 @@ are amazing, but do you always need them?) Week-2 homework:
 have Claude pull the ~80 lines of Lua this needs from Tim's
 600, port to Python classes Num and Sym, wire `test_` functions
 until `--all` runs clean.
+
+
+# Nine exam-style questions
+
+Each: (a) recall, then (b) a bug hunt in code. The bugs are small;
+the issues they reflect are not. Answers at the bottom.
+
+**Q1 — where the seed goes**
+
+a) What does resetting a random seed guarantee?
+
+b) This bug cost two years of research. Find it. What is the sd
+of the 20 "repeats"?
+
+```lua
+for _,data in pairs(datasets) do
+  for _,opt in pairs(optimizers) do
+    for r = 1, 20 do
+      srand(the.seed)
+      out[data][opt][r] = run(opt, data) end end end
+```
+
+**Q2 — the LLM's streaming sd**
+
+a) Given a count `n` and second moment `m2`, what is the formula
+for sd?
+
+b) An LLM proposes this "for standard deviation of streaming
+data." Grade it: what must `i.all` be, how many passes, and what
+does Welford change?
+
+```lua
+function NUM.div(i,    mu,m2)
+  mu, m2 = 0, 0
+  for _,v in pairs(i.all) do mu = mu + v / #i.all end
+  for _,v in pairs(i.all) do m2 = m2 + (v - mu)^2 end
+  return sqrt(m2 / (#i.all - 1)) end
+```
+
+**Q3 — the vanishing entropy**
+
+a) Assuming a correct implementation of entropy: what is the
+entropy of a,a,a? Of a,b,c,d (in bits)?
+
+b) Here is an incorrect implementation of entropy. Find the bug.
+What exactly gets returned?
+
+```lua
+function SYM.div(i,    e,p)
+  for _,n in pairs(i.has) do
+    p = n / i.n
+    e = -p * log(p) / log(2) end
+  return e end
+```
+
+**Q4 — who goes in x?**
+
+a) Which columns does `distx` read? Which does `disty` read?
+
+b) Find the bug in this column-role parser. Why do results look
+*better* because of it?
+
+```lua
+for at, s in ipairs(names) do
+  all[at] = Col(s, at)
+  if s:find"[+-]$" then y[#y+1] = all[at] end
+  x[#x+1] = all[at]
+end
+```
+
+**Q5 — the fragile harness**
+
+a) Red, green, refactor: which is which?
+
+b) Compare this with the real `run`. What happens to `--all` at
+the first failing demo, and why does a harness that dies hide
+more than one bug?
+
+```lua
+function run(funs,w)
+  srand(the.seed)
+  if funs[w] then funs[w](); return true end
+end
+```
+
+**Q6 — how many, or which?**
+
+a) What is `mid` for a Num? For a Sym?
+
+b) Find the bug. Feed it apple,apple,orange — what comes back,
+and where downstream does that first explode?
+
+```lua
+function SYM.mid(i,    hi)
+  hi = -1
+  for k,n in pairs(i.has) do
+    if n > hi then hi = n end end
+  return hi
+end
+```
+
+**Q7 — forgetting, badly**
+
+a) What does calling `add` with `inc = -1` do?
+
+b) One `inc` is missing below. Find it. Why does adding still
+work, but forgetting fail?
+
+```lua
+function NUM.add(i,v,inc,    d)
+  if v == "?" then return v end
+  inc  = inc or 1
+  i.n  = i.n + inc
+  d    = v - i.mu
+  i.mu = i.mu + d / i.n
+  i.m2 = i.m2 + inc * d * (v - i.mu); return v end
+```
+
+**Q8 — "more random is better"**
+
+a) Why does this course use one shared Park-Miller RNG across
+Lua and Python?
+
+b) An LLM "improves" the reseed as below. What three things
+break? Name one setting where time-seeding would be the right
+choice.
+
+```lua
+function srand(n)
+  Seed = os.time() % 2147483647
+end
+```
+
+**Q9 — real norm, bad norm**
+
+a) What should a norm return, over what range?
+
+b) One of these is ezr's norm; one is an LLM's simplification.
+Which is which? Give two reasons the loser loses.
+
+```lua
+function NUM.norm(i,v,    z)
+  if v == "?" then return v end
+  z = (v - i.mu) / (i:div() + TINY)
+  return 1 / (1 + exp(-1.702 * max(-3, min(3, z)))) end
+
+function NUM.norm(i,v)
+  if v == "?" then return v end
+  return (v - i.lo) / (i.hi - i.lo) end
+```
+
+## Answers
+
+**A1.** Same seed, same stream, same result — replayable
+experiments. The reset belongs per-*run*, not inside the repeat
+loop: as written all 20 repeats are identical, so their sd is 0
+and any statistics over them are fiction.
+
+**A2.** sd = sqrt(m2/(n-1)). `i.all` must hold every value seen
+(O(n) memory); two passes (mean first, gaps second) — that is
+not streaming. Welford: one pass, three numbers, invertible.
+
+**A3.** 0 bits; 2 bits. The bug: `e =` overwrites instead of
+accumulating, so only one symbol's term is returned.
+
+**A4.** distx reads x only; disty reads y only. The bug: goals
+are also pushed into x, so distx reads labels — leakage. The
+search consults the answers, so scores inflate.
+
+**A5.** Red = a failing test; green = just enough code to pass;
+refactor = clean up under the tests' protection. Without
+`xpcall`, the first crash kills `--all`; every later demo goes
+unexamined — one red hides unknown reds.
+
+**A6.** Num: the mean. Sym: the mode. Bug: it returns the count
+(2), not the key ("apple"); it first explodes wherever mid's
+value re-enters column operations (`holds`/`dist` comparing a
+number against symbols).
+
+**A7.** inc=-1 un-adds a value: the stats roll back. The `i.mu`
+line lost its `inc`: adding (inc=1) is unchanged, but on
+subtract the mean moves *toward* the removed value. The law
+`(a+b)-b == a` breaks; `--col` never subtracts, `--sub`
+round-trips and fails.
+
+**A8.** So a correct port prints the SAME numbers — grading is
+diff, debugging is replay. Time-seeding breaks replay
+debugging, Lua-vs-Python diff-grading, and running the same
+experiment twice. Right choice: a production system that wants
+run diversity.
+
+**A9.** A position in the column, 0..1. The first is ezr's: a
+CDF via a clamped logistic — streaming-friendly (mu and sd
+update incrementally) and outlier-calm. Min-max loses twice:
+lo/hi are unknown until all data is seen (and cannot un-see an
+outlier when forgetting), and one wild value stretches the
+denominator so every other row squeezes toward 0.
