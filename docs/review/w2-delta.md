@@ -282,14 +282,19 @@ test prints its stack dump and the suite keeps going.
 **L9. Scraping settings with Lua patterns.**
 
 ```lua
-for k,v in help:gmatch("[-][-]([%a%d]+)[^=]+= ([%S]+)") do
-  the[k] = coerce(v) end
+function The(s,    i)
+  i = new(THE, {_help=s})
+  for k,v in (" "..s):gmatch"%s(%a%w*)=(%S+)" do
+    i[k] = thing(v) end
+  return i end
 ```
 
 Lua patterns use `%` where Python uses `\`: `%w`≈`\w`,
 `%s`≈`\s`, `%S`≈`\S`; `^`/`$` anchor, `[^=]` means "not an
-equals". One line turns the help text into the config table —
-the same SSOT trick as P11, in the other language.
+equals". Two lines turn the help text into the config table —
+the same SSOT trick as P11, in the other language. (Note the
+`" "..s` trick: every `k=v` pair must follow whitespace, so
+prose mentions of `--k=v` in the usage line stay prose.)
 
 **L10. Column kinds, and heaven, off row 1.**
 
@@ -394,10 +399,15 @@ roughly equal-frequency bins.
 
 ```lua
 function csv(file,    f)
-  f = io.open(file)
-  return function(    s)
-    s = f:read()
-    if s then return cells(s) else f:close() end end end
+  f = io.lines(pathname(file))
+  return function(    t,l)
+    for line in f do
+      l = line:gsub("\239\187\191","")   -- strip any BOM
+              :gsub("%%.*",""):match"^%s*(.-)%s*$"
+      if l ~= "" then
+        t={}                        -- (.-), keeps empty cells
+        for s in (l..","):gmatch"(.-)," do t[#t+1]=thing(s) end
+        return t end end end end
 ```
 
 Pandas is amazing — but do you always need it? (Likewise: LLMs
