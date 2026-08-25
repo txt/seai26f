@@ -40,13 +40,12 @@ stats also run backwards: subtract a value and they roll back,
 so a table can forget rows as cheaply as it learned them.</p>
 <hr />
 <details><summary><b>noir</b></summary>
-<p>Nominal, Ordinal, Interval, Ratio (Stevens 1946): the four
-scales of measurement. This code collapses them to two: symbols
-you can only count (nominal) and numbers you can subtract
-(interval and up). One header letter decides which: lowercase
-makes a SYM, uppercase a NUM. The header row is the entire
-schema — policy as one line of data, mechanism in the
-code.</p></details>
+<p>Nominal, Ordinal, Interval, Ratio (Stevens 1946): the four scales of measurement. This code collapses them to two: symbols you can only count (nominal) and numbers you can subtract (interval and up). One header letter decides which:</p>
+<pre>-- Column kind from the first letter: lowercase makes a SYM,
+-- uppercase a NUM.
+function Col(name,at)
+  return (name:find&quot;^%l&quot; and Sym or Num)(name,at) end</pre>
+</details>
     </div>
     <div class='code'>
       <div class="highlight"><pre><span class="kr">function</span><span class="w"> </span><span class="nf">Col</span><span class="p">(</span><span class="nv">name</span><span class="p">,</span><span class="nv">at</span><span class="p">)</span>
@@ -59,21 +58,20 @@ code.</p></details>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-2'>#</a>
       </div>
-      <details><summary><b>Num, Sym, heaven</b></summary>
-<p><b>Num</b>: the summary of a numeric column — count
-<code>n</code>, mean <code>mu</code>, and <code>m2</code> (the
-sum of squared deviations, from which sd falls out). Nothing
-else is stored: not the data, just three numbers.</p>
-<p><b>Sym</b>: the summary of a symbolic column — count
-<code>n</code> and a table of counts <code>has</code>. Again no
-data kept, just the histogram.</p>
-<p><b>heaven</b>: the best value a goal can hope for, in
-normalized 0..1 space: 0 for a minimize goal (trailing
-<code>-</code>), 1 for maximize (trailing <code>+</code>).
-Decided in one line, at column birth. Careful: flip that one
-token and nothing crashes, every test passes — and the
-optimizer hunts the heaviest, thirstiest car. Goal bugs steer
-perfect machinery toward the wrong objective.</p></details>
+      <details><summary><b>Num</b></summary>
+<p>The summary of a numeric column: count <code>n</code>, mean <code>mu</code>, and <code>m2</code> (the sum of squared deviations from the mean, from which the standard deviation falls out). Nothing else is stored — not the data, just three numbers. A trailing <code>-</code> in the name means "goal: minimize".</p>
+<pre>function Num(name,at)
+  name = name or &quot;&quot;
+  return new(NUM, {at=at or 1, name=name, n=0, mu=0, m2=0,
+                   heaven = name:find&quot;-$&quot; and 0 or 1}) end</pre>
+<p>That last line, in Python, uses the True/False-is-1/0 trick (bools ARE ints, so arithmetic on a test needs no if):</p>
+<pre>heaven = 1 - (name[-1] == &quot;-&quot;)   # True==1, False==0</pre>
+</details>
+<details><summary><b>Sym</b></summary>
+<p>The summary of a symbolic column: count <code>n</code> and a table of counts <code>has</code>. Again, no data kept — just the histogram.</p>
+<pre>function Sym(name,at)
+  return new(SYM, {at=at or 1, name=name or &quot;&quot;, n=0, has={}}) end</pre>
+</details>
     </div>
     <div class='code'>
       <div class="highlight"><pre><span class="kr">function</span><span class="w"> </span><span class="nf">Num</span><span class="p">(</span><span class="nv">name</span><span class="p">,</span><span class="nv">at</span><span class="p">)</span>
@@ -91,37 +89,32 @@ perfect machinery toward the wrong objective.</p></details>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-3'>#</a>
       </div>
-      <details><summary><b>welford</b>, and the
-<b>columnProtocol</b></summary>
-<p><b>Welford</b>'s 1962 one-pass update: mean and variance
-from a stream, no stored data, no catastrophic cancellation.
-After each value v:</p>
-<pre>n' = n+1
-d  = v - mu
-mu'= mu + d/n'
-m2'= m2 + d*(v - mu')</pre>
-<p>then sd = sqrt(m2/(n-1)). The NUM.add code at right is
-exactly these four lines. Run with <code>inc=-1</code> the
-algebra inverts, which is what makes summaries
-subtractable.</p>
-<p><b>columnProtocol</b>: Num and Sym answer the same eight
-questions — one polymorphic protocol, two implementations.
-Everything downstream (tables, distance, trees, cuts) talks to
-the protocol, never to the type:</p>
-<table>
-<tr><th>question</th><th>Num answers</th><th>Sym answers</th></tr>
-<tr><td>add</td><td>welford update of mu, m2</td><td>bump a count in has</td></tr>
-<tr><td>sub</td><td>welford, run backwards</td><td>drop a count</td></tr>
-<tr><td>mid</td><td>mean</td><td>mode</td></tr>
-<tr><td>div</td><td>standard deviation</td><td>entropy</td></tr>
-<tr><td>norm</td><td>cdf position, 0..1</td><td>identity</td></tr>
-<tr><td>dist</td><td>gap of normed values</td><td>0 if same else 1</td></tr>
-<tr><td>holds</td><td>x &lt;= v</td><td>x == v</td></tr>
-<tr><td>reset</td><td>zero mu, m2</td><td>empty has</td></tr>
-</table>
-<p>Note the shared conventions: <code>"?"</code> (missing) is
-ignored on the way in, and <code>inc=-1</code> runs the summary
-backwards.</p></details>
+      <details><summary><b>columnProtocol</b></summary>
+<p>Num and Sym answer the same eight questions — one polymorphic <a href="#protocol-duck-typing">protocol</a>, two implementations. Everything downstream (tables, distance, trees, cuts) talks to the protocol, never to the type:</p>
+<table><tr><th>question</th><th>Num answers</th><th>Sym answers</th></tr><tr><td><code>add</code></td><td><a href="#welford">welford</a> update of mu, m2</td><td>bump a count in <code>has</code></td></tr><tr><td><code>sub</code></td><td>welford, run backwards</td><td>drop a count</td></tr><tr><td><code>mid</code></td><td><a href="#mode">mean</a></td><td><a href="#mode">mode</a></td></tr><tr><td><code>div</code></td><td><a href="#entropy">standard deviation</a></td><td><a href="#entropy">entropy</a></td></tr><tr><td><code>norm</code></td><td><a href="#cdf">cdf</a> position, 0..1</td><td>identity</td></tr><tr><td><code>dist</code></td><td>gap of normed values</td><td>0 if same else 1</td></tr><tr><td><code>holds</code></td><td><code>x &lt;= v</code></td><td><code>x == v</code></td></tr><tr><td><code>reset</code></td><td>zero mu, m2</td><td>empty <code>has</code></td></tr></table>
+<p>Two samples, both sides of <code>add</code>:</p>
+<pre>function NUM.add(i,v,inc,    d)
+  if v == &quot;?&quot; then return v end
+  inc  = inc or 1
+  i.n  = i.n + inc
+  d    = v - i.mu
+  i.mu = i.mu + inc * d / i.n
+  i.m2 = i.m2 + inc * d * (v - i.mu); return v end
+
+function SYM.add(i,v,inc)
+  if v == &quot;?&quot; then return v end
+  inc = inc or 1
+  i.n = i.n + inc
+  i.has[v] = inc + (i.has[v] or 0)
+  if i.has[v] &lt;= 0 then i.has[v] = nil end
+  return v end</pre>
+<p>Note the shared conventions: <code>"?"</code> (missing) is ignored on the way in, and <code>inc=-1</code> runs the summary backwards (see <a href="#stream">stream</a>).</p>
+</details>
+<details><summary><b>welford</b></summary>
+<p>Welford's 1962 one-pass update: mean and variance from a stream, no stored data, no catastrophic cancellation. After each value <i>v</i>:</p>
+<pre>n&#x27; = n+1,    d = v - μ,    μ&#x27; = μ + d/n&#x27;,    m2&#x27; = m2 + d (v - μ&#x27;)</pre>
+<p>then <i>sd = √(m2/(n-1))</i>. The <code>NUM.add</code> code above is exactly these four lines. Run with <code>inc=-1</code> the algebra inverts, which is what makes summaries subtractable.</p>
+</details>
     </div>
     <div class='code'>
       <div class="highlight"><pre><span class="kr">function</span><span class="w"> </span><span class="nc">SYM</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="nv">i</span><span class="p">,</span><span class="nv">v</span><span class="p">,</span><span class="nv">inc</span><span class="p">)</span>
@@ -147,25 +140,29 @@ backwards.</p></details>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-4'>#</a>
       </div>
-      <details><summary><b>mid, div</b> (mode, mean; entropy,
-sd)</summary>
-<p><b>mid</b>: the most frequent symbol is a Sym's answer to
-"what is typical here?" The mean is the same question asked of
-numbers — both are one value standing in for the whole column.
-That is why mid is one protocol slot, not two functions with
-different names.</p>
-<p><b>div</b> (diversity): Shannon 1948 — the spread of a
-symbol column, in bits, the mean surprise of drawing from
-counts p<sub>k</sub> = n<sub>k</sub>/n:</p>
-<pre>e = -&Sigma; p&#8342; log&#8322; p&#8342;</pre>
-<p>All-same symbols: 0 bits. Uniform over k symbols:
-log&#8322;&nbsp;k bits. Variance (or sd) is the same question
-asked of numbers — "how far is this column from settled?" —
-which is why div is one slot with two spellings.</p>
-<p>The two analogies are one design rule: every protocol slot
-names a question; each type answers in its own dialect. Trees
-built on div therefore handle numeric and symbolic goals with
-the same code.</p></details>
+      <details><summary><b>mid (mode, mean)</b></summary>
+<p>The most frequent symbol: a Sym's answer to <code>mid</code> ("what is typical here?"). The <b>mean is the same question asked of numbers</b> — both are one value standing in for the whole column. That is why <code>mid</code> is one protocol slot, not two functions with different names:</p>
+<pre>function SYM.mid(i,    hi,out)
+  hi = -1
+  for k, n in pairs(i.has) do
+    if n &gt; hi then hi, out = n, k end end
+  return out end
+
+function NUM.mid(i) return i.mu end</pre>
+</details>
+<details><summary><b>diversity (entropy, standard deviation)</b></summary>
+<p>Shannon 1948: the spread of a symbol column, in bits — the mean surprise of drawing from counts <i>pₖ = nₖ/n</i>:</p>
+<pre>e = -Σₖ pₖ log₂ pₖ</pre>
+<p>All-same symbols: 0 bits. Uniform over <i>k</i> symbols: <i>log₂ k</i> bits. <b>Variance (or sd) is the same question asked of numbers</b> — "how far is this column from settled?" — which is why <code>div</code> ("diversity") is one protocol slot with two spellings:</p>
+<pre>function SYM.div(i)
+  return sum(i.has, function(n,    p)
+    p = n / i.n
+    return -p * log(p) / log(2) end) end
+
+function NUM.div(i)
+  return i.n &lt; 2 and 0 or sqrt(max(i.m2,0) / (i.n-1)) end</pre>
+<p>The two analogies are one design rule: every protocol slot names a question; each type answers in its own dialect. Central tendency: mean, mode. Diversity: sd, entropy. Trees built on <code>div</code> therefore handle numeric and symbolic goals with the same code.</p>
+</details>
     </div>
     <div class='code'>
       <div class="highlight"><pre><span class="kr">function</span><span class="w"> </span><span class="nc">SYM</span><span class="p">.</span><span class="nf">mid</span><span class="p">(</span><span class="nv">i</span><span class="p">,</span><span class="w">    </span><span class="nv">hi</span><span class="p">,</span><span class="nv">out</span><span class="p">)</span>
@@ -191,15 +188,49 @@ the same code.</p></details>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-5'>#</a>
       </div>
-      <details><summary><b>stream</b> (subtraction, and
-forgetting)</summary>
-<p>A summary you can update — and un-update — one datum at a
-time, in constant memory. Adding costs O(1); so does
-forgetting (sub). That is why a table can watch data flow
-past, and forget rows as cheaply as it learned them; and why
-<code>(a+b)-b == a</code> is a testable law
-(<code>--without</code>, <code>--sub</code> in
-<a href="ezr-eg1.html">ezr-eg1</a>).</p></details>
+      <details><summary><b>gaussian (mean, second moment)</b></summary>
+<p>The bell curve:</p>
+<pre>                *  *
+             *        *
+           *            *
+          *              *
+        *                  *
+     *                        *
+*  *                             *  *
+--------+-----------+-----------+----
+      mu-sd        mu         mu+sd
+         (68% of the data falls
+          within mu +/- 1*sd)</pre>
+<p>Summarized by two moments: the first moment <i>μ</i> (the mean, <code>mu</code>) and, from the second moment, the spread (<code>m2</code> = sum of squared deviations, so <i>sd=√(m2/(n-1))</i>). Two tricks make these course-critical: both update *incrementally*, one value at a time (<a href="#welford">welford</a>); and two summaries *subtract* without resampling. From ezr-eg1's <code>--without</code>: pour <code>{10,20,30}</code> into a summary of <code>{1,2,3,4,5}</code>, subtract a summary of <code>{10,20,30}</code>, and mu and sd of <code>{1..5}</code> come back exactly. Learn, unlearn, in O(1) — no stored data (see <a href="#stream">stream</a>).</p>
+</details>
+<details><summary><b>cdf (cumulative distribution function)</b></summary>
+<p>The fraction of a population at or below a value: the area under the <a href="#pdf">pdf</a> up to <i>x</i>. Monotone, 0..1 — which makes it a natural normalizer: <code>norm</code> maps any cell to "what fraction of this column sits below you?". The normal cdf has no closed form, so ezr uses a logistic approximation (good to about ±1%), with the z-score clamped to ±3:</p>
+<pre>cdf(z) ≈ (1)/(1 + e^(-1.702 z))</pre>
+<pre>function NUM.norm(i,v,    z)
+  if v == &quot;?&quot; then return v end
+  z = (v - i.mu) / (i:div() + TINY)
+  return 1 / (1 + exp(-1.702 * max(-3, min(3, z)))) end</pre>
+<p>A bonus, for later: discretization rides on this for free. To turn any number into a small bin id, take <code>floor(the.bins * num:norm(23))</code> — since norm is the cdf, equal-width slices of 0..1 give (roughly) equal-frequency bins of the data.</p>
+</details>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span><span class="w"> </span><span class="nc">NUM</span><span class="p">.</span><span class="nf">norm</span><span class="p">(</span><span class="nv">i</span><span class="p">,</span><span class="nv">v</span><span class="p">,</span><span class="w">    </span><span class="nv">z</span><span class="p">)</span>
+<span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="nv">v</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;?&quot;</span><span class="w"> </span><span class="kr">then</span><span class="w"> </span><span class="kr">return</span><span class="w"> </span><span class="nv">v</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="nv">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nv">v</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">i</span><span class="p">.</span><span class="py">mu</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="nv">i</span><span class="p">:</span><span class="nf">div</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">TINY</span><span class="p">)</span>
+<span class="w">  </span><span class="kr">return</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">1.702</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">max</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="nf">min</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="nv">z</span><span class="p">))))</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      <details><summary><b>stream</b></summary>
+<p>A summary you can update — and un-update — one datum at a time, in constant memory. The <code>inc</code> argument (+1 or -1) means adding is O(1) and so is deleting, so any add-and-forget sweep over <i>n</i> items runs in linear time. Remember that: it matters later. Trees will score EVERY possible split of a sorted column in one linear pass — adding each row to the summary on one side of the cut while forgetting it from the other — where naive rebuilding would cost <i>O(n^2)</i>. It is also why <code>(a+b)-b == a</code> is a testable law (<code>--without</code>, <code>--sub</code> in ezr-eg1).</p>
+<pre>function NUM.reset(i) i.n, i.mu, i.m2 = 0, 0, 0 end
+function SYM.reset(i) i.n, i.has = 0, {} end</pre>
+</details>
     </div>
     <div class='code'>
       <div class="highlight"><pre><span class="kr">function</span><span class="w"> </span><span class="nc">NUM</span><span class="p">.</span><span class="nf">__sub</span><span class="p">(</span><span class="nv">i</span><span class="p">,</span><span class="nv">j</span><span class="p">,</span><span class="w">    </span><span class="nv">n</span><span class="p">,</span><span class="nv">d</span><span class="p">)</span>
@@ -216,10 +247,10 @@ past, and forget rows as cheaply as it learned them; and why
     </div>
   </div>
   <div class='clearall'></div>
-  <div class='section' id='section-6'>
+  <div class='section' id='section-7'>
     <div class='docs'>
       <div class='octowrap'>
-        <a class='octothorpe' href='#section-6'>#</a>
+        <a class='octothorpe' href='#section-7'>#</a>
       </div>
       <h2>exercises</h2>
 <div class=ex>

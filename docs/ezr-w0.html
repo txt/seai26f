@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>ezr-w0.py</title>
+  <link rel="stylesheet" href="pycco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div class='section'>
+    <div class='docs'><h1>ezr-w0.py</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      <p>ezr, week 0: the port, warm-up.
+All of <a href="https://github.com/txt/seai26f/blob/main/src/101.py">101.py</a>,
+verbatim, with glossary notes folded in (click a &#9654; to open
+one) and this week&rsquo;s exercises at the bottom.</p>
+<h2>This week&rsquo;s story</h2>
+<p>Nothing clever yet: one small Python shell — settings from a help
+string, tests run from the command line, seeds reset before every
+run. Every later week&rsquo;s port grows inside this file.</p>
+<hr />
+<details><summary><b>python docstrings (__doc__)</b></summary>
+<p>A string as the first statement of a file (or def) is stored, not executed: <code>__doc__</code>. 101.py's docstring is its usage message (<code>-h</code> just prints it) AND its settings table — <code>settings(__doc__)</code> regx-scrapes the defaults out of the help text. One string: help, defaults, documentation. That is <a href="#ssot">SSOT</a> and <a href="#mechanism-policy">mechanism-policy</a> in thirteen lines of Python.</p>
+</details>
+<details><summary><b>SSOT (single source of truth)</b></summary>
+<p>Say each fact once; derive everything else. E.g. define the options ONCE, in a help string; parse settings out of that string; then code and documentation can never drift apart:</p>
+<pre>def settings(doc):
+  pat = r&quot;--(\w+)\s+[^=\n]*=\s*(\S+)&quot;
+  return o(**{k: thing(v) for k,v in re.findall(pat, doc)})
+
+the = settings(__doc__)</pre>
+<p>Other SSOTs here: the README schedule (all dates), row 1 of a csv (all column roles). SSOT is <a href="#mechanism-policy">mechanism-policy</a>'s best friend: the single source is the policy.</p>
+</details>
+<details><summary><b>mechanism-policy</b></summary>
+<p>Separate the *what* (policy: small, declarative, easy to change) from the *how* (mechanism: code that obeys any policy). Then one mechanism serves a thousand policies. Everywhere in this course:</p>
+<table><tr><th>policy (a little data)</th><th>mechanism (code)</th></tr><tr><td><code>__doc__</code> options text in 101.py</td><td>the regx that parses it</td></tr><tr><td>row 1 of a csv (<code>Lbs-</code>, <code>Acc+</code>...)</td><td>the csv reader, <code>Cols</code>, <code>heaven</code>, <code>disty</code></td></tr><tr><td>keys of the <code>eg</code> demo table</td><td>the <code>go()</code> dispatcher</td></tr><tr><td><code>the</code> settings table</td><td>every function reading it</td></tr></table>
+<p>Change the policy line, never the mechanism: a new dataset is a new header row, not new code.</p>
+</details>
+
+<p>101.py: just enough to reset settings from the command line
+(c) 2026, Tim Menzies <a href="&#109;&#97;&#105;&#108;&#116;&#111;&#58;&#116;&#105;&#109;&#109;&#64;&#105;&#101;&#101;&#101;&#46;&#111;&#114;&#103;">&#116;&#105;&#109;&#109;&#64;&#105;&#101;&#101;&#101;&#46;&#111;&#114;&#103;</a>, MIT license</p>
+<p>USAGE: python3 101.py [&ndash;key=val &hellip;] [test &hellip;]</p>
+<p>OPTIONS: (defaults below are parsed into <code>the</code>):
+  &ndash;file   data file  = $MOOT/optimize/misc/auto93.csv
+  &ndash;seed   random seed           = 1
+  &ndash;round  decimals shown        = 3
+  -h       print this help</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span><span class="o">,</span><span class="w"> </span><span class="nn">re</span><span class="o">,</span><span class="w"> </span><span class="nn">random</span><span class="o">,</span><span class="w"> </span><span class="nn">sys</span><span class="p">;</span> <span class="n">sys</span><span class="o">.</span><span class="n">dont_write_bytecode</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">math</span><span class="w"> </span><span class="kn">import</span> <span class="n">floor</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimpleNamespace</span> <span class="k">as</span> <span class="n">o</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <details><summary><b>python environ</b></summary>
+<p><code>os.environ</code> is a dict of the shell's variables. Lets one default live outside the code, per machine:</p>
+<pre>MOOT = (os.environ.get(&quot;MOOT&quot;) or
+        os.path.expanduser(&quot;~/gits/moot&quot;))</pre>
+<p>Set <code>MOOT=/somewhere</code> in your shell and 101.py finds your data; set nothing and a sane default fires.</p>
+</details>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="n">MOOT</span> <span class="o">=</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;MOOT&quot;</span><span class="p">)</span> <span class="ow">or</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~/gits/moot&quot;</span><span class="p">))</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      <details><summary><b>python f-strings</b></summary>
+<p><code>f"..."</code> runs the <code>{...}</code> parts as code; after a <code>:</code> comes a format spec, which may itself be <code>{computed}</code>:</p>
+<pre>f&quot;{x:.0f}&quot;           # x, zero decimals
+f&quot;{x:.{the.round}f}&quot; # x, the.round decimals
+f&quot;:{k} {say(v)}&quot;     # any expression allowed</pre>
+<p>That second line is why <code>--round=4</code> changes every number 101.py prints: one policy value, one printing mechanism.</p>
+</details>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">say</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+  <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">x</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">x</span><span class="o">==</span><span class="n">floor</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">else</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">x</span><span class="si">:</span><span class="s2">.</span><span class="si">{</span><span class="n">the</span><span class="o">.</span><span class="n">round</span><span class="si">}</span><span class="s2">f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+  <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span> <span class="k">return</span> <span class="s2">&quot;{&quot;</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">&quot;:</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">say</span><span class="p">(</span><span class="n">v</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">items</span><span class="p">()</span><span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="s2">&quot;_&quot;</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;}&quot;</span>
+  <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      <details><summary><b>python slices</b></summary>
+<p><code>x[lo:hi]</code> is items <code>lo</code> to <code>hi-1</code>; blanks mean "from the start" or "to the end"; negatives count from the end:</p>
+<pre>x = [a, b, c, d, e]
+     0  1  2  3  4      &lt;- index
+    -5 -4 -3 -2 -1      &lt;- negative index
+
+x[:2]  = [a, b]         x[2:]  = [c, d, e]
+x[-2:] = [d, e]         x[1:3] = [b, c]
+x[:]   = a copy of x</pre>
+<p>In 101.py: <code>s[:1]=="-"</code> (first char), <code>s[1:]</code> (the rest), <code>a[2:]</code> (strip a leading <code>--</code>).</p>
+</details>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">thing</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="k">if</span> <span class="n">s</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span><span class="o">==</span><span class="s2">&quot;-&quot;</span> <span class="k">else</span> <span class="n">s</span><span class="p">)</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span> <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+  <span class="k">try</span><span class="p">:</span> <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+  <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span> <span class="k">return</span> <span class="n">s</span><span class="o">==</span><span class="s2">&quot;True&quot;</span> <span class="ow">or</span> <span class="p">(</span><span class="n">s</span><span class="o">!=</span><span class="s2">&quot;False&quot;</span> <span class="ow">and</span> <span class="n">s</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      <details><summary><b>regx (regular expressions)</b></summary>
+<p>Little languages for matching text. Just enough for 101.py and the Lua at its side (Lua patterns use <code>%</code> where Python uses <code>\</code>, and <code>-</code> where Python uses <code>*?</code>):</p>
+<table><tr><th>means</th><th>python</th><th>lua</th></tr><tr><td>word char (letter/digit)</td><td><code>\w</code></td><td><code>%w</code></td></tr><tr><td>whitespace / non-space</td><td><code>\s</code> <code>\S</code></td><td><code>%s</code> <code>%S</code></td></tr><tr><td>letter / lowercase</td><td><code>[a-zA-Z]</code></td><td><code>%a</code> <code>%l</code></td></tr><tr><td>any chars, lazy</td><td><code>.*?</code></td><td><code>.-</code></td></tr><tr><td>start / end of string</td><td><code>^</code> <code>$</code></td><td><code>^</code> <code>$</code></td></tr><tr><td>one char from a set</td><td><code>[^=\n]</code></td><td><code>[+-]</code></td></tr><tr><td>capture a group</td><td><code>( )</code></td><td><code>( )</code></td></tr><tr><td>all matches</td><td><code>re.findall</code></td><td><code>s:gmatch</code></td></tr><tr><td>find / replace</td><td><code>re.search</code>, <code>re.sub</code></td><td><code>s:find</code>, <code>s:gsub</code></td></tr><tr><td>a literal <code>.</code></td><td><code>\.</code></td><td><code>%.</code></td></tr></table>
+<p>The two worked examples, one per language — 101.py scraping <code>--key ... = default</code> pairs from its docstring, ezr picking a column's kind off its first letter:</p>
+<pre>pat = r&quot;--(\w+)\s+[^=\n]*=\s*(\S+)&quot;    # 101.py</pre>
+<pre>return (name:find&quot;^%l&quot; and Sym or Num)(name,at)  -- ezr.lua</pre>
+</details>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">settings</span><span class="p">(</span><span class="n">doc</span><span class="p">):</span>
+  <span class="n">pat</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;--(\w+)\s+[^=\n]*=\s*(\S+)&quot;</span>
+  <span class="k">return</span> <span class="n">o</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">thing</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">pat</span><span class="p">,</span> <span class="n">doc</span><span class="p">)})</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">test_config</span><span class="p">():</span> <span class="nb">print</span><span class="p">(</span><span class="n">say</span><span class="p">(</span><span class="nb">vars</span><span class="p">(</span><span class="n">the</span><span class="p">)))</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      <details><summary><b>python argv</b></summary>
+<p><code>sys.argv</code> is the command line, split on spaces: <code>argv[0]</code> the script name, the rest yours. 101.py walks it twice — first pass updates settings from <code>--key=val</code>, second runs any named tests:</p>
+<pre>for a in sys.argv[1:]:
+  if a[:2]==&quot;--&quot; and &quot;=&quot; in a:
+    k,v = a[2:].split(&quot;=&quot;,1)
+    if k in vars(the): setattr(the, k, thing(v))
+for a in sys.argv[1:]:
+  if (n := &quot;test_&quot;+a) in funs:
+    random.seed(the.seed); funs[n]()</pre>
+<p>Note that last line; see <a href="#rng">RNG</a>, next.</p>
+</details>
+<details><summary><b>RNG (random number generator)</b></summary>
+<p>Computers do not roll dice. An RNG is a deterministic formula that *looks* random; from the same seed, the same stream, forever. This course uses the Park-Miller minimal standard (one multiply, one modulo):</p>
+<pre>Seed = (16807 * Seed) % 2147483647</pre>
+<p>The point of need: RESET the seed before every run. Then every experiment replays exactly — same seed, same "random" numbers, same result — on your machine, your grader's, and in Lua or Python alike (ports are graded by diff-ing the two streams). 101.py does this before every test:</p>
+<pre>random.seed(the.seed); funs[n]()   # reset, then run</pre>
+<p>Forget the reset and your "bug" changes every run. Reset, and science becomes repeatable.</p>
+</details>
+<details><summary><b>TDD (test-driven development)</b></summary>
+<p>Red, green, refactor: write a failing test (red), write just enough code to pass (green), then clean up with the tests as a safety net (refactor). This code's dialect: every demo in the eg files reseeds, prints, then asserts — no crash means pass — and the harness never dies mid-suite. <code>run</code> traps a failing demo and prints its stack dump, so <code>--all</code> can count failures and keep going:</p>
+<pre>function run(funs,w,    ok,msg)
+  srand(the.seed)
+  if funs[w] then
+    ok, msg = xpcall(funs[w], debug.traceback)
+    if not ok then print(msg) end
+    return ok end end</pre>
+<p>The eg table is the whole test framework: demos are just entries, so adding a test is one assignment, no registration ceremony:</p>
+<pre>eg = {}                        -- the demo table
+
+eg[&quot;--col&quot;] = function(    n)  -- green: watch, then lock in
+  n = adds{1,2,3,4,5}
+  print(show{mu=n:mid(), sd=n:div()})
+  assert(n:mid() == 3) end
+
+eg[&quot;--ent&quot;] = function(    s)
+  s = adds({&quot;a&quot;,&quot;a&quot;,&quot;b&quot;}, Sym())
+  assert(abs(s:div() - 0.918) &lt; 0.01) end
+
+eg[&quot;--broke&quot;] = function()     -- red: prints a stack dump;
+  assert(2 + 2 == 5) end       -- --all counts it, moves on</pre>
+<p>But beware: test suites are code, with their own maintenance bill — suites of 30 to 50 percent of total code size are not uncommon. So be choosy:</p>
+<ul><li>A test with zero assertions tests nothing. Keep the assert.</li><li>Mere line coverage can mislead: touching a line is not checking its meaning. Prefer a few detailed checks on the code's semantics over many shallow ones.</li><li>Keep long-running tests out of the suite. Slow suites do not get run, and an unrun suite protects nothing.</li></ul>
+</details>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span><span class="n">funs</span><span class="p">):</span>
+  <span class="k">if</span> <span class="s2">&quot;-h&quot;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">:</span> <span class="k">return</span> <span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+    <span class="k">if</span> <span class="n">a</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span><span class="o">==</span><span class="s2">&quot;--&quot;</span> <span class="ow">and</span> <span class="s2">&quot;=&quot;</span> <span class="ow">in</span> <span class="n">a</span><span class="p">:</span>
+      <span class="n">k</span><span class="p">,</span><span class="n">v</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">vars</span><span class="p">(</span><span class="n">the</span><span class="p">):</span> <span class="nb">setattr</span><span class="p">(</span><span class="n">the</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">thing</span><span class="p">(</span><span class="n">v</span><span class="p">))</span>
+  <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">:=</span> <span class="s2">&quot;test_&quot;</span><span class="o">+</span><span class="n">a</span><span class="p">)</span> <span class="ow">in</span> <span class="n">funs</span><span class="p">:</span>
+      <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">the</span><span class="o">.</span><span class="n">seed</span><span class="p">);</span> <span class="n">funs</span><span class="p">[</span><span class="n">n</span><span class="p">]()</span>
+
+<span class="n">the</span> <span class="o">=</span> <span class="n">settings</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span><span class="o">==</span><span class="s2">&quot;__main__&quot;</span><span class="p">:</span> <span class="n">main</span><span class="p">(</span><span class="nb">globals</span><span class="p">())</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-7'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-7'>#</a>
+      </div>
+      <h2>exercises</h2>
+<div class=ex>
+
+**Exercises, week 0**
+
+1. Run `python3 101.py config`, then again with
+   `--round=1 --seed=42 config`. Explain every difference.
+2. Add `test_rand`: print ten random numbers. Run it twice with
+   the same seed, then twice with different seeds. What is
+   guaranteed, and by which line of `main`?
+3. Port `rand.lua` (Park-Miller) to Python. Same seed, SAME 20
+   numbers as the Lua, or the port is wrong:
+   `diff <(lua rand.lua) <(python3 rand.py)` prints nothing.
+4. Add one new option to the docstring only (say
+   `--bins  cuts  = 5`). Prove `the.bins` now exists without
+   touching any code. Which principle is that?
+5. Break `thing`: what does it return for `"-3"`, `"3.1.4"`,
+   `"None"`? Which answers surprise you?
+
+</div>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>

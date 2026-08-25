@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>ezr-w2.lua</title>
+  <link rel="stylesheet" href="pycco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div class='section'>
+    <div class='docs'><h1>ezr-w2.lua</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      <p>ezr, week 2: tables, distance, gap to heaven.
+One weekly-sized chunk of <a href="ezr.html">ezr.lua</a>, verbatim, with
+glossary notes folded in (click a &#9654; to open one) and this
+week&rsquo;s exercises at the bottom.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span></span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <h2>This week&rsquo;s story</h2>
+<p>Rows gather into tables; row 1 alone decides every column&rsquo;s
+kind and role. Then two numbers see the whole table: distx,
+the gap between two rows over the x columns; and disty, the
+gap from a row&rsquo;s goals to heaven. Sorting by disty is
+optimization with no model, no weights, no training.</p>
+<hr />
+<details><summary><b>Tbl</b></summary>
+<p>Rows, plus the column summaries those rows built. Row 1 of any source is the header, and the header alone decides each column's kind (<a href="#noir">noir</a>) and role: a trailing <code>!</code> is the class, <code>+</code> or <code>-</code> a goal (a y column), <code>X</code> is ignored, the rest are the x (independent) columns.</p>
+<pre>function Tbl(src)
+  src = iter(src)
+  return adds(src, new(TBL, {rows={}, mid=nil,
+                             cols=Cols(src())})) end
+
+function Cols(names,    all,x,y,klass)
+  all, x, y = {}, {}, {}
+  for at, s in ipairs(names) do
+    all[at] = Col(s, at)
+    if s:find&quot;!$&quot; then klass = all[at]
+    elseif s:find&quot;[+-]$&quot; then y[#y+1] = all[at]
+    elseif s:sub(-1) ~= &quot;X&quot; then x[#x+1] = all[at] end end
+  return new(COLS, {names=names,all=all,x=x,y=y,klass=klass}) end</pre>
+</details>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span><span class="w"> </span><span class="nf">Tbl</span><span class="p">(</span><span class="nv">src</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">src</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">iter</span><span class="p">(</span><span class="nv">src</span><span class="p">)</span>
+<span class="w">  </span><span class="kr">return</span><span class="w"> </span><span class="nf">adds</span><span class="p">(</span><span class="nv">src</span><span class="p">,</span><span class="w"> </span><span class="nf">new</span><span class="p">(</span><span class="nv">TBL</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nv">rows</span><span class="o">=</span><span class="p">{},</span><span class="w"> </span><span class="nv">mid</span><span class="o">=</span><span class="kc">nil</span><span class="p">,</span>
+<span class="w">                             </span><span class="nv">cols</span><span class="o">=</span><span class="nf">Cols</span><span class="p">(</span><span class="nf">src</span><span class="p">())}))</span><span class="w"> </span><span class="kr">end</span>
+
+<span class="kr">function</span><span class="w"> </span><span class="nf">Cols</span><span class="p">(</span><span class="nv">names</span><span class="p">,</span><span class="w">    </span><span class="nv">all</span><span class="p">,</span><span class="nv">x</span><span class="p">,</span><span class="nv">y</span><span class="p">,</span><span class="nv">klass</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">all</span><span class="p">,</span><span class="w"> </span><span class="nv">x</span><span class="p">,</span><span class="w"> </span><span class="nv">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="p">{}</span>
+<span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="nv">at</span><span class="p">,</span><span class="w"> </span><span class="nv">s</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nb">ipairs</span><span class="p">(</span><span class="nv">names</span><span class="p">)</span><span class="w"> </span><span class="kr">do</span>
+<span class="w">    </span><span class="nv">all</span><span class="p">[</span><span class="nv">at</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">Col</span><span class="p">(</span><span class="nv">s</span><span class="p">,</span><span class="w"> </span><span class="nv">at</span><span class="p">)</span>
+<span class="w">    </span><span class="kr">if</span><span class="w"> </span><span class="nv">s</span><span class="p">:</span><span class="py">find</span><span class="s2">&quot;!$&quot;</span><span class="w"> </span><span class="kr">then</span><span class="w"> </span><span class="nv">klass</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">all</span><span class="p">[</span><span class="nv">at</span><span class="p">]</span>
+<span class="w">    </span><span class="kr">elseif</span><span class="w"> </span><span class="nv">s</span><span class="p">:</span><span class="py">find</span><span class="s2">&quot;[+-]$&quot;</span><span class="w"> </span><span class="kr">then</span><span class="w"> </span><span class="nv">y</span><span class="p">[</span><span class="o">#</span><span class="nv">y</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">all</span><span class="p">[</span><span class="nv">at</span><span class="p">]</span>
+<span class="w">    </span><span class="kr">elseif</span><span class="w"> </span><span class="nv">s</span><span class="p">:</span><span class="nf">sub</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">~=</span><span class="w"> </span><span class="s2">&quot;X&quot;</span><span class="w"> </span><span class="kr">then</span><span class="w"> </span><span class="nv">x</span><span class="p">[</span><span class="o">#</span><span class="nv">x</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">all</span><span class="p">[</span><span class="nv">at</span><span class="p">]</span><span class="w"> </span><span class="kr">end</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="kr">return</span><span class="w"> </span><span class="nf">new</span><span class="p">(</span><span class="nv">COLS</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nv">names</span><span class="o">=</span><span class="nv">names</span><span class="p">,</span><span class="nv">all</span><span class="o">=</span><span class="nv">all</span><span class="p">,</span><span class="nv">x</span><span class="o">=</span><span class="nv">x</span><span class="p">,</span><span class="nv">y</span><span class="o">=</span><span class="nv">y</span><span class="p">,</span><span class="nv">klass</span><span class="o">=</span><span class="nv">klass</span><span class="p">})</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      <details><summary><b>minkowski</b></summary>
+<p>Minkowski's p-norm, folding many per-column gaps <i>g_c</i> (each 0..1) into one 0..1 number:</p>
+<pre>d = ((1)/(n)Σc g_c^( p))^(1/p)</pre>
+<p><i>p=1</i> is the Manhattan distance (all gaps count equally), <i>p=2</i> Euclidean; as <i>p</i> grows, the largest single gap dominates. <code>the.p</code> defaults to 2.</p>
+<pre>function minkowski(cols,f,    d,n)
+  d, n = 0, TINY
+  for _, c in ipairs(cols) do n, d = n+1, d + f(c) ^ the.p end
+  return (d / n) ^ (1 / the.p) end</pre>
+<p>Note the design: minkowski never touches the data. It takes a function <code>f</code> and calls <code>f(c)</code> per column, on demand — a higher-order, lazy style. Each caller passes its own little lambda (distx measures row gaps, disty measures gaps to heaven), and no intermediate list of gaps is ever built. The Python analog is a generator expression, computing each term only as it is summed:</p>
+<pre>d = (sum(f(c)**p for c in cols) / len(cols)) ** (1/p)</pre>
+</details>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span><span class="w"> </span><span class="nf">minkowski</span><span class="p">(</span><span class="nv">cols</span><span class="p">,</span><span class="nv">f</span><span class="p">,</span><span class="w">    </span><span class="nv">d</span><span class="p">,</span><span class="nv">n</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">d</span><span class="p">,</span><span class="w"> </span><span class="nv">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nv">TINY</span>
+<span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="nv">_</span><span class="p">,</span><span class="w"> </span><span class="nv">c</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nb">ipairs</span><span class="p">(</span><span class="nv">cols</span><span class="p">)</span><span class="w"> </span><span class="kr">do</span><span class="w"> </span><span class="nv">n</span><span class="p">,</span><span class="w"> </span><span class="nv">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nv">d</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="nv">c</span><span class="p">)</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="nv">the</span><span class="p">.</span><span class="py">p</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="kr">return</span><span class="w"> </span><span class="p">(</span><span class="nv">d</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nv">n</span><span class="p">)</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nv">the</span><span class="p">.</span><span class="py">p</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      <details><summary><b>distx</b></summary>
+<p>The gap between two rows, over the x columns only: each column measures its own 0..1 gap (<code>dist</code> in the <a href="#columnprotocol">columnProtocol</a>), and <a href="#minkowski">minkowski</a> folds them. An unknown <code>"?"</code> assumes the worst: symbols that might differ, do; a missing number is pushed to whichever end is further away.</p>
+<pre>function SYM.dist(i,a,b)
+  if a == &quot;?&quot; and b == &quot;?&quot; then return 1 end
+  return a ~= b and 1 or 0 end
+
+function NUM.dist(i,a,b)
+  if a == &quot;?&quot; and b == &quot;?&quot; then return 1 end
+  a, b = i:norm(a), i:norm(b)
+  if a == &quot;?&quot; then a = b &gt; 0.5 and 0 or 1 end
+  if b == &quot;?&quot; then b = a &gt; 0.5 and 0 or 1 end
+  return abs(a - b) end
+
+function TBL.distx(i,row1,row2)
+  return minkowski(i.cols.x, function(c)
+           return c:dist(row1[c.at], row2[c.at]) end) end</pre>
+</details>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span><span class="w"> </span><span class="nc">SYM</span><span class="p">.</span><span class="nf">dist</span><span class="p">(</span><span class="nv">i</span><span class="p">,</span><span class="nv">a</span><span class="p">,</span><span class="nv">b</span><span class="p">)</span>
+<span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="nv">a</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;?&quot;</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nv">b</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;?&quot;</span><span class="w"> </span><span class="kr">then</span><span class="w"> </span><span class="kr">return</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="kr">return</span><span class="w"> </span><span class="nv">a</span><span class="w"> </span><span class="o">~=</span><span class="w"> </span><span class="nv">b</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="kr">end</span>
+
+<span class="kr">function</span><span class="w"> </span><span class="nc">NUM</span><span class="p">.</span><span class="nf">dist</span><span class="p">(</span><span class="nv">i</span><span class="p">,</span><span class="nv">a</span><span class="p">,</span><span class="nv">b</span><span class="p">)</span>
+<span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="nv">a</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;?&quot;</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nv">b</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;?&quot;</span><span class="w"> </span><span class="kr">then</span><span class="w"> </span><span class="kr">return</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="nv">a</span><span class="p">,</span><span class="w"> </span><span class="nv">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">i</span><span class="p">:</span><span class="nf">norm</span><span class="p">(</span><span class="nv">a</span><span class="p">),</span><span class="w"> </span><span class="nv">i</span><span class="p">:</span><span class="nf">norm</span><span class="p">(</span><span class="nv">b</span><span class="p">)</span>
+<span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="nv">a</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;?&quot;</span><span class="w"> </span><span class="kr">then</span><span class="w"> </span><span class="nv">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">b</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.5</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="nv">b</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;?&quot;</span><span class="w"> </span><span class="kr">then</span><span class="w"> </span><span class="nv">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">a</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.5</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="kr">return</span><span class="w"> </span><span class="nf">abs</span><span class="p">(</span><span class="nv">a</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">b</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span>
+
+<span class="kr">function</span><span class="w"> </span><span class="nc">TBL</span><span class="p">.</span><span class="nf">distx</span><span class="p">(</span><span class="nv">i</span><span class="p">,</span><span class="nv">row1</span><span class="p">,</span><span class="nv">row2</span><span class="p">)</span>
+<span class="w">  </span><span class="kr">return</span><span class="w"> </span><span class="nf">minkowski</span><span class="p">(</span><span class="nv">i</span><span class="p">.</span><span class="py">cols</span><span class="p">.</span><span class="py">x</span><span class="p">,</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="nv">c</span><span class="p">)</span>
+<span class="w">           </span><span class="kr">return</span><span class="w"> </span><span class="nv">c</span><span class="p">:</span><span class="nf">dist</span><span class="p">(</span><span class="nv">row1</span><span class="p">[</span><span class="nv">c</span><span class="p">.</span><span class="py">at</span><span class="p">],</span><span class="w"> </span><span class="nv">row2</span><span class="p">[</span><span class="nv">c</span><span class="p">.</span><span class="py">at</span><span class="p">])</span><span class="w"> </span><span class="kr">end</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      <details><summary><b>heaven</b></summary>
+<p>The best value a goal column can hope for, in normalized 0..1 space: 0 for a minimize goal (trailing <code>-</code>), 1 for a maximize goal (trailing <code>+</code>). Decided in one line, at column birth:</p>
+<pre>heaven = name:find&quot;-$&quot; and 0 or 1</pre>
+</details>
+<details><summary><b>disty</b></summary>
+<p>The gap from a row's goals to <a href="#heaven">heaven</a>: each y column measures <i>|norm(v) - heaven|</i>, and <a href="#minkowski">minkowski</a> folds them. 0 = best possible row, 1 = worst. No model, no weights, no training — sort rows by disty and the best float to the top (<code>--disty</code> in ezr-eg2). disty is an *aggregation function*, the zooming rival to frontier-chasing (see <a href="#pareto-zoom-effect">Pareto zoom effect</a>). Later weeks make disty the thing that costs money: it reads the goal columns, and goals are labels.</p>
+<pre>function TBL.disty(i,row)
+  if i.model and row[i.cols.y[1].at] == &quot;?&quot; then
+    i:label(row) end
+  return minkowski(i.cols.y, function(y)
+           return abs(y:norm(row[y.at]) - y.heaven) end) end</pre>
+</details>
+<details><summary><b>Pareto frontier</b></summary>
+<p><i>"Give me the fruitful error any time, full of seeds, bursting with its own corrections. You can keep your sterile truth for yourself." — Vilfredo Pareto</i></p>
+<p>With many goals there is rarely one best row — lighter cars brake worse. Row <code>a</code> *dominates* <code>b</code> if <code>a</code> is at least as good on every goal and better on one. The frontier (<code>o</code>) is whatever nothing dominates:</p>
+<pre>y2 (less is better)
+|
+|      .            .          .
+|           .               .        . = dominated
+|   o             .     .
+|                .            .
+|      o               .
+|         o        .        .
+|            o          .
+|              o   o         .
+|                    o    o      o
++---------------------------------------- y1 (less is better)</pre>
+<p>Report the frontier and let the customer pick their trade-off.</p>
+</details>
+<details><summary><b>Pareto zoom effect</b></summary>
+<p>Ganguly &amp; Menzies, <a href="https://arxiv.org/abs/2605.09658">"Zoom, Don't Wander" (2026)</a>: across 100+ SE optimization tasks, Pareto-optimal solutions are RARE (about 0.6% of configurations) and CLUMPED — a tiny island, tight in decision space (85% of datasets) and huddled near the ideal corner of objective space (88%). Real example, the Redis configuration landscape (from <a href="https://arxiv.org/abs/2507.05995">PromiseTune</a>, Chen &amp; Chen, ICSE 2026): the dark-red good region is a small fraction of a rugged space, and tuners that wander it (SMAC, random search) plateau far below the optimum:</p>
+<img src="../promisetune-fig1.png" width=600      alt="PromiseTune Fig 1: Redis configuration landscape and tuning trajectories">
+<p>So frontier-chasing evolvers and global Bayesian methods spend most of a small labelling budget wandering the huge ungood region; a greedy regional search that zooms toward the island wins or ties in 84-89% of cases, running 2-3 orders of magnitude faster. The opposite of frontier reasoning is an *aggregation function* — collapse all goals to one number and chase that. <a href="#disty">disty</a> is this course's aggregation function: zoom, don't wander.</p>
+</details>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span><span class="w"> </span><span class="nc">TBL</span><span class="p">.</span><span class="nf">disty</span><span class="p">(</span><span class="nv">i</span><span class="p">,</span><span class="nv">row</span><span class="p">)</span>
+<span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="nv">i</span><span class="p">.</span><span class="py">model</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nv">row</span><span class="p">[</span><span class="nv">i</span><span class="p">.</span><span class="py">cols</span><span class="p">.</span><span class="py">y</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nv">at</span><span class="p">]</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;?&quot;</span><span class="w"> </span><span class="kr">then</span>
+<span class="w">    </span><span class="nv">i</span><span class="p">:</span><span class="nf">label</span><span class="p">(</span><span class="nv">row</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="kr">return</span><span class="w"> </span><span class="nf">minkowski</span><span class="p">(</span><span class="nv">i</span><span class="p">.</span><span class="py">cols</span><span class="p">.</span><span class="py">y</span><span class="p">,</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="nv">y</span><span class="p">)</span>
+<span class="w">           </span><span class="kr">return</span><span class="w"> </span><span class="nf">abs</span><span class="p">(</span><span class="nv">y</span><span class="p">:</span><span class="nf">norm</span><span class="p">(</span><span class="nv">row</span><span class="p">[</span><span class="nv">y</span><span class="p">.</span><span class="py">at</span><span class="p">])</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">y</span><span class="p">.</span><span class="py">heaven</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      <h2>exercises</h2>
+<div class=ex>
+
+**Exercises, week 2**
+
+1. Port this page's code to Python, wiring each demo of
+   ezr-eg2 (`--distx --disty --laws`) to a test_ function.
+2. On auto93, sort all rows by disty and print the top and
+   bottom three. Do the best rows *look* best? (If not, see
+   exercise 5 of week 1.)
+3. `--laws` probes distance laws at random. State the four
+   laws. Which one fails for the "?"-handling here, and why
+   is that a price worth paying?
+4. Set `the.p=1`, then 4, then 8. How does the disty ranking
+   change? What is minkowski converging to as p grows?
+5. distx never reads a goal; disty reads nothing else. Why
+   does that split matter when labels cost money?
+
+</div>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kd">local</span><span class="w"> </span><span class="nv">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;week 2 ends here&quot;</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>
