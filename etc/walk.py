@@ -103,27 +103,44 @@ print(f"""<!doctype html><html lang=en><head><meta charset=utf-8>
 <title>walkthru</title>
 <meta name=viewport content="width=device-width">
 <style>
-body {{ margin:0; font:19px/1.5 Georgia, serif; color:#222; }}
-.wrap {{ display:flex; align-items:flex-start; }}
-.code {{ flex:1.3; min-width:0; }}
-.notes {{ flex:1; min-width:0; position:sticky; top:0;
-  max-height:100vh; overflow-y:auto; border-left:1px solid #ddd;
-  padding:0 1em; }}
+body {{ margin:0; background:#000; color:#f2f2f2;
+  font:19px/1.5 Georgia, serif; }}
+.wrap {{ display:flex; align-items:stretch; height:100vh; }}
+.code {{ flex:0 0 60%; min-width:15%; overflow:auto; }}
+.bar  {{ flex:0 0 8px; background:#444; cursor:col-resize; }}
+.bar:hover {{ background:#888; }}
+.notes {{ flex:1; min-width:15%; overflow-y:auto; padding:0 1em; }}
+.tools {{ position:sticky; top:0; background:#000; padding:.3em .6em;
+  font:15px ui-monospace, monospace; color:#999; z-index:2; }}
+.tools button {{ font:inherit; background:#222; color:#ffd700;
+  border:1px solid #555; border-radius:6px; padding:0 10px;
+  cursor:pointer; }}
+.tools button:hover {{ background:#333; }}
 pre {{ margin:.6em; padding:.8em;
   font:21px/1.5 ui-monospace, Menlo, Consolas, monospace;
-  background:#f7f7f7; border-radius:8px; overflow-x:auto; }}
-.notes pre {{ font-size:17px; }}
-.k {{ color:#8f4e8b; }} .s {{ color:#2a7f2a; }} .c {{ color:#999; }}
-.f {{ color:#0b5394; font-weight:bold; }}
-a.fn {{ color:#0b5394; background:#e8f0fe; border-radius:6px;
-  padding:0 6px; text-decoration:none; }}
-a.fn:hover {{ background:#c9ddfb; }}
+  background:#000; color:#fff; }}
+.notes pre {{ font-size:.85em; background:#111; border-radius:8px;
+  padding:.6em; }}
+.k {{ color:#ff79c6; }} .s {{ color:#50fa7b; }} .c {{ color:#888; }}
+.f {{ color:#8be9fd; font-weight:bold; }}
+code {{ color:#50fa7b; }}
+a.fn {{ color:#000; background:#ffd700; border-radius:6px;
+  padding:0 6px; text-decoration:none; font-weight:bold; }}
+a.fn:hover {{ background:#fff176; }}
 .note {{ display:none; }} .note.on {{ display:block; }}
-.note h3 {{ color:#0b5394; margin:.7em 0 .3em; }}
-.hint {{ color:#777; font-style:italic; padding-top:1em; }}
+.note h3 {{ color:#ffd700; margin:.7em 0 .3em; }}
+.hint {{ color:#999; font-style:italic; padding-top:1em; }}
 </style></head><body><div class=wrap>
-<div class=code><pre>{chr(10).join(lines)}</pre></div>
-<div class=notes>
+<div class=code id=codeP>
+<div class=tools>code
+ <button onclick="zoom('codeP',-2)">A&minus;</button>
+ <button onclick="zoom('codeP',2)">A+</button></div>
+<pre>{chr(10).join(lines)}</pre></div>
+<div class=bar id=bar></div>
+<div class=notes id=noteP>
+<div class=tools>notes
+ <button onclick="zoom('noteP',-2)">A&minus;</button>
+ <button onclick="zoom('noteP',2)">A+</button></div>
 <p class=hint id=hint>&larr; click a term (or press 1-{len(order)}).</p>
 {notes_html}</div></div>
 <script>
@@ -136,4 +153,18 @@ document.querySelectorAll("a.fn").forEach(a=>a.addEventListener("click",
   e=>{{e.preventDefault(); show(a.dataset.n);}}));
 document.addEventListener("keydown",e=>{{
   const i=+e.key-1; if(i>=0&&i<T.length) show(T[i]);}});
+const SZ={{codeP:21, noteP:19}};
+function zoom(id,d){{ SZ[id]=Math.max(9,SZ[id]+d);
+  const p=document.getElementById(id);
+  if(id=="codeP") p.querySelector("pre").style.fontSize=SZ[id]+"px";
+  else p.style.fontSize=SZ[id]+"px"; }}
+const bar=document.getElementById("bar"),
+      codeP=document.getElementById("codeP");
+bar.addEventListener("pointerdown",e=>{{
+  bar.setPointerCapture(e.pointerId);
+  const move=ev=>{{ codeP.style.flexBasis=
+    Math.min(85,Math.max(15,100*ev.clientX/innerWidth))+"%"; }};
+  bar.addEventListener("pointermove",move);
+  bar.addEventListener("pointerup",()=>
+    bar.removeEventListener("pointermove",move),{{once:true}}); }});
 </script></body></html>""")
