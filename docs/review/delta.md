@@ -18,7 +18,9 @@
 <h1 align="center">:cyclone: CSC491/591: SE for AI <br>NC State, Fall '26</h1>
 <img src="https://raw.githubusercontent.com/txt/seai26f/refs/heads/main/etc/img/seai26f.png">
 
-# Delta, week 2: lecture code examples + exam questions\n\n## Every code example, with notes
+# w2: lecture code examples + exam questions
+
+## Every code example, with notes
 
 Reconstructed from the Aug 24 transcript. Two sections: the
 Python examples, then the Lua. Each: the code as spoken (or as
@@ -209,11 +211,23 @@ functions plus the open-closed principle, home-made.
 **L3. map vs kap.**
 
 ```lua
-map(t, f)   -- f(v)   over the values
-kap(t, f)   -- f(k,v) over keys and values
+function map(t,f,    u)
+  f = fun(f)
+  u = {}
+  for _,v in ipairs(t) do u[1+#u]=f(v) end
+  return u end
+
+function kap(t,f,    u)
+  u = {}
+  for k,v in pairs(t) do u[1+#u] = f(k,v) end
+  return u end
 ```
 
-kap's Python cousin is a comprehension over `d.items()` (P4).
+map runs `f(v)` over the values (in array order, via `ipairs`);
+kap runs `f(k,v)` over keys and values (any order, via `pairs`).
+Note map's first move: `fun(f)` (L2) upgrades a string or index
+to a function, so `map(cols, "mid")` works. kap's Python cousin
+is a comprehension over `d.items()` (P4).
 
 **L4. sum through a function.**
 

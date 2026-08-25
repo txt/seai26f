@@ -228,6 +228,73 @@ eg[&quot;--broke&quot;] = function()     -- red: prints a stack dump;
       <div class='octowrap'>
         <a class='octothorpe' href='#section-7'>#</a>
       </div>
+      <h2>a slicker main: tests register themselves</h2>
+<p>The <code>main</code> above works, but every part of it can shrink. In
+later weeks the shell looks like this: <code>globals()</code> is scanned
+once, so writing <code>def test_x</code> IS the registration; <code>run</code>
+reseeds then shields each test; and one walrus-powered pass
+over argv both runs tests and updates settings. (<code>seed</code> and
+<code>atom</code> are later-week spellings of <code>random.seed</code> and <code>thing</code>;
+<code>test_tree</code> shows the shape with machinery from week 4.)</p>
+<details><summary><b>python reflection (self-registering tests)</b></summary>
+<p>How does a new demo join the command line? In Lua, by hand: <code>eg["--tree"] = function() ... end</code>. Python can do the registration itself, since <code>globals()</code> is just a dict of every top-level name:</p>
+<pre>def test_tree():
+  &quot;recursive contrast splits; leaves show row counts&quot;
+  show(tree(Tbl(csv(the.file))))
+
+eg = {&quot;-&quot; + k[5:]: f for k, f in globals().items()
+      if k.startswith(&quot;test_&quot;)}
+
+def run(f): # reseed, call f, catch crashes
+  seed(the.seed)
+  try: f()
+  except Exception: traceback.print_exc()
+
+if __name__ == &quot;__main__&quot;:
+  for j, s in enumerate(sys.argv):
+    if f := eg.get(&quot;-&quot; + s.lstrip(&quot;-&quot;)): run(f)
+    elif (k := s.lstrip(&quot;-&quot;)) in the:
+      the[k] = atom(sys.argv[j + 1])</pre>
+<p>Four tricks, top to bottom:</p>
+<p>1. <b>Self-registration.</b> The dict comprehension scans <code>globals()</code>, keeps every name starting <code>test_</code>, strips the prefix (<code>k[5:]</code>) and maps the flag <code>-tree</code> to the function itself. Write <code>def test_x</code> and <code>-x</code> exists; delete it and the flag is gone. <a href="#mechanism-policy">Mechanism-policy</a> again: the policy is a naming convention, the mechanism two lines. And the docstring rides along as the flag's help text (<code>f.__doc__</code>). 2. <b>run() = reseed, then shield.</b> Reseed first, so every demo replays exactly (see <a href="#rng">RNG</a>). Then <code>try/except</code>: a crashing demo prints its full stack (<code>traceback</code>) and the loop moves on, so one failure cannot hide the others. 3. <b>The <code>__main__</code> guard.</b> Dispatch fires only when this file is the script the user ran; importing it defines everything and runs nothing (Lua's <code>go(eg)</code> plays the same role). 4. <b>One pass over argv.</b> The walrus <code>:=</code> names a value inside the test (<code>if f := ...</code>). <code>lstrip("-")</code> accepts <code>-tree</code> or <code>--tree</code>. A flag naming a test runs it; a flag naming a settings key takes the NEXT argument (<code>sys.argv[j + 1]</code>), coerces it with <code>atom</code>, and updates <code>the</code>. Order matters: <code>python x.py -seed 42 -tree</code> resets the seed before the test fires.</p>
+</details>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">test_tree</span><span class="p">():</span>
+  <span class="s2">&quot;recursive contrast splits; leaves show row counts&quot;</span>
+  <span class="n">show</span><span class="p">(</span><span class="n">tree</span><span class="p">(</span><span class="n">Tbl</span><span class="p">(</span><span class="n">csv</span><span class="p">(</span><span class="n">the</span><span class="o">.</span><span class="n">file</span><span class="p">))))</span>
+
+<span class="n">eg</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">k</span><span class="p">[</span><span class="mi">5</span><span class="p">:]:</span> <span class="n">f</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">globals</span><span class="p">()</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+      <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;test_&quot;</span><span class="p">)}</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-8'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-8'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="n">f</span><span class="p">):</span> <span class="c1"># reseed, call f, catch crashes</span>
+  <span class="n">seed</span><span class="p">(</span><span class="n">the</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+  <span class="k">try</span><span class="p">:</span> <span class="n">f</span><span class="p">()</span>
+  <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span> <span class="n">traceback</span><span class="o">.</span><span class="n">print_exc</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+  <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">f</span> <span class="o">:=</span> <span class="n">eg</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">+</span> <span class="n">s</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)):</span> <span class="n">run</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="p">(</span><span class="n">k</span> <span class="o">:=</span> <span class="n">s</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">))</span> <span class="ow">in</span> <span class="n">the</span><span class="p">:</span>
+      <span class="n">the</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">atom</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-9'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-9'>#</a>
+      </div>
       <h2>exercises</h2>
 <div class=ex>
 

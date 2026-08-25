@@ -70,6 +70,34 @@ the = settings(__doc__)
 
 if __name__=="__main__": main(globals())
 
+# ## a slicker main: tests register themselves
+# The `main` above works, but every part of it can shrink. In
+# later weeks the shell looks like this: `globals()` is scanned
+# once, so writing `def test_x` IS the registration; `run`
+# reseeds then shields each test; and one walrus-powered pass
+# over argv both runs tests and updates settings. (`seed` and
+# `atom` are later-week spellings of `random.seed` and `thing`;
+# `test_tree` shows the shape with machinery from week 4.)
+#
+# @gloss python reflection
+def test_tree():
+  "recursive contrast splits; leaves show row counts"
+  show(tree(Tbl(csv(the.file))))
+
+eg = {"-" + k[5:]: f for k, f in globals().items()
+      if k.startswith("test_")}
+
+def run(f): # reseed, call f, catch crashes
+  seed(the.seed)
+  try: f()
+  except Exception: traceback.print_exc()
+
+if __name__ == "__main__":
+  for j, s in enumerate(sys.argv):
+    if f := eg.get("-" + s.lstrip("-")): run(f)
+    elif (k := s.lstrip("-")) in the:
+      the[k] = atom(sys.argv[j + 1])
+
 # ## exercises
 # <div class=ex>
 #
