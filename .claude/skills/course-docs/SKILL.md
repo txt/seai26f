@@ -202,6 +202,53 @@ lost, concretely.
   test_* dispatch, `say()` printer: floats integral→"%d" else
   %.{the.round}f, dicts insertion-order, "_" keys hidden).
 
+## Walk pages (code + glossary, four outputs)
+
+- Anchor files: src/ezr-lua/walks/ezr-wN.{lua,py} — real code plus
+  `-- @gloss <entry>` marker lines (py: `# @gloss`), story head,
+  yellow exercises div at bottom. Markers splice LIVE glossary
+  entries at build time, so walk pages cannot drift from
+  docs/lect/glossary.md.
+- Four emitters, all driven by walks/Makefile:
+  `make all`    -> etc/weekly.py | etc/doc.awk | etc/pyccot.py ->
+                   docs/ezr-wN.html (details folds; key 'a' toggles
+                   all folds; beforeprint opens them) + headless
+                   Chrome print pdf in docs/pdf/
+  `make slides` -> etc/slides.py -> pandoc beamer
+                   --pdf-engine=tectonic -> docs/slides/ezr-wN.pdf
+                   (10pt, 16:9, notes 40% Pagella serif
+                   footnotesize, code 60% small, frame numbers;
+                   header latex MUST travel in a raw {=latex} block
+                   or pandoc mangles [frame number])
+  `make mds`    -> etc/slides.py --md -> walks/ezr-wN.md (GitHub-
+                   renderable: fences + <details>; links fixed to
+                   live pages)
+- Both slide + md emitters drop glossary code fences in the walk's
+  own language (the adjacent code IS the sample); cross-language
+  fences survive.
+- etc/pycco-extras.css is the SSOT for the pycco.css re-append
+  (details pill, yellow .ex box included); walks/Makefile restores
+  it after every pyccot clobber.
+- mathpazo is NOT in tectonic's bundle; tgpagella is.
+- Placement calls: Pareto evolve + Pareto eval stay glossary-only
+  (no code anchor until optimizer weeks); pdf folds into cdf.
+
+## Review deltas & exam questions
+
+- docs/review/w1-delta.md = lecture-1 recap + D-questions;
+  docs/review/delta.md (was w2-delta) = lecture-2 code examples
+  with notes + nine exam-style questions. Question format: (a)
+  low-Bloom recall FIRST, then (b) high-Bloom bug-hunt prompt,
+  THEN the code fence. Bugs must be one-token-ish but reflect deep
+  optimization issues (seed placement, leakage, streaming vs
+  two-pass, harness dying on red, forgetting algebra, norm
+  choice). Monitor constraint: every question short enough to
+  project. Answers at file bottom (practice bank — do not reuse
+  verbatim on real exams).
+- Transcript workflow: Panopto captions land in ~/Downloads;
+  compare against site, write missing material to *-delta files,
+  code examples verified against repo source and by execution.
+
 ## Review files & glossary
 
 - docs/gloss1.md is the same glossary re-authored in the
