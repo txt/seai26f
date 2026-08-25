@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>walkthru: ezr.lua columns</title>
+<meta name="viewport" content="width=device-width">
+<style>
+:root { --ink:#222; --dim:#777; --mark:#0b5394; --bg:#fff; }
+body { margin:0; font:15px/1.5 Georgia, serif; color:var(--ink);
+       background:var(--bg); }
+h1 { font-size:1.2em; margin:.7em 1em .2em; }
+.sub { margin:0 1em 1em; color:var(--dim); font-size:.9em; }
+.wrap { display:flex; gap:0; align-items:flex-start; }
+.code { flex:1.2; min-width:0; }
+.notes { flex:1; min-width:0; position:sticky; top:0;
+         max-height:100vh; overflow-y:auto;
+         border-left:1px solid #ddd; padding:0 1.2em; }
+pre { margin:0 0 1em 1em; padding:1em;
+      font:13px/1.55 ui-monospace, Menlo, Consolas, monospace;
+      background:#f7f7f7; border-radius:6px; overflow-x:auto; }
+.k { color:#8f4e8b; } .s { color:#2a7f2a; } .c { color:#999; }
+.f { color:#0b5394; font-weight:bold; }
+a.fn { color:var(--mark); background:#e8f0fe; border-radius:4px;
+       padding:0 3px; text-decoration:none; cursor:pointer; }
+a.fn:hover { background:#c9ddfb; }
+a.fn sup { font-size:.75em; }
+.note { display:none; padding:.4em 0 .8em; }
+.note.on { display:block; }
+.note h3 { margin:.6em 0 .3em; font-size:1em; color:var(--mark); }
+.note p, .note li { font-size:.92em; }
+.note pre { margin:.5em 0; }
+.note .src { color:var(--dim); font-size:.8em; }
+.hint { color:var(--dim); font-style:italic; padding-top:1em; }
+mark { background:#fff3b0; }
+</style>
+</head>
+<body>
+
+<h1>Code walkthru: columns, from ezr.lua</h1>
+<p class="sub">Click any <a class="fn">highlighted term</a> in the
+code; its glossary note appears on the right. Notes lifted from the
+course <a href="https://github.com/txt/seai26f/blob/main/docs/lect/glossary.md">glossary</a>.</p>
+
+<div class="wrap">
+<div class="code">
+<pre>
+<span class=c>-- Column kind from the first letter: lowercase makes</span>
+<span class=c>-- a SYM, uppercase a NUM.</span>
+<span class=k>function</span> <span class=f>Col</span>(name,at)
+  <span class=k>return</span> (name:find<span class=s>"^%l"</span> <span class=k>and</span> Sym <span class=k>or</span> Num)(name,at) <span class=k>end</span>   <a class="fn" data-n="noir">noir<sup>1</sup></a>
+
+<span class=k>function</span> <span class=f>Num</span>(name,at)
+  name = name <span class=k>or</span> <span class=s>""</span>
+  <span class=k>return</span> new(NUM, {at=at <span class=k>or</span> 1, name=name, n=0, mu=0, m2=0,
+                   heaven = name:find<span class=s>"-$"</span> <span class=k>and</span> 0 <span class=k>or</span> 1}) <span class=k>end</span>   <a class="fn" data-n="heaven">heaven<sup>2</sup></a>
+
+<span class=k>function</span> <span class=f>Sym</span>(name,at)
+  <span class=k>return</span> new(SYM, {at=at <span class=k>or</span> 1, name=name <span class=k>or</span> <span class=s>""</span>, n=0, has={}}) <span class=k>end</span>
+
+<span class=k>function</span> <span class=f>SYM.add</span>(i,v,inc)
+  <span class=k>if</span> v == <span class=s>"?"</span> <span class=k>then</span> <span class=k>return</span> v <span class=k>end</span>   <a class="fn" data-n="missing">missing<sup>3</sup></a>
+  inc = inc <span class=k>or</span> 1
+  i.n = i.n + inc
+  i.has[v] = inc + (i.has[v] <span class=k>or</span> 0)
+  <span class=k>if</span> i.has[v] &lt;= 0 <span class=k>then</span> i.has[v] = <span class=k>nil</span> <span class=k>end</span>
+  <span class=k>return</span> v <span class=k>end</span>
+
+<span class=k>function</span> <span class=f>NUM.add</span>(i,v,inc,    d)   <a class="fn" data-n="protocol">protocol<sup>4</sup></a>
+  <span class=k>if</span> v == <span class=s>"?"</span> <span class=k>then</span> <span class=k>return</span> v <span class=k>end</span>
+  inc  = inc <span class=k>or</span> 1
+  i.n  = i.n + inc
+  d    = v - i.mu
+  i.mu = i.mu + inc * d / i.n                <a class="fn" data-n="welford">welford<sup>5</sup></a>
+  i.m2 = i.m2 + inc * d * (v - i.mu); <span class=k>return</span> v <span class=k>end</span>   <a class="fn" data-n="stream">stream<sup>6</sup></a>
+</pre>
+</div>
+
+<div class="notes" id="notes">
+<p class="hint" id="hint">&larr; click a term in the code.</p>
+
+<div class="note" id="n-noir">
+<h3>1. noir</h3>
+<p>Nominal, Ordinal, Interval, Ratio (Stevens 1946): the four
+scales of measurement, collapsed here to two &mdash; symbols you
+can only count (nominal) and numbers you can subtract. One header
+letter decides which: lowercase first letter &rarr; <b>Sym</b>,
+uppercase &rarr; <b>Num</b>. The header row is the entire schema
+&mdash; policy as one line of data, mechanism in the code.</p>
+<p class="src">glossary: noir; mechanism-policy</p>
+</div>
+
+<div class="note" id="n-heaven">
+<h3>2. heaven</h3>
+<p>A goal's best <em>normalized</em> value: 0 for a minimized goal
+(<code>Lbs-</code>), 1 for a maximized one (<code>Mpg+</code>).
+<code>disty</code> is each row's distance to heaven; the tree's
+&#9650; marks the row nearest it.</p>
+<p><mark>Careful:</mark> flip this one token
+(<code>and 1 or 0</code>) and nothing crashes, every test passes
+&mdash; and the optimizer hunts the heaviest, thirstiest car.
+Goal-encoding bugs steer perfect machinery toward the wrong
+objective; only eyeballing output catches them.</p>
+<p class="src">glossary: heaven, disty</p>
+</div>
+
+<div class="note" id="n-missing">
+<h3>3. missing values</h3>
+<p><code>"?"</code> means missing, and it is ignored on the way
+in &mdash; the summary only ever learns from what was seen. In
+this course's data most goal cells start as "?", since labels are
+the thing we cannot afford. Distance functions make their own,
+pessimal, assumption about "?" later.</p>
+<p class="src">glossary: csv schema; labels cost money</p>
+</div>
+
+<div class="note" id="n-protocol">
+<h3>4. columnProtocol</h3>
+<p>Num and Sym answer the same eight questions &mdash; add, sub,
+mid, div, norm, dist, holds, reset &mdash; one polymorphic
+protocol, two implementations (mid is mean or mode; div is sd or
+entropy). Everything downstream (tables, distance, trees) talks
+to the protocol, never to the type. Duck typing with a
+contract.</p>
+<p class="src">glossary: columnProtocol, protocol</p>
+</div>
+
+<div class="note" id="n-welford">
+<h3>5. welford</h3>
+<p>Welford's 1962 one-pass update: mean and variance from a
+stream, no stored data, no catastrophic cancellation. After each
+value v:</p>
+<pre>n' = n+1
+d  = v - mu
+mu'= mu + d/n'
+m2'= m2 + d*(v - mu')</pre>
+<p>then sd = sqrt(m2/(n-1)). These four lines are exactly the
+code at left.</p>
+<p class="src">glossary: welford, gaussian</p>
+</div>
+
+<div class="note" id="n-stream">
+<h3>6. stream (and forgetting)</h3>
+<p>A summary you can update &mdash; and un-update &mdash; one
+datum at a time, in constant memory. Run with
+<code>inc=-1</code> the Welford algebra inverts: subtract a value
+and the stats roll back. That is why a table can forget rows as
+cheaply as it learned them, and why <code>(a+b)-b == a</code> is
+a testable law (<code>--without</code>, <code>--sub</code> in
+ezr-eg1).</p>
+<p class="src">glossary: stream</p>
+</div>
+</div>
+</div>
+
+<script>
+document.querySelectorAll("a.fn[data-n]").forEach(a =>
+  a.addEventListener("click", e => {
+    e.preventDefault();
+    document.getElementById("hint").style.display = "none";
+    document.querySelectorAll(".note").forEach(n =>
+      n.classList.remove("on"));
+    document.getElementById("n-" + a.dataset.n).classList.add("on");
+  }));
+</script>
+</body>
+</html>
