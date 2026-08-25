@@ -369,6 +369,58 @@ random.seed(the.seed); funs[n]()   # reset, then run
 Forget the reset and your "bug" changes every run. Reset, and
 science becomes repeatable.
 
+### python reflection (self-registering tests)
+
+How does a new demo join the command line? In Lua, by hand:
+`eg["--tree"] = function() ... end`. Python can do the
+registration itself, since `globals()` is just a dict of every
+top-level name:
+
+```python
+def test_tree():
+  "recursive contrast splits; leaves show row counts"
+  show(tree(Tbl(csv(the.file))))
+
+eg = {"-" + k[5:]: f for k, f in globals().items()
+      if k.startswith("test_")}
+
+def run(f): # reseed, call f, catch crashes
+  seed(the.seed)
+  try: f()
+  except Exception: traceback.print_exc()
+
+if __name__ == "__main__":
+  for j, s in enumerate(sys.argv):
+    if f := eg.get("-" + s.lstrip("-")): run(f)
+    elif (k := s.lstrip("-")) in the:
+      the[k] = atom(sys.argv[j + 1])
+```
+
+Four tricks, top to bottom:
+
+1. **Self-registration.** The dict comprehension scans
+   `globals()`, keeps every name starting `test_`, strips the
+   prefix (`k[5:]`) and maps the flag `-tree` to the function
+   itself. Write `def test_x` and `-x` exists; delete it and the
+   flag is gone. [Mechanism-policy](#mechanism-policy) again:
+   the policy is a naming convention, the mechanism two lines.
+   And the docstring rides along as the flag's help text
+   (`f.__doc__`).
+2. **run() = reseed, then shield.** Reseed first, so every demo
+   replays exactly (see [RNG](#rng)). Then `try/except`: a
+   crashing demo prints its full stack (`traceback`) and the
+   loop moves on, so one failure cannot hide the others.
+3. **The `__main__` guard.** Dispatch fires only when this file
+   is the script the user ran; importing it defines everything
+   and runs nothing (Lua's `go(eg)` plays the same role).
+4. **One pass over argv.** The walrus `:=` names a value inside
+   the test (`if f := ...`). `lstrip("-")` accepts `-tree` or
+   `--tree`. A flag naming a test runs it; a flag naming a
+   settings key takes the NEXT argument (`sys.argv[j + 1]`),
+   coerces it with `atom`, and updates `the`. Order matters:
+   `python x.py -seed 42 -tree` resets the seed before the
+   test fires.
+
 <a name="regx"></a>
 
 ### regx (regular expressions)

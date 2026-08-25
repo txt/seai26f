@@ -270,6 +270,37 @@ science becomes repeatable.
 
 -
 
+**Python reflection (self-registering tests)**: How does a new
+demo join the command line? In Lua, by hand:
+*eg["--tree"] = function() ... end*. Python can do the
+registration itself, since *globals()* is just a dict of every
+top-level name:
+
+<pre><span class=k>def</span> <span class=f>test_tree</span>():<br>  <span class=s>"recursive contrast splits; leaves show row counts"</span><br>  show(tree(Tbl(csv(the.file))))<br><br>eg = {<span class=s>"-"</span> + k[5:]: f <span class=k>for</span> k, f <span class=k>in</span> globals().items()<br>      <span class=k>if</span> k.startswith(<span class=s>"test_"</span>)}<br><br><span class=k>def</span> <span class=f>run</span>(f): <span class=c># reseed, call f, catch crashes</span><br>  seed(the.seed)<br>  <span class=k>try</span>: f()<br>  <span class=k>except</span> Exception: traceback.print_exc()<br><br><span class=k>if</span> __name__ == <span class=s>"__main__"</span>:<br>  <span class=k>for</span> j, s <span class=k>in</span> enumerate(sys.argv):<br>    <span class=k>if</span> f := eg.get(<span class=s>"-"</span> + s.lstrip(<span class=s>"-"</span>)): run(f)<br>    <span class=k>elif</span> (k := s.lstrip(<span class=s>"-"</span>)) <span class=k>in</span> the:<br>      the[k] = atom(sys.argv[j + 1])</pre>
+
+Four tricks, top to bottom. **Self-registration**: the dict
+comprehension scans *globals()*, keeps every name starting
+*test_*, strips the prefix (*k[5:]*) and maps the flag *-tree*
+to the function itself. Write *def test_x* and *-x* exists;
+delete it and the flag is gone. Mechanism-policy again: the
+policy is a naming convention, the mechanism two lines. And the
+docstring rides along as the flag's help text (*f.__doc__*).
+**run() = reseed, then shield**: reseed first, so every demo
+replays exactly (see RNG, above). Then try/except: a crashing
+demo prints its full stack (*traceback*) and the loop moves on,
+so one failure cannot hide the others. **The main guard**:
+dispatch fires only when this file is the script the user ran;
+importing it defines everything and runs nothing (Lua's *go(eg)*
+plays the same role). **One pass over argv**: the walrus *:=*
+names a value inside the test. *lstrip("-")* accepts *-tree* or
+*--tree*. A flag naming a test runs it; a flag naming a settings
+key takes the NEXT argument (*sys.argv[j + 1]*), coerces it with
+*atom*, and updates *the*. Order matters:
+*python x.py -seed 42 -tree* resets the seed before the test
+fires.
+
+-
+
 **regx (regular expressions)**: Little languages for matching
 text. Just enough for 101.py and the Lua at its side (Lua
 patterns use "%" where Python uses "\", and "-" where Python
