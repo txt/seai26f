@@ -25,6 +25,11 @@ pdf-%:
 	  --print-to-pdf=$(TOP)/docs/pdf/$*.pdf --no-pdf-header-footer \
 	  file://$(TOP)/docs/$*.html 2>/dev/null || true
 
+mds: $(addprefix md-,$(LUAW) $(PYW))  ## github-renderable .md pages
+
+md-%:
+	python3 $(TOP)/etc/slides.py $(wildcard $*.lua $*.py) --md > $*.md
+
 slides: $(addprefix slide-,$(LUAW) $(PYW))  ## beamer decks
 
 slide-%:

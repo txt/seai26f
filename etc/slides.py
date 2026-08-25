@@ -90,6 +90,37 @@ def strip_code(c):
 
 # ---- emit ------------------------------------------------------
 t = head[0].rstrip(".") if head else "walkthru"
+
+# --md : a dull, GitHub-renderable markdown page — code fences,
+# each followed by <details><summary> folds of the glossary text.
+if len(sys.argv) > 2 and sys.argv[2] == "--md":
+    import builtins
+    def print(*a, **kw):                       # github-flavored fixes
+        def fix(x):
+            x = re.sub(r"\s*\(click a &#9654; to open one\)", "", str(x))
+            x = re.sub(r"\(([\w-]+)\.html\)",
+                       r"(https://txt.github.io/seai26f/\1.html)", x)
+            return x.replace("](docs/", "](../../../docs/")
+        builtins.print(*[fix(x) for x in a], **kw)
+    print(f"# {t}\n")
+    story = [l for l in head[1:] if not l.startswith("## ")
+             and l.strip() != "---"]
+    print("\n".join(story).strip(), "\n")
+    for markers, code in segs:
+        code = strip_code(code)
+        if not code: continue
+        print(f"```{lang}")
+        print("\n".join(code))
+        print("```\n")
+        for k in markers:
+            tt, b = entry(k)
+            print(f"<details><summary><b>{tt}</b></summary>\n")
+            print("\n".join(clean(b, lang)).strip())
+            print("\n</details>\n")
+    if ex:
+        x = [l for l in ex if "<div" not in l and "</div" not in l]
+        print("\n".join(x).strip())
+    sys.exit(0)
 print("---")
 print(f"title: '{t}'")
 print("""header-includes:
