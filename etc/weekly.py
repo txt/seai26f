@@ -138,3 +138,24 @@ for l in open(src):
         for hl in h.splitlines():
             print(f"{cmt} {hl}")
     print(f"{cmt} </details>")
+
+# printing: open every fold before print, restore after; and a
+# print stylesheet (compact, page-break aware)
+print(f"""{cmt} <script>
+{cmt} window.addEventListener("beforeprint", () =>
+{cmt}   document.querySelectorAll("details").forEach(d => {{
+{cmt}     d.dataset.was = d.open; d.open = true; }}));
+{cmt} window.addEventListener("afterprint", () =>
+{cmt}   document.querySelectorAll("details").forEach(d => {{
+{cmt}     d.open = d.dataset.was === "true"; }}));
+{cmt} </script>
+{cmt} <style media=print>
+{cmt}   body {{ font-size: 8pt; }}
+{cmt}   .docs pre, .code pre {{ font-size: 6pt !important;
+{cmt}     line-height: 1.35 !important; }}
+{cmt}   pre, table, details, .ex {{ break-inside: avoid; }}
+{cmt}   details {{ background: #fff !important;
+{cmt}     border: .5pt solid #999; }}
+{cmt}   .ex {{ background: #fff !important;
+{cmt}     border: 1pt solid #000; }}
+{cmt} </style>""")
