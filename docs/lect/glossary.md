@@ -179,6 +179,15 @@ Note the trap: HV, GD and IGD need the very thing search is
 looking for (a reference point or the true frontier), so they are
 research-report scores, not steering signals.
 
+In software engineering the fix is the **reference optimum**: we
+never know the true best (nobody has godlike knowledge of, say,
+every compiler configuration), so "optimal" means best-seen-so-far.
+For evaluation, pool the frontiers found by every algorithm in the
+study into one combined **reference front**, and score each
+algorithm by its gap (GD/IGD) to that. It is not truth — it is the
+best anybody found — and it is the only frontier you will ever
+actually have.
+
 ### Pareto zoom effect
 
 Ganguly & Menzies, ["Zoom, Don't Wander"

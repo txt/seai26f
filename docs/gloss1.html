@@ -234,6 +234,8 @@ GD and IGD are the same arrow, pointed opposite ways:
 <pre>     x = TRUE frontier    o = your points<br>y2<br>| x                  GD:  each o walks to its nearest x<br>|   x   &lt;--- o            (how close are YOUR points?)<br>|     x<br>|  o ---&gt; x          IGD: each x walks to its nearest o<br>|       x    x  &lt;--- o    (how much truth did you COVER?<br>|                          one clump of o's scores well on<br>+------------------- y1    GD but terribly on IGD)</pre>
 <br><br>
 Note the trap: HV, GD and IGD need the very thing search is looking for (a reference point or the true frontier), so they are research-report scores, not steering signals.
+<br><br>
+In software engineering the fix is the <b>reference optimum</b>: we never know the true best (nobody has godlike knowledge of, say, every compiler configuration), so "optimal" means best-seen-so-far. For evaluation, pool the frontiers found by every algorithm in the study into one combined <b>reference front</b>, and score each algorithm by its gap (GD/IGD) to that. It is not truth &mdash; it is the best anybody found &mdash; and it is the only frontier you will ever actually have.
 </li>
 <li>
 <b>Pareto zoom effect</b>: Across 100+ SE optimization tasks, Pareto-optimal solutions are RARE (about 0.6% of configurations) and CLUMPED &mdash; a tiny island, tight in decision space (85% of datasets) and huddled near the ideal corner of objective space (88% of datasets). Real example, the Redis configuration landscape (from the PromiseTune paper): the dark-red good region is a small fraction of a rugged space, and tuners that wander it (SMAC, random search) plateau far below the optimum:
