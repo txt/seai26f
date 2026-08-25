@@ -196,3 +196,8 @@ body .il { color: #666666 }                     /* Literal.Number.Integer.Long *
   Consolas, monospace; }
 .docs table { border-collapse: collapse; margin: 1em 0 1em auto; }
 .docs th, .docs td { border: 1px solid #ccc; padding: 2px 8px; font-size: .85em; }
+.docs details { background: #eef4ff; border-radius: 8px;
+  padding: .4em .8em; margin: .5em 0; }
+.docs details summary { cursor: pointer; color: #0b5394; }
+.docs .ex { background: #fff3b0; border-radius: 8px;
+  padding: .6em 1em; margin: .8em 0; }

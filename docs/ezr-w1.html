@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>ezr-w1.lua</title>
+  <link rel="stylesheet" href="pycco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div class='section'>
+    <div class='docs'><h1>ezr-w1.lua</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      <p>ezr, week 1: columns, streaming, forgetting.
+One weekly-sized chunk of <a href="ezr.html">ezr.lua</a>, verbatim, with
+glossary notes folded in (click a &#9654; to open one) and this
+week&rsquo;s exercises at the bottom.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span></span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <h2>This week&rsquo;s story</h2>
+<p>A column watches values stream past and keeps a tiny summary:
+a Num holds mean and standard deviation, a Sym holds counts,
+mode and entropy. Nothing stores the values themselves. The
+stats also run backwards: subtract a value and they roll back,
+so a table can forget rows as cheaply as it learned them.</p>
+<hr />
+<details><summary><b>noir</b></summary>
+Nominal, Ordinal, Interval, Ratio (Stevens 1946): the four
+scales of measurement, collapsed here to two — symbols you can
+only count, and numbers you can subtract. One header letter
+decides which. The header row is the entire schema: policy as
+one line of data, mechanism in the code.
+[more](https://github.com/txt/seai26f/blob/main/docs/lect/glossary.md#noir)
+</details>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span><span class="w"> </span><span class="nf">Col</span><span class="p">(</span><span class="nv">name</span><span class="p">,</span><span class="nv">at</span><span class="p">)</span>
+<span class="w">  </span><span class="kr">return</span><span class="w"> </span><span class="p">(</span><span class="nv">name</span><span class="p">:</span><span class="py">find</span><span class="s2">&quot;^%l&quot;</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nv">Sym</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="nv">Num</span><span class="p">)(</span><span class="nv">name</span><span class="p">,</span><span class="nv">at</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      <details><summary><b>heaven</b></summary>
+A goal's best <i>normalized</i> value: 0 for a minimized goal
+(<code>Lbs-</code>), 1 for a maximized one (<code>Mpg+</code>).
+Careful: flip this one token and nothing crashes, every test
+passes — and the optimizer hunts the heaviest, thirstiest car.
+Goal bugs steer perfect machinery toward the wrong objective.
+[more](https://github.com/txt/seai26f/blob/main/docs/lect/glossary.md#heaven)
+</details>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span><span class="w"> </span><span class="nf">Num</span><span class="p">(</span><span class="nv">name</span><span class="p">,</span><span class="nv">at</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">name</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+<span class="w">  </span><span class="kr">return</span><span class="w"> </span><span class="nf">new</span><span class="p">(</span><span class="nv">NUM</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nv">at</span><span class="o">=</span><span class="nv">at</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nv">name</span><span class="o">=</span><span class="nv">name</span><span class="p">,</span><span class="w"> </span><span class="nv">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nv">mu</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nv">m2</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="w">                   </span><span class="nv">heaven</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">name</span><span class="p">:</span><span class="py">find</span><span class="s2">&quot;-$&quot;</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="mi">1</span><span class="p">})</span><span class="w"> </span><span class="kr">end</span>
+
+<span class="kr">function</span><span class="w"> </span><span class="nf">Sym</span><span class="p">(</span><span class="nv">name</span><span class="p">,</span><span class="nv">at</span><span class="p">)</span>
+<span class="w">  </span><span class="kr">return</span><span class="w"> </span><span class="nf">new</span><span class="p">(</span><span class="nv">SYM</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nv">at</span><span class="o">=</span><span class="nv">at</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nv">name</span><span class="o">=</span><span class="nv">name</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="w"> </span><span class="nv">n</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nv">has</span><span class="o">=</span><span class="p">{}})</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      <details><summary><b>welford</b>, and the
+<b>columnProtocol</b></summary>
+Welford's 1962 one-pass update: mean and variance from a
+stream, no stored data. Run with <code>inc=-1</code> the
+algebra inverts — that is the forgetting trick. And note the
+twinned shape: Num and Sym answer the same eight questions
+(add, sub, mid, div, norm, dist, holds, reset) — one
+polymorphic protocol, two implementations. Everything
+downstream talks to the protocol, never to the type.
+[more](https://github.com/txt/seai26f/blob/main/docs/lect/glossary.md#welford)
+</details>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span><span class="w"> </span><span class="nc">SYM</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="nv">i</span><span class="p">,</span><span class="nv">v</span><span class="p">,</span><span class="nv">inc</span><span class="p">)</span>
+<span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="nv">v</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;?&quot;</span><span class="w"> </span><span class="kr">then</span><span class="w"> </span><span class="kr">return</span><span class="w"> </span><span class="nv">v</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="nv">inc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">inc</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">  </span><span class="nv">i</span><span class="p">.</span><span class="py">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">i</span><span class="p">.</span><span class="py">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">inc</span>
+<span class="w">  </span><span class="nv">i</span><span class="p">.</span><span class="py">has</span><span class="p">[</span><span class="nv">v</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">inc</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="nv">i</span><span class="p">.</span><span class="py">has</span><span class="p">[</span><span class="nv">v</span><span class="p">]</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span>
+<span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="nv">i</span><span class="p">.</span><span class="py">has</span><span class="p">[</span><span class="nv">v</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="kr">then</span><span class="w"> </span><span class="nv">i</span><span class="p">.</span><span class="py">has</span><span class="p">[</span><span class="nv">v</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">nil</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="kr">return</span><span class="w"> </span><span class="nv">v</span><span class="w"> </span><span class="kr">end</span>
+
+<span class="kr">function</span><span class="w"> </span><span class="nc">NUM</span><span class="p">.</span><span class="nf">add</span><span class="p">(</span><span class="nv">i</span><span class="p">,</span><span class="nv">v</span><span class="p">,</span><span class="nv">inc</span><span class="p">,</span><span class="w">    </span><span class="nv">d</span><span class="p">)</span>
+<span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="nv">v</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&quot;?&quot;</span><span class="w"> </span><span class="kr">then</span><span class="w"> </span><span class="kr">return</span><span class="w"> </span><span class="nv">v</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="nv">inc</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nv">inc</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">  </span><span class="nv">i</span><span class="p">.</span><span class="py">n</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nv">i</span><span class="p">.</span><span class="py">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">inc</span>
+<span class="w">  </span><span class="nv">d</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="nv">v</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">i</span><span class="p">.</span><span class="py">mu</span>
+<span class="w">  </span><span class="nv">i</span><span class="p">.</span><span class="py">mu</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">i</span><span class="p">.</span><span class="py">mu</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">inc</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nv">d</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nv">i</span><span class="p">.</span><span class="py">n</span>
+<span class="w">  </span><span class="nv">i</span><span class="p">.</span><span class="py">m2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">i</span><span class="p">.</span><span class="py">m2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nv">inc</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nv">d</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="nv">v</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">i</span><span class="p">.</span><span class="py">mu</span><span class="p">);</span><span class="w"> </span><span class="kr">return</span><span class="w"> </span><span class="nv">v</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      <details><summary><b>mid, div</b> (mode, mean; entropy,
+sd)</summary>
+Every protocol slot names a question; each type answers in its
+own dialect. Central tendency: mean, mode. Diversity: sd,
+entropy. Trees built on <code>div</code> therefore handle
+numeric and symbolic goals with the same code.
+[more](https://github.com/txt/seai26f/blob/main/docs/lect/glossary.md#mid-mode-mean)
+</details>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span><span class="w"> </span><span class="nc">SYM</span><span class="p">.</span><span class="nf">mid</span><span class="p">(</span><span class="nv">i</span><span class="p">,</span><span class="w">    </span><span class="nv">hi</span><span class="p">,</span><span class="nv">out</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">hi</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mi">1</span>
+<span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="nv">k</span><span class="p">,</span><span class="w"> </span><span class="nv">n</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nb">pairs</span><span class="p">(</span><span class="nv">i</span><span class="p">.</span><span class="py">has</span><span class="p">)</span><span class="w"> </span><span class="kr">do</span>
+<span class="w">    </span><span class="kr">if</span><span class="w"> </span><span class="nv">n</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="nv">hi</span><span class="w"> </span><span class="kr">then</span><span class="w"> </span><span class="nv">hi</span><span class="p">,</span><span class="w"> </span><span class="nv">out</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">n</span><span class="p">,</span><span class="w"> </span><span class="nv">k</span><span class="w"> </span><span class="kr">end</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="kr">return</span><span class="w"> </span><span class="nv">out</span><span class="w"> </span><span class="kr">end</span>
+
+<span class="kr">function</span><span class="w"> </span><span class="nc">NUM</span><span class="p">.</span><span class="nf">mid</span><span class="p">(</span><span class="nv">i</span><span class="p">)</span><span class="w"> </span><span class="kr">return</span><span class="w"> </span><span class="nv">i</span><span class="p">.</span><span class="py">mu</span><span class="w"> </span><span class="kr">end</span>
+
+<span class="kr">function</span><span class="w"> </span><span class="nc">SYM</span><span class="p">.</span><span class="nf">div</span><span class="p">(</span><span class="nv">i</span><span class="p">)</span>
+<span class="w">  </span><span class="kr">return</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="nv">i</span><span class="p">.</span><span class="py">has</span><span class="p">,</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="nv">n</span><span class="p">,</span><span class="w">    </span><span class="nv">p</span><span class="p">)</span>
+<span class="w">    </span><span class="nv">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">n</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nv">i</span><span class="p">.</span><span class="py">n</span>
+<span class="w">    </span><span class="kr">return</span><span class="w"> </span><span class="o">-</span><span class="nv">p</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="nf">log</span><span class="p">(</span><span class="nv">p</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nf">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span>
+
+<span class="kr">function</span><span class="w"> </span><span class="nc">NUM</span><span class="p">.</span><span class="nf">div</span><span class="p">(</span><span class="nv">i</span><span class="p">)</span>
+<span class="w">  </span><span class="kr">return</span><span class="w"> </span><span class="nv">i</span><span class="p">.</span><span class="py">n</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="nf">sqrt</span><span class="p">(</span><span class="nf">max</span><span class="p">(</span><span class="nv">i</span><span class="p">.</span><span class="py">m2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="nv">i</span><span class="p">.</span><span class="py">n</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      <details><summary><b>stream</b> (subtraction, and
+forgetting)</summary>
+A summary you can update — and un-update — one datum at a
+time, in constant memory. <code>(a+b)-b == a</code> is a
+testable law: see <code>--without</code> and <code>--sub</code>
+in ezr-eg1.
+[more](https://github.com/txt/seai26f/blob/main/docs/lect/glossary.md#stream)
+</details>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kr">function</span><span class="w"> </span><span class="nc">NUM</span><span class="p">.</span><span class="nf">__sub</span><span class="p">(</span><span class="nv">i</span><span class="p">,</span><span class="nv">j</span><span class="p">,</span><span class="w">    </span><span class="nv">n</span><span class="p">,</span><span class="nv">d</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">i</span><span class="p">.</span><span class="py">n</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">j</span><span class="p">.</span><span class="py">n</span>
+<span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="nv">n</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="kr">then</span><span class="w"> </span><span class="kr">return</span><span class="w"> </span><span class="nf">Num</span><span class="p">(</span><span class="nv">i</span><span class="p">.</span><span class="py">name</span><span class="p">,</span><span class="w"> </span><span class="nv">i</span><span class="p">.</span><span class="py">at</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="nv">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">j</span><span class="p">.</span><span class="py">mu</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">i</span><span class="p">.</span><span class="py">mu</span>
+<span class="w">  </span><span class="kr">return</span><span class="w"> </span><span class="nf">new</span><span class="p">(</span><span class="nv">NUM</span><span class="p">,</span><span class="w"> </span><span class="p">{</span><span class="nv">name</span><span class="o">=</span><span class="nv">i</span><span class="p">.</span><span class="py">name</span><span class="p">,</span><span class="w"> </span><span class="nv">at</span><span class="o">=</span><span class="nv">i</span><span class="p">.</span><span class="py">at</span><span class="p">,</span><span class="w"> </span><span class="nv">heaven</span><span class="o">=</span><span class="nv">i</span><span class="p">.</span><span class="py">heaven</span><span class="p">,</span>
+<span class="w">                   </span><span class="nv">n</span><span class="o">=</span><span class="nv">n</span><span class="p">,</span><span class="w"> </span><span class="nv">mu</span><span class="o">=</span><span class="p">(</span><span class="nv">i</span><span class="p">.</span><span class="py">n</span><span class="o">*</span><span class="nv">i</span><span class="p">.</span><span class="py">mu</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">j</span><span class="p">.</span><span class="py">n</span><span class="o">*</span><span class="nv">j</span><span class="p">.</span><span class="py">mu</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nv">n</span><span class="p">,</span>
+<span class="w">                   </span><span class="nv">m2</span><span class="o">=</span><span class="nf">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nv">i</span><span class="p">.</span><span class="py">m2</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">j</span><span class="p">.</span><span class="py">m2</span>
+<span class="w">                             </span><span class="o">-</span><span class="w"> </span><span class="nv">d</span><span class="o">*</span><span class="nv">d</span><span class="o">*</span><span class="nv">i</span><span class="p">.</span><span class="py">n</span><span class="o">*</span><span class="nv">j</span><span class="p">.</span><span class="py">n</span><span class="o">/</span><span class="nv">n</span><span class="p">)})</span><span class="w"> </span><span class="kr">end</span>
+
+<span class="kr">function</span><span class="w"> </span><span class="nc">NUM</span><span class="p">.</span><span class="nf">reset</span><span class="p">(</span><span class="nv">i</span><span class="p">)</span><span class="w"> </span><span class="nv">i</span><span class="p">.</span><span class="py">n</span><span class="p">,</span><span class="w"> </span><span class="nv">i</span><span class="p">.</span><span class="py">mu</span><span class="p">,</span><span class="w"> </span><span class="nv">i</span><span class="p">.</span><span class="py">m2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="kr">end</span>
+<span class="kr">function</span><span class="w"> </span><span class="nc">SYM</span><span class="p">.</span><span class="nf">reset</span><span class="p">(</span><span class="nv">i</span><span class="p">)</span><span class="w"> </span><span class="nv">i</span><span class="p">.</span><span class="py">n</span><span class="p">,</span><span class="w"> </span><span class="nv">i</span><span class="p">.</span><span class="py">has</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">{}</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      <h2>exercises</h2>
+<div class=ex>
+
+**Exercises, week 1**
+
+1. Port this page's code to Python, wiring each demo of
+   [ezr-eg1](ezr-eg1.html) to a test_ function.
+2. Add {10,20,30} to a Num one value at a time, printing mu
+   and sd after each add. Watch Welford converge.
+3. What is the entropy of a Sym fed "a","a","a"? Fed
+   "a","b","c"? Predict first, then run it.
+4. In `NUM.__sub`, why does `m2` get clamped with `max(0,...)`?
+   What does that say about floats?
+5. Flip `heaven` to `and 1 or 0`. Every test still passes.
+   What breaks, and how would you ever notice?
+
+</div>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kd">local</span><span class="w"> </span><span class="nv">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;week 1 ends here&quot;</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>
