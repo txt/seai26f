@@ -235,6 +235,15 @@ lost, concretely.
 
 ## Review deltas & exam questions
 
+- Question-generation rules (check every generated question):
+  (1) if (a) says "define", the answer defines first, examples
+  after; (2) every term used is defined in-question or in the
+  notes — no harness jargon; (3) test the concept, artifact is
+  scenery — no file-internals recall; (4) show-then-ask: give the
+  artifact, probe the load-bearing line; never ask students to
+  reproduce given boilerplate; (5) only tools they have met;
+  (6) one causal ask per sub-question — compound (b)s get cut;
+  (7) fact-check mechanism claims first.
 - docs/review/w1-delta.md = lecture-1 recap + D-questions;
   docs/review/delta.md (was w2-delta) = lecture-2 code examples
   with notes + nine exam-style questions. Question format: (a)
