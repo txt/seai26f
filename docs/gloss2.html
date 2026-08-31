@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Glossary 2: SE for AI</title>
+<link rel="icon" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
+<meta name="viewport" content="width=device-width" />
+<style>
+:root {
+    --back-color: rgb(30, 30, 30);
+    --text-color: rgb(212, 212, 212);
+}
+
+/* minimalist reset */
+* {
+    padding: 0;
+    margin: 0;
+    font-size: 1em;
+}
+
+body {
+    background-color: var(--back-color);
+    color: var(--text-color);
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+}
+
+main {
+    margin: 0 auto;
+    padding: 30px 140px 0 140px;
+    max-width: 600px;
+    min-height: 100vh;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid var(--text-color);
+    margin: 3em 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 1.2em;
+    font-weight: 700;
+    display: inline;
+    margin-right: 5px;
+    line-height: 1.2;
+}
+
+h2 {
+    margin-top: 50px;
+    font-size: 1.4em;
+}
+
+h3 {
+    margin-top: 40px;
+    font-size: 1.1em;
+    text-align: center;
+}
+
+h4 {
+    font-weight: 400;
+    margin-bottom: 40px;
+}
+
+ol {
+    counter-reset: item;
+}
+ol>li {
+    counter-increment: item;
+    list-style: none inside;
+    margin: 20px 0;
+    overflow: hidden;
+    line-height: 1.5em;
+}
+ol>li:before {
+    content: counter(item) ;
+    margin-right: 10px;
+    padding: 8px;
+    border-radius: 50%;
+    width: 25px;
+    background: var(--text-color);
+    color: var(--back-color);
+    text-align: center;
+    float: left;
+    font-weight: 700;
+}
+
+footer {
+    text-align: right;
+    margin-top: 80px;
+    padding-bottom: 20px;
+    font-size: 0.7em;
+    font-style: italic;
+}
+
+p {
+    line-height: 1.5em;
+    margin-top: 20px;
+    display: block;
+}
+
+a {
+    color: inherit;
+}
+a:hover, a:focus {
+    color: var(--back-color);
+    background-color: var(--text-color);
+}
+
+img {
+    margin: 3px;
+}
+
+ul {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-left: 1.4em;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.85em;
+    line-height: 1.35;
+}
+th, td {
+    border: 1px solid rgba(212, 212, 212, 0.35);
+    padding: 4px 9px;
+    text-align: left;
+}
+th {
+    font-weight: 700;
+}
+
+.reference {
+    font-size: 0.8rem;
+    line-height: 1.2rem;
+}
+
+.footnote {
+    font-size: 0.8rem;
+    line-height: 1.2rem;
+    margin-top: 20px;
+}
+
+sup {
+    font-size: 0.7em;
+    line-height: 0;
+}
+
+.reference > a {
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+  main {
+      max-width: 600px;
+    padding: 10px;
+  }
+  h2 {
+    font-size: 1.2em;
+  }
+  img {
+    width: 100%;
+  }
+}
+</style>
+</head>
+<body>
+<main>
+<style>:root { --back-color: rgb(24, 31, 43); } pre { background: rgba(212,212,212,0.07); border: 1px solid rgba(212,212,212,0.25); padding: 10px 14px; margin: 20px 0; font-size: 0.85em; line-height: 1.4; overflow-x: auto; } pre .k { color: #79b8ff; } pre .s { color: #e0b06a; } pre .c { color: #8ac28a; font-style: italic; } pre .f { color: #d2a8ff; }</style>
+<h1>A glossary of tiny lectures, part 2</h1>
+<h2>The machinery under the weekly demos</h2>
+<h4>By <a href="https://timm.fyi">Tim Menzies</a>, published 2026-08-31, updated 2026-08-31</h4>
+<p>
+<b>Summary:</b> <em><a href="gloss1.html">Glossary 1</a> says what weeks one and two compute: Num, Sym, Tbl, distx, disty. This page is the machinery those demos ride on. Every term here was found the same way homework 1 and 2 find code: start at the demos in <a href="ezr-eg1.html">ezr-eg1.lua</a> and <a href="ezr-eg2.html">ezr-eg2.lua</a>, trace only the functions they actually call, down the require chain into <a href="ezr.html">ezr.lua</a> and <a href="ezr-lib.html">ezr-lib.lua</a>. Same deal as before: each entry is a tiny lecture &mdash; a hook, the idea, the math if any, then the code, verbatim from the source.</em>
+</p>
+<hr id="under">
+<h3>Lua under the hood</h3>
+<hr>
+<p>
+Five language tricks that every file in this code leans on. New acronyms: REPL.
+</p>
+<ol>
+<li>
+<b>closure</b>: A function that remembers where it was born. <em>csv</em> opens a file, then returns a function that takes no arguments &mdash; yet each call yields the next row. How? The returned function <em>captures</em> the variable <em>f</em> (the line iterator) from its birthplace, and <em>f</em> stays alive between calls. Code plus captured variables: that is a closure &mdash; an object with one method, no class required.
+<pre><span class=k>function</span> <span class=f>csv</span>(file,    f)<br>  f = io.lines(pathname(file))<br>  <span class=k>return</span> <span class=k>function</span>(    t,l)<br>    <span class=k>for</span> line <span class=k>in</span> f <span class=k>do</span><br>      l = line:gsub(<span class=s>"\239\187\191"</span>,<span class=s>""</span>)   <span class=c>-- strip any BOM</span><br>              :gsub(<span class=s>"%%.*"</span>,<span class=s>""</span>):match<span class=s>"^%s*(.-)%s*$"</span><br>      <span class=k>if</span> l ~= <span class=s>""</span> <span class=k>then</span><br>        t={}                        <span class=c>-- (.-), keeps empty cells</span><br>        <span class=k>for</span> s <span class=k>in</span> (l..<span class=s>","</span>):gmatch<span class=s>"(.-),"</span> <span class=k>do</span> t[#t+1]=thing(s) <span class=k>end</span><br>        <span class=k>return</span> t <span class=k>end</span> <span class=k>end</span> <span class=k>end</span> <span class=k>end</span></pre>
+<br><br>
+Closures are everywhere here. <em>TBL.Y</em> wraps a whole table into a one-argument key function (used by <em>--disty</em> to sort rows):
+<pre><span class=k>function</span> <span class=f>TBL.Y</span>(i)<br>  <span class=k>return</span> <span class=k>function</span>(r) <span class=k>return</span> i:disty(r) <span class=k>end</span> <span class=k>end</span></pre>
+<br><br>
+Python gets the same effect from <em>yield</em> (a generator is a closure the language wrote for you) &mdash; see the streaming <em>csv</em> in your port.
+</li>
+<li>
+<b>iterator</b>: What does <em>for row in csv(the.file) do</em> actually do? Lua's generic <em>for</em> just calls the function once per lap and stops when it returns nil. Anything that returns a function can be looped. <em>iter</em> makes plain lists loop the same way, so <em>adds</em> and <em>Tbl</em> accept a list or a live stream, no flag needed:
+<pre><span class=k>function</span> <span class=f>iter</span>(src,    at)<br>  <span class=k>if</span> type(src) == <span class=s>"function"</span> <span class=k>then</span> <span class=k>return</span> src <span class=k>end</span><br>  at = 0; <span class=k>return</span> <span class=k>function</span>() at = at + 1; <span class=k>return</span> src[at] <span class=k>end</span> <span class=k>end</span></pre>
+<br><br>
+Python cousins: <em>next()</em>, <em>yield</em>, and anything answering <em>__iter__</em>.
+</li>
+<li>
+<b>metatable (colon calls, __index)</b>: <em>n:mid()</em> is sugar for <em>n.mid(n)</em>: the receiver rides in as the first argument, which is why every method's first parameter is <em>i</em>. But <em>n</em> is a plain table holding only <em>{n=5, mu=3, m2=10}</em> &mdash; there is no <em>mid</em> inside it. When a lookup misses, Lua tries the table's <em>metatable</em>, field <em>__index</em>. <em>new</em> wires that up, and it is the entire class system:
+<pre><span class=k>function</span> <span class=f>new</span>(kl,t)<br>  kl.__index=kl;kl.__tostring=show; <span class=k>return</span> setmetatable(t,kl) <span class=k>end</span></pre>
+<br><br>
+One line of OO: the class table (NUM, SYM, TBL...) doubles as the metatable, so a miss on the instance falls through to the class. The same trick scales to whole files. Every module here opens with:
+<pre><span class=c>-- top of ezr-eg1.lua, ezr-eg2.lua, ezr.lua:</span><br><span class=k>local</span> _ENV = setmetatable({}, {__index = require<span class=s>"ezr"</span>})<br><span class=k>if</span> setfenv <span class=k>then</span> setfenv(1, _ENV) <span class=k>end</span></pre>
+<br><br>
+Reads in ezr-eg2 fall through to ezr, then to ezr-lib, then to Lua's globals &mdash; delegation, three levels deep. That is why a demo can say <em>Tbl</em> or <em>csv</em> with no imports in sight.
+</li>
+<li>
+<b>metamethod (operator overloading)</b>: The <em>--without</em> demo subtracts one summary from another with a minus sign: <em>w = adds(...) - b</em>. Minus, on tables? Metatable keys starting <em>__</em> are metamethods: <em>__sub</em> answers the <em>-</em> operator, <em>__tostring</em> answers <em>print</em>. So this makes summaries subtractable algebra:
+<pre><span class=k>function</span> <span class=f>SYM.__sub</span>(i,j,    out,n)<br>  out = Sym(i.name, i.at)<br>  <span class=k>for</span> k,v <span class=k>in</span> pairs(i.has) <span class=k>do</span><br>    n = v - (j.has[k] <span class=k>or</span> 0)<br>    <span class=k>if</span> n &gt; 0 <span class=k>then</span> out.has[k] = n; out.n = out.n + n <span class=k>end</span> <span class=k>end</span><br>  <span class=k>return</span> out <span class=k>end</span></pre>
+<br><br>
+(The Num version has real mathematics in it; see the pool entry, below.) Python spells the same idea with dunders: <em>__sub__</em>, <em>__repr__</em>. Overload only when the algebra is real &mdash; here, summaries genuinely subtract, so <em>a - b</em> reads as the mathematics it is.
+</li>
+<li>
+<b>REPL (read-eval-print loop)</b>: The <em>--repl</em> demo is an interactive prompt in a dozen lines, and a lesson: code is just data until you run it. <em>load</em> turns a typed string into a function; handing it <em>env</em> (a module's _ENV) makes bare names like <em>Tbl</em> resolve; <em>pcall</em> traps crashes so a typo cannot kill the session:
+<pre><span class=k>function</span> <span class=f>repl</span>(env,    s,f,ok,r)<br>  <span class=k>while</span> <span class=k>true</span> <span class=k>do</span><br>    io.write(<span class=s>"ezr&gt; "</span>)<br>    s = io.read()<br>    <span class=k>if</span> <span class=k>not</span> s <span class=k>then</span> io.write<span class=s>"\n"</span>; <span class=k>return</span> <span class=k>end</span><br>    f = load(<span class=s>"return "</span>..s, <span class=s>"=repl"</span>, <span class=s>"t"</span>, env) <span class=k>or</span><br>        load(s, <span class=s>"=repl"</span>, <span class=s>"t"</span>, env)<br>    <span class=k>if</span> <span class=k>not</span> f <span class=k>then</span> print(<span class=s>"! syntax"</span>) <span class=k>else</span><br>      ok, r = pcall(f)<br>      <span class=k>if</span> <span class=k>not</span> ok <span class=k>then</span> print(<span class=s>"! "</span>..tostring(r))<br>      <span class=k>elseif</span> r ~= <span class=k>nil</span> <span class=k>then</span> print(show(r)) <span class=k>end</span> <span class=k>end</span> <span class=k>end</span> <span class=k>end</span></pre>
+</li>
+<li>
+<b>main guard</b>: Both eg files end with <em>go(eg)</em>, yet <em>require"ezr-eg1"</em> runs no demos. <em>go</em> checks whether its caller's file is the script the user actually ran &mdash; Lua's spelling of Python's <em>if __name__ == "__main__"</em>. Only then: parse the flags, run each demo named on the command line, and exit with the failure count, so a shell script or CI job can gate on it:
+<pre><span class=k>function</span> <span class=f>go</span>(eg,    n)<br>  <span class=k>if</span> arg <span class=k>and</span> arg[0] <span class=k>and</span><br>     debug.getinfo(2,<span class=s>"S"</span>).source == <span class=s>"@"</span>..arg[0] <span class=k>then</span><br>    cli(the)<br>    n = 0<br>    <span class=k>for</span> _,w <span class=k>in</span> ipairs(arg) <span class=k>do</span><br>      <span class=k>if</span> run(eg, w) == <span class=k>false</span> <span class=k>then</span> n = n + 1 <span class=k>end</span> <span class=k>end</span><br>    os.exit(n) <span class=k>end</span> <span class=k>end</span></pre>
+</li>
+</ol>
+<hr id="verbs">
+<h3>The little verbs</h3>
+<hr>
+<p>
+ezr-lib is not batteries-included; it is batteries-handmade. Four verbs carry most of the weight. New acronyms: DSU.
+</p>
+<ol>
+<li>
+<b>fun (map, kap)</b>: Glossary 1's minkowski entry showed the style: pass little functions into bigger ones. <em>fun</em> generalizes it &mdash; a function stays a function, but a string becomes "call that method" and a number becomes "grab that field", so callers write <em>map(cols, "mid")</em> or <em>map(xy, 2)</em> instead of a closure:
+<pre><span class=k>function</span> <span class=f>fun</span>(f)<br>  <span class=k>if</span> type(f)==<span class=s>"string"</span> <span class=k>then</span><br>    <span class=k>return</span> <span class=k>function</span>(v,...) <span class=k>return</span> v[f](v,...) <span class=k>end</span> <span class=k>end</span><br>  <span class=k>if</span> type(f)==<span class=s>"number"</span> <span class=k>then</span> <span class=k>return</span> <span class=k>function</span>(v) <span class=k>return</span> v[f]<span class=k>end</span> <span class=k>end</span><br>  <span class=k>return</span> f <span class=k>end</span><br><br><span class=k>function</span> <span class=f>map</span>(t,f,    u)<br>  f = fun(f)<br>  u = {}; <span class=k>for</span> _,v <span class=k>in</span> ipairs(t) <span class=k>do</span> u[1+#u]=f(v) <span class=k>end</span>; <span class=k>return</span> u <span class=k>end</span><br><br><span class=k>function</span> <span class=f>kap</span>(t,f,    u)<br>  u = {}<br>  <span class=k>for</span> k,v <span class=k>in</span> pairs(t) <span class=k>do</span> u[1+#u] = f(k,v) <span class=k>end</span>; <span class=k>return</span> u <span class=k>end</span></pre>
+<br><br>
+<em>map</em> walks values in array order; <em>kap</em> walks key-value pairs in any order (Python's <em>d.items()</em>), and since a nil result simply vanishes, <em>kap</em> also filters. This is the open-closed principle by hand: <em>map</em> never changes, yet every caller re-aims it.
+</li>
+<li>
+<b>keysort (DSU: decorate, sort, undecorate)</b>: <em>--disty</em> must rank 398 rows by their gap to heaven. Sorting with a comparator would call <em>disty</em> O(n log n) times; <em>keysort</em> calls it once per row (decorate), sorts on the cached keys, and returns the rows (undecorate). Perl folk call it the Schwartzian transform; Python's <em>sorted(key=f)</em> is the same contract:
+<pre><span class=k>function</span> <span class=f>keysort</span>(t,f,    px,ix)<br>  px, ix = {}, {}<br>  <span class=k>for</span> at, v <span class=k>in</span> ipairs(t) <span class=k>do</span> px[v], ix[v] = f(v), at <span class=k>end</span><br>  <span class=k>return</span> sorted(t, <span class=k>function</span>(u,v)<br>           <span class=k>if</span> px[u] == px[v] <span class=k>then</span> <span class=k>return</span> ix[u] &lt; ix[v] <span class=k>end</span><br>           <span class=k>return</span> px[u] &lt; px[v] <span class=k>end</span>) <span class=k>end</span></pre>
+<br><br>
+Two details that matter. Once-per-row is not just style: in later weeks the key function costs money (<em>disty</em> reads labels), so calling it once is budget discipline. And the <em>ix</em> table breaks ties by input order &mdash; Lua's <em>table.sort</em> is unstable, and an unstable sort prints different lines on different Lua versions, rotting every frozen transcript (see show, below).
+</li>
+<li>
+<b>thing (coercion)</b>: Every cell in every csv file enters the system through one gate:
+<pre><span class=k>function</span> <span class=f>thing</span>(s)<br>  s = s:match<span class=s>"^%s*(.-)%s*$"</span><br>  <span class=k>return</span> tonumber(s) <span class=k>or</span> s==<span class=s>"True"</span> <span class=k>or</span> (s~=<span class=s>"False"</span> <span class=k>and</span> s) <span class=k>end</span></pre>
+<br><br>
+Trim, then: a number if it parses, <em>true</em>/<em>false</em> for "True"/"False", else the string. Note what survives untouched: "?" stays a string, which is why every column method opens with <em>if v == "?"</em>. One gate means one place to change &mdash; your Python port calls it <em>atom</em>.
+</li>
+<li>
+<b>show (the transcript is the test)</b>: The whole system prints through one function:
+<pre><span class=k>function</span> <span class=f>show</span>(t,    u)<br>  <span class=k>if</span> type(t) ~= <span class=s>"table"</span> <span class=k>then</span><br>    <span class=k>return</span> tostring(type(t) == <span class=s>"number"</span> <span class=k>and</span> round(t) <span class=k>or</span> t) <span class=k>end</span><br>  u = #t &gt; 0 <span class=k>and</span> map(t, show) <span class=k>or</span><br>      sorted(kap(t, <span class=k>function</span>(k,v)<br>        <span class=k>if</span> tostring(k):sub(1,1) ~= <span class=s>"_"</span> <span class=k>then</span><br>          <span class=k>return</span> <span class=s>":"</span>..k..<span class=s>" "</span>..show(v) <span class=k>end</span> <span class=k>end</span>))<br>  <span class=k>return</span> <span class=s>"{"</span>..table.concat(u, <span class=s>" "</span>)..<span class=s>"}"</span> <span class=k>end</span></pre>
+<br><br>
+Lists print in order; dictionaries print sorted by key; keys starting "_" stay hidden; numbers pass through <em>round</em>, which drops float noise and re-floors whole results so 15.0 prints as 15 on every Lua version. Why the fuss? Deterministic printing turns a transcript into a test: same seed plus same <em>show</em> means the output diffs clean &mdash; across runs, across Lua versions, and across your Lua-to-Python port, which is graded exactly that way.
+</li>
+</ol>
+<hr id="laws">
+<h3>The laws the demos swear by</h3>
+<hr>
+<p>
+Weeks one and two end in three asserts that are really three pieces of mathematics. New acronyms: PBT.
+</p>
+<ol>
+<li>
+<b>pool (the algebra of summaries)</b>: The <em>--without</em> demo pours {10,20,30} into a summary of {1,2,3,4,5}, subtracts a summary of {10,20,30}, and the mean and sd of {1..5} come back to nine decimals &mdash; with no stored data anywhere. That works because moments pool. For two groups a and b, with d = &mu;<sub>b</sub> - &mu;<sub>a</sub>:
+<ul>
+<li>n<sub>ab</sub> = n<sub>a</sub> + n<sub>b</sub></li>
+<li>&mu;<sub>ab</sub> = (n<sub>a</sub>&mu;<sub>a</sub> + n<sub>b</sub>&mu;<sub>b</sub>) / n<sub>ab</sub></li>
+<li>m2<sub>ab</sub> = m2<sub>a</sub> + m2<sub>b</sub> + d&sup2; n<sub>a</sub>n<sub>b</sub> / n<sub>ab</sub></li>
+</ul>
+<em>NUM.__sub</em> is those three lines solved backwards &mdash; given the whole and one part, recover the other part, O(1):
+<pre><span class=k>function</span> <span class=f>NUM.__sub</span>(i,j,    n,d)<br>  n = i.n - j.n<br>  <span class=k>if</span> n &lt; 1 <span class=k>then</span> <span class=k>return</span> Num(i.name, i.at) <span class=k>end</span><br>  d = j.mu - i.mu<br>  <span class=k>return</span> new(NUM, {name=i.name, at=i.at, heaven=i.heaven,<br>                   n=n, mu=(i.n*i.mu - j.n*j.mu) / n,<br>                   m2=max(0, i.m2 - j.m2<br>                             - d*d*i.n*j.n/n)}) <span class=k>end</span></pre>
+<br><br>
+Note the guards: fewer than one row left returns a fresh Num, and <em>max(0, ...)</em> exists because float error can push m2 a hair below zero. Welford (glossary 1) forgets one value at a time; <em>__sub</em> forgets a whole group at once. Together they are why later code can score every split of a column in one linear pass.
+<br><br><div class="reference">
+<a href="https://doi.org/10.1080/00031305.1983.10483115">Chan, Golub & LeVeque: Algorithms for computing the sample variance: analysis and recommendations</a>. T.F. Chan, G.H. Golub, R.J. LeVeque. The American Statistician 37, 3 (1983), 242-247.
+</div>
+</li>
+<li>
+<b>metric (the distance laws)</b>: A distance you cannot trust poisons everything built on it &mdash; clusters, poles, trees. Mathematicians call a trustworthy one a <em>metric</em>: it obeys
+<table>
+<tr><th>law</th><th>says</th></tr>
+<tr><td>identity</td><td>d(a,a) = 0</td></tr>
+<tr><td>symmetry</td><td>d(a,b) = d(b,a)</td></tr>
+<tr><td>non-negative</td><td>d &ge; 0 (and here, d &le; 1)</td></tr>
+<tr><td>triangle</td><td>d(a,c) &le; d(a,b) + d(b,c)</td></tr>
+</table>
+The <em>--laws</em> demo probes the first three on 100 random pairs. The one at risk is identity: unknowns assume the worst, so <em>SYM.dist("?","?")</em> is 1 &mdash; a row holding a "?" would sit at nonzero distance from itself, making distx strictly a <em>pseudometric</em>. So why does self-is-zero never fail on auto93? Its only "?" cells live in <em>HpX</em>, and a trailing "X" means ignored: that column never reaches distx (homework 2, question 6). The design trade is deliberate: maximum ignorance maps to maximum distance, buying robustness to missing data at the price of textbook metric-hood. Note also what tames the ruler itself: gaps are measured between <em>norm</em>'d values (the cdf, glossary 1), so one wild outlier cannot stretch the scale for everyone else.
+</li>
+<li>
+<b>PBT (property-based testing)</b>: <em>--col</em> asserts an example: the mid of {1,2,3,4,5} is 3. <em>--laws</em> asserts a <em>property</em>: for ALL rows a and b, distx(a,b) equals distx(b,a) &mdash; then goes hunting for a counterexample with 100 random probes. Example tests catch the regressions you foresaw; property tests catch the ones you did not. QuickCheck made the recipe famous: state the law, generate random inputs, shrink any failure. This code keeps the cheap half of that recipe, and adds the RNG discipline of glossary 1: since <em>run</em> reseeds before every demo, a failing probe replays exactly, every time. <em>--without</em> and <em>--sub</em> are the same idea wearing algebra: (a+b)-b == a, asserted to 1e-9. When code claims mathematics &mdash; distance, probability, algebra &mdash; test the law, not the instance.
+<br><br><div class="reference">
+<a href="https://doi.org/10.1145/351240.351266">Claessen & Hughes: QuickCheck: a lightweight tool for random testing of Haskell programs</a>. Koen Claessen, John Hughes. ICFP 2000, 268-279.
+</div>
+</li>
+</ol>
+<footer>This page is <a href="http://jeffhuang.com/designed_to_last/">designed to last</a>.</footer>
+</main>
+</body>
+</html>
