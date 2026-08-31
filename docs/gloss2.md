@@ -162,11 +162,16 @@ caller re-aims it.
 
 **keysort (DSU: decorate, sort, undecorate)**: *--disty* must
 rank 398 rows by their gap to heaven. Sorting with a
-comparator would call *disty* O(n log n) times; *keysort*
-calls it once per row (decorate), sorts on the cached keys,
-and returns the rows (undecorate). Perl folk call it the
-Schwartzian transform; Python's *sorted(key=f)* is the same
-contract:
+comparator would call *disty* O(n log n) times; the classic
+fix (Perl folk call it the Schwartzian transform) is decorate
+each row as a {key, row} pair, sort the pairs, then undecorate
+back to bare rows. Python's *sorted(key=f)* is the same
+contract. Fun fact: set up your functions right and the third
+step vanishes. *keysort* decorates into SIDE tables (*px*:
+row to key; *ix*: row to input position), then sorts the
+original rows in place, with a comparator that just reads the
+cache &mdash; nothing was wrapped, so there is nothing to
+unwrap:
 
 <pre><span class=k>function</span> <span class=f>keysort</span>(t,f,    px,ix)<br>  px, ix = {}, {}<br>  <span class=k>for</span> at, v <span class=k>in</span> ipairs(t) <span class=k>do</span> px[v], ix[v] = f(v), at <span class=k>end</span><br>  <span class=k>return</span> sorted(t, <span class=k>function</span>(u,v)<br>           <span class=k>if</span> px[u] == px[v] <span class=k>then</span> <span class=k>return</span> ix[u] &lt; ix[v] <span class=k>end</span><br>           <span class=k>return</span> px[u] &lt; px[v] <span class=k>end</span>) <span class=k>end</span></pre>
 
