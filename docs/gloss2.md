@@ -108,11 +108,20 @@ summary comes back:
 
 <pre>a, b = adds{1,2,3,4,5}, adds{10,20,30}<br>w = adds({10,20,30}, adds{1,2,3,4,5}) - b<br>print(show{mu=w.mu, sd=w:div()})   <span class=c>-- {:mu 3 :sd 1.58}</span></pre>
 
-As a picture, that minus sign is one gaussian leaving another
-(the combined curve has two humps; take away b's hump and
-only a's remains):
+As a picture, that minus sign is one gaussian leaving
+another. When the curves overlap, subtraction moves BOTH
+moments: take a narrow curve out of a wide one and what
+remains has an in-between spread &mdash; and a different
+middle. Here a = {4,8,12,16} and b = {18,20,22}:
 
-<pre>     a+b: n=8            b: n=3           a: n=5<br>   *        *               *              *<br>  ***      ***     -       ***     =      ***<br> *****    *****           *****          *****<br>---+--------+---        ----+----      ----+----<br>  mu=3    mu=20           mu=20          mu=3</pre>
+<pre> a+b: mu=14.3 sd=6.6       b: mu=20 sd=2      a: mu=10 sd=5.2<br>        ****                     *<br>     **********        -        ***      =        ****<br> ******************            *****          **********<br>---------+---------          ----+----       ------+-------<br>        14.3                     20                10</pre>
+
+Check it with the pool equations (next section): pulling b's
+60 out of the total 100 drags mu from 14.3 back to 10, and
+removing a tight clump parked off-center shrinks the spread
+from 6.6 to only 5.2 &mdash; not to 2's neighborhood, because
+much of the combined width WAS the gap between the two
+middles.
 
 How the subtraction actually works &mdash; the counts and the
 algebra &mdash; is the pool entry, below. Python spells the
