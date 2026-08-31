@@ -27,8 +27,8 @@ the code, verbatim from the source.*
 
 ---
 
-Five language tricks that every file in this code leans on.
-New acronyms: REPL.
+Four language tricks that every file in this code leans on.
+New acronyms: none.
 
 -
 
@@ -62,8 +62,17 @@ flag needed:
 
 <pre><span class=k>function</span> <span class=f>iter</span>(src,    at)<br>  <span class=k>if</span> type(src) == <span class=s>"function"</span> <span class=k>then</span> <span class=k>return</span> src <span class=k>end</span><br>  at = 0; <span class=k>return</span> <span class=k>function</span>() at = at + 1; <span class=k>return</span> src[at] <span class=k>end</span> <span class=k>end</span></pre>
 
-Python cousins: *next()*, *yield*, and anything answering
-*__iter__*.
+Python's *for* loop is programmable in exactly the same way:
+it loops over anything answering *__iter__*/*__next__*, and
+the quickest way to write one is a generator &mdash; *yield*
+turns an ordinary function into a resumable stream, so the
+Lua *csv* above is four lines of Python:
+
+<pre><span class=k>def</span> <span class=f>csv</span>(file):<br>  <span class=k>for</span> line <span class=k>in</span> open(file):<br>    <span class=k>yield</span> [thing(s) <span class=k>for</span> s <span class=k>in</span> line.strip().split(<span class=s>","</span>)]<br><br><span class=k>for</span> row <span class=k>in</span> csv(<span class=s>"auto93.csv"</span>): ...   <span class=c># same shape as the Lua</span></pre>
+
+Either way the moral is the same: the for loop is not magic
+syntax over lists &mdash; it is an open protocol, and your own
+code can join it.
 
 -
 
@@ -72,61 +81,45 @@ Python cousins: *next()*, *yield*, and anything answering
 is why every method's first parameter is *i*. But *n* is a
 plain table holding only *{n=5, mu=3, m2=10}* &mdash; there is
 no *mid* inside it. When a lookup misses, Lua tries the
-table's *metatable*, field *__index*. *new* wires that up, and
-it is the entire class system:
+table's *metatable*, field *__index*. The whole trick, in the
+simplest possible example &mdash; methods live in one table,
+data in another, and *__index* joins them:
+
+<pre>NUM = {}<br><span class=k>function</span> <span class=f>NUM.mid</span>(i) <span class=k>return</span> i.mu <span class=k>end</span><br><span class=k>function</span> <span class=f>NUM.div</span>(i) <span class=k>return</span> (i.m2/(i.n-1))^0.5 <span class=k>end</span><br><br>n = setmetatable({n=5, mu=3, m2=10}, {__index=NUM})<br>print(n:mid())  <span class=c>-- 3: no mid in n, so Lua asks NUM</span><br>print(n:div())  <span class=c>-- 1.58: same story</span></pre>
+
+*new* wires that up for every object in this system, and it
+is the entire class system:
 
 <pre><span class=k>function</span> <span class=f>new</span>(kl,t)<br>  kl.__index=kl;kl.__tostring=show; <span class=k>return</span> setmetatable(t,kl) <span class=k>end</span></pre>
-
-One line of OO: the class table (NUM, SYM, TBL...) doubles as
-the metatable, so a miss on the instance falls through to the
-class. The same trick scales to whole files. Every module here
-opens with:
-
-<pre><span class=c>-- top of ezr-eg1.lua, ezr-eg2.lua, ezr.lua:</span><br><span class=k>local</span> _ENV = setmetatable({}, {__index = require<span class=s>"ezr"</span>})<br><span class=k>if</span> setfenv <span class=k>then</span> setfenv(1, _ENV) <span class=k>end</span></pre>
-
-Reads in ezr-eg2 fall through to ezr, then to ezr-lib, then to
-Lua's globals &mdash; delegation, three levels deep. That is
-why a demo can say *Tbl* or *csv* with no imports in sight.
 
 -
 
 **metamethod (operator overloading)**: The *--without* demo
 subtracts one summary from another with a minus sign: *w =
 adds(...) - b*. Minus, on tables? Metatable keys starting
-*__* are metamethods: *__sub* answers the *-* operator,
-*__tostring* answers *print*. So this makes summaries
-subtractable algebra:
+*__* are metamethods: *__index* answers a lookup miss (the
+previous entry), *__sub* answers the *-* operator,
+*__tostring* answers *print*. Define *NUM.__sub* and
+summaries become subtractable algebra. Seen in action,
+straight from the *--without* demo: pour
+{10,20,30} on top of a summary of {1,2,3,4,5}, then subtract
+a summary of {10,20,30} with a minus sign, and the first
+summary comes back:
 
-<pre><span class=k>function</span> <span class=f>SYM.__sub</span>(i,j,    out,n)<br>  out = Sym(i.name, i.at)<br>  <span class=k>for</span> k,v <span class=k>in</span> pairs(i.has) <span class=k>do</span><br>    n = v - (j.has[k] <span class=k>or</span> 0)<br>    <span class=k>if</span> n &gt; 0 <span class=k>then</span> out.has[k] = n; out.n = out.n + n <span class=k>end</span> <span class=k>end</span><br>  <span class=k>return</span> out <span class=k>end</span></pre>
+<pre>a, b = adds{1,2,3,4,5}, adds{10,20,30}<br>w = adds({10,20,30}, adds{1,2,3,4,5}) - b<br>print(show{mu=w.mu, sd=w:div()})   <span class=c>-- {:mu 3 :sd 1.58}</span></pre>
 
-(The Num version has real mathematics in it; see the pool
-entry, below.) Python spells the same idea with dunders:
+As a picture, that minus sign is one gaussian leaving another
+(the combined curve has two humps; take away b's hump and
+only a's remains):
+
+<pre>     a+b: n=8            b: n=3           a: n=5<br>   *        *               *              *<br>  ***      ***     -       ***     =      ***<br> *****    *****           *****          *****<br>---+--------+---        ----+----      ----+----<br>  mu=3    mu=20           mu=20          mu=3</pre>
+
+How the subtraction actually works &mdash; the counts and the
+algebra &mdash; is the pool entry, below. Python spells the
+same idea with dunders:
 *__sub__*, *__repr__*. Overload only when the algebra is real
 &mdash; here, summaries genuinely subtract, so *a - b* reads
 as the mathematics it is.
-
--
-
-**REPL (read-eval-print loop)**: The *--repl* demo is an
-interactive prompt in a dozen lines, and a lesson: code is
-just data until you run it. *load* turns a typed string into a
-function; handing it *env* (a module's _ENV) makes bare names
-like *Tbl* resolve; *pcall* traps crashes so a typo cannot
-kill the session:
-
-<pre><span class=k>function</span> <span class=f>repl</span>(env,    s,f,ok,r)<br>  <span class=k>while</span> <span class=k>true</span> <span class=k>do</span><br>    io.write(<span class=s>"ezr&gt; "</span>)<br>    s = io.read()<br>    <span class=k>if</span> <span class=k>not</span> s <span class=k>then</span> io.write<span class=s>"\n"</span>; <span class=k>return</span> <span class=k>end</span><br>    f = load(<span class=s>"return "</span>..s, <span class=s>"=repl"</span>, <span class=s>"t"</span>, env) <span class=k>or</span><br>        load(s, <span class=s>"=repl"</span>, <span class=s>"t"</span>, env)<br>    <span class=k>if</span> <span class=k>not</span> f <span class=k>then</span> print(<span class=s>"! syntax"</span>) <span class=k>else</span><br>      ok, r = pcall(f)<br>      <span class=k>if</span> <span class=k>not</span> ok <span class=k>then</span> print(<span class=s>"! "</span>..tostring(r))<br>      <span class=k>elseif</span> r ~= <span class=k>nil</span> <span class=k>then</span> print(show(r)) <span class=k>end</span> <span class=k>end</span> <span class=k>end</span> <span class=k>end</span></pre>
-
--
-
-**main guard**: Both eg files end with *go(eg)*, yet
-*require"ezr-eg1"* runs no demos. *go* checks whether its
-caller's file is the script the user actually ran &mdash;
-Lua's spelling of Python's *if __name__ == "__main__"*. Only
-then: parse the flags, run each demo named on the command
-line, and exit with the failure count, so a shell script or CI
-job can gate on it:
-
-<pre><span class=k>function</span> <span class=f>go</span>(eg,    n)<br>  <span class=k>if</span> arg <span class=k>and</span> arg[0] <span class=k>and</span><br>     debug.getinfo(2,<span class=s>"S"</span>).source == <span class=s>"@"</span>..arg[0] <span class=k>then</span><br>    cli(the)<br>    n = 0<br>    <span class=k>for</span> _,w <span class=k>in</span> ipairs(arg) <span class=k>do</span><br>      <span class=k>if</span> run(eg, w) == <span class=k>false</span> <span class=k>then</span> n = n + 1 <span class=k>end</span> <span class=k>end</span><br>    os.exit(n) <span class=k>end</span> <span class=k>end</span></pre>
 
 .
 
@@ -229,8 +222,14 @@ d = &mu;<sub>b</sub> - &mu;<sub>a</sub>:
 - &mu;<sub>ab</sub> = (n<sub>a</sub>&mu;<sub>a</sub> + n<sub>b</sub>&mu;<sub>b</sub>) / n<sub>ab</sub>
 - m2<sub>ab</sub> = m2<sub>a</sub> + m2<sub>b</sub> + d&sup2; n<sub>a</sub>n<sub>b</sub> / n<sub>ab</sub>
 
-*NUM.__sub* is those three lines solved backwards &mdash;
-given the whole and one part, recover the other part, O(1):
+The Sym side is the easy half &mdash; histograms subtract one
+count at a time:
+
+<pre><span class=k>function</span> <span class=f>SYM.__sub</span>(i,j,    out,n)<br>  out = Sym(i.name, i.at)<br>  <span class=k>for</span> k,v <span class=k>in</span> pairs(i.has) <span class=k>do</span><br>    n = v - (j.has[k] <span class=k>or</span> 0)<br>    <span class=k>if</span> n &gt; 0 <span class=k>then</span> out.has[k] = n; out.n = out.n + n <span class=k>end</span> <span class=k>end</span><br>  <span class=k>return</span> out <span class=k>end</span></pre>
+
+The Num side is the three pooling lines above, solved
+backwards &mdash; given the whole and one part, recover the
+other part, O(1):
 
 <pre><span class=k>function</span> <span class=f>NUM.__sub</span>(i,j,    n,d)<br>  n = i.n - j.n<br>  <span class=k>if</span> n &lt; 1 <span class=k>then</span> <span class=k>return</span> Num(i.name, i.at) <span class=k>end</span><br>  d = j.mu - i.mu<br>  <span class=k>return</span> new(NUM, {name=i.name, at=i.at, heaven=i.heaven,<br>                   n=n, mu=(i.n*i.mu - j.n*j.mu) / n,<br>                   m2=max(0, i.m2 - j.m2<br>                             - d*d*i.n*j.n/n)}) <span class=k>end</span></pre>
 
