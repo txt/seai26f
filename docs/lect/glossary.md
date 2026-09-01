@@ -761,7 +761,11 @@ measures its own 0..1 gap (`dist` in the
 [columnProtocol](#columnprotocol)), and [minkowski](#minkowski)
 folds them. An unknown `"?"` assumes the worst: symbols that
 might differ, do; a missing number is pushed to whichever end is
-further away.
+further away. That rule has a name — the **Aha heuristic**, from
+the instance-based learning literature: when ignorance is total,
+assume maximum distance (Aha, Kibler & Albert, [Instance-based
+learning algorithms](https://doi.org/10.1007/BF00153759),
+Machine Learning 6, 1991).
 
 ```lua
 function SYM.dist(i,a,b)
@@ -801,6 +805,16 @@ zooming rival to frontier-chasing (see
 [Pareto zoom effect](#pareto-zoom-effect)). Later weeks make
 disty the thing that costs money: it reads the goal columns, and
 goals are labels.
+
+Why do labels cost? Because x and y columns have different
+economics. The x columns are cheap observables; the y columns
+are verdicts. Look at a used car: its color, cylinders and
+weight are free at a glance, but its honest miles-per-gallon
+needs a long test drive. Or: which degree you enrolled in is an
+x, known today; whether it was the *right* degree is a y that
+may take decades to label. In practice we are rich in x and poor
+in y — which is why whole later weeks (active learning) are
+about spending as few y's as possible.
 
 ```lua
 function TBL.disty(i,row)

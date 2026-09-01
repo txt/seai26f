@@ -556,9 +556,13 @@ it is summed:
 each column measures its own 0..1 gap (*dist* in the
 columnProtocol), and minkowski folds them. An unknown "?" assumes
 the worst: symbols that might differ, do; a missing number is
-pushed to whichever end is further away.
+pushed to whichever end is further away. That rule has a name
+&mdash; the **Aha heuristic**, from the instance-based learning
+literature: when ignorance is total, assume maximum distance.
 
 <pre><span class=k>function</span> <span class=f>SYM.dist</span>(i,a,b)<br>  <span class=k>if</span> a == <span class=s>"?"</span> <span class=k>and</span> b == <span class=s>"?"</span> <span class=k>then</span> <span class=k>return</span> 1 <span class=k>end</span><br>  <span class=k>return</span> a ~= b <span class=k>and</span> 1 <span class=k>or</span> 0 <span class=k>end</span><br><br><span class=k>function</span> <span class=f>NUM.dist</span>(i,a,b)<br>  <span class=k>if</span> a == <span class=s>"?"</span> <span class=k>and</span> b == <span class=s>"?"</span> <span class=k>then</span> <span class=k>return</span> 1 <span class=k>end</span><br>  a, b = i:norm(a), i:norm(b)<br>  <span class=k>if</span> a == <span class=s>"?"</span> <span class=k>then</span> a = b &gt; 0.5 <span class=k>and</span> 0 <span class=k>or</span> 1 <span class=k>end</span><br>  <span class=k>if</span> b == <span class=s>"?"</span> <span class=k>then</span> b = a &gt; 0.5 <span class=k>and</span> 0 <span class=k>or</span> 1 <span class=k>end</span><br>  <span class=k>return</span> abs(a - b) <span class=k>end</span><br><br><span class=k>function</span> <span class=f>TBL.distx</span>(i,row1,row2)<br>  <span class=k>return</span> minkowski(i.cols.x, <span class=k>function</span>(c)<br>           <span class=k>return</span> c:dist(row1[c.at], row2[c.at]) <span class=k>end</span>) <span class=k>end</span></pre>
+
+@ [Aha, Kibler & Albert: Instance-based learning algorithms](https://doi.org/10.1007/BF00153759). D.W. Aha, D. Kibler, M.K. Albert. Machine Learning 6 (1991), 37-66.
 
 -
 
@@ -579,6 +583,16 @@ possible row, 1 = worst. No model, no weights, no training
 zooming rival to frontier-chasing (see the Pareto zoom effect,
 above). Later weeks make disty the thing that costs money: it
 reads the goal columns, and goals are labels.
+
+Why do labels cost? Because x and y columns have different
+economics. The x columns are cheap observables; the y columns
+are verdicts. Look at a used car: its color, cylinders and
+weight are free at a glance, but its honest miles-per-gallon
+needs a long test drive. Or: which degree you enrolled in is an
+x, known today; whether it was the *right* degree is a y that
+may take decades to label. In practice we are rich in x and
+poor in y &mdash; which is why whole later weeks (active
+learning) are about spending as few y's as possible.
 
 <pre><span class=k>function</span> <span class=f>TBL.disty</span>(i,row)<br>  <span class=k>if</span> i.model <span class=k>and</span> row[i.cols.y[1].at] == <span class=s>"?"</span> <span class=k>then</span><br>    i:label(row) <span class=k>end</span><br>  <span class=k>return</span> minkowski(i.cols.y, <span class=k>function</span>(y)<br>           <span class=k>return</span> abs(y:norm(row[y.at]) - y.heaven) <span class=k>end</span>) <span class=k>end</span></pre>
 

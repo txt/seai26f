@@ -276,9 +276,11 @@ at nonzero distance from itself, making distx strictly a
 *pseudometric*. So why does self-is-zero never fail on
 auto93? Its only "?" cells live in *HpX*, and a trailing "X"
 means ignored: that column never reaches distx (homework 2,
-question 6). The design trade is deliberate: maximum ignorance
-maps to maximum distance, buying robustness to missing data at
-the price of textbook metric-hood. Note also what tames the
+question 6). The design trade is deliberate, and it has a name:
+the **Aha heuristic**, from the instance-based learning
+literature (see the distx entry in [glossary 1](gloss1.html)) &mdash;
+maximum ignorance maps to maximum distance, buying robustness to
+missing data at the price of textbook metric-hood. Note also what tames the
 ruler itself: gaps are measured between *norm*'d values (the
 cdf, glossary 1), so one wild outlier cannot stretch the scale
 for everyone else.
