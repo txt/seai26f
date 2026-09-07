@@ -137,7 +137,8 @@ eg["--node"] = function(    t,nd,n,leafs,walk)
 -- 9. The projection is (d(lo,r)^2 + c^2 - d(hi,r)^2) / (2c),
 --    where c = d(lo,hi). Draw the triangle and derive this
 --    from the cosine rule. What does a projection less than
---    zero tell you about a row?
+--    zero tell you about a row? (Check your triangle against
+--    the projection entry in [gloss3](gloss3.html).)
 
 --## start-up --------------------------------------------------
 -- Fires only when this file is the script the user ran.
