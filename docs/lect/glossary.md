@@ -1071,5 +1071,44 @@ Recent work does better still:
 
 Where to read the code: ezr's own `acquire` (week 5) IS sway3
 in Lua — see its settings `keepf=0.66` and `more=4` — and a
-clean Python version is `descend/descends` in
-[flair.py](https://github.com/timm/super/blob/main/flair.py).
+clean Python version lives in
+[flair.py](https://github.com/timm/super/blob/main/flair.py):
+`poles` (same fastmap, same cosine rule; with `ordering` on,
+poles come only from the rows passed in, which sway2's restart
+makes the labelled examples), `descend` (spend up to `the.more`
+labels per level, sort by projection onto poles drawn from the
+labelled rows, keep the `the.best` fraction — sway3's .66), and
+`descends` (the sway2 restart: while budget remains and the
+last descent labelled something new, go again from a fresh
+shuffle, poles drawn from everything labelled so far):
+
+```python
+def poles(tbl, rows, y, ordering=False): # far pair in rows
+  far = lambda r: max(rows, key=lambda x: distx(tbl, x, r))
+  a = far(rows[0]); z = far(a)
+  if ordering and y(z) < y(a): a, z = z, a
+  c = distx(tbl, a, z) + 1/BIG
+  return lambda r: (distx(tbl,a,r)**2 + c*c -
+                    distx(tbl,z,r)**2)/(2*c)
+
+def descend(tbl, rows, y, seen, cap, label, go=False):
+  while len(rows) > the.stop and len(seen) < cap: # one descent
+    todo, more = [], min(the.more, cap - len(seen))
+    for r in rows:
+      if id(r) in seen:
+        todo += [seen[id(r)]]
+      elif more > 0:
+        more -= 1; go = True; seen[id(r)] = label(r)
+        todo += [seen[id(r)]]
+    rows = sorted(rows, key=poles(tbl, todo, y))
+    rows = rows[:int(the.best*len(rows))]
+  return go
+
+def descends(tbl, rows, label=lambda row: row):
+  seen = {}
+  cap  = the.budget - the.check
+  y    = lambda r: disty(tbl, r)
+  while len(seen) < cap and \
+        descend(tbl, shuffle(rows), y, seen, cap, label): pass
+  return sorted(seen.values(), key=y)
+```

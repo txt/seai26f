@@ -150,8 +150,27 @@ Recent work does better still:
 
 Where to read the code: ezr's own *acquire* (week 5) IS sway3
 in Lua &mdash; see its settings *keepf=0.66* and *more=4*
-&mdash; and a clean Python version is *descend/descends* in
-[flair.py](https://github.com/timm/super/blob/main/flair.py).
+&mdash; and a clean Python version lives in
+[flair.py](https://github.com/timm/super/blob/main/flair.py)
+(the code below). First, poles &mdash; same fastmap, same
+cosine rule, Python accent (and when *ordering* is on, poles
+come only from *rows* passed in, which sway2's restart makes
+the labelled examples):
+
+<pre><span class=k>def</span> <span class=f>poles</span>(tbl, rows, y, ordering=<span class=k>False</span>): <span class=c># far pair in rows</span><br>  far = <span class=k>lambda</span> r: max(rows, key=<span class=k>lambda</span> x: distx(tbl, x, r))<br>  a = far(rows[0]); z = far(a)<br>  <span class=k>if</span> ordering <span class=k>and</span> y(z) &lt; y(a): a, z = z, a<br>  c = distx(tbl, a, z) + 1/BIG<br>  <span class=k>return</span> <span class=k>lambda</span> r: (distx(tbl,a,r)**2 + c*c -<br>                    distx(tbl,z,r)**2)/(2*c)</pre>
+
+One descent: spend up to *the.more* labels per level, sort the
+pool by projection onto poles drawn from the labelled rows,
+keep the *the.best* fraction (sway3's .66):
+
+<pre><span class=k>def</span> <span class=f>descend</span>(tbl, rows, y, seen, cap, label, go=<span class=k>False</span>):<br>  <span class=k>while</span> len(rows) &gt; the.stop <span class=k>and</span> len(seen) &lt; cap: <span class=c># one descent</span><br>    todo, more = [], min(the.more, cap - len(seen))<br>    <span class=k>for</span> r <span class=k>in</span> rows:<br>      <span class=k>if</span> id(r) <span class=k>in</span> seen:<br>        todo += [seen[id(r)]]<br>      <span class=k>elif</span> more &gt; 0:<br>        more -= 1; go = <span class=k>True</span>; seen[id(r)] = label(r)<br>        todo += [seen[id(r)]]<br>    rows = sorted(rows, key=poles(tbl, todo, y))<br>    rows = rows[:int(the.best*len(rows))]<br>  <span class=k>return</span> go</pre>
+
+And the sway2 restart trick is the outer loop: while budget
+remains and the last descent still labelled something new, go
+again from a fresh shuffle &mdash; each restart's poles drawn
+from everything labelled so far:
+
+<pre><span class=k>def</span> <span class=f>descends</span>(tbl, rows, label=<span class=k>lambda</span> row: row):<br>  seen = {}<br>  cap  = the.budget - the.check<br>  y    = <span class=k>lambda</span> r: disty(tbl, r)<br>  <span class=k>while</span> len(seen) &lt; cap <span class=k>and</span> \<br>        descend(tbl, shuffle(rows), y, seen, cap, label): <span class=k>pass</span><br>  <span class=k>return</span> sorted(seen.values(), key=y)</pre>
 
 @ [Chen, Nair, Krishna & Menzies: "Sampling" as a baseline optimizer for search-based software engineering](https://doi.org/10.1109/TSE.2018.2790925). Jianfeng Chen, Vivek Nair, Rahul Krishna, Tim Menzies. IEEE Trans. Software Engineering 45, 6 (2019), 597-614.
 

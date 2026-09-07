@@ -74,4 +74,6 @@ the reading load stays flat.
 See [topics](docs/lect/tools.md): tool-talk subjects, 1976–2026,
 every one a place these ideas get applied.
 
-See also [MOOT](http://github.com/timm/moot)
+See also [MOOT](http://github.com/timm/moot); and for the bleeding edge
+beyond the [gloss3](https://txt.github.io/seai26f/gloss3.html) sway entry,
+[flair.py](https://github.com/timm/super/blob/main/flair.py).
