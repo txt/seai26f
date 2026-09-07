@@ -188,7 +188,15 @@ New acronyms: XAI.
 <b>cut</b>: One test on one x column: numbers split at a threshold (<em>x &le; v</em>), symbols split by equality (<em>x == v</em>) &mdash; the <em>holds</em> slot of the columnProtocol (glossary 1). A good cut is one whose two sides are each more SETTLED about y than the whole was: split on "cylinders &le; 4" and maybe the light, thrifty cars land on one side and the tanks on the other. The craft is scoring thousands of candidate cuts, cheaply.
 </li>
 <li>
-<b>div, recalled (sd and entropy)</b>: Everything below scores a split by asking each side one question: "how settled are you about y?" That question is <em>div</em> from glossary 1 &mdash; one protocol slot, two spellings. A Num answers with the standard deviation; a Sym answers with the entropy; both read 0 when the column has entirely made up its mind, and grow as it wriggles:
+<b>div, recalled (sd and entropy)</b>: Everything below scores a split by asking each side one question: "how settled are you about y?" That question is <em>div</em> from glossary 1 &mdash; one protocol slot, two spellings. A Num answers with the standard deviation; a Sym answers with the entropy; both read 0 when the column has entirely made up its mind, and grow as it wriggles.
+<br><br>
+Entropy deserves an intuition: it is <b>the average cost of playing twenty-questions against a column</b>. Hunt one symbol in a bag; each yes/no question halves the candidates, so a thing filling fraction p of the bag is cornered after log<sub>2</sub>(1/p) questions &mdash; common things fast, rare things slowly. But you hunt things as often as they occur: with probability p you run a hunt costing log<sub>2</sub>(1/p), so the average effort per search is
+<ul>
+<li>e = &sum; p &middot; log<sub>2</sub>(1/p) = -&sum; p log<sub>2</sub> p</li>
+</ul>
+Check it: {a,a,a,a} &mdash; the search is over before it starts, 0 bits. A fair coin {a,b} &mdash; one question, 1 bit. {a,b,c,d} even &mdash; two questions, 2 bits. Skewed {a,a,a,b} &mdash; hunting a costs log<sub>2</sub>(4/3) &asymp; 0.4, hunting b costs 2, but you hunt a three times as often: 0.75&middot;0.4 + 0.25&middot;2 &asymp; 0.81 bits. Skew is cheaper than fair, because mostly you are hunting the easy thing &mdash; which is exactly why entropy falls as a column settles. (Glossary 1's paper-strip story is this game in costume: one fold = one question.)
+<br><br>
+So val, below, reads as: the expected number of questions still to ask about y after the cut. A good cut pre-answers most of the search &mdash; pay one question at the branch, save many at the leaves. Trees are search-effort arbitrage. The code:
 <pre><span class=k>function</span> <span class=f>NUM.div</span>(i)<br>  <span class=k>return</span> i.n &lt; 2 <span class=k>and</span> 0 <span class=k>or</span> sqrt(max(i.m2,0) / (i.n-1)) <span class=k>end</span><br><br><span class=k>function</span> <span class=f>SYM.div</span>(i)<br>  <span class=k>return</span> sum(i.has, <span class=k>function</span>(n,    p)<br>    p = n / i.n<br>    <span class=k>return</span> -p * log(p) / log(2) <span class=k>end</span>) <span class=k>end</span></pre>
 <br><br>
 Because both spellings answer the same call, nothing below ever asks which kind of column it is holding.

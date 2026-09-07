@@ -982,6 +982,21 @@ Num, entropy for a Sym, 0 when a column has made up its mind —
 one protocol slot, so nothing here asks which column kind it
 holds.)
 
+An intuition for entropy: it is the average cost of playing
+twenty-questions against a column. Each yes/no question halves
+the candidates, so a symbol filling fraction p of the bag is
+cornered after $log_2(1/p)$ questions; you hunt things as often
+as they occur, so the average effort per search is
+$e = -\sum p\,log_2 p$. Check: {a,a,a,a} = 0 bits (search over
+before it starts); a fair coin = 1 bit; {a,b,c,d} = 2 bits;
+{a,a,a,b} ≈ 0.81 bits — skew is cheaper than fair, since mostly
+you hunt the easy thing, which is exactly why entropy falls as
+a column settles. So `val` reads as: the expected number of
+questions still to ask about y after the cut. A good cut
+pre-answers most of the search — pay one question at the
+branch, save many at the leaves. Trees are search-effort
+arbitrage.
+
 ### val
 
 How good is a cut? Summarize y on each side, ask each summary
