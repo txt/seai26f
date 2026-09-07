@@ -1040,3 +1040,36 @@ leaf marked, better branch printed first. When the model is
 small, the model IS the explanation, and a business user can
 push back on any line of it. See
 [Rudin 2019](https://doi.org/10.1038/s42256-019-0048-x).
+
+### sway (the sampling way)
+
+*Not examinable — this entry marks the gap between here and
+bleeding-edge research.*
+
+After all the machinery above, optimization becomes almost
+embarrassingly simple: halve the data, IGNORE the worse half,
+recurse only into the better one. Since each split labels only
+its two poles, reaching a good leaf costs about 2·log(n) labels
+— call it a **(.5, 2) strategy**: keep half, spend two new
+labels per level. That baseline, run against state-of-the-art
+evolutionary optimizers on SE problems, proved hard to beat —
+which raised awkward questions about how much of the fancy
+machinery was ever needed. See
+[Chen, Nair, Krishna & Menzies, TSE 2019](https://doi.org/10.1109/TSE.2018.2790925).
+
+Recent work does better still:
+
+- **sway2**: given a labelling budget B, descend with sway; if
+  budget remains at the bottom, start again from the root — but
+  this time run fastmap only over the already-labelled examples
+  to pick the first division. Restarts get smarter for free,
+  because every restart inherits everything paid for so far.
+- **sway3**: loosen (.5, 2) to **(.66, 4)** — keep the top 66%
+  of the pool and label 4 new things at each level — plus
+  sway2's start-again trick. Gentler culls waste fewer good
+  rows; more labels per level steady the poles.
+
+Where to read the code: ezr's own `acquire` (week 5) IS sway3
+in Lua — see its settings `keepf=0.66` and `more=4` — and a
+clean Python version is `descend/descends` in
+[flair.py](https://github.com/timm/super/blob/main/flair.py).

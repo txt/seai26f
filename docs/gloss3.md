@@ -120,4 +120,39 @@ an address:
 
 <pre><span class=k>function</span> <span class=f>NODE.leaf</span>(i,row,    t)<br>  <span class=k>while</span> i.lo <span class=k>do</span><br>    t = i.here<br>    i = t:distx(row, i.a) &lt;= t:distx(row, i.b)<br>        <span class=k>and</span> i.lo <span class=k>or</span> i.hi <span class=k>end</span><br>  <span class=k>return</span> i <span class=k>end</span></pre>
 
+-
+
+**sway (the sampling way)**: *Not examinable &mdash; this entry
+marks the gap between here and bleeding-edge research.*
+
+After all the machinery above, optimization becomes almost
+embarrassingly simple: halve the data, IGNORE the worse half,
+recurse only into the better one. Since each split labels only
+its two poles, reaching a good leaf costs about 2&middot;log(n)
+labels &mdash; call it a **(.5, 2) strategy**: keep half, spend
+two new labels per level. That baseline, run against
+state-of-the-art evolutionary optimizers on SE problems, proved
+hard to beat &mdash; which raised awkward questions about how
+much of the fancy machinery was ever needed.
+
+Recent work does better still:
+
+- **sway2**: given a labelling budget B, descend with sway;
+  if budget remains at the bottom, start again from the root
+  &mdash; but this time run fastmap only over the
+  already-labelled examples to pick the first division. Restarts
+  get smarter for free, because every restart inherits
+  everything paid for so far.
+- **sway3**: loosen (.5, 2) to **(.66, 4)** &mdash; keep the
+  top 66% of the pool and label 4 new things at each level
+  &mdash; plus sway2's start-again trick. Gentler culls waste
+  fewer good rows; more labels per level steady the poles.
+
+Where to read the code: ezr's own *acquire* (week 5) IS sway3
+in Lua &mdash; see its settings *keepf=0.66* and *more=4*
+&mdash; and a clean Python version is *descend/descends* in
+[flair.py](https://github.com/timm/super/blob/main/flair.py).
+
+@ [Chen, Nair, Krishna & Menzies: "Sampling" as a baseline optimizer for search-based software engineering](https://doi.org/10.1109/TSE.2018.2790925). Jianfeng Chen, Vivek Nair, Rahul Krishna, Tim Menzies. IEEE Trans. Software Engineering 45, 6 (2019), 597-614.
+
 .
