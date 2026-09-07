@@ -4,6 +4,7 @@ ezr-eg0	ezr-eg0.lua	tests
 ezr-eg1	ezr-eg1.lua	tests
 ezr-eg2	ezr-eg2.lua	tests
 ezr-eg3	ezr-eg3.lua	tests
+ezr-eg4	ezr-eg4.lua	tests
 ezr-apps	ezr-apps.lua	code
 ezr-dtlz	ezr-dtlz.lua	code
 play	play.lua	code

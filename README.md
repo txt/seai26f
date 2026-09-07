@@ -32,7 +32,7 @@ See [hello](https://txt.github.io/seai26f/hello.html) for the course intro, [pol
 | 🟩 ${\color{green}\textsf{Sep 07 — Labor Day, no class}}$ | | | | | |
 | Sep 14 | [gloss3](https://txt.github.io/seai26f/gloss3.html) | [eg2](https://txt.github.io/seai26f/ezr-eg2.html) | [tool:ga](docs/lect/tools.md#ga) | [tool:sa](docs/lect/tools.md#sa) | |
 | Sep 21 | [gloss4](https://txt.github.io/seai26f/gloss4.html) | [eg3](https://txt.github.io/seai26f/ezr-eg3.html) | [tool:gp](docs/lect/tools.md#gp) | [tool:nsga2](docs/lect/tools.md#nsga2) | |
-| Sep 28 | acquire | eg4 | [tool:nov](docs/lect/tools.md#nov) | [tool:ibea](docs/lect/tools.md#ibea) | |
+| Sep 28 | acquire | [eg4](https://txt.github.io/seai26f/ezr-eg4.html) | [tool:nov](docs/lect/tools.md#nov) | [tool:ibea](docs/lect/tools.md#ibea) | |
 | Oct 05 | stats | eg5 | [tool:moead](docs/lect/tools.md#moead) | [tool:al](docs/lect/tools.md#al) | |
 | Oct 12 | 🟥 ${\color{#ff9999}\textsf{Mid-term exam}}$ | | no talks | no talks | |
 | 🟩 ${\color{green}\textsf{Oct 19 — Fall break, no class}}$ | | | | | |
@@ -63,7 +63,7 @@ the reading load stays flat.
 | [ezr-eg1.lua](https://txt.github.io/seai26f/ezr-eg1.html) | boot; columns, streaming          | `--the` `--csv` `--col` `--without` `--sub`                              |
 | [ezr-eg2.lua](https://txt.github.io/seai26f/ezr-eg2.html) | distance & gap-to-heaven          | `--distx` `--disty` `--laws`                                             |
 | [ezr-eg3.lua](https://txt.github.io/seai26f/ezr-eg3.html) | clustering by poles               | `--half` `--node`                                                        |
-| ezr-eg4.lua                                               | cuts, trees, XAI                  | `--cuts` `--tree` `--show` `--why`                                       |
+| [ezr-eg4.lua](https://txt.github.io/seai26f/ezr-eg4.html) | cuts, trees, XAI                  | `--cuts` `--tree` `--show` `--why`                                       |
 | ezr-eg5.lua                                               | active learning; labels cost money | `--acquire` `--holdout` `--holdouts` `--label`                           |
 | ezr-eg6.lua                                               | statistics & ranking              | `--same` `--ranks` `--dominate` `--fronts` `--wins`                      |
 | ezr-eg7.lua                                               | apps: predict, guard, group       | `--knn` `--detect` `--nb` `--kmeans` `--kpp`                             |
