@@ -258,8 +258,10 @@ Recursive halving; rows are conserved in the leafs.</p>
    &ndash;half with &ndash;few=8, then &ndash;few=512. How much do the
    halves change? Why so little?</li>
 <li>After finding the two poles, one line sorts them by
-   disty. How many labels does a single halve spend, and
-   what does that buy the left-hand half?</li>
+   disty &ndash; and disty reads the goal columns. For how many
+   rows per halve() does this code read the goals (compare:
+   how many rows get distx&rsquo;d)? Later, when reading a row&rsquo;s
+   goals costs money, why will that number matter?</li>
 <li>Node stops splitting when a node holds fewer than
    2 * the.stop rows. auto93 has 398 rows and stop=32:
    predict the leaf count BEFORE running &ndash;node.</li>

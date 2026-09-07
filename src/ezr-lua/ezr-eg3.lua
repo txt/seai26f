@@ -126,8 +126,10 @@ eg["--node"] = function(    t,nd,n,leafs,walk)
 --    --half with --few=8, then --few=512. How much do the
 --    halves change? Why so little?
 -- 7. After finding the two poles, one line sorts them by
---    disty. How many labels does a single halve spend, and
---    what does that buy the left-hand half?
+--    disty -- and disty reads the goal columns. For how many
+--    rows per halve() does this code read the goals (compare:
+--    how many rows get distx'd)? Later, when reading a row's
+--    goals costs money, why will that number matter?
 -- 8. Node stops splitting when a node holds fewer than
 --    2 * the.stop rows. auto93 has 398 rows and stop=32:
 --    predict the leaf count BEFORE running --node.
