@@ -188,7 +188,24 @@ New acronyms: XAI.
 <b>cut</b>: One test on one x column: numbers split at a threshold (<em>x &le; v</em>), symbols split by equality (<em>x == v</em>) &mdash; the <em>holds</em> slot of the columnProtocol (glossary 1). A good cut is one whose two sides are each more SETTLED about y than the whole was: split on "cylinders &le; 4" and maybe the light, thrifty cars land on one side and the tanks on the other. The craft is scoring thousands of candidate cuts, cheaply.
 </li>
 <li>
-<b>val (expected diversity)</b>: How good is a cut? Summarize y on each side, ask each summary its diversity (<em>div</em>: sd for numbers, entropy for symbols &mdash; glossary 1), and take the size-weighted mean. Lower is better: a low val says both sides have (mostly) made up their minds.
+<b>div, recalled (sd and entropy)</b>: Everything below scores a split by asking each side one question: "how settled are you about y?" That question is <em>div</em> from glossary 1 &mdash; one protocol slot, two spellings. A Num answers with the standard deviation; a Sym answers with the entropy; both read 0 when the column has entirely made up its mind, and grow as it wriggles:
+<pre><span class=k>function</span> <span class=f>NUM.div</span>(i)<br>  <span class=k>return</span> i.n &lt; 2 <span class=k>and</span> 0 <span class=k>or</span> sqrt(max(i.m2,0) / (i.n-1)) <span class=k>end</span><br><br><span class=k>function</span> <span class=f>SYM.div</span>(i)<br>  <span class=k>return</span> sum(i.has, <span class=k>function</span>(n,    p)<br>    p = n / i.n<br>    <span class=k>return</span> -p * log(p) / log(2) <span class=k>end</span>) <span class=k>end</span></pre>
+<br><br>
+Because both spellings answer the same call, nothing below ever asks which kind of column it is holding.
+</li>
+<li>
+<b>expected value</b>: The probability-weighted average. If value f<sub>i</sub> arrives with probability p<sub>i</sub>, then on average you meet
+<ul>
+<li>E[f] = &sum; p<sub>i</sub> &middot; f<sub>i</sub></li>
+</ul>
+Now split n rows into two sides holding n<sub>a</sub> and n<sub>b</sub>. Pick a random row after the split: you land on side a with probability n<sub>a</sub>/n. So "how much diversity does a randomly-chosen row live with, after this cut?" is
+<ul>
+<li>(div<sub>a</sub> &middot; n<sub>a</sub> + div<sub>b</sub> &middot; n<sub>b</sub>) / n</li>
+</ul>
+&mdash; the expected diversity. That one number scores a cut, and it is the next entry, verbatim.
+</li>
+<li>
+<b>val (expected diversity)</b>: How good is a cut? Summarize y on each side, ask each summary its diversity (previous entries), and weight by size &mdash; the expected value of the diversity a random row lives with after the split. Lower is better: a low val says both sides have (mostly) made up their minds.
 <pre><span class=k>function</span> <span class=f>val</span>(a,b)<br>  <span class=k>return</span> (a:div()*a.n + b:div()*b.n) / (a.n + b.n + TINY) <span class=k>end</span></pre>
 <br><br>
 Note what this does NOT ask: whether y is numeric or symbolic. Any summary answering <em>div</em> can play, so the same tree code will handle regression, classification, and (via disty) multi-objective optimization. The protocol keeps paying.

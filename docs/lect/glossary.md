@@ -969,11 +969,25 @@ of the [columnProtocol](#columnprotocol). A good cut leaves
 each side more settled about y than the whole was. The craft is
 scoring thousands of candidates, cheaply.
 
+### expected value
+
+The probability-weighted average: if value $f_i$ arrives with
+probability $p_i$, on average you meet $E[f] = \sum p_i f_i$.
+Split n rows into sides of $n_a$ and $n_b$; a random row lands
+on side a with probability $n_a/n$, so the diversity a random
+row lives with after the split is
+$(div_a \cdot n_a + div_b \cdot n_b)/n$ — the expected
+diversity. (Recall [diversity](#diversity): `div` is sd for a
+Num, entropy for a Sym, 0 when a column has made up its mind —
+one protocol slot, so nothing here asks which column kind it
+holds.)
+
 ### val
 
 How good is a cut? Summarize y on each side, ask each summary
-its diversity (`div`: sd or entropy), take the size-weighted
-mean; lower is better.
+its diversity (`div`: sd or entropy), and weight by size — the
+expected value of the diversity a random row lives with after
+the split; lower is better.
 
 ```lua
 function val(a,b)

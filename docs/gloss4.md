@@ -40,11 +40,43 @@ craft is scoring thousands of candidate cuts, cheaply.
 
 -
 
+**div, recalled (sd and entropy)**: Everything below scores a
+split by asking each side one question: "how settled are you
+about y?" That question is *div* from glossary 1 &mdash; one
+protocol slot, two spellings. A Num answers with the standard
+deviation; a Sym answers with the entropy; both read 0 when the
+column has entirely made up its mind, and grow as it wriggles:
+
+<pre><span class=k>function</span> <span class=f>NUM.div</span>(i)<br>  <span class=k>return</span> i.n &lt; 2 <span class=k>and</span> 0 <span class=k>or</span> sqrt(max(i.m2,0) / (i.n-1)) <span class=k>end</span><br><br><span class=k>function</span> <span class=f>SYM.div</span>(i)<br>  <span class=k>return</span> sum(i.has, <span class=k>function</span>(n,    p)<br>    p = n / i.n<br>    <span class=k>return</span> -p * log(p) / log(2) <span class=k>end</span>) <span class=k>end</span></pre>
+
+Because both spellings answer the same call, nothing below ever
+asks which kind of column it is holding.
+
+-
+
+**expected value**: The probability-weighted average. If value
+f<sub>i</sub> arrives with probability p<sub>i</sub>, then on
+average you meet
+
+- E[f] = &sum; p<sub>i</sub> &middot; f<sub>i</sub>
+
+Now split n rows into two sides holding n<sub>a</sub> and
+n<sub>b</sub>. Pick a random row after the split: you land on
+side a with probability n<sub>a</sub>/n. So "how much diversity
+does a randomly-chosen row live with, after this cut?" is
+
+- (div<sub>a</sub> &middot; n<sub>a</sub> + div<sub>b</sub> &middot; n<sub>b</sub>) / n
+
+&mdash; the expected diversity. That one number scores a cut,
+and it is the next entry, verbatim.
+
+-
+
 **val (expected diversity)**: How good is a cut? Summarize y on
-each side, ask each summary its diversity (*div*: sd for
-numbers, entropy for symbols &mdash; glossary 1), and take the
-size-weighted mean. Lower is better: a low val says both sides
-have (mostly) made up their minds.
+each side, ask each summary its diversity (previous entries),
+and weight by size &mdash; the expected value of the diversity
+a random row lives with after the split. Lower is better: a low
+val says both sides have (mostly) made up their minds.
 
 <pre><span class=k>function</span> <span class=f>val</span>(a,b)<br>  <span class=k>return</span> (a:div()*a.n + b:div()*b.n) / (a.n + b.n + TINY) <span class=k>end</span></pre>
 
