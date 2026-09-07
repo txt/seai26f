@@ -925,9 +925,10 @@ function TBL.halve(i,rows,    fun,a,b,n)
 
 ### node
 
-Recurse the halving and a tree falls out: each node holds its
-rows (a fresh cloned table) and its two poles; splitting stops
-below 2·`the.stop` rows. auto93's 398 rows, stop=32:
+[halve](#halve) divides the data once. node divides the data,
+then recurses on each half — and a tree falls out: each node
+holds its rows (a fresh cloned table) and its two poles;
+splitting stops below 2·`the.stop` rows. auto93's 398 rows, stop=32:
 398 → 199 → ~100 → ~50, stop — three levels, eight leafs. A
 binary chop through data space: no centroids, no k, no distance
 matrix, two labels per split. To place a NEW row, walk down

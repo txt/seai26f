@@ -102,9 +102,10 @@ actually needs.
 
 -
 
-**node**: Recurse the halving and a tree falls out: each node
-holds its rows (as a fresh cloned table) and its two poles;
-splitting stops when a node is too small to bother
+**node**: halve, above, divides the data once. node divides
+the data, then recurses on each half &mdash; and a tree falls
+out: each node holds its rows (as a fresh cloned table) and its
+two poles; splitting stops when a node is too small to bother
 (fewer than 2 &middot; *the.stop* rows). auto93's 398 rows,
 with stop=32: 398 &rarr; 199 &rarr; ~100 &rarr; ~50, then
 stop &mdash; three levels, eight leafs. A binary chop through
