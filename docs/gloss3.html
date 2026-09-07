@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Glossary 3: SE for AI</title>
+<link rel="icon" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧭</text></svg>">
+<meta name="viewport" content="width=device-width" />
+<style>
+:root {
+    --back-color: rgb(30, 30, 30);
+    --text-color: rgb(212, 212, 212);
+}
+
+/* minimalist reset */
+* {
+    padding: 0;
+    margin: 0;
+    font-size: 1em;
+}
+
+body {
+    background-color: var(--back-color);
+    color: var(--text-color);
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+}
+
+main {
+    margin: 0 auto;
+    padding: 30px 140px 0 140px;
+    max-width: 600px;
+    min-height: 100vh;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid var(--text-color);
+    margin: 3em 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 1.2em;
+    font-weight: 700;
+    display: inline;
+    margin-right: 5px;
+    line-height: 1.2;
+}
+
+h2 {
+    margin-top: 50px;
+    font-size: 1.4em;
+}
+
+h3 {
+    margin-top: 40px;
+    font-size: 1.1em;
+    text-align: center;
+}
+
+h4 {
+    font-weight: 400;
+    margin-bottom: 40px;
+}
+
+ol {
+    counter-reset: item;
+}
+ol>li {
+    counter-increment: item;
+    list-style: none inside;
+    margin: 20px 0;
+    overflow: hidden;
+    line-height: 1.5em;
+}
+ol>li:before {
+    content: counter(item) ;
+    margin-right: 10px;
+    padding: 8px;
+    border-radius: 50%;
+    width: 25px;
+    background: var(--text-color);
+    color: var(--back-color);
+    text-align: center;
+    float: left;
+    font-weight: 700;
+}
+
+footer {
+    text-align: right;
+    margin-top: 80px;
+    padding-bottom: 20px;
+    font-size: 0.7em;
+    font-style: italic;
+}
+
+p {
+    line-height: 1.5em;
+    margin-top: 20px;
+    display: block;
+}
+
+a {
+    color: inherit;
+}
+a:hover, a:focus {
+    color: var(--back-color);
+    background-color: var(--text-color);
+}
+
+img {
+    margin: 3px;
+}
+
+ul {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-left: 1.4em;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.85em;
+    line-height: 1.35;
+}
+th, td {
+    border: 1px solid rgba(212, 212, 212, 0.35);
+    padding: 4px 9px;
+    text-align: left;
+}
+th {
+    font-weight: 700;
+}
+
+.reference {
+    font-size: 0.8rem;
+    line-height: 1.2rem;
+}
+
+.footnote {
+    font-size: 0.8rem;
+    line-height: 1.2rem;
+    margin-top: 20px;
+}
+
+sup {
+    font-size: 0.7em;
+    line-height: 0;
+}
+
+.reference > a {
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+  main {
+      max-width: 600px;
+    padding: 10px;
+  }
+  h2 {
+    font-size: 1.2em;
+  }
+  img {
+    width: 100%;
+  }
+}
+</style>
+</head>
+<body>
+<main>
+<style>:root { --back-color: rgb(24, 31, 43); } pre { background: rgba(212,212,212,0.07); border: 1px solid rgba(212,212,212,0.25); padding: 10px 14px; margin: 20px 0; font-size: 0.85em; line-height: 1.4; overflow-x: auto; } pre .k { color: #79b8ff; } pre .s { color: #e0b06a; } pre .c { color: #8ac28a; font-style: italic; } pre .f { color: #d2a8ff; }</style>
+<h1>A glossary of tiny lectures, part 3</h1>
+<h2>Week 3: clustering by poles</h2>
+<h4>By <a href="https://timm.fyi">Tim Menzies</a>, published 2026-09-07, updated 2026-09-07</h4>
+<p>
+<b>Summary:</b> <em>Week 2 built distance (<a href="gloss1.html">glossary 1</a>); this week distance buys structure, found without labels. Two sweeps find the far poles of the data; the cosine rule projects every row onto the line between them; a median split makes two halves; recursion makes a tree. The demos are <a href="ezr-eg3.html">ezr-eg3.lua</a>; the machinery below is verbatim from <a href="ezr.html">ezr.lua</a>. Same deal as always: each entry is a tiny lecture &mdash; hook, idea, math if any, then the code.</em>
+</p>
+<hr id="week3">
+<h3>Clustering by poles</h3>
+<hr>
+<p>
+New acronyms: none.
+</p>
+<ol>
+<li>
+<b>cluster</b>: Learning without labels. Before anyone will pay for a single y value, the x columns are already free &mdash; so group rows by x-distance and structure appears: rows that sit together tend to behave together. Clustering is how this code spends its unlabelled riches; the only question is how to split a table cheaply. The classic answers (k-means and friends) sweep the data many times chasing centroids. This code splits once, on two rows.
+</li>
+<li>
+<b>fastmap</b>: How do you find the two most separated rows? The honest way compares everything to everything: O(n&sup2;) distance calls. The fastmap trick gets close for O(2n): pick any row at random; its farthest neighbor is pole one; pole one's farthest neighbor is pole two. Two sweeps, and you hold (roughly) the longest line through the data.
+<pre><span class=k>function</span> <span class=f>TBL.poles</span>(i,rows,lo,hi,    far,c)<br>  far = <span class=k>function</span>(r,    t)<br>          t = keysort(rows, <span class=k>function</span>(z) <span class=k>return</span> i:distx(z, r) <span class=k>end</span>)<br>          <span class=k>return</span> t[#t] <span class=k>end</span><br>  lo = lo <span class=k>or</span> far(rows[rand(#rows)])<br>  hi = hi <span class=k>or</span> far(lo)<br>  <span class=k>if</span> i:disty(lo) &gt; i:disty(hi) <span class=k>then</span> lo, hi = hi, lo <span class=k>end</span><br>  c = i:distx(lo, hi) + TINY<br>  <span class=k>return</span> <span class=k>function</span>(r) <span class=k>return</span> (i:distx(lo,r)^2 + c*c<br>                              - i:distx(hi,r)^2) / (2*c) <span class=k>end</span>,<br>         lo, hi <span class=k>end</span></pre>
+<br><br>
+Note the middle line: after finding the poles, ONE comparison sorts them by disty, so <em>lo</em> is always the pole nearer heaven. That costs two labels &mdash; the only two this whole chapter spends &mdash; and it means every split knows which side is the good side. Remember that thrift: it grows into active learning.
+<br><br><div class="reference">
+<a href="https://doi.org/10.1145/223784.223812">Faloutsos & Lin: FastMap: a fast algorithm for indexing, data-mining and visualization of traditional and multimedia datasets</a>. Christos Faloutsos, King-Ip Lin. SIGMOD 1995, 163-174.
+</div>
+</li>
+<li>
+<b>projection</b>: Where does a row <em>r</em> sit on the line between the poles? High-school geometry answers. With <em>a</em> = the gap from <em>lo</em> to <em>r</em>, <em>b</em> = the gap from <em>hi</em> to <em>r</em>, and <em>c</em> = the gap between the poles:
+<pre>              r<br>             /|<br>          a / |     x = (a&sup2; + c&sup2; - b&sup2;) / (2c)<br>           /  |<br>          /   |          \ b<br>  lo ----+----+----------- hi<br>         x<br>         &lt;------- c -------&gt;</pre>
+<br><br>
+That is the cosine rule, solved for the foot of the perpendicular. <em>x</em> near 0: the row sits with the good pole (<em>lo</em>); <em>x</em> near <em>c</em>: with the bad one; <em>x</em> below 0 or beyond <em>c</em>: outside the poles entirely, which fastmap's approximation happily allows. And look at what <em>poles</em> returns: not a number &mdash; a FUNCTION, carrying <em>lo</em>, <em>hi</em> and <em>c</em> in its closure (glossary 2). One line of geometry, wrapped so keysort can use it as a key.
+</li>
+<li>
+<b>halve</b>: Project every row, sort by projection, cut at the median: two halves, better half first. The sort key calls distx twice per row, so this is exactly the slow-key situation from the DSU notes &mdash; keysort computes each projection once. One more thrift: the poles are picked from <em>some(rows, the.few)</em>, a random sample of 128 rows, because the longest-line estimate barely improves with more.
+<pre><span class=k>function</span> <span class=f>TBL.halve</span>(i,rows,    fun,a,b,n)<br>  rows = rows <span class=k>or</span> i.rows<br>  fun, a, b = i:poles(some(rows, the.few))<br>  rows = keysort(rows, fun)<br>  n = floor(#rows / 2)<br>  <span class=k>return</span> a, b, slice(rows, 1, n), slice(rows, n + 1) <span class=k>end</span></pre>
+</li>
+<li>
+<b>node</b>: Recurse the halving and a tree falls out: each node holds its rows (as a fresh cloned table) and its two poles; splitting stops when a node is too small to bother (fewer than 2 &middot; <em>the.stop</em> rows). auto93's 398 rows, with stop=32: 398 &rarr; 199 &rarr; ~100 &rarr; ~50, then stop &mdash; three levels, eight leafs. A binary chop through data space: no centroids, no k, no distance matrix, and label cost of two poles per split.
+<pre><span class=k>function</span> <span class=f>Node</span>(tbl,rows,    recurse)<br>  <span class=k>function</span> <span class=f>recurse</span>(rows,    node,a,b,lo,hi)<br>    node = new(NODE, {here=tbl:clone(rows),<br>                      a=<span class=k>nil</span>, b=<span class=k>nil</span>, lo=<span class=k>nil</span>, hi=<span class=k>nil</span>})<br>    <span class=k>if</span> #rows &gt;= 2 * the.stop <span class=k>then</span><br>      a, b, lo, hi = tbl:halve(rows)<br>      node.a, node.b = a, b<br>      <span class=k>if</span> #lo &gt; 0 <span class=k>and</span> #hi &gt; 0 <span class=k>then</span><br>        node.lo, node.hi = recurse(lo), recurse(hi) <span class=k>end</span> <span class=k>end</span><br>    <span class=k>return</span> node<br>  <span class=k>end</span> <span class=c>-- recurse</span><br>  <span class=k>return</span> recurse(rows <span class=k>or</span> tbl.rows) <span class=k>end</span></pre>
+<br><br>
+To place a NEW row, walk down: at each level, go to whichever pole is nearer. Log-many distance checks and the stranger has an address:
+<pre><span class=k>function</span> <span class=f>NODE.leaf</span>(i,row,    t)<br>  <span class=k>while</span> i.lo <span class=k>do</span><br>    t = i.here<br>    i = t:distx(row, i.a) &lt;= t:distx(row, i.b)<br>        <span class=k>and</span> i.lo <span class=k>or</span> i.hi <span class=k>end</span><br>  <span class=k>return</span> i <span class=k>end</span></pre>
+</li>
+</ol>
+<footer>This page is <a href="http://jeffhuang.com/designed_to_last/">designed to last</a>.</footer>
+</main>
+</body>
+</html>

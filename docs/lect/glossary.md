@@ -823,3 +823,207 @@ function TBL.disty(i,row)
   return minkowski(i.cols.y, function(y)
            return abs(y:norm(row[y.at]) - y.heaven) end) end
 ```
+
+## Week 3: clustering by poles
+
+New acronyms: none.
+
+### cluster
+
+Learning without labels. Before anyone will pay for a single y
+value, the x columns are already free — so group rows by
+x-distance and structure appears: rows that sit together tend
+to behave together. Clustering is how this code spends its
+unlabelled riches. The classic answers (k-means and friends)
+sweep the data many times chasing centroids; this code splits
+once, on two rows.
+
+### fastmap
+
+How do you find the two most separated rows? The honest way
+compares everything to everything: O(n²) distance calls. The
+fastmap trick gets close for O(2n): pick any row at random; its
+farthest neighbor is pole one; pole one's farthest neighbor is
+pole two. Two sweeps, and you hold (roughly) the longest line
+through the data. Note the disty line: after finding the poles,
+ONE comparison sorts them so `lo` is always the pole nearer
+heaven. That costs two labels — the only two this chapter
+spends — and it means every split knows which side is the good
+side. That thrift grows into active learning.
+
+```lua
+function TBL.poles(i,rows,lo,hi,    far,c)
+  far = function(r,    t)
+          t = keysort(rows, function(z) return i:distx(z, r) end)
+          return t[#t] end
+  lo = lo or far(rows[rand(#rows)])
+  hi = hi or far(lo)
+  if i:disty(lo) > i:disty(hi) then lo, hi = hi, lo end
+  c = i:distx(lo, hi) + TINY
+  return function(r) return (i:distx(lo,r)^2 + c*c
+                              - i:distx(hi,r)^2) / (2*c) end,
+         lo, hi end
+```
+
+See [Faloutsos & Lin, FastMap, SIGMOD 1995](https://doi.org/10.1145/223784.223812).
+
+### projection
+
+Where does a row *r* sit on the line between the poles? With
+*a* = the gap from `lo` to *r*, *b* = the gap from `hi` to *r*,
+and *c* = the gap between the poles, the cosine rule gives the
+foot of the perpendicular:
+
+$$x = (a^2 + c^2 - b^2) / (2c)$$
+
+```
+              r
+             /|
+          a / |     x = (a² + c² - b²) / (2c)
+           /  |
+          /   |          \ b
+  lo ----+----+----------- hi
+         x
+         <------- c ------->
+```
+
+*x* near 0: the row sits with the good pole; near *c*: with the
+bad one; outside 0..c: beyond the poles, which fastmap's
+approximation happily allows. And `poles` returns not a number
+but a FUNCTION — the geometry rides in a closure (glossary 2)
+with `lo`, `hi` and `c`, ready to be a keysort key.
+
+### halve
+
+Project every row, sort by projection, cut at the median: two
+halves, better half first. The key calls distx twice per row —
+the slow-key situation — so keysort computes each projection
+once. One more thrift: poles are picked from
+`some(rows, the.few)`, a random 128-row sample, because the
+longest-line estimate barely improves with more.
+
+```lua
+function TBL.halve(i,rows,    fun,a,b,n)
+  rows = rows or i.rows
+  fun, a, b = i:poles(some(rows, the.few))
+  rows = keysort(rows, fun)
+  n = floor(#rows / 2)
+  return a, b, slice(rows, 1, n), slice(rows, n + 1) end
+```
+
+### node
+
+Recurse the halving and a tree falls out: each node holds its
+rows (a fresh cloned table) and its two poles; splitting stops
+below 2·`the.stop` rows. auto93's 398 rows, stop=32:
+398 → 199 → ~100 → ~50, stop — three levels, eight leafs. A
+binary chop through data space: no centroids, no k, no distance
+matrix, two labels per split. To place a NEW row, walk down
+toward whichever pole is nearer: log-many checks and the
+stranger has an address.
+
+```lua
+function Node(tbl,rows,    recurse)
+  function recurse(rows,    node,a,b,lo,hi)
+    node = new(NODE, {here=tbl:clone(rows),
+                      a=nil, b=nil, lo=nil, hi=nil})
+    if #rows >= 2 * the.stop then
+      a, b, lo, hi = tbl:halve(rows)
+      node.a, node.b = a, b
+      if #lo > 0 and #hi > 0 then
+        node.lo, node.hi = recurse(lo), recurse(hi) end end
+    return node
+  end -- recurse
+  return recurse(rows or tbl.rows) end
+
+function NODE.leaf(i,row,    t)
+  while i.lo do
+    t = i.here
+    i = t:distx(row, i.a) <= t:distx(row, i.b)
+        and i.lo or i.hi end
+  return i end
+```
+
+## Week 4: cuts, trees, XAI
+
+New acronyms: XAI.
+
+### cut
+
+One test on one x column: numbers split at a threshold
+(`x <= v`), symbols by equality (`x == v`) — the `holds` slot
+of the [columnProtocol](#columnprotocol). A good cut leaves
+each side more settled about y than the whole was. The craft is
+scoring thousands of candidates, cheaply.
+
+### val
+
+How good is a cut? Summarize y on each side, ask each summary
+its diversity (`div`: sd or entropy), take the size-weighted
+mean; lower is better.
+
+```lua
+function val(a,b)
+  return (a:div()*a.n + b:div()*b.n) / (a.n + b.n + TINY) end
+```
+
+Note what this does NOT ask: whether y is numeric or symbolic.
+Any summary answering `div` can play, so one tree does
+regression, classification, and (via disty) optimization. See
+[Quinlan, Induction of decision trees, 1986](https://doi.org/10.1007/BF00116251).
+
+### one-pass cuts
+
+A numeric column with n distinct values offers n−1 cuts.
+Rebuilding summaries per cut is O(n²). Instead: sort the (x,y)
+pairs once, walk left to right ADDING each y to a growing left
+summary — and the right summary is `tot - here`, by the pool
+algebra (NUM.__sub). Every cut scored in one linear pass; this
+is why week 1 insisted summaries must subtract. Guards: cuts
+fall only between distinct sorted values, and `big` refuses any
+cut leaving fewer than `the.leaf` rows on a side.
+
+```lua
+function NUM.cuts(c,xy,tot,acc,best,    here)
+  table.sort(xy, function(a,b) return a[1] < b[1] end)
+  here = acc()
+  for j,p in ipairs(xy) do
+    here:add(p[2])
+    if j < #xy and p[1] ~= xy[j+1][1] and big(j, #xy) then
+      best{val(here, tot - here),c.at,p[1]} end end end
+```
+
+### least
+
+Thousands of candidate cuts, and no list of them is ever built:
+`least` returns a closure holding only the best candidate seen.
+Call it with a candidate to offer one; call it empty to read
+the winner. O(1) memory over any number of candidates.
+
+```lua
+function least(    lo)
+  return function(x)
+    if x and (lo == nil or x[1] < lo[1]) then lo = x end
+    return lo end end
+```
+
+### tree
+
+Take the champion cut (`bestcut` feeds every column's cuts to
+one `least` reducer), divide rows into yes and no, recurse;
+stop at `the.maxd` levels or when a side is small. Default Y is
+disty, so the tree optimizes many goals at once — but hand it
+any Y and accumulator and the same dozen lines classify or
+regress. Predict for a new row by walking it to a leaf and
+answering the leaf's mean (`TREE.leaf`).
+
+### XAI
+
+Explainable AI: an explanation is a model small enough to argue
+with. A depth-four tree is a paragraph — "under these tests,
+these rows; the best leaf is here" — and ezr's printer works
+for arguability: one row per node, goal means in columns, best
+leaf marked, better branch printed first. When the model is
+small, the model IS the explanation, and a business user can
+push back on any line of it. See
+[Rudin 2019](https://doi.org/10.1038/s42256-019-0048-x).
