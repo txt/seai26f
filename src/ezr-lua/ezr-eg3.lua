@@ -113,7 +113,8 @@ eg["--node"] = function(    t,nd,n,leafs,walk)
 --    understand. Share that list with your pair. See if,
 --    together, you can figure them out.
 -- 4. Make that Python perform like the Lua: same demos,
---    similar printed numbers.
+--    similar printed numbers. Stuck on the ideas? Each function
+--    here gets its own tiny lecture in [gloss3](gloss3.html).
 -- 5. Hand in: one side of one piece of paper, showing your
 --    Python code for poles, halve and Node. At the end of that
 --    code, add comments answering the "check your port"
