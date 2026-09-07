@@ -1014,16 +1014,43 @@ Any summary answering `div` can play, so one tree does
 regression, classification, and (via disty) optimization. See
 [Quinlan, Induction of decision trees, 1986](https://doi.org/10.1007/BF00116251).
 
+### least
+
+Thousands of candidate cuts are coming, and no list of them
+will ever be built: `least` returns a closure holding only the
+best candidate seen. Call it with a candidate to offer one;
+call it empty to read the winner. In SE-theory terms this is a
+**visitor pattern**: a little visitor, handed to whoever walks
+the data, memo-ing the best thing seen so far. The walker never
+knows what the visitor collects; the visitor never knows the
+walking order — open-closed, both ways. O(1) memory over any
+number of candidates.
+
+```lua
+function least(    lo)
+  return function(x)
+    if x and (lo == nil or x[1] < lo[1]) then lo = x end
+    return lo end end
+```
+
 ### one-pass cuts
 
-A numeric column with n distinct values offers n−1 cuts.
-Rebuilding summaries per cut is O(n²). Instead: sort the (x,y)
-pairs once, walk left to right ADDING each y to a growing left
-summary — and the right summary is `tot - here`, by the pool
-algebra (NUM.__sub). Every cut scored in one linear pass; this
-is why week 1 insisted summaries must subtract. Guards: cuts
-fall only between distinct sorted values, and `big` refuses any
-cut leaving fewer than `the.leaf` rows on a side.
+The dumb way first: a numeric column with n distinct values
+offers n−1 cuts, and scoring one cut by building both side
+summaries from scratch is a pass over all n rows — so scoring
+every cut is O(n²). Fine at 398 rows; death at a million. Can
+we do O(n)? Yes: sort the (x,y) pairs once, walk left to right
+ADDING each y to a growing left summary — the right summary is
+never built at all, it is `tot - here`, by the pool algebra
+(NUM.__sub). Every cut scored in one linear pass; this is why
+week 1 insisted summaries must subtract. Can we do O(m), m<n?
+Also yes — gloss3's trick again: hand the machinery a small
+random sample (`the.few` style) and it finds nearly the same
+champion. Recurring moral, third appearance: before optimizing
+the computation, ask how little of the data it actually needs.
+Guards: cuts fall only between distinct sorted values, and
+`big` refuses any cut leaving fewer than `the.leaf` rows on a
+side.
 
 ```lua
 function NUM.cuts(c,xy,tot,acc,best,    here)
@@ -1033,20 +1060,6 @@ function NUM.cuts(c,xy,tot,acc,best,    here)
     here:add(p[2])
     if j < #xy and p[1] ~= xy[j+1][1] and big(j, #xy) then
       best{val(here, tot - here),c.at,p[1]} end end end
-```
-
-### least
-
-Thousands of candidate cuts, and no list of them is ever built:
-`least` returns a closure holding only the best candidate seen.
-Call it with a candidate to offer one; call it empty to read
-the winner. O(1) memory over any number of candidates.
-
-```lua
-function least(    lo)
-  return function(x)
-    if x and (lo == nil or x[1] < lo[1]) then lo = x end
-    return lo end end
 ```
 
 ### tree

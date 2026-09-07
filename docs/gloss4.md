@@ -116,15 +116,53 @@ multi-objective optimization. The protocol keeps paying.
 
 -
 
-**one-pass cuts**: A numeric column with n distinct values
-offers n-1 cuts. Score each by rebuilding two summaries and
-that is O(n&sup2;). Instead: sort the (x,y) pairs once, then
-walk left to right, ADDING each y to a growing left summary
-&mdash; and the right summary is just *tot - here*, by the pool
-algebra of glossary 2. Every cut scored in one linear pass;
-this is why week 1 insisted summaries must subtract.
+**least (the champion closure)**: Thousands of candidate cuts
+are coming, and no list of them will ever be built. *least*
+returns a closure holding one thing: the best candidate seen so
+far. Call it with a candidate to offer one; call it empty to
+read the winner.
+
+<pre><span class=k>function</span> <span class=f>least</span>(    lo)<br>  <span class=k>return</span> <span class=k>function</span>(x)<br>    <span class=k>if</span> x <span class=k>and</span> (lo == <span class=k>nil</span> <span class=k>or</span> x[1] &lt; lo[1]) <span class=k>then</span> lo = x <span class=k>end</span><br>    <span class=k>return</span> lo <span class=k>end</span> <span class=k>end</span></pre>
+
+In SE-theory terms this is a **visitor pattern**: a little
+visitor, handed to whoever walks the data, memo-ing the best
+thing seen so far. The walker never knows what the visitor
+collects; the visitor never knows the walking order &mdash;
+open-closed, both ways. Every column feeds its cuts to the same
+visitor, and the champion rides home in the closure (glossary
+2, again): O(1) memory over any number of candidates.
+
+<pre><span class=k>function</span> <span class=f>TBL.bestcut</span>(i,rows,Y,acc,best)<br>  <span class=k>for</span> _,c <span class=k>in</span> ipairs(i.cols.x) <span class=k>do</span> i:cuts(rows,c,Y,acc,best) <span class=k>end</span><br>  <span class=k>return</span> best() <span class=k>end</span></pre>
+
+-
+
+**one-pass cuts**: The dumb way first. A numeric column with n
+distinct values offers n-1 candidate cuts, and the obvious
+score for one cut is: build a left y-summary and a right
+y-summary from scratch, then take val. Building those summaries
+is a pass over all n rows &mdash; so scoring EVERY cut is
+O(n&sup2;):
+
+<pre><span class=c>-- dumb: n-1 cuts, each rebuilding summaries from n rows</span><br><span class=k>for</span> _,cut <span class=k>in</span> ipairs(cuts) <span class=k>do</span>          <span class=c>-- n-1 laps...</span><br>  l, r = acc(), acc()<br>  <span class=k>for</span> _,p <span class=k>in</span> ipairs(xy) <span class=k>do</span>            <span class=c>-- ...of n rows each</span><br>    (p[1] &lt;= cut <span class=k>and</span> l <span class=k>or</span> r):add(p[2]) <span class=k>end</span><br>  best{val(l, r), c.at, cut} <span class=k>end</span></pre>
+
+Fine at 398 rows; death at a million. So: can we do O(n)? Yes,
+with week 1's machinery. Sort the (x,y) pairs once, then walk
+left to right ADDING each y to one growing left summary &mdash;
+and the right summary is never built at all: it is *tot - here*,
+by the pool algebra of glossary 2. Every cut scored in one
+linear pass; this is why week 1 insisted summaries must
+subtract.
 
 <pre><span class=k>function</span> <span class=f>NUM.cuts</span>(c,xy,tot,acc,best,    here)<br>  table.sort(xy, <span class=k>function</span>(a,b) <span class=k>return</span> a[1] &lt; b[1] <span class=k>end</span>)<br>  here = acc()<br>  <span class=k>for</span> j,p <span class=k>in</span> ipairs(xy) <span class=k>do</span><br>    here:add(p[2])<br>    <span class=k>if</span> j &lt; #xy <span class=k>and</span> p[1] ~= xy[j+1][1] <span class=k>and</span> big(j, #xy) <span class=k>then</span><br>      best{val(here, tot - here),c.at,p[1]} <span class=k>end</span> <span class=k>end</span> <span class=k>end</span></pre>
+
+Can we do better still &mdash; O(m), for some m &lt; n? Also
+yes, and it is gloss3's trick wearing new clothes: nothing is
+sacred about scoring cuts on ALL the rows. Hand the cuts
+machinery a small random sample (m = a few hundred, the.few
+style) and it finds nearly the same champion, for the same
+reason a 128-row sample found good enough poles. The recurring
+moral, third appearance: before optimizing the computation, ask
+how little of the data the computation actually needs.
 
 Two guards ride along: cuts only fall between DISTINCT sorted
 values, and *big* refuses any cut leaving fewer than *the.leaf*
@@ -132,21 +170,6 @@ rows on either side &mdash; tiny splits are memorization
 wearing a costume.
 
 <pre><span class=k>function</span> <span class=f>big</span>(lo,n)<br>  <span class=k>return</span> the.leaf &lt;= lo <span class=k>and</span> lo &lt;= n - the.leaf <span class=k>end</span></pre>
-
--
-
-**least (the champion closure)**: Thousands of candidate cuts,
-and no list of them is ever built. *least* returns a closure
-holding one thing: the best candidate seen so far. Call it with
-a candidate to offer one; call it empty to read the winner.
-
-<pre><span class=k>function</span> <span class=f>least</span>(    lo)<br>  <span class=k>return</span> <span class=k>function</span>(x)<br>    <span class=k>if</span> x <span class=k>and</span> (lo == <span class=k>nil</span> <span class=k>or</span> x[1] &lt; lo[1]) <span class=k>then</span> lo = x <span class=k>end</span><br>    <span class=k>return</span> lo <span class=k>end</span> <span class=k>end</span></pre>
-
-Every column feeds its cuts to the same reducer; the champion
-rides in the closure (glossary 2, again). Streaming style: O(1)
-memory over any number of candidates.
-
-<pre><span class=k>function</span> <span class=f>TBL.bestcut</span>(i,rows,Y,acc,best)<br>  <span class=k>for</span> _,c <span class=k>in</span> ipairs(i.cols.x) <span class=k>do</span> i:cuts(rows,c,Y,acc,best) <span class=k>end</span><br>  <span class=k>return</span> best() <span class=k>end</span></pre>
 
 -
 
