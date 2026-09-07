@@ -898,9 +898,21 @@ with `lo`, `hi` and `c`, ready to be a keysort key.
 Project every row, sort by projection, cut at the median: two
 halves, better half first. The key calls distx twice per row —
 the slow-key situation — so keysort computes each projection
-once. One more thrift: poles are picked from
-`some(rows, the.few)`, a random 128-row sample, because the
-longest-line estimate barely improves with more.
+once.
+
+Then note `some(rows, the.few)`: the poles come from a random
+sample of 128 rows, not from all of them. That line is the
+voice of experience. Early versions found poles over ALL the
+remaining rows — and each `far` call is a full distance sweep,
+so every split of every node paid O(n²)-ish distance work, at
+every level of the recursion. Slow. Then came the experiment of
+doing it on just a few rows — and the splits were as good as
+anything the full sweep found. Which makes sense: two far-apart
+rows in a random 128 are already close to the diameter of the
+whole cloud, and the split only needs the poles to be far and
+roughly opposed, not optimal. Moral, and it recurs all
+semester: before optimizing the computation, check how little
+of the data the computation actually needs.
 
 ```lua
 function TBL.halve(i,rows,    fun,a,b,n)

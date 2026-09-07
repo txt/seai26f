@@ -81,9 +81,22 @@ it as a key.
 median: two halves, better half first. The sort key calls
 distx twice per row, so this is exactly the slow-key situation
 from the DSU notes &mdash; keysort computes each projection
-once. One more thrift: the poles are picked from
-*some(rows, the.few)*, a random sample of 128 rows, because
-the longest-line estimate barely improves with more.
+once.
+
+Then note *some(rows, the.few)*: the poles come from a random
+sample of 128 rows, not from all of them. That line is the
+voice of experience. Early versions of this code found poles
+over ALL the remaining rows &mdash; and each *far* call is a
+full distance sweep, so every split of every node paid
+O(n&sup2;)-ish distance work, at every level of the recursion.
+Slow. Then came the experiment of doing it on just a few rows
+&mdash; and the splits were as good as anything the full sweep
+found. Which makes sense: two far-apart rows in a random 128
+are already close to the diameter of the whole cloud, and the
+split only needs the poles to be far and roughly opposed, not
+optimal. Moral, and it recurs all semester: before optimizing
+the computation, check how little of the data the computation
+actually needs.
 
 <pre><span class=k>function</span> <span class=f>TBL.halve</span>(i,rows,    fun,a,b,n)<br>  rows = rows <span class=k>or</span> i.rows<br>  fun, a, b = i:poles(some(rows, the.few))<br>  rows = keysort(rows, fun)<br>  n = floor(#rows / 2)<br>  <span class=k>return</span> a, b, slice(rows, 1, n), slice(rows, n + 1) <span class=k>end</span></pre>
 
