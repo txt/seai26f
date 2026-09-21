@@ -30,7 +30,7 @@ See [hello](https://txt.github.io/seai26f/hello.html) for the course intro, [pol
 | Aug 24 | [gloss1](https://txt.github.io/seai26f/gloss1.html) | [eg0](https://txt.github.io/seai26f/ezr-eg0.html) | | | [w2](docs/review/w2.md) |
 | Aug 31 |  [gloss2](https://txt.github.io/seai26f/gloss2.html) | [eg1](https://txt.github.io/seai26f/ezr-eg1.html) | [tool:ds](docs/lect/tools.md#ds) | [tool:hc](docs/lect/tools.md#hc) | [w3](docs/review/w3.md) |
 | 🟩 ${\color{green}\textsf{Sep 07 — Labor Day, no class}}$ | | | | | |
-| Sep 14 | [gloss3](https://txt.github.io/seai26f/gloss3.html) | [eg2](https://txt.github.io/seai26f/ezr-eg2.html) | [tool:gp](docs/lect/tools.md#gp) | [tool:nsga2](docs/lect/tools.md#nsga2) | |
+| Sep 14 | [gloss3](https://txt.github.io/seai26f/gloss3.html) | [eg2](https://txt.github.io/seai26f/ezr-eg2.html) | [tool:gp](docs/lect/tools.md#gp) | [tool:nsga2](docs/lect/tools.md#nsga2) | [w4](docs/review/w4.md) |
 | Sep 21 | [gloss4](https://txt.github.io/seai26f/gloss4.html) | [eg3](https://txt.github.io/seai26f/ezr-eg3.html) | [tool:nov](docs/lect/tools.md#nov) | — | |
 | Sep 28 | acquire | [eg4](https://txt.github.io/seai26f/ezr-eg4.html) | — | [tool:ibea](docs/lect/tools.md#ibea) | |
 | Oct 05 | stats | eg5 | [tool:moead](docs/lect/tools.md#moead) | [tool:al](docs/lect/tools.md#al) | |
