@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Glossary 9: SE for AI</title>
+<link rel="icon" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛰️</text></svg>">
+<meta name="viewport" content="width=device-width" />
+<style>
+:root {
+    --back-color: rgb(30, 30, 30);
+    --text-color: rgb(212, 212, 212);
+}
+
+/* minimalist reset */
+* {
+    padding: 0;
+    margin: 0;
+    font-size: 1em;
+}
+
+body {
+    background-color: var(--back-color);
+    color: var(--text-color);
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+}
+
+main {
+    margin: 0 auto;
+    padding: 30px 140px 0 140px;
+    max-width: 600px;
+    min-height: 100vh;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid var(--text-color);
+    margin: 3em 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 1.2em;
+    font-weight: 700;
+    display: inline;
+    margin-right: 5px;
+    line-height: 1.2;
+}
+
+h2 {
+    margin-top: 50px;
+    font-size: 1.4em;
+}
+
+h3 {
+    margin-top: 40px;
+    font-size: 1.1em;
+    text-align: center;
+}
+
+h4 {
+    font-weight: 400;
+    margin-bottom: 40px;
+}
+
+ol {
+    counter-reset: item;
+}
+ol>li {
+    counter-increment: item;
+    list-style: none inside;
+    margin: 20px 0;
+    overflow: hidden;
+    line-height: 1.5em;
+}
+ol>li:before {
+    content: counter(item) ;
+    margin-right: 10px;
+    padding: 8px;
+    border-radius: 50%;
+    width: 25px;
+    background: var(--text-color);
+    color: var(--back-color);
+    text-align: center;
+    float: left;
+    font-weight: 700;
+}
+
+footer {
+    text-align: right;
+    margin-top: 80px;
+    padding-bottom: 20px;
+    font-size: 0.7em;
+    font-style: italic;
+}
+
+p {
+    line-height: 1.5em;
+    margin-top: 20px;
+    display: block;
+}
+
+a {
+    color: inherit;
+}
+a:hover, a:focus {
+    color: var(--back-color);
+    background-color: var(--text-color);
+}
+
+img {
+    margin: 3px;
+}
+
+ul {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-left: 1.4em;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.85em;
+    line-height: 1.35;
+}
+th, td {
+    border: 1px solid rgba(212, 212, 212, 0.35);
+    padding: 4px 9px;
+    text-align: left;
+}
+th {
+    font-weight: 700;
+}
+
+.reference {
+    font-size: 0.8rem;
+    line-height: 1.2rem;
+}
+
+.footnote {
+    font-size: 0.8rem;
+    line-height: 1.2rem;
+    margin-top: 20px;
+}
+
+sup {
+    font-size: 0.7em;
+    line-height: 0;
+}
+
+.reference > a {
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+  main {
+      max-width: 600px;
+    padding: 10px;
+  }
+  h2 {
+    font-size: 1.2em;
+  }
+  img {
+    width: 100%;
+  }
+}
+</style>
+</head>
+<body>
+<main>
+<style>:root { --back-color: rgb(24, 31, 43); } pre { background: rgba(212,212,212,0.07); border: 1px solid rgba(212,212,212,0.25); padding: 10px 14px; margin: 20px 0; font-size: 0.85em; line-height: 1.4; overflow-x: auto; } pre .k { color: #79b8ff; } pre .s { color: #e0b06a; } pre .c { color: #8ac28a; font-style: italic; } pre .f { color: #d2a8ff; }</style>
+<h1>A glossary of tiny lectures, part 9</h1>
+<h2>Week 9: models and the seam</h2>
+<h4>By <a href="https://timm.fyi">Tim Menzies</a>, published 2026-11-09, updated 2026-11-09</h4>
+<p>
+<b>Summary:</b> <em>The last piece: replace the csv with a MODEL. Rows are born with "?" goals and disty buys them, one row at a time, so the label count IS the experiment. DTLZ1-7 give us problems whose true answers are known, so a search can be graded exactly. Then the week's punchline: the classics spend the whole pool; acquire spends 45 and lands in the same place. Demos in <a href="ezr-eg8.html">ezr-eg8.lua</a>; machinery verbatim from <a href="ezr-dtlz.html">ezr-dtlz.lua</a>.</em>
+</p>
+<hr id="week9">
+<h3>When the goals cost money</h3>
+<hr>
+<p>
+New acronyms: DTLZ (Deb-Thiele-Laumanns-Zitzler test suite).
+</p>
+<ol>
+<li>
+<b>model seam</b>: Everything so far read goals from a csv. The seam swaps that for a FUNCTION: set <em>t.model</em> and rows may be born with <em>"?"</em> goals, which <em>label</em> fills in on demand. Nothing upstream changes &mdash; trees, acquire, holdout, the optimizers all keep asking <em>disty</em> &mdash; which is the point of a seam. This is where outsiders plug in their own (maybe very expensive) simulator.
+<pre><span class=k>function</span> <span class=f>Dtlz</span>(    u,r)<br>  u = {names()}<br>  <span class=k>for</span> _ = 1, the.pool <span class=k>do</span><br>    r = {}<br>    <span class=k>for</span> _ = 1, the.Nx <span class=k>do</span> push(r, rand()) <span class=k>end</span><br>    <span class=k>for</span> _ = 1, the.M  <span class=k>do</span> push(r, <span class=s>"?"</span>) <span class=k>end</span><br>    push(u, r) <span class=k>end</span><br>  u = Tbl(u)<br>  u.model = _ENV[the.model]<br>  <span class=k>return</span> u <span class=k>end</span></pre>
+</li>
+<li>
+<b>dtlz</b>: The standard multi-objective test problems (Deb, Thiele, Laumanns & Zitzler, 2002): x lives in [0,1]<sup>Nx</sup>, the objectives have a KNOWN true front, and the difficulty is dialable. The last Nx-M+1 variables set DISTANCE from the front (make them zero and you are on it); the first M-1 set POSITION along it. dtlz1's front is the plane &sum;f = 0.5, approached across a landscape full of local traps; dtlz2's is the unit sphere &sum;f<sup>2</sup> = 1; dtlz7's comes in disconnected pieces. Because the answer is known, a search can be graded exactly &mdash; which is what makes these problems the field's measuring stick.
+<pre><span class=k>function</span> <span class=f>dtlz1</span>(x,M,    g,f,v)<br>  g, f = g1(slice(x, M)), {}<br>  <span class=k>for</span> i = 0, M-1 <span class=k>do</span><br>    v = 0.5 * (1 + g)<br>    <span class=k>for</span> j = 1, M-1-i <span class=k>do</span> v = v * x[j] <span class=k>end</span><br>    <span class=k>if</span> i &gt; 0 <span class=k>then</span> v = v * (1 - x[M-i]) <span class=k>end</span><br>    push(f, v) <span class=k>end</span><br>  <span class=k>return</span> f <span class=k>end</span></pre>
+</li>
+<li>
+<b>lazy labels (the sharpening ruler)</b>: A subtle consequence of buying goals one at a time: <em>disty</em> normalizes each goal against the column summary, and that summary only knows the labels bought so far. So the SAME row can score differently early and late &mdash; the ruler sharpens as spending grows. This is a feature, not a bug: with five labels you do not know the range of the world, and pretending otherwise is how leakage sneaks in. It also means any reported score must say how many labels were in hand when it was taken.
+</li>
+<li>
+<b>baseline</b>: What does doing nothing get you? <em>baseline</em> calls the model on every row and reports each goal's mean &mdash; deliberately NOT folding those calls into the column summaries, so the baseline never sharpens the ruler it is measured against. Every claim in this course is "better than X"; <em>baseline</em> is the cheapest honest X.
+<pre><span class=k>function</span> <span class=f>TBL.baseline</span>(i,    nums,f)<br>  nums = map(i.cols.y, <span class=k>function</span>() <span class=k>return</span> Num() <span class=k>end</span>)<br>  <span class=k>for</span> _,r <span class=k>in</span> ipairs(i.rows) <span class=k>do</span><br>    f = i.model(map(i.cols.x,<br>          <span class=k>function</span>(c) <span class=k>return</span> r[c.at] <span class=k>end</span>), #i.cols.y)<br>    <span class=k>for</span> j,v <span class=k>in</span> ipairs(f) <span class=k>do</span> nums[j]:add(v) <span class=k>end</span> <span class=k>end</span><br>  <span class=k>return</span> map(nums, <span class=s>"mid"</span>) <span class=k>end</span></pre>
+</li>
+<li>
+<b>pure vs generalize</b>: Two ways to report the same search. PURE (<em>--pure</em>): spend the budget over the whole pool and report the best row found &mdash; the right number when you own every row and just want the best one (config tuning, say). GENERALIZE (<em>--generalize</em>): spend on half, then pick from the half never seen &mdash; the right number when tomorrow's rows are not today's. Pure scores flatter. Say which one you ran; papers that do not are hiding the difference.
+</li>
+<li>
+<b>the price of a label</b>: The week's punchline, from <em>ezr-eg8.lua --race</em> on a 200-row DTLZ2 pool: the four classic optimizers between them buy around 200 labels &mdash; effectively the whole pool &mdash; while <em>acquire</em> buys 45 and lands at the same place or better. Neither result says the classics are bad; they say the classics were designed for cheap models. The question to carry into any project is not "which optimizer is best" but "what does one evaluation cost here, and how many can I afford?"
+<br><br><div class="reference">
+<a href="https://doi.org/10.1109/CEC.2002.1007032">Deb, Thiele, Laumanns & Zitzler: Scalable multi-objective optimization test problems</a>. Kalyanmoy Deb, Lothar Thiele, Marco Laumanns, Eckart Zitzler. CEC 2002, 825-830.
+</div>
+<div class="reference">
+<a href="https://doi.org/10.1109/TSE.2018.2790925">Chen, Nair, Krishna & Menzies: Sampling as a baseline optimizer for search-based software engineering</a>. IEEE TSE 45(6), 2019, 597-614.
+</div>
+</li>
+</ol>
+<footer>This page is <a href="http://jeffhuang.com/designed_to_last/">designed to last</a>.</footer>
+</main>
+</body>
+</html>

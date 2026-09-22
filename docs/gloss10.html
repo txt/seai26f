@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Glossary 10: SE for AI</title>
+<link rel="icon" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧩</text></svg>">
+<meta name="viewport" content="width=device-width" />
+<style>
+:root {
+    --back-color: rgb(30, 30, 30);
+    --text-color: rgb(212, 212, 212);
+}
+
+/* minimalist reset */
+* {
+    padding: 0;
+    margin: 0;
+    font-size: 1em;
+}
+
+body {
+    background-color: var(--back-color);
+    color: var(--text-color);
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+}
+
+main {
+    margin: 0 auto;
+    padding: 30px 140px 0 140px;
+    max-width: 600px;
+    min-height: 100vh;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid var(--text-color);
+    margin: 3em 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 1.2em;
+    font-weight: 700;
+    display: inline;
+    margin-right: 5px;
+    line-height: 1.2;
+}
+
+h2 {
+    margin-top: 50px;
+    font-size: 1.4em;
+}
+
+h3 {
+    margin-top: 40px;
+    font-size: 1.1em;
+    text-align: center;
+}
+
+h4 {
+    font-weight: 400;
+    margin-bottom: 40px;
+}
+
+ol {
+    counter-reset: item;
+}
+ol>li {
+    counter-increment: item;
+    list-style: none inside;
+    margin: 20px 0;
+    overflow: hidden;
+    line-height: 1.5em;
+}
+ol>li:before {
+    content: counter(item) ;
+    margin-right: 10px;
+    padding: 8px;
+    border-radius: 50%;
+    width: 25px;
+    background: var(--text-color);
+    color: var(--back-color);
+    text-align: center;
+    float: left;
+    font-weight: 700;
+}
+
+footer {
+    text-align: right;
+    margin-top: 80px;
+    padding-bottom: 20px;
+    font-size: 0.7em;
+    font-style: italic;
+}
+
+p {
+    line-height: 1.5em;
+    margin-top: 20px;
+    display: block;
+}
+
+a {
+    color: inherit;
+}
+a:hover, a:focus {
+    color: var(--back-color);
+    background-color: var(--text-color);
+}
+
+img {
+    margin: 3px;
+}
+
+ul {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-left: 1.4em;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.85em;
+    line-height: 1.35;
+}
+th, td {
+    border: 1px solid rgba(212, 212, 212, 0.35);
+    padding: 4px 9px;
+    text-align: left;
+}
+th {
+    font-weight: 700;
+}
+
+.reference {
+    font-size: 0.8rem;
+    line-height: 1.2rem;
+}
+
+.footnote {
+    font-size: 0.8rem;
+    line-height: 1.2rem;
+    margin-top: 20px;
+}
+
+sup {
+    font-size: 0.7em;
+    line-height: 0;
+}
+
+.reference > a {
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+  main {
+      max-width: 600px;
+    padding: 10px;
+  }
+  h2 {
+    font-size: 1.2em;
+  }
+  img {
+    width: 100%;
+  }
+}
+</style>
+</head>
+<body>
+<main>
+<style>:root { --back-color: rgb(24, 31, 43); } pre { background: rgba(212,212,212,0.07); border: 1px solid rgba(212,212,212,0.25); padding: 10px 14px; margin: 20px 0; font-size: 0.85em; line-height: 1.4; overflow-x: auto; } pre .k { color: #79b8ff; } pre .s { color: #e0b06a; } pre .c { color: #8ac28a; font-style: italic; } pre .f { color: #d2a8ff; }</style>
+<h1>A glossary of tiny lectures, part 10</h1>
+<h2>Revision: one machine, many names</h2>
+<h4>By <a href="https://timm.fyi">Tim Menzies</a>, published 2026-11-09, updated 2026-11-09</h4>
+<p>
+<b>Summary:</b> <em>No new terms here. This page is the map: what each week bought, how the pieces stack into one machine, and the claim the whole course exists to test &mdash; that most of the "different" tools in a data mining textbook are the same tool, wearing hats. Read this before the final, and before you write up either project.</em>
+</p>
+<hr id="stack">
+<h3>The stack, in one page</h3>
+<hr>
+<p>
+Every week added one layer, and every layer used only the ones below it.
+</p>
+<table>
+<tr><th>week</th><th>what it added</th><th>what that bought</th></tr>
+<tr><td>1</td><td>columns that summarize as they read (<em>Num</em>, <em>Sym</em>, <em>add</em>, <em>mid</em>, <em>div</em>)</td><td>O(1) memory, and summaries that subtract</td></tr>
+<tr><td>2</td><td>tables, distance, <em>disty</em> (gap to heaven)</td><td>one number for "how good is this row"</td></tr>
+<tr><td>3</td><td>fastmap poles, projection, recursive halving</td><td>structure with no labels, and an index</td></tr>
+<tr><td>4</td><td>cuts scored by expected diversity; trees; XAI</td><td>a model small enough to argue with</td></tr>
+<tr><td>5</td><td>budgets, acquire, restart, holdout</td><td>good rows for about 45 labels, honestly scored</td></tr>
+<tr><td>6</td><td>cohen, cliffs, ks, ranks, domination, wins</td><td>the right to say "this one is better"</td></tr>
+<tr><td>7</td><td>knn, anomaly, naive Bayes, kmeans, kpp</td><td>the textbook chapters, a dozen lines each</td></tr>
+<tr><td>8</td><td>ga, de, sa, local search, race</td><td>fifty years of search, and its price tag</td></tr>
+<tr><td>9</td><td>the model seam, DTLZ</td><td>goals that cost money, and known right answers</td></tr>
+</table>
+<ol>
+<li>
+<b>The one machine.</b> Read down this picture and every week is in it:
+<pre>rows (x cheap, y expensive)<br>  |<br>  +-- distx -----&gt; poles -----&gt; projection -----&gt; halve<br>  |                                                  |<br>  |                                            recurse = tree<br>  |                                                  |<br>  +-- disty (buys labels) --&gt; better half only --&gt; acquire<br>                                                     |<br>                              leaf -&gt; mean = regression<br>                              leaf -&gt; mode = classification<br>                              far from leaf = anomaly / alert<br>                              read the tree  = summarization / XAI<br>                              mutate + re-drop = forecast / what-if</pre>
+</li>
+<hr id="synonyms">
+<h3>The synonyms claim</h3>
+<hr>
+<p>
+Buse & Zimmermann's analytics grid has nine boxes; the explanation literature has its own list of triggers. The claim is that those lists collapse:
+</p>
+<table>
+<tr><th>they call it</th><th>we call it</th></tr>
+<tr><td>classification</td><td>the leaf's mode</td></tr>
+<tr><td>regression, forecasting</td><td>the leaf's mean</td></tr>
+<tr><td>optimization, tuning</td><td>keep the better half, recurse</td></tr>
+<tr><td>alerts, anomaly detection</td><td>far outside the leaf's own spread</td></tr>
+<tr><td>benchmarking</td><td>anomaly detection, with a reference population</td></tr>
+<tr><td>simulation, what-if, goals</td><td>mutate x, re-drop, read the new leaf</td></tr>
+<tr><td>summarization, overlays</td><td>read the tree</td></tr>
+<tr><td>privacy</td><td>publish the corner (prototypes of the columns that matter)</td></tr>
+<tr><td>explanation</td><td>the tree is the explanation</td></tr>
+</table>
+<li>
+<b>How you can prove this wrong.</b> The claim is falsifiable, and the undergraduate project is the experiment: build the skills in order, tag each step, and plot the percentage of NEW code per step. If reuse is real the bars fall. If they stay flat, this course's architecture lost &mdash; and an honest flat histogram scores full marks, because failures are findings.
+<br><br>
+The rival is easy to run: ask an LLM for each skill cold, one fresh prompt per skill, with no instruction to reuse anything. The prediction to beat is a thousand lines of new glue per skill, ten separate programs, each hooked into a large library.
+</li>
+<hr id="ideas">
+<h3>Ideas worth carrying out of here</h3>
+<hr>
+<ul>
+<li><b>x is cheap, y is expensive.</b> Almost everything in this   course follows from that one asymmetry.</li>
+<li><b>Weak indicators, hedged.</b> A cheap heuristic is evidence,   not truth: ask it more times, or act on it more gently.</li>
+<li><b>Before optimizing a computation, ask how little data it   needs.</b> Poles from 128 rows; cuts from a sample; prototypes   instead of rows.</li>
+<li><b>Support, not just purity.</b> A split that isolates one row   explains nothing.</li>
+<li><b>Say what it cost.</b> A score without its label count, or   without saying pure-vs-generalize, is not a result.</li>
+<li><b>Ties are the normal case.</b> Rank 0 is usually a set. So is   a Pareto front.</li>
+<li><b>Know when you do not know.</b> The certification envelope is   three lines and it is the difference between a useful model   and Crater.</li>
+<li><b>Explanations must be actionable.</b> Not "tires are   important" &mdash; <em>bald</em> tires.</li>
+</ul>
+<li>
+<b>Where to look things up.</b> Principles and weeks 0-2: <a href="gloss1.html">gloss1</a>. The Lua machinery under the demos: <a href="gloss2.html">gloss2</a>. Clustering: <a href="gloss3.html">gloss3</a>. Cuts and trees: <a href="gloss4.html">gloss4</a>. Active learning: <a href="gloss5.html">gloss5</a>. Statistics: <a href="gloss6.html">gloss6</a>. Applications: <a href="gloss7.html">gloss7</a>. Optimizers: <a href="gloss8.html">gloss8</a>. Models and the seam: <a href="gloss9.html">gloss9</a>. The full text of every entry lives in one file: <a href="https://github.com/txt/seai26f/blob/main/docs/lect/glossary.md">glossary.md</a>.
+<br><br><div class="reference">
+<a href="https://doi.org/10.1109/ICSE.2012.6227122">Buse & Zimmermann: Information needs for software development analytics</a>. Raymond P.L. Buse, Thomas Zimmermann. ICSE 2012.
+</div>
+<div class="reference">
+<a href="https://arxiv.org/abs/1812.04608">Hoffman, Mueller, Klein & Litman: Metrics for explainable AI: challenges and prospects</a>. Robert R. Hoffman, Shane T. Mueller, Gary Klein, Jordan Litman. arXiv:1812.04608, 2018.
+</div>
+</li>
+</ol>
+<footer>This page is <a href="http://jeffhuang.com/designed_to_last/">designed to last</a>.</footer>
+</main>
+</body>
+</html>

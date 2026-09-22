@@ -201,10 +201,12 @@ function TBL.kpp(i,k,    cents,pool,ws)
 -- their y cells are unknown: `snap` grades a mutant by its
 -- nearest real row, and `guess` is that neighbour's disty.
 
--- *`TBL:dominates(r1:row, r2:row) -> bool`*  
+-- *`TBL:dominates(r1:row, r2:row) -> bool`*
 -- True when r1 is no worse on all goals and better on at
--- least one.
+-- least one. Goals that do not exist yet get bought here
+-- (via disty), so this works on model-backed pools too.
 function TBL.dominates(i,r1,r2,    d1,d2,better,worse)
+  if i.model then i:disty(r1); i:disty(r2) end
   better, worse = false, false
   for _,y in ipairs(i.cols.y) do
     d1 = abs(y:norm(r1[y.at]) - y.heaven)

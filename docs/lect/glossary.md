@@ -1311,3 +1311,681 @@ def descends(tbl, rows, label=lambda row: row):
         descend(tbl, shuffle(rows), y, seen, cap, label): pass
   return sorted(seen.values(), key=y)
 ```
+
+## Week 5: active learning
+
+New acronyms: none.
+
+### active learning
+
+<a name="active-learning"></a>
+Until now every y value was free: the csv arrived with its
+goals filled in. Drop that. Suppose one label costs a test
+drive, a clinical trial, a week of CPU — and you get fifty,
+ever. Active learning is the discipline of choosing WHICH rows
+to label, using only the free x columns to choose, and counting
+every label you spend. The counting is the science: a result
+whose price is unknown says nothing.
+
+### label
+
+<a name="label"></a>
+Where the money is spent. A row born with `"?"` goals stays
+blank until someone asks; `label` calls the model, writes the
+answers into the row, and folds each answer into its goal
+column — so the summaries used for normalization sharpen as
+spending grows. Note the seam: everything upstream just asks
+for [disty](#disty), and never knows whether the number was
+looked up or bought.
+
+```lua
+function TBL.label(i,row,    f)
+  f = i.model(map(i.cols.x,
+        function(c) return row[c.at] end), #i.cols.y)
+  for j, y in ipairs(i.cols.y) do
+    row[y.at] = y:add(f[j]) end
+  return row end
+```
+
+### budget
+
+<a name="budget"></a>
+Four numbers run the economy: `budget=50` (labels, total),
+`check=5` (labels held back to confirm the final pick),
+`more=4` (labels per round) and `keepf=0.66` (fraction of the
+pool kept per cull). Read them as a sentence: spend four
+labels, throw away a third of what is left, repeat; keep five
+in your pocket for the final exam. Any experiment that quietly
+exceeds these is not measuring what it claims.
+
+### acquire
+
+<a name="acquire"></a>
+One sweep of [sway3](#sway-the-sampling-way), in code. Label up
+to `the.more` rows in the current pool, sort the pool by the
+projection onto poles drawn from those labelled rows, keep the
+best `the.keepf` of it, repeat until the pool is small or the
+budget is gone. Nothing here builds a model; the geometry does
+all the work, and the goals are only ever read for the few rows
+we paid for.
+
+```lua
+function TBL.acquire(i,rows,cap,lab,lo,hi,
+                     seen,more,new)
+  seen = {}
+  for _,r in ipairs(lab) do seen[r] = true end
+  while #rows >= 2*the.leaf do
+    more, new = min(the.more, cap - #lab), {}
+    for _,r in ipairs(rows) do -- new = labels in this pool
+      if seen[r] then push(new, r)
+      elseif more > 0 then
+        more, seen[r] = more - 1, true
+        push(new, push(lab, r)) end end
+    if #lab >= cap then return lab end -- budget spent
+    rows = slice(keysort(rows, (i:poles(new, lo, hi))),
+               1, max(1, floor(the.keepf * #rows))) end
+  return lab end
+```
+
+### restart
+
+<a name="restart"></a>
+A log-n chop reaches a tiny pool long before fifty labels are
+spent. So when the pool dries with budget left, reshuffle and
+descend again — but anchored at `lo, hi`, the best and worst
+rows labelled SO FAR. Every restart inherits everything paid
+for to date, which is why the second descent is sharper than
+the first. The loop stops when the budget is gone, or when a
+whole sweep buys nothing new.
+
+```lua
+function TBL.acquirer(i,cap,    lab,lo,hi,t,b4)
+  lab = {}
+  while true do
+    b4  = #lab
+    lab = i:acquire(shuffle(i.rows), cap, lab, lo, hi)
+    if #lab >= cap or #lab >= #i.rows or
+       #lab == b4 then break end -- full, or no progress
+    t = keysort(lab, i:Y())
+    lo, hi = t[1], t[#t] end -- best+worst seen
+  return keysort(lab, i:Y()) end
+```
+
+### holdout
+
+<a name="holdout"></a>
+The honesty check. Finding a good row among rows you have
+studied proves nothing; the question is whether what you
+learned TRANSFERS. So: split the rows in half, spend the budget
+on the train half, grow a [tree](#tree) from those labels, use
+that tree to rank the unseen test half, then spend the last
+`the.check` labels confirming the top of that ranking. The
+assert on line five is the whole ethic of the course — the
+spend is counted before anything is scored.
+
+```lua
+function TBL.holdout(i,how,    rows,n,train,test,lab,t,top)
+  how  = how or function(t2,cap) return t2:acquirer(cap) end
+  rows = shuffle(i.rows)
+  n    = floor(#rows/2)
+  train= slice(rows, 1, n)
+  test = slice(rows, n+1)
+  lab  = how(i:clone(train), the.budget - the.check)
+  assert(#lab + the.check <= the.budget) -- spend, counted
+  t    = Tree(i, lab)
+  top  = slice(keysort(test, function(r) return t:leaf(i, r) end),
+           1, the.check)
+  return keysort(top, i:Y())[1] end
+```
+
+One holdout is an anecdote; twenty of them are a distribution,
+and the distribution is the result. Which raises next week's
+question: when is one distribution really better than another?
+
+## Week 6: statistics and ranking
+
+New acronyms: KS (Kolmogorov-Smirnov).
+
+### cohen
+
+<a name="cohen"></a>
+The mean gap, measured in pooled standard deviations. If two
+bags differ by less than about a third of their own spread,
+nobody will ever notice the difference in practice — so
+`the` default is 0.35. This is an EFFECT SIZE, not a p-value:
+it asks "how big" rather than "how surprising", which is the
+right question when your sample size is whatever you could
+afford.
+
+```lua
+function cohen(xs,ys,    x,y,n,m,sd)
+  x, y = adds(xs), adds(ys)
+  n, m = x.n, y.n
+  sd = sqrt(((n-1)*x:div()^2 + (m-1)*y:div()^2)/(n+m-2))
+  return abs(x.mu - y.mu) / (sd + TINY) end
+```
+
+### cliffs delta
+
+<a name="cliffs"></a><a name="cliffs-delta"></a>
+Forget the means; count the comparisons. Of all pairs (x,y),
+how many have x above y, and how many below? The imbalance,
+scaled to 0..1, is Cliff's delta, and the default threshold
+(0.195) is the standard "small effect" line. Because it reads
+only ranks, no outlier can drag it around — the complaint that
+kills [cohen](#cohen) on skewed data.
+
+```lua
+function cliffs(xs,ys,    gt,lt,j,k)
+  gt, lt, j, k = 0, 0, 0, 0
+  for _, x in ipairs(xs) do
+    while j < #ys and ys[j+1] <  x do j = j + 1; k = j end
+    while k < #ys and ys[k+1] == x do k = k + 1 end
+    gt = gt + j; lt = lt + #ys - k end
+  return abs(gt - lt) / (#xs * #ys) end
+```
+
+### ks (Kolmogorov-Smirnov)
+
+<a name="ks"></a>
+Compare the SHAPES. Walk both [cdfs](#cdf) together, one
+distinct value at a time, and record the widest vertical gap
+between them. Divide by the critical value
+$\sqrt{(n_x+n_y)/(n_x n_y)}$ and the answer reads as
+"how many critical units apart" — above 1.36 means different
+at the usual 5% line. Two bags can share a mean and a median
+and still fail this test, because one is a lump and the other
+is two humps.
+
+```lua
+function ks(xs,ys,    nx,ny,d,p,q,v)
+  nx, ny  = #xs, #ys
+  d, p, q = 0, 0, 0
+  while p < nx and q < ny do
+    v = min(xs[p+1], ys[q+1])
+    while p < nx and xs[p+1] == v do p = p + 1 end
+    while q < ny and ys[q+1] == v do q = q + 1 end
+    d = max(d, abs(p / nx - q / ny)) end
+  return d / ((nx + ny) / (nx * ny)) ^ 0.5 end
+```
+
+At 5%, this test cries wolf on about one comparison in twenty
+even when both bags come from the same generator. That is not
+a bug in the code; it is the price of the threshold, and it is
+why one test alone should never decide anything.
+
+### same
+
+<a name="same"></a>
+Three tests, three different questions — means, ranks, shapes.
+Two samples count as the same only when all three agree, so a
+method that fools one test still has to fool the others. Note
+the ordering: `and` is lazy, so the cheapest test runs first
+and usually decides.
+
+```lua
+function same(xsort,ysort,Cohen,Ks,Cliffs)
+  return cohen( xsort,ysort) <= (Cohen  or .35)
+     and cliffs(xsort,ysort) <= (Cliffs or .195)
+     and ks(    xsort,ysort) <= (Ks     or 1.36) end
+```
+
+### ranks
+
+<a name="ranks"></a>
+The table a paper actually prints. Sort the treatments by
+median, walk down the sorted list, and give a treatment a NEW
+rank only when it is not [same](#same) as the one above it.
+Ties therefore share a rank, and rank 0 is a SET of winners,
+not a name. Reporting a single winner when four methods tie is
+the most common statistical lie in this field.
+
+```lua
+function ranks(d,big,    mid,dd,sign,out,win,rank,best)
+  mid = function(t) return t[floor(#t / 2) + 1] end
+  dd  = {}; for k,v in pairs(d) do dd[k] = sorted(v) end
+  sign = big and -1 or 1
+  out, win, rank, best = {}, {}, -1, nil
+  for _, k in ipairs(keysort(keys(dd),
+                function(k) return sign * mid(dd[k]) end)) do
+    if best == nil or not same(dd[best], dd[k]) then
+      rank, best = rank + 1, k end
+    if rank == 0 then win[1+#win] = k end
+    out[k] = rank end
+  return {winners=win, ranks=out} end
+```
+
+### dominates
+
+<a name="dominates"></a>
+Comparing rows, not samples — and with no weights anywhere in
+it. Row *a* dominates *b* when *a* is no worse on every goal
+and better on at least one. That is the honest multi-goal
+comparison, and its honesty is also its weakness: most pairs
+are incomparable (better here, worse there), so domination
+often refuses to speak. Hence [disty](#disty), which buys a
+total order with one assumption (all goals weigh the same).
+
+```lua
+function TBL.dominates(i,r1,r2,    d1,d2,better,worse)
+  if i.model then i:disty(r1); i:disty(r2) end
+  better, worse = false, false
+  for _,y in ipairs(i.cols.y) do
+    d1 = abs(y:norm(r1[y.at]) - y.heaven)
+    d2 = abs(y:norm(r2[y.at]) - y.heaven)
+    if d1 < d2 then better = true end
+    if d1 > d2 then worse  = true end end
+  return better and not worse end
+```
+
+### front
+
+<a name="front"></a>
+The rows nothing dominates: the [Pareto frontier](#pareto-frontier)
+of whatever sample you hold. Two facts about real fronts, both
+visible in `ezr-eg6.lua --fronts`: they are small (a handful of
+64 rows), and their mean disty is far better than everything
+else — which is why the one-number shortcut usually lands in
+about the right place. Remember the [Pareto zoom
+effect](#pareto-zoom-effect): the good region is rare and
+clumped, so zooming beats wandering.
+
+### wins
+
+<a name="wins"></a>
+A score a stranger can read. Label the whole pool (cheating,
+but this is scoring, not searching), then rescale: 100 = the
+best row in the pool, 0 = the median row, negative = worse than
+doing nothing. Reporting raw disty invites "is 0.31 good?";
+reporting wins answers it.
+
+```lua
+function TBL.wins(i,rows,    ys,lo,b4)
+  ys = sorted(map(rows or i.rows, i:Y()))
+  lo, b4 = ys[1], ys[floor(#ys/2)+1]
+  return function(r)
+    return max(-100, min(100,
+      100*(1 - (i:disty(r)-lo) / (b4-lo+TINY)))) end end
+```
+
+## Week 7: applications
+
+New acronyms: knn, NB (naive Bayes), kpp (k-means++).
+
+### knn
+
+<a name="knn"></a>
+The Fortune Teller. To guess a row's goals, sort everything by
+distance to it and average the goals of the nearest `the.k`.
+Nothing is fitted; the neighbours ARE the model. It is also the
+cheapest possible regression — and on auto93 it beats guessing
+the global mean by about four times.
+
+```lua
+function TBL.knn(i,row,k,    t)
+  t = i:around(row)
+  return adds(map(slice(t, 1, k or the.k), i:Y())).mu end
+```
+
+### anomaly detection
+
+<a name="anomaly-detection"></a>
+The Bouncer. Loneliness is the whole test: how far is the
+nearest OTHER row? Score every row that way, normalize to
+0..1, and 1 is the loneliest thing in the data. Wrap this
+around any learner and you have the
+[certification envelope](#certification-envelope): the guess,
+plus a red light when the question is unlike anything the
+model was built from. The same code, pointed at a reference
+population instead of your own history, is BENCHMARKING — is
+this car yard near the good cluster, or far from every
+cluster? ([synonyms](#synonyms), again.)
+
+```lua
+function TBL.anomaly(i,    dn,gap)
+  gap = function(r,    lo,d)
+    lo = 1e32
+    for _,z in ipairs(i.rows) do
+      if z ~= r then
+        d = i:distx(r, z); if d < lo then lo = d end end end
+    return lo end
+  dn = Num()
+  for _,r in ipairs(i.rows) do dn:add(gap(r)) end
+  return function(r) return dn:norm(gap(r)) end end
+```
+
+### naive bayes
+
+<a name="naive-bayes"></a>
+The ER Nurse: sort arrivals into classes, fast, one row at a
+time. Each class keeps its own column summaries; the score for
+a row is the log of the class prior plus the logs of
+P(value | column), summed over the x columns. "Naive" means
+the columns are assumed independent — plainly false, and it
+wins anyway, because a wrong-but-consistent bias still ranks
+the classes correctly. Note the protocol at work: symbols get
+an m-estimate, numbers get a gaussian pdf, and `likes` never
+asks which is which.
+
+```lua
+function like(col,v,prior,    z)
+  if not col.mu then
+    return ((col.has[v] or 0) + the.L*prior)
+           / (col.n + the.L) end
+  z = 2 * col:div()^2 + 1e-32
+  return exp(-(v - col.mu)^2 / z) / (pi * z)^0.5 end
+```
+
+The rig is test-then-train: every row is GUESSED before it is
+learned, so the accuracy needs no held-out split and the model
+is always as current as the last row seen.
+
+```lua
+function TBL.classify(i,wait,    at,h,seen,nh,want)
+  wait, at = wait or the.wait, i.cols.klass.at
+  h, seen, nh = {}, {}, 0
+  for j,row in ipairs(i.rows) do
+    want = row[at]
+    if j >= wait and nh > 0 then
+      push(seen, {mostlikes(h, row, #i.rows, nh), want}) end
+    if not h[want] then h[want] = i:clone(); nh = nh + 1 end
+    h[want]:add(row) end
+  return seen end
+```
+
+### kmeans
+
+<a name="kmeans"></a>
+The Curator, textbook edition: pick k centroids, assign every
+row to its nearest, move each centroid to the middle of what it
+caught, repeat. Compare with week 3's [node](#node): kmeans
+needs k, needs a full pass per iteration, and needs a distance
+to every centroid — while node splits on two rows and gives you
+an index for free. Both cluster; they do not cost the same.
+
+```lua
+function TBL.kmeans(i,k,iter,    cents)
+  cents = some(i.rows, k or the.kluster)
+  for _ = 1, iter or the.iter do
+    cents = recentre(assign(i, cents)) end
+  return assign(i, cents) end
+```
+
+### kpp
+
+<a name="kpp"></a>
+k-means++: start the centroids far apart, or kmeans starts in a
+corner and stays there. Each new centre is drawn with a chance
+proportional to its SQUARED distance from the centres chosen so
+far — random, but biased toward the empty regions. Week 3's
+poles made the same bet with two rows and no randomness.
+
+```lua
+function TBL.kpp(i,k,    cents,pool,ws)
+  cents = {some(i.rows, 1)[1]}
+  while #cents < (k or the.kluster) do
+    pool = some(i.rows, min(the.few, #i.rows))
+    ws   = map(pool, function(r) return d2(i, cents, r) end)
+    push(cents, pool[wpick(ws)]) end
+  return cents end
+```
+
+## Week 8: optimizers
+
+New acronyms: GA (genetic algorithm), DE (differential
+evolution), SA (simulated annealing).
+
+### snap and guess
+
+<a name="snap"></a>
+The classic optimizers invent new x values, so their offspring
+have no goals at all. Rather than call the model for every
+mutant, this code SNAPS a mutant to the nearest real row and
+grades it by that neighbour's disty. That is a lie with a
+purpose: it keeps the comparison fair (every method scores
+against the same pool) and it keeps the demos fast. Homework
+asks where the lie leaks.
+
+```lua
+function TBL.guess(i,row)
+  return i:disty(i:snap(row)) end
+```
+
+### mutate
+
+<a name="mutate"></a>
+Copy a row, re-pick a few x cells: symbols by frequency (rare
+values stay rare), numbers by a gaussian step of one standard
+deviation, clamped to ±3sd. Mutation is where every
+population method gets its new ideas, and the clamp is what
+stops those ideas leaving the world the data came from.
+
+```lua
+function pick(col,v,    sd)
+  if col.has then return wkey(col.has) end
+  v  = v ~= "?" and v or col.mu
+  sd = col:div()
+  return max(col.mu - 3*sd,
+             min(col.mu + 3*sd, v + sd * gauss())) end
+```
+
+### ga (genetic algorithm)
+
+<a name="ga"></a>
+Darwin in twelve lines. Keep a population; to make each kid,
+pick two parents by a domination tournament, cut-and-splice
+them, then mutate. Repeat for `the.gens` generations and
+return the best of the final population. Everything expensive
+lives in the fitness call, which is why a GA is a fine idea
+when the model is cheap and a terrible one when each label
+costs a week.
+
+```lua
+function TBL.ga(i,    pop,kids)
+  pop = slice(shuffle(i.rows), 1, the.np)
+  for _ = 1, the.gens do
+    kids = {}
+    for _ = 1, the.np do
+      push(kids, i:mutate(cross(i, tourn(i, pop),
+                                    tourn(i, pop)))) end
+    pop = kids end
+  return i:snap(keysort(pop, function(r)
+                          return i:guess(r) end)[1]) end
+```
+
+### de (differential evolution)
+
+<a name="de"></a>
+The population IS the step size. A kid is
+$a + F\,(b - c)$ for three random members — so while the
+population is spread out the jumps are long, and as it
+converges they shrink automatically, with no cooling schedule
+to tune. A kid replaces its parent only if it is better.
+Across this course's races, DE is the classic that keeps
+winning.
+
+```lua
+function TBL.de(i,    pop,es,t,kid,d,at)
+  pop = slice(shuffle(i.rows), 1, the.np)
+  es  = map(pop, function(r) return i:guess(r) end)
+  for _ = 1, the.gens do
+    for j = 1, #pop do
+      t   = some(pop, 3)
+      kid = i:extrapolate(t[1], t[2], t[3])
+      d   = i:guess(kid)
+      if d < es[j] then pop[j], es[j] = kid, d end end end
+  at = 1
+  for j = 2, #es do if es[j] < es[at] then at = j end end
+  return i:snap(pop[at]) end
+```
+
+### local search
+
+<a name="local-search"></a>
+The (1+1) loop, stripped to nothing: mutate the current
+solution, accept the mutant if the acceptance rule says so,
+and remember the best ever seen. `ls` accepts only
+improvements — fast, and stuck in the first valley it finds.
+
+```lua
+local function climb(i,accept,    s,e,b,eb,kid,d)
+  s = i.rows[rand(#i.rows)]
+  e = i:guess(s)
+  b, eb = s, e
+  for h = 1, the.budget1 do
+    kid = i:mutate(s)
+    d   = i:guess(kid)
+    if d < eb then b, eb = kid, d end
+    if accept(e, d, h) then s, e = kid, d end end
+  return i:snap(b) end
+```
+
+### sa (simulated annealing)
+
+<a name="sa"></a>
+The same loop with one different line: accept a WORSE mutant
+with probability $e^{-\Delta/T}$, where the temperature T falls
+as the budget burns. Early on it wanders (escaping local
+valleys); late on it only improves. One rule, two behaviours,
+zero extra machinery — which is why annealing is still the
+best first thing to try on a strange problem.
+
+```lua
+function TBL.sa(i)
+  return climb(i, function(e,d,h)
+    return d < e or rand() < exp((e - d) /
+      (1 - h/the.budget1 + 1e-32)) end) end
+```
+
+### race
+
+<a name="race"></a>
+The drag race: every optimizer, several repeats, plus a
+best-of-`np` random baseline (`any`) that exists to embarrass
+anyone whose clever method cannot beat a lucky dip. Results go
+straight into [ranks](#ranks), so the output is a rank table,
+not a champion. Always race against `any`; papers that do not
+are how the field wastes decades.
+
+```lua
+function TBL.race(i,repeats,    d)
+  d = {ga={}, de={}, sa={}, ls={}, any={}}
+  for _ = 1, repeats or the.repeats do
+    push(d.ga,  i:disty(i:ga()))
+    push(d.de,  i:disty(i:de()))
+    push(d.sa,  i:disty(i:sa()))
+    push(d.ls,  i:disty(i:ls()))
+    push(d.any, i:disty(
+      keysort(some(i.rows, the.np), i:Y())[1])) end
+  return d, ranks(d) end
+```
+
+## Week 9: models and the seam
+
+New acronyms: DTLZ (Deb-Thiele-Laumanns-Zitzler test suite).
+
+### model seam
+
+<a name="model-seam"></a>
+Everything so far read goals from a csv. The seam swaps that
+for a FUNCTION: set `t.model` and rows may be born with `"?"`
+goals, which [label](#label) fills in on demand. Nothing
+upstream changes — trees, acquire, holdout, the optimizers all
+keep asking [disty](#disty) — which is the point of a seam.
+This is where outsiders plug in their own (maybe very
+expensive) simulator.
+
+```lua
+function Dtlz(    u,r)
+  u = {names()}
+  for _ = 1, the.pool do
+    r = {}
+    for _ = 1, the.Nx do push(r, rand()) end
+    for _ = 1, the.M  do push(r, "?") end
+    push(u, r) end
+  u = Tbl(u)
+  u.model = _ENV[the.model]
+  return u end
+```
+
+### dtlz
+
+<a name="dtlz"></a>
+The standard multi-objective test problems (Deb, Thiele,
+Laumanns & Zitzler, 2002): x lives in $[0,1]^{N_x}$, the
+objectives have a KNOWN true front, and the difficulty is
+dialable. The last $N_x-M+1$ variables set DISTANCE from the
+front (make them zero and you are on it); the first $M-1$ set
+POSITION along it. dtlz1's front is the plane $\sum f = 0.5$,
+approached across a landscape full of local traps; dtlz2's is
+the unit sphere $\sum f^2 = 1$; dtlz7's comes in disconnected
+pieces. Because the answer is known, a search can be graded
+exactly — which is what makes these problems the field's
+measuring stick.
+
+```lua
+function dtlz1(x,M,    g,f,v)
+  g, f = g1(slice(x, M)), {}
+  for i = 0, M-1 do
+    v = 0.5 * (1 + g)
+    for j = 1, M-1-i do v = v * x[j] end
+    if i > 0 then v = v * (1 - x[M-i]) end
+    push(f, v) end
+  return f end
+```
+
+### lazy labels (the sharpening ruler)
+
+<a name="lazy-labels"></a>
+A subtle consequence of buying goals one at a time: `disty`
+normalizes each goal against the column summary, and that
+summary only knows the labels bought so far. So the SAME row
+can score differently early and late — the ruler sharpens as
+spending grows. This is a feature, not a bug: with five labels
+you do not know the range of the world, and pretending
+otherwise is how leakage sneaks in. It also means any reported
+score must say how many labels were in hand when it was taken.
+
+### baseline
+
+<a name="baseline"></a>
+What does doing nothing get you? `baseline` calls the model on
+every row and reports each goal's mean — deliberately NOT
+folding those calls into the column summaries, so the baseline
+never sharpens the ruler it is measured against. Every claim in
+this course is "better than X"; `baseline` is the cheapest
+honest X.
+
+```lua
+function TBL.baseline(i,    nums,f)
+  nums = map(i.cols.y, function() return Num() end)
+  for _,r in ipairs(i.rows) do
+    f = i.model(map(i.cols.x,
+          function(c) return r[c.at] end), #i.cols.y)
+    for j,v in ipairs(f) do nums[j]:add(v) end end
+  return map(nums, "mid") end
+```
+
+### pure vs generalize
+
+<a name="pure-vs-generalize"></a>
+Two ways to report the same search. PURE (`--pure`): spend the
+budget over the whole pool and report the best row found — the
+right number when you own every row and just want the best one
+(config tuning, say). GENERALIZE (`--generalize`): spend on
+half, then pick from the half never seen — the right number
+when tomorrow's rows are not today's. Pure scores flatter.
+Say which one you ran; papers that do not are hiding the
+difference.
+
+### the price of a label
+
+<a name="price"></a>
+The week's punchline, from `ezr-eg8.lua --race` on a 200-row
+DTLZ2 pool: the four classic optimizers between them buy
+around 200 labels — effectively the whole pool — while
+[acquire](#acquire) buys 45 and lands at the same place or
+better. Neither result says the classics are bad; they say the
+classics were designed for cheap models. The question to carry
+into any project is not "which optimizer is best" but "what
+does one evaluation cost here, and how many can I afford?"

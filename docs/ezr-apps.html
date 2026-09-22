@@ -25,7 +25,7 @@
   <a href="https://discord.gg/uQgTnGsfR"><img 
       src="https://img.shields.io/badge/Chat-%23008080?style=flat-square&logo=discord&logoColor=white" /></a>
   <a href="https://github.com/txt/seai26f/blob/main/LICENSE.md"><img 
-      src="https://img.shields.io/badge/©%20timm%202026-%234b4b4b?style=flat-square&logoColor=white" /></a></p><p align="center"><a href="ezr.html">ezr</a> | <a href="ezr-lib.html">ezr-lib</a> | <a href="ezr-eg0.html">ezr-eg0</a> | <a href="ezr-eg1.html">ezr-eg1</a> | <a href="ezr-eg2.html">ezr-eg2</a> | <a href="ezr-eg3.html">ezr-eg3</a> | <a href="ezr-eg4.html">ezr-eg4</a> | <b>ezr-apps</b> | <a href="ezr-dtlz.html">ezr-dtlz</a> | <a href="play.html">play</a></p><p align="center"><a href="ezr-eg4.html">&lt; prev</a> | <a href="ezr-dtlz.html">next &gt;</a></p><h1><a href="https://github.com/txt/seai26f/blob/main/src/ezr-lua/ezr-apps.lua">ezr-apps.lua</a></h1></div>
+      src="https://img.shields.io/badge/©%20timm%202026-%234b4b4b?style=flat-square&logoColor=white" /></a></p><p align="center"><a href="ezr.html">ezr</a> | <a href="ezr-lib.html">ezr-lib</a> | <a href="ezr-eg0.html">ezr-eg0</a> | <a href="ezr-eg1.html">ezr-eg1</a> | <a href="ezr-eg2.html">ezr-eg2</a> | <a href="ezr-eg3.html">ezr-eg3</a> | <a href="ezr-eg4.html">ezr-eg4</a> | <a href="ezr-eg5.html">ezr-eg5</a> | <a href="ezr-eg6.html">ezr-eg6</a> | <a href="ezr-eg7.html">ezr-eg7</a> | <a href="ezr-eg8.html">ezr-eg8</a> | <b>ezr-apps</b> | <a href="ezr-dtlz.html">ezr-dtlz</a> | <a href="play.html">play</a></p><p align="center"><a href="ezr-eg8.html">&lt; prev</a> | <a href="ezr-dtlz.html">next &gt;</a></p><h1><a href="https://github.com/txt/seai26f/blob/main/src/ezr-lua/ezr-apps.lua">ezr-apps.lua</a></h1></div>
   </div>
   <div class='clearall'>
   <div class='section' id='section-0'>
@@ -439,12 +439,14 @@ nearest real row, and <code>guess</code> is that neighbour&rsquo;s disty.</p>
       <div class='octowrap'>
         <a class='octothorpe' href='#section-22'>#</a>
       </div>
-      <p><em><code>TBL:dominates(r1:row, r2:row) -&gt; bool</code></em><br />
+      <p><em><code>TBL:dominates(r1:row, r2:row) -&gt; bool</code></em>
 True when r1 is no worse on all goals and better on at
-least one.</p>
+least one. Goals that do not exist yet get bought here
+(via disty), so this works on model-backed pools too.</p>
     </div>
     <div class='code'>
       <div class="highlight"><pre><span class="kr">function</span><span class="w"> </span><span class="nc">TBL</span><span class="p">.</span><span class="nf">dominates</span><span class="p">(</span><span class="nv">i</span><span class="p">,</span><span class="nv">r1</span><span class="p">,</span><span class="nv">r2</span><span class="p">,</span><span class="w">    </span><span class="nv">d1</span><span class="p">,</span><span class="nv">d2</span><span class="p">,</span><span class="nv">better</span><span class="p">,</span><span class="nv">worse</span><span class="p">)</span>
+<span class="w">  </span><span class="kr">if</span><span class="w"> </span><span class="nv">i</span><span class="p">.</span><span class="py">model</span><span class="w"> </span><span class="kr">then</span><span class="w"> </span><span class="nv">i</span><span class="p">:</span><span class="nf">disty</span><span class="p">(</span><span class="nv">r1</span><span class="p">);</span><span class="w"> </span><span class="nv">i</span><span class="p">:</span><span class="nf">disty</span><span class="p">(</span><span class="nv">r2</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span>
 <span class="w">  </span><span class="nv">better</span><span class="p">,</span><span class="w"> </span><span class="nv">worse</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span>
 <span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="nv">_</span><span class="p">,</span><span class="nv">y</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nb">ipairs</span><span class="p">(</span><span class="nv">i</span><span class="p">.</span><span class="py">cols</span><span class="p">.</span><span class="py">y</span><span class="p">)</span><span class="w"> </span><span class="kr">do</span>
 <span class="w">    </span><span class="nv">d1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">abs</span><span class="p">(</span><span class="nv">y</span><span class="p">:</span><span class="nf">norm</span><span class="p">(</span><span class="nv">r1</span><span class="p">[</span><span class="nv">y</span><span class="p">.</span><span class="py">at</span><span class="p">])</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nv">y</span><span class="p">.</span><span class="py">heaven</span><span class="p">)</span>
