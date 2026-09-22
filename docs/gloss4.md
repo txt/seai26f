@@ -202,6 +202,15 @@ and a business user can push back on any line of it ("three
 developers, not seven" is an arguable sentence; a weight
 matrix is not).
 
+Note what kind of answer a tree gives. Attribution methods
+(SHAP, LIME and friends) rank columns: *tires are important*,
+*the cap is important*, *tree is important*. A tree ranks
+column-and-value together, because a branch is a test, not a
+name: *bald* tires, the cap *turned through 180 degrees*, an
+*oak* tree. The first kind tells you where to look; only the
+second tells you what to do &mdash; and what to do is the whole
+reason anyone asked.
+
 @ [Rudin: Stop explaining black box machine learning models for high stakes decisions and use interpretable models instead](https://doi.org/10.1038/s42256-019-0048-x). Cynthia Rudin. Nature Machine Intelligence 1 (2019), 206-215.
 
 .

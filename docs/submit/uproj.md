@@ -39,6 +39,13 @@ Pick ONE corpus:
   triggers — *how does it work? what did it just do? why not z? what if
   x were different?* — plus the goodness and satisfaction measures that
   score the answers.
+- **Corpus C — a domain you invent.** Pick a client and write their
+  wish list: 10 to 20 things they want to know. A car yard ("which
+  cars sell? which listing is a scam? what happens to price if I
+  restock?"), a swimming coach ("who is about to quit the team?"), a
+  hospital roster, a game studio. The list must be written down before
+  you code, and it must be honest work for the client, not ten
+  restatements of one query. Get the list okayed by the lecturer.
 
 Build an **impressive sequence of small demos** that covers your corpus,
 running on example data from [MOOT](https://github.com/timm/moot)
@@ -52,6 +59,16 @@ the alerter's stats feed the forecaster. By the last step you should be
 writing almost nothing and demoing something amazing.
 
 Tag each step in git (`step1`, `step2`, ...). That history is marked.
+
+**What is being tested.** The claim is that these skills are
+[synonyms](../lect/glossary.md#synonyms): one machine (cluster, tree,
+leaf) wearing ten hats. The rival claim is that they are ten separate
+problems. So the falsifiable prediction is the shape of your histogram:
+if the bars fall, reuse is real; if they stay flat, this course's
+architecture lost, and saying so clearly scores full marks. For a rival
+baseline (optional, but it makes a much better video): ask an LLM for
+each skill cold — one fresh prompt per skill, no "reuse what you built
+before" — and plot its new-code-per-step beside yours.
 
 ## Example ladders (yours may differ)
 

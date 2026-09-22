@@ -242,11 +242,61 @@ In software engineering the fix is the <b>reference optimum</b>: we never know t
 <img src="promisetune-fig1.png" width=600 alt="PromiseTune Fig 1: Redis configuration landscape and tuning trajectories">
 <br><br>
 So frontier-chasing evolvers and global Bayesian methods spend most of a small labelling budget wandering the huge ungood region; a greedy regional search that zooms toward the island wins or ties in 84-89% of cases, running 2-3 orders of magnitude faster. The opposite of frontier reasoning is an <em>aggregation function</em> &mdash; collapse all goals to one number and chase that. <em>disty</em> (week 2) is this course's aggregation function: zoom, don't wander.
+</li>
+<li>
+<b>Synonyms (one machine, many tasks)</b>: Textbooks give a chapter each to classification, regression, optimization, anomaly detection, explanation, privacy. Buse & Zimmermann give analytics nine boxes: trends, alerts, forecasting; summarization, overlays, goals; modeling, benchmarking, simulation. The claim of this course: most of those boxes are <em>synonyms</em> &mdash; one machine, the recursive cluster tree, plus a few lines each:
+<table>
+<tr><th>box</th><th>what it is, once you hold a cluster tree</th></tr>
+<tr><td>classification</td><td>walk a new row to its leaf, report the leaf's mode</td></tr>
+<tr><td>regression</td><td>same walk, report the leaf's mean</td></tr>
+<tr><td>optimization</td><td>sort poles by y, recurse only into the better half</td></tr>
+<tr><td>anomaly, alerts</td><td>leaf found, but the row sits far outside that leaf's spread</td></tr>
+<tr><td>benchmarking</td><td>anomaly detection against a reference population: is this car yard near the good cluster?</td></tr>
+<tr><td>forecasting, simulation</td><td>mutate rows the way you think the world will move (three wheels, not four), drop them back down the tree, see which leaf catches them</td></tr>
+<tr><td>goals, overlays</td><td>y = f(x): change x, re-drop, read the new y</td></tr>
+<tr><td>summarization</td><td>read the tree; each leaf already names a group of similar rows</td></tr>
+<tr><td>privacy</td><td>publish only the leaves' exemplars</td></tr>
+<tr><td>explanation</td><td>the tree IS the explanation</td></tr>
+</table>
+That table is a testable claim, not a slogan. <em>The Menzies hypothesis</em>: if the architecture is right, coding skill i+1 needs less new code than skill i, so a plot of %-new-code per step falls toward zero. Rival prediction, for a fresh LLM asked each skill cold with no instruction to reuse: a thousand lines of new glue per skill, ten separate programs. That is the undergraduate project, and it is a real experiment, so the hypothesis can lose.
+</li>
+<li>
+<b>Cluster naming (knowledge acquisition)</b>: Structure first, words second. Cluster with no y at all, then take two far-apart leaves to a human oracle and ask one question: how do these differ? The answers come back as vocabulary ("these are cheap to run, those are quick off the line"), so a handful of comparisons buys names for the whole tree. Be warned: unsupervised structure does not respect our nouns. Sometimes a cluster is a real, repeatable group with no name in anyone's language yet &mdash; and finding those is the point, not the bug.
+</li>
+<li>
+<b>Weak indicators</b>: A heuristic is evidence, not truth. Fastmap (week 3) says "these two rows are far apart" using two sweeps instead of n&sup2; comparisons; usually right, sometimes wrong. The discipline: never bet everything on one weak indicator. Either ask it more times, or act on it more gently. Both moves appear in sway: the original (.5, 2) strategy trusts fastmap absolutely (throw away half the data on the word of two labels), while the newer (.66, 4) keeps two-thirds and spends four labels per level. A large Monte Carlo study preferred the hedged version. Same logic lets <em>halve</em> pick its poles from a 128-row sample: a weak indicator read cheaply, many times, beats one expensive oracle.
+</li>
+<li>
+<b>Data collapse (prototypes, root-n columns)</b>: Big data is mostly repetition. Models are built from evidence, and evidence means many rows saying the same thing &mdash; so rows collapse to a few dozen <em>prototypes</em> (often a tenth, or a hundredth, of the data) with no loss to the model. Columns collapse too: for any one target, only about &radic;n of n columns carry signal. Multiply the two collapses and the useful part of a large table is a tiny corner of it.
+<br><br>
+This is the folk version of the <em>Johnson-Lindenstrauss lemma</em>: n dimensions map down to a far smaller m while distances change by only a small &epsilon; &mdash; which is why clustering on a projection works at all. It runs in the world too: the color of the wall behind you is in your data and not in your model, until you step onto a highway and the speed of the thing behind you becomes the only column that matters. Context decides which columns are live.
+<br><br>
+Two uses of the corner. <em>Privacy</em> (Peters' LACE): do not share the data, share the corner &mdash; prototypes of the important columns. Everything removed is 100% private by construction, and the corner itself can be mutated within the structural rules that hold there, giving about 95% privacy over the roughly 1% you do release. <em>Reading a literature</em>: bibliometrics finds the same shape. In a field of N researchers, about &radic;N produce the artifacts half the field uses. Do not read 1,000 papers; find the 30 the rest are washing bottles for.
+</li>
+<li>
+<b>Certification envelope</b>: A learner asked about something it has never seen will answer anyway, confidently, with nothing in its reply to say <em>this is outside everything I was built from</em>. Clustering fixes that for free. Each leaf knows the typical distance between its own rows. Walk a new row down to its leaf and compare: close, answer normally; far outside that leaf's spread, answer AND flash a red light &mdash; here is my guess, and here is why you should not believe it.
+<br><br>
+Why this matters. On 2003-02-01 the shuttle Columbia broke up on re-entry, killing seven astronauts, because foam shed at launch had punched a hole in the wing's leading edge. On orbit, NASA asked a debris model called Crater how much damage such a strike would do. Crater had been calibrated on projectiles of roughly 3 cubic inches. The foam that hit Columbia was estimated at about 1,200 cubic inches &mdash; some 400 times outside the model's evidence &mdash; and Crater answered anyway. An envelope check (volume far beyond anything I was fitted on, do not use this number) is a handful of lines around a model, and it was the one line of output nobody had.
+</li>
+<li>
+<b>Knee</b>: Sort any "how much is enough" curve, draw the chord from its first point to its last, and the <em>knee</em> is the point furthest from that chord &mdash; where extra effort stops buying much. Note the geometry: point-to-line distance, the same arithmetic as the week 3 projection. Standard use here: sort a literature search by citation count and read only above the knee. One 249-paper search kneed at 23 papers, all with 31+ citations &mdash; an evening's reading instead of a semester's. Same trick on a learning curve (how many labels before the score flattens?) or on sorted cut scores (how many cuts are worth keeping?).
 <br><br><div class="reference">
 <a href="https://arxiv.org/abs/2605.09658">Ganguly & Menzies: Zoom, don't wander: Why regional search outperforms Pareto reasoning and global optimization in budget-constrained SBSE</a>. Kishan Kumar Ganguly, Tim Menzies. arXiv:2605.09658, 2026.
 </div>
 <div class="reference">
 <a href="https://arxiv.org/abs/2507.05995">Chen & Chen: PromiseTune: Unveiling causally promising and explainable configuration tuning</a>. Pengzhou Chen, Tao Chen. ICSE 2026. arXiv:2507.05995.
+</div>
+<div class="reference">
+<a href="https://doi.org/10.1109/ICSE.2012.6227122">Buse & Zimmermann: Information needs for software development analytics</a>. Raymond P.L. Buse, Thomas Zimmermann. ICSE 2012. (Figure 6: the nine boxes.)
+</div>
+<div class="reference">
+<a href="https://doi.org/10.1090/conm/026/737400">Johnson & Lindenstrauss: Extensions of Lipschitz mappings into a Hilbert space</a>. William B. Johnson, Joram Lindenstrauss. Contemporary Mathematics 26, 1984.
+</div>
+<div class="reference">
+<a href="https://doi.org/10.1109/ICSE.2015.92">Peters, Menzies & Layman: LACE2: Better privacy-preserving data sharing for cross project defect prediction</a>. Fayola Peters, Tim Menzies, Lucas Layman. ICSE 2015.
+</div>
+<div class="reference">
+<a href="https://www.nasa.gov/columbia/home/CAIB_Vol1.html">Columbia Accident Investigation Board, Report Volume I</a>. NASA, August 2003. (Crater, and use of a model outside its calibration.)
 </div>
 </li>
 </ol>

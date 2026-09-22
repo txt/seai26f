@@ -249,6 +249,8 @@ To predict for a new row, walk it down and answer the leaf's mean:
 </li>
 <li>
 <b>XAI (explainable AI)</b>: An explanation is a model small enough to argue with. A tree of depth four is a paragraph: "under these tests, these rows; the best leaf is here." ezr's tree printer works for that arguability: one row per node, each goal's mean in its own column, best leaf marked with a triangle, and siblings printed better-branch-first so the top of the page is always the way to heaven. Contrast the rival offer &mdash; a black box plus an after-the-fact rationale. When the model itself is small, the model IS the explanation, and a business user can push back on any line of it ("three developers, not seven" is an arguable sentence; a weight matrix is not).
+<br><br>
+Note what kind of answer a tree gives. Attribution methods (SHAP, LIME and friends) rank columns: <em>tires are important</em>, <em>the cap is important</em>, <em>tree is important</em>. A tree ranks column-and-value together, because a branch is a test, not a name: <em>bald</em> tires, the cap <em>turned through 180 degrees</em>, an <em>oak</em> tree. The first kind tells you where to look; only the second tells you what to do &mdash; and what to do is the whole reason anyone asked.
 <br><br><div class="reference">
 <a href="https://doi.org/10.1038/s42256-019-0048-x">Rudin: Stop explaining black box machine learning models for high stakes decisions and use interpretable models instead</a>. Cynthia Rudin. Nature Machine Intelligence 1 (2019), 206-215.
 </div>

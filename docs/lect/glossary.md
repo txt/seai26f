@@ -214,6 +214,145 @@ function* — collapse all goals to one number and chase that.
 [disty](#disty) is this course's aggregation function: zoom,
 don't wander.
 
+### synonyms (one machine, many tasks)
+
+<a name="synonyms"></a>
+Data mining textbooks give a chapter each to classification,
+regression, optimization, anomaly detection, planning,
+explanation, privacy. Buse & Zimmermann (ICSE 2012, Fig 6) give
+analytics nine boxes: trends, alerts, forecasting;
+summarization, overlays, goals; modeling, benchmarking,
+simulation. The claim of this course is that most of those boxes
+are **synonyms** — different words for one machine, the
+recursive cluster tree, plus a few lines each:
+
+| box | what it is, once you hold a cluster tree |
+|-----|------------------------------------------|
+| classification | walk a new row to its leaf, report the leaf's mode |
+| regression | same walk, report the leaf's mean |
+| optimization | sort poles by y, recurse only into the better half ([sway](#sway-the-sampling-way)) |
+| anomaly, alerts | leaf found, but the row sits far outside that leaf's spread ([certification envelope](#certification-envelope)) |
+| benchmarking | anomaly detection with the reference population as the data: is this car yard near the good cluster? |
+| forecasting, simulation | mutate rows the way you think the world will move ("three wheels, not four"), drop them back down the tree, see which leaf catches them |
+| goals, overlays | *y = f(x)*: change x, re-drop, read the new y |
+| summarization | read the tree — each leaf already names a group of similar rows |
+| privacy | publish only the leaves' exemplars ([data collapse](#data-collapse)) |
+| explanation | the tree IS the explanation ([XAI](#xai)) |
+
+That table is a testable claim, not a slogan. **The Menzies
+hypothesis**: if the architecture is right, coding skill *i+1*
+needs less new code than skill *i*, so a plot of %-new-code per
+step falls toward zero. The rival prediction, for a fresh LLM
+asked each skill cold, with no instruction to reuse: a thousand
+lines of new glue per skill, ten separate programs. That is
+exactly the experiment the [ugrad
+project](https://github.com/txt/seai26f/blob/main/docs/submit/uproj.md)
+runs — and it is a real experiment, so the hypothesis can lose.
+
+### cluster naming (knowledge acquisition)
+
+<a name="clusternaming"></a>
+Structure first, words second. Cluster with no y at all, then
+take two far-apart leaves to a human oracle and ask one
+question: *how do these differ?* The answers come back as
+vocabulary ("these are cheap to run, those are quick off the
+line") — so a handful of comparisons buys the names for the
+whole tree. Be warned: unsupervised structure does not respect
+our nouns. Sometimes a cluster is a real, repeatable group with
+no name in anyone's language yet, and finding those is the point
+rather than the bug.
+
+### weak indicators
+
+<a name="weakindicators"></a>
+A heuristic is evidence, not truth. [fastmap](#fastmap) says
+"these two rows are far apart" using two sweeps instead of n²
+comparisons; it is usually right and sometimes wrong. The
+discipline: never bet everything on one weak indicator — either
+ask it more times, or act on it more gently.
+
+Both moves show up in [sway](#sway-the-sampling-way): the
+original (.5, 2) strategy trusts fastmap absolutely (throw away
+half the data on the word of two labels), while the newer
+(.66, 4) keeps two-thirds and spends four labels per level —
+a gentler cull, steadied by more evidence. A large Monte Carlo
+study preferred the hedged version. The same logic lets
+[halve](#halve) pick poles from a 128-row sample: a weak
+indicator read cheaply, many times, beats one expensive oracle.
+
+### data collapse (prototypes, root-n columns)
+
+<a name="data-collapse"></a>
+Big data is mostly repetition. Models are built from evidence,
+and evidence means many rows saying the same thing — so the rows
+collapse to a few dozen **prototypes** (often a tenth, a
+hundredth, of the data) with no loss to the model. Columns
+collapse too: for any one target, only about $\sqrt{n}$ of $n$
+columns carry the signal. Multiply the two collapses and the
+useful part of a large table is a tiny corner of it.
+
+This is the folk version of the **Johnson-Lindenstrauss lemma**:
+$n$ dimensions can be mapped down to a far smaller $m$ while
+distances change by only a small $\epsilon$ — which is why
+clustering on a projection ([fastmap](#fastmap)) works at all.
+It also runs in the world: the color of the wall behind you is
+in your data and is not in your model, until you step onto a
+highway and the speed of the thing behind you becomes the only
+column that matters. Context decides which columns are live.
+
+Two uses of the corner:
+
+- **Privacy** (Peters' LACE): do not share the data, share the
+  corner — the prototypes of the important columns. Everything
+  removed is 100% private by construction, and the corner itself
+  can be mutated within the structural rules that hold there,
+  giving ~95% privacy over the ~1% you do release.
+- **Reading a literature**: bibliometrics finds the same shape.
+  In a field of $N$ researchers, about $\sqrt{N}$ produce the
+  artifacts half the field uses. Do not read 1,000 papers; find
+  the 30 that the rest are washing bottles for (see
+  [knee](#knee)).
+
+### certification envelope
+
+<a name="certification-envelope"></a>
+A learner asked about something it has never seen will answer
+anyway, confidently, with nothing in its reply to say *this is
+outside everything I was built from*. Clustering fixes that for
+free. Each leaf knows the typical distance between its own rows.
+Walk a new row down to its leaf and compare: close, answer
+normally; far outside that leaf's spread, answer AND flash a red
+light — *here is my guess, and here is why you should not
+believe it.*
+
+Why this matters. On 2003-02-01 the shuttle Columbia broke up on
+re-entry, killing seven astronauts, because foam shed at launch
+had punched a hole in the wing's leading edge. On orbit, NASA
+asked a debris model called Crater how much damage such a strike
+would do. Crater had been calibrated on projectiles of roughly
+3 cubic inches. The foam that hit Columbia was estimated at
+about 1,200 cubic inches — some 400 times outside the model's
+evidence — and Crater answered anyway. An envelope check
+("volume far beyond anything I was fitted on, do not use this
+number") is a handful of lines around the model, and it was the
+one line of output nobody had.
+
+### knee
+
+<a name="knee"></a>
+Sort any "how much is enough" curve, draw the chord from its
+first point to its last, and the **knee** is the point furthest
+from that chord — the place where extra effort stops buying
+much. Note the geometry: point-to-line distance, the same
+arithmetic as [projection](#projection).
+
+Standard use in this course: sort a literature search by
+citation count and read only above the knee. One 249-paper
+search kneed at 23 papers, all with 31+ citations — an evening's
+reading instead of a semester's. Same trick on a learning curve
+(how many labels before the score flattens?) or on sorted cut
+scores (how many cuts are worth keeping?).
+
 ## Week 0: the port, warm-up
 
 New acronyms: [TDD](#tdd-test-driven-development),
@@ -1083,6 +1222,16 @@ small, the model IS the explanation, and a business user can
 push back on any line of it. See
 [Rudin 2019](https://doi.org/10.1038/s42256-019-0048-x).
 
+Note what kind of answer a tree gives. Attribution methods
+(SHAP, LIME and friends) rank columns: *tires are important*,
+*the cap is important*, *tree is important*. A tree ranks
+column-and-value together, because a branch is a test, not a
+name: *bald* tires, the cap *turned through 180 degrees*, an
+*oak* tree. The first kind tells you where to look; only the
+second tells you what to do — and "what to do" is the whole
+reason anyone asked. A test you can act on is worth more than an
+importance score you can only nod at.
+
 ### sway (the sampling way)
 
 *Not examinable — this entry marks the gap between here and
@@ -1099,17 +1248,25 @@ which raised awkward questions about how much of the fancy
 machinery was ever needed. See
 [Chen, Nair, Krishna & Menzies, TSE 2019](https://doi.org/10.1109/TSE.2018.2790925).
 
-Recent work does better still:
+That first version is **sway1**: it takes fastmap at its word,
+halves all the way down to one leaf, and stops. (There was a
+sway2. It was a bad idea; nothing here descends from it.)
 
-- **sway2**: given a labelling budget B, descend with sway; if
-  budget remains at the bottom, start again from the root — but
-  this time run fastmap only over the already-labelled examples
-  to pick the first division. Restarts get smarter for free,
-  because every restart inherits everything paid for so far.
-- **sway3**: loosen (.5, 2) to **(.66, 4)** — keep the top 66%
-  of the pool and label 4 new things at each level — plus
-  sway2's start-again trick. Gentler culls waste fewer good
-  rows; more labels per level steady the poles.
+**sway3** is the current version, and it is [weak
+indicators](#weakindicators) taken seriously — two changes:
+
+- **(α, β) instead of (.5, 2)**: keep the top α of the pool and
+  label β new rows per level. Gentler culls waste fewer good
+  rows; more labels per level steady the poles. After a large
+  Monte Carlo study, α=0.66 and β=4 won.
+- **Restart**: the log-n chop hits a tiny leaf long before a
+  budget of 50 labels is spent. So when the pool dries with
+  budget left, start again from the root — but pick the poles
+  only from the rows already labelled. Every restart inherits
+  everything paid for so far.
+
+Thus 1,000 columns and 100,000 rows, 50 labels, and still
+representative examples at the end.
 
 Where to read the code: ezr's own `acquire` (week 5) IS sway3
 in Lua — see its settings `keepf=0.66` and `more=4` — and a
