@@ -63,7 +63,9 @@ exceeds these is not measuring what it claims.
 Where did those numbers come from? From a sweep: run the thing
 at every (budget, check) pair and colour the result. Test score
 (100 = the pool's best row) is the colour; the contours mark
-75, 85 and 95:
+75, 85 and 95 (figure from [Menzies, Srinivasan & Ganguly, *Can
+AI be Easy? Lessons Learned from the EZR.py Toolkit*, SPE
+2026](https://arxiv.org/abs/2606.03640)):
 
 <img src="budget-check.png" width=600
      alt="Test score as a heatmap over budget (10-150) and check (1-10); contours at 75, 85 and 95 run almost vertically">
@@ -125,6 +127,8 @@ spend is counted before anything is scored.
 One holdout is an anecdote; twenty of them are a distribution,
 and the distribution is the result. Which raises next week's
 question: when is one distribution really better than another?
+
+@ [Menzies, Srinivasan & Ganguly: Can AI be easy? Lessons learned from the EZR.py toolkit](https://arxiv.org/abs/2606.03640). Tim Menzies, S. Srinivasan, Kishan Kumar Ganguly. Software: Practice and Experience, 2026. arXiv:2606.03640. (Source of the budget/check sweep above.)
 
 @ [Settles: Active learning literature survey](https://minds.wisconsin.edu/handle/1793/60660). Burr Settles. Univ. Wisconsin-Madison, Computer Sciences TR 1648, 2009.
 

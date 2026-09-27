@@ -1378,7 +1378,9 @@ exceeds these is not measuring what it claims.
 Where did those numbers come from? From a sweep: run the thing
 at every (budget, check) pair and colour the result. Test score
 (100 = the pool's best row) is the colour; the contours mark
-75, 85 and 95:
+75, 85 and 95 (figure from [Menzies, Srinivasan & Ganguly, *Can
+AI be Easy? Lessons Learned from the EZR.py Toolkit*, SPE
+2026](https://arxiv.org/abs/2606.03640)):
 
 <img src="../budget-check.png" width=600
      alt="Test score as a heatmap over budget (10-150) and check (1-10); contours at 75, 85 and 95 run almost vertically">

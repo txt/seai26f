@@ -194,7 +194,7 @@ New acronyms: none.
 <li>
 <b>budget</b>: Four numbers run the economy: <em>budget=50</em> (labels, total), <em>check=5</em> (labels held back to confirm the final pick), <em>more=4</em> (labels per round) and <em>keepf=0.66</em> (fraction of the pool kept per cull). Read them as a sentence: spend four labels, throw away a third of what is left, repeat; keep five in your pocket for the final exam. Any experiment that quietly exceeds these is not measuring what it claims.
 <br><br>
-Where did those numbers come from? From a sweep: run the thing at every (budget, check) pair and colour the result. Test score (100 = the pool's best row) is the colour; the contours mark 75, 85 and 95:
+Where did those numbers come from? From a sweep: run the thing at every (budget, check) pair and colour the result. Test score (100 = the pool's best row) is the colour; the contours mark 75, 85 and 95 (figure from <a href="https://arxiv.org/abs/2606.03640">Menzies, Srinivasan & Ganguly, <em>Can AI be Easy? Lessons Learned from the EZR.py Toolkit</em>, SPE 2026</a>):
 <img src="budget-check.png" width=600      alt="Test score as a heatmap over budget (10-150) and check (1-10); contours at 75, 85 and 95 run almost vertically">
 <br><br>
 Read the contours, not the colours: they run almost VERTICALLY. That means the score depends mostly on <em>check</em> &mdash; the labels spent confirming the top of the final ranking &mdash; and only weakly on <em>budget</em>, the labels spent searching. Going from a budget of 30 to 150 (five times the money) barely moves the colour; moving check from 1 to 5 crosses two contour lines, and the yellow lives out past check 7. The cheap corner is bottom right: a SMALL budget with a few more checks beats a large budget with one.
@@ -215,6 +215,9 @@ Why? The search only has to get the right rows NEAR the top of its ranking; the 
 <br><br>
 One holdout is an anecdote; twenty of them are a distribution, and the distribution is the result. Which raises next week's question: when is one distribution really better than another?
 <br><br><div class="reference">
+<a href="https://arxiv.org/abs/2606.03640">Menzies, Srinivasan & Ganguly: Can AI be easy? Lessons learned from the EZR.py toolkit</a>. Tim Menzies, S. Srinivasan, Kishan Kumar Ganguly. Software: Practice and Experience, 2026. arXiv:2606.03640. (Source of the budget/check sweep above.)
+</div>
+<div class="reference">
 <a href="https://minds.wisconsin.edu/handle/1793/60660">Settles: Active learning literature survey</a>. Burr Settles. Univ. Wisconsin-Madison, Computer Sciences TR 1648, 2009.
 </div>
 <div class="reference">
