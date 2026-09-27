@@ -38,6 +38,18 @@ whole was: split on "cylinders &le; 4" and maybe the light,
 thrifty cars land on one side and the tanks on the other. The
 craft is scoring thousands of candidate cuts, cheaply.
 
+Two lines hold that whole difference &mdash; and note the third
+rule hiding in both: an unknown cell says yes to everything, so
+a *"?"* never loses a row. (Glossary 1's Aha doctrine again:
+with no information, assume the answer that costs least.)
+
+<pre><span class=k>function</span> <span class=f>SYM.holds</span>(i,x,v) <span class=k>return</span> x == <span class=s>"?"</span> <span class=k>or</span> x == v  <span class=k>end</span><br><br><span class=k>function</span> <span class=f>NUM.holds</span>(i,x,v) <span class=k>return</span> x == <span class=s>"?"</span> <span class=k>or</span> x &lt;= v  <span class=k>end</span></pre>
+
+So one call site, *c:holds(row[c.at], v)*, sends a row left or
+right without ever asking which kind of column it holds &mdash;
+which is why divide, TREE.leaf and the cut scorers are each a
+line shorter than they would otherwise be.
+
 -
 
 **div, recalled (sd and entropy)**: Everything below scores a

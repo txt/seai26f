@@ -1108,6 +1108,23 @@ of the [columnProtocol](#columnprotocol). A good cut leaves
 each side more settled about y than the whole was. The craft is
 scoring thousands of candidates, cheaply.
 
+Two lines hold the whole of that difference — and note the
+third rule hiding in both: an unknown cell says yes to
+everything, so a `"?"` never loses a row. (Which is the
+[Aha](#distx) doctrine again: with no information, assume the
+answer that costs you least.)
+
+```lua
+function SYM.holds(i,x,v) return x == "?" or x == v  end
+
+function NUM.holds(i,x,v) return x == "?" or x <= v  end
+```
+
+So one call site, `c:holds(row[c.at], v)`, sends a row left or
+right without ever asking which kind of column it holds — and
+that is why [divide](#tree), [TREE.leaf](#tree) and the cut
+scorers are each one line shorter than they would otherwise be.
+
 ### expected value
 
 The probability-weighted average: if value $f_i$ arrives with
@@ -1357,6 +1374,31 @@ pool kept per cull). Read them as a sentence: spend four
 labels, throw away a third of what is left, repeat; keep five
 in your pocket for the final exam. Any experiment that quietly
 exceeds these is not measuring what it claims.
+
+Where did those numbers come from? From a sweep: run the thing
+at every (budget, check) pair and colour the result. Test score
+(100 = the pool's best row) is the colour; the contours mark
+75, 85 and 95:
+
+<img src="../budget-check.png" width=600
+     alt="Test score as a heatmap over budget (10-150) and check (1-10); contours at 75, 85 and 95 run almost vertically">
+
+Read the contours, not the colours: they run almost VERTICALLY.
+That means the score depends mostly on `check` — the labels
+spent confirming the top of the final ranking — and only weakly
+on `budget`, the labels spent searching. Going from a budget of
+30 to 150 (five times the money) barely moves the colour;
+moving check from 1 to 5 crosses two contour lines, and the
+yellow lives out past check 7. The cheap corner is bottom
+right: a SMALL budget with a few more checks beats a large
+budget with one.
+
+Why? The search only has to get the right rows NEAR the top of
+its ranking; the checks are what pick the winner out of that
+shortlist. Pay for the sort, not for the search. And note the
+shape of this lesson — it is [weak indicators](#weakindicators)
+once more: the ranking is a cheap guess, so spend a little
+confirming it rather than a lot perfecting it.
 
 ### acquire
 
