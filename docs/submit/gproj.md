@@ -69,7 +69,11 @@ your top hits will be blockbusters from nowhere near SE (in one run of
 this method, only nine of the top 1,000 unfiltered hits were SE papers).
 Save your search strings — they go in the paper.
 
-**2. Find the knee.** Sort your top ~100 hits by citation count and plot
+**2. Find the [knee](../lect/glossary.md#knee).** Why a knee is enough:
+in any field of *N* researchers, about *√N* of them write the artifacts
+half the field uses; the rest is bottle-washing (re-measuring,
+re-tuning, re-reporting). Reading above the knee is how you find the
+√N. Sort your top ~100 hits by citation count and plot
 the curve. Draw the chord from the most-cited to the least-cited paper;
 the **knee** is the point on the curve furthest from that chord.
 Worked example: one 249-paper search gave a knee of 23 papers, all with

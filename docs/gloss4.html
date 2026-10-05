@@ -186,6 +186,11 @@ New acronyms: XAI.
 <ol>
 <li>
 <b>cut</b>: One test on one x column: numbers split at a threshold (<em>x &le; v</em>), symbols split by equality (<em>x == v</em>) &mdash; the <em>holds</em> slot of the columnProtocol (glossary 1). A good cut is one whose two sides are each more SETTLED about y than the whole was: split on "cylinders &le; 4" and maybe the light, thrifty cars land on one side and the tanks on the other. The craft is scoring thousands of candidate cuts, cheaply.
+<br><br>
+Two lines hold that whole difference &mdash; and note the third rule hiding in both: an unknown cell says yes to everything, so a <em>"?"</em> never loses a row. (Glossary 1's Aha doctrine again: with no information, assume the answer that costs least.)
+<pre><span class=k>function</span> <span class=f>SYM.holds</span>(i,x,v) <span class=k>return</span> x == <span class=s>"?"</span> <span class=k>or</span> x == v  <span class=k>end</span><br><br><span class=k>function</span> <span class=f>NUM.holds</span>(i,x,v) <span class=k>return</span> x == <span class=s>"?"</span> <span class=k>or</span> x &lt;= v  <span class=k>end</span></pre>
+<br><br>
+So one call site, <em>c:holds(row[c.at], v)</em>, sends a row left or right without ever asking which kind of column it holds &mdash; which is why divide, TREE.leaf and the cut scorers are each a line shorter than they would otherwise be.
 </li>
 <li>
 <b>div, recalled (sd and entropy)</b>: Everything below scores a split by asking each side one question: "how settled are you about y?" That question is <em>div</em> from glossary 1 &mdash; one protocol slot, two spellings. A Num answers with the standard deviation; a Sym answers with the entropy; both read 0 when the column has entirely made up its mind, and grow as it wriggles.
@@ -249,6 +254,8 @@ To predict for a new row, walk it down and answer the leaf's mean:
 </li>
 <li>
 <b>XAI (explainable AI)</b>: An explanation is a model small enough to argue with. A tree of depth four is a paragraph: "under these tests, these rows; the best leaf is here." ezr's tree printer works for that arguability: one row per node, each goal's mean in its own column, best leaf marked with a triangle, and siblings printed better-branch-first so the top of the page is always the way to heaven. Contrast the rival offer &mdash; a black box plus an after-the-fact rationale. When the model itself is small, the model IS the explanation, and a business user can push back on any line of it ("three developers, not seven" is an arguable sentence; a weight matrix is not).
+<br><br>
+Note what kind of answer a tree gives. Attribution methods (SHAP, LIME and friends) rank columns: <em>tires are important</em>, <em>the cap is important</em>, <em>tree is important</em>. A tree ranks column-and-value together, because a branch is a test, not a name: <em>bald</em> tires, the cap <em>turned through 180 degrees</em>, an <em>oak</em> tree. The first kind tells you where to look; only the second tells you what to do &mdash; and what to do is the whole reason anyone asked.
 <br><br><div class="reference">
 <a href="https://doi.org/10.1038/s42256-019-0048-x">Rudin: Stop explaining black box machine learning models for high stakes decisions and use interpretable models instead</a>. Cynthia Rudin. Nature Machine Intelligence 1 (2019), 206-215.
 </div>

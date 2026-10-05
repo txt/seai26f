@@ -63,6 +63,13 @@ Your twenty skills must cover one of these:
   triggers — *how does it work? what did it just do? why not z? what if
   x were different?* — plus the goodness and satisfaction measures that
   score the answers.
+- **Corpus C — a domain you invent.** Pick a client and write their
+  wish list: 10 to 20 things they want to know. A car yard ("which
+  cars sell? which listing is a scam? what happens to price if I
+  restock?"), a swimming coach ("who is about to quit the team?"), a
+  hospital roster, a game studio. The list must be written down before
+  you code, and it must be honest work for the client, not ten
+  restatements of one query. Get the list okayed by the lecturer.
 
 Build an **impressive sequence of small demos** that covers your
 corpus, running on your chosen MOOT data.
@@ -144,6 +151,16 @@ list to twenty. Getting from ten to twenty is where your corpus
 earns its keep: each of Buse's nine analyses, and each of Hoffman's
 triggers and measures, is a customer ask waiting to be phrased in
 your domain's words.
+
+**What is being tested.** The claim is that these skills are
+[synonyms](../lect/glossary.md#synonyms): one machine (cluster, tree,
+leaf) wearing ten hats. The rival claim is that they are ten separate
+problems. So the falsifiable prediction is the shape of your histogram:
+if the bars fall, reuse is real; if they stay flat, this course's
+architecture lost, and saying so clearly scores full marks. The rival
+baselines are not optional — they are the no-reuse treatments in the
+experiment below: ask an LLM for each skill cold, one fresh prompt per
+skill, and plot its new-code-per-step beside yours.
 
 ## Example ladders (yours may differ)
 

@@ -152,9 +152,141 @@ function* &mdash; collapse all goals to one number and chase
 that. *disty* (week 2) is this course's aggregation function:
 zoom, don't wander.
 
+-
+
+**Synonyms (one machine, many tasks)**: Textbooks give a chapter
+each to classification, regression, optimization, anomaly
+detection, explanation, privacy. Buse & Zimmermann give
+analytics nine boxes: trends, alerts, forecasting; summarization,
+overlays, goals; modeling, benchmarking, simulation. The claim of
+this course: most of those boxes are *synonyms* &mdash; one
+machine, the recursive cluster tree, plus a few lines each:
+
+| box                    | what it is, once you hold a cluster tree |
+|------------------------|------------------------------------------|
+| classification         | walk a new row to its leaf, report the leaf's mode |
+| regression             | same walk, report the leaf's mean |
+| optimization           | sort poles by y, recurse only into the better half |
+| anomaly, alerts        | leaf found, but the row sits far outside that leaf's spread |
+| benchmarking           | anomaly detection against a reference population: is this car yard near the good cluster? |
+| forecasting, simulation| mutate rows the way you think the world will move (three wheels, not four), drop them back down the tree, see which leaf catches them |
+| goals, overlays        | y = f(x): change x, re-drop, read the new y |
+| summarization          | read the tree; each leaf already names a group of similar rows |
+| privacy                | publish only the leaves' exemplars |
+| explanation            | the tree IS the explanation |
+
+That table is a testable claim, not a slogan. *The Menzies
+hypothesis*: if the architecture is right, coding skill i+1 needs
+less new code than skill i, so a plot of %-new-code per step
+falls toward zero. Rival prediction, for a fresh LLM asked each
+skill cold with no instruction to reuse: a thousand lines of new
+glue per skill, ten separate programs. That is the undergraduate
+project, and it is a real experiment, so the hypothesis can lose.
+
+-
+
+**Cluster naming (knowledge acquisition)**: Structure first,
+words second. Cluster with no y at all, then take two far-apart
+leaves to a human oracle and ask one question: how do these
+differ? The answers come back as vocabulary ("these are cheap to
+run, those are quick off the line"), so a handful of comparisons
+buys names for the whole tree. Be warned: unsupervised structure
+does not respect our nouns. Sometimes a cluster is a real,
+repeatable group with no name in anyone's language yet &mdash;
+and finding those is the point, not the bug.
+
+-
+
+**Weak indicators**: A heuristic is evidence, not truth. Fastmap
+(week 3) says "these two rows are far apart" using two sweeps
+instead of n&sup2; comparisons; usually right, sometimes wrong.
+The discipline: never bet everything on one weak indicator.
+Either ask it more times, or act on it more gently. Both moves
+appear in sway: the original (.5, 2) strategy trusts fastmap
+absolutely (throw away half the data on the word of two labels),
+while the newer (.66, 4) keeps two-thirds and spends four labels
+per level. A large Monte Carlo study preferred the hedged
+version. Same logic lets *halve* pick its poles from a 128-row
+sample: a weak indicator read cheaply, many times, beats one
+expensive oracle.
+
+-
+
+**Data collapse (prototypes, root-n columns)**: Big data is
+mostly repetition. Models are built from evidence, and evidence
+means many rows saying the same thing &mdash; so rows collapse to
+a few dozen *prototypes* (often a tenth, or a hundredth, of the
+data) with no loss to the model. Columns collapse too: for any
+one target, only about &radic;n of n columns carry signal.
+Multiply the two collapses and the useful part of a large table
+is a tiny corner of it.
+
+This is the folk version of the *Johnson-Lindenstrauss lemma*: n
+dimensions map down to a far smaller m while distances change by
+only a small &epsilon; &mdash; which is why clustering on a
+projection works at all. It runs in the world too: the color of
+the wall behind you is in your data and not in your model, until
+you step onto a highway and the speed of the thing behind you
+becomes the only column that matters. Context decides which
+columns are live.
+
+Two uses of the corner. *Privacy* (Peters' LACE): do not share
+the data, share the corner &mdash; prototypes of the important
+columns. Everything removed is 100% private by construction, and
+the corner itself can be mutated within the structural rules that
+hold there, giving about 95% privacy over the roughly 1% you do
+release. *Reading a literature*: bibliometrics finds the same
+shape. In a field of N researchers, about &radic;N produce the
+artifacts half the field uses. Do not read 1,000 papers; find the
+30 the rest are washing bottles for.
+
+-
+
+**Certification envelope**: A learner asked about something it
+has never seen will answer anyway, confidently, with nothing in
+its reply to say *this is outside everything I was built from*.
+Clustering fixes that for free. Each leaf knows the typical
+distance between its own rows. Walk a new row down to its leaf
+and compare: close, answer normally; far outside that leaf's
+spread, answer AND flash a red light &mdash; here is my guess,
+and here is why you should not believe it.
+
+Why this matters. On 2003-02-01 the shuttle Columbia broke up on
+re-entry, killing seven astronauts, because foam shed at launch
+had punched a hole in the wing's leading edge. On orbit, NASA
+asked a debris model called Crater how much damage such a strike
+would do. Crater had been calibrated on projectiles of roughly
+3 cubic inches. The foam that hit Columbia was estimated at about
+1,200 cubic inches &mdash; some 400 times outside the model's
+evidence &mdash; and Crater answered anyway. An envelope check
+(volume far beyond anything I was fitted on, do not use this
+number) is a handful of lines around a model, and it was the one
+line of output nobody had.
+
+-
+
+**Knee**: Sort any "how much is enough" curve, draw the chord
+from its first point to its last, and the *knee* is the point
+furthest from that chord &mdash; where extra effort stops buying
+much. Note the geometry: point-to-line distance, the same
+arithmetic as the week 3 projection. Standard use here: sort a
+literature search by citation count and read only above the knee.
+One 249-paper search kneed at 23 papers, all with 31+ citations
+&mdash; an evening's reading instead of a semester's. Same trick
+on a learning curve (how many labels before the score flattens?)
+or on sorted cut scores (how many cuts are worth keeping?).
+
 @ [Ganguly & Menzies: Zoom, don't wander: Why regional search outperforms Pareto reasoning and global optimization in budget-constrained SBSE](https://arxiv.org/abs/2605.09658). Kishan Kumar Ganguly, Tim Menzies. arXiv:2605.09658, 2026.
 
 @ [Chen & Chen: PromiseTune: Unveiling causally promising and explainable configuration tuning](https://arxiv.org/abs/2507.05995). Pengzhou Chen, Tao Chen. ICSE 2026. arXiv:2507.05995.
+
+@ [Buse & Zimmermann: Information needs for software development analytics](https://doi.org/10.1109/ICSE.2012.6227122). Raymond P.L. Buse, Thomas Zimmermann. ICSE 2012. (Figure 6: the nine boxes.)
+
+@ [Johnson & Lindenstrauss: Extensions of Lipschitz mappings into a Hilbert space](https://doi.org/10.1090/conm/026/737400). William B. Johnson, Joram Lindenstrauss. Contemporary Mathematics 26, 1984.
+
+@ [Peters, Menzies & Layman: LACE2: Better privacy-preserving data sharing for cross project defect prediction](https://doi.org/10.1109/ICSE.2015.92). Fayola Peters, Tim Menzies, Lucas Layman. ICSE 2015.
+
+@ [Columbia Accident Investigation Board, Report Volume I](https://www.nasa.gov/columbia/home/CAIB_Vol1.html). NASA, August 2003. (Crater, and use of a model outside its calibration.)
 
 .
 

@@ -38,6 +38,18 @@ whole was: split on "cylinders &le; 4" and maybe the light,
 thrifty cars land on one side and the tanks on the other. The
 craft is scoring thousands of candidate cuts, cheaply.
 
+Two lines hold that whole difference &mdash; and note the third
+rule hiding in both: an unknown cell says yes to everything, so
+a *"?"* never loses a row. (Glossary 1's Aha doctrine again:
+with no information, assume the answer that costs least.)
+
+<pre><span class=k>function</span> <span class=f>SYM.holds</span>(i,x,v) <span class=k>return</span> x == <span class=s>"?"</span> <span class=k>or</span> x == v  <span class=k>end</span><br><br><span class=k>function</span> <span class=f>NUM.holds</span>(i,x,v) <span class=k>return</span> x == <span class=s>"?"</span> <span class=k>or</span> x &lt;= v  <span class=k>end</span></pre>
+
+So one call site, *c:holds(row[c.at], v)*, sends a row left or
+right without ever asking which kind of column it holds &mdash;
+which is why divide, TREE.leaf and the cut scorers are each a
+line shorter than they would otherwise be.
+
 -
 
 **div, recalled (sd and entropy)**: Everything below scores a
@@ -201,6 +213,15 @@ When the model itself is small, the model IS the explanation,
 and a business user can push back on any line of it ("three
 developers, not seven" is an arguable sentence; a weight
 matrix is not).
+
+Note what kind of answer a tree gives. Attribution methods
+(SHAP, LIME and friends) rank columns: *tires are important*,
+*the cap is important*, *tree is important*. A tree ranks
+column-and-value together, because a branch is a test, not a
+name: *bald* tires, the cap *turned through 180 degrees*, an
+*oak* tree. The first kind tells you where to look; only the
+second tells you what to do &mdash; and what to do is the whole
+reason anyone asked.
 
 @ [Rudin: Stop explaining black box machine learning models for high stakes decisions and use interpretable models instead](https://doi.org/10.1038/s42256-019-0048-x). Cynthia Rudin. Nature Machine Intelligence 1 (2019), 206-215.
 

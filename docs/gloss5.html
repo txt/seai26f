@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Glossary 5: SE for AI</title>
+<link rel="icon" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎯</text></svg>">
+<meta name="viewport" content="width=device-width" />
+<style>
+:root {
+    --back-color: rgb(30, 30, 30);
+    --text-color: rgb(212, 212, 212);
+}
+
+/* minimalist reset */
+* {
+    padding: 0;
+    margin: 0;
+    font-size: 1em;
+}
+
+body {
+    background-color: var(--back-color);
+    color: var(--text-color);
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+}
+
+main {
+    margin: 0 auto;
+    padding: 30px 140px 0 140px;
+    max-width: 600px;
+    min-height: 100vh;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid var(--text-color);
+    margin: 3em 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 1.2em;
+    font-weight: 700;
+    display: inline;
+    margin-right: 5px;
+    line-height: 1.2;
+}
+
+h2 {
+    margin-top: 50px;
+    font-size: 1.4em;
+}
+
+h3 {
+    margin-top: 40px;
+    font-size: 1.1em;
+    text-align: center;
+}
+
+h4 {
+    font-weight: 400;
+    margin-bottom: 40px;
+}
+
+ol {
+    counter-reset: item;
+}
+ol>li {
+    counter-increment: item;
+    list-style: none inside;
+    margin: 20px 0;
+    overflow: hidden;
+    line-height: 1.5em;
+}
+ol>li:before {
+    content: counter(item) ;
+    margin-right: 10px;
+    padding: 8px;
+    border-radius: 50%;
+    width: 25px;
+    background: var(--text-color);
+    color: var(--back-color);
+    text-align: center;
+    float: left;
+    font-weight: 700;
+}
+
+footer {
+    text-align: right;
+    margin-top: 80px;
+    padding-bottom: 20px;
+    font-size: 0.7em;
+    font-style: italic;
+}
+
+p {
+    line-height: 1.5em;
+    margin-top: 20px;
+    display: block;
+}
+
+a {
+    color: inherit;
+}
+a:hover, a:focus {
+    color: var(--back-color);
+    background-color: var(--text-color);
+}
+
+img {
+    margin: 3px;
+}
+
+ul {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-left: 1.4em;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.85em;
+    line-height: 1.35;
+}
+th, td {
+    border: 1px solid rgba(212, 212, 212, 0.35);
+    padding: 4px 9px;
+    text-align: left;
+}
+th {
+    font-weight: 700;
+}
+
+.reference {
+    font-size: 0.8rem;
+    line-height: 1.2rem;
+}
+
+.footnote {
+    font-size: 0.8rem;
+    line-height: 1.2rem;
+    margin-top: 20px;
+}
+
+sup {
+    font-size: 0.7em;
+    line-height: 0;
+}
+
+.reference > a {
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+  main {
+      max-width: 600px;
+    padding: 10px;
+  }
+  h2 {
+    font-size: 1.2em;
+  }
+  img {
+    width: 100%;
+  }
+}
+</style>
+</head>
+<body>
+<main>
+<style>:root { --back-color: rgb(24, 31, 43); } pre { background: rgba(212,212,212,0.07); border: 1px solid rgba(212,212,212,0.25); padding: 10px 14px; margin: 20px 0; font-size: 0.85em; line-height: 1.4; overflow-x: auto; } pre .k { color: #79b8ff; } pre .s { color: #e0b06a; } pre .c { color: #8ac28a; font-style: italic; } pre .f { color: #d2a8ff; }</style>
+<h1>A glossary of tiny lectures, part 5</h1>
+<h2>Week 5: active learning</h2>
+<h4>By <a href="https://timm.fyi">Tim Menzies</a>, published 2026-09-28, updated 2026-09-28</h4>
+<p>
+<b>Summary:</b> <em>Weeks 1-4 got the goals for free. Now suppose a single y value costs a test drive, a trial, a week of CPU &mdash; and you get fifty, ever. This week is how to spend them: label only the poles, cull gently, restart when the pool dries, and count every purchase. Then the honesty check: a holdout that picks from rows the search never studied. Demos in <a href="ezr-eg5.html">ezr-eg5.lua</a>; machinery verbatim from <a href="ezr.html">ezr.lua</a>. Each entry is a tiny lecture &mdash; hook, idea, math if any, then the code.</em>
+</p>
+<hr id="week5">
+<h3>Labels cost money</h3>
+<hr>
+<p>
+New acronyms: none.
+</p>
+<ol>
+<li>
+<b>active learning</b>: Until now every y value was free: the csv arrived with its goals filled in. Drop that. Suppose one label costs a test drive, a clinical trial, a week of CPU &mdash; and you get fifty, ever. Active learning is the discipline of choosing WHICH rows to label, using only the free x columns to choose, and counting every label you spend. The counting is the science: a result whose price is unknown says nothing.
+</li>
+<li>
+<b>label</b>: Where the money is spent. A row born with <em>"?"</em> goals stays blank until someone asks; <em>label</em> calls the model, writes the answers into the row, and folds each answer into its goal column &mdash; so the summaries used for normalization sharpen as spending grows. Note the seam: everything upstream just asks for <em>disty</em>, and never knows whether the number was looked up or bought.
+<pre><span class=k>function</span> <span class=f>TBL.label</span>(i,row,    f)<br>  f = i.model(map(i.cols.x,<br>        <span class=k>function</span>(c) <span class=k>return</span> row[c.at] <span class=k>end</span>), #i.cols.y)<br>  <span class=k>for</span> j, y <span class=k>in</span> ipairs(i.cols.y) <span class=k>do</span><br>    row[y.at] = y:add(f[j]) <span class=k>end</span><br>  <span class=k>return</span> row <span class=k>end</span></pre>
+</li>
+<li>
+<b>budget</b>: Four numbers run the economy: <em>budget=50</em> (labels, total), <em>check=5</em> (labels held back to confirm the final pick), <em>more=4</em> (labels per round) and <em>keepf=0.66</em> (fraction of the pool kept per cull). Read them as a sentence: spend four labels, throw away a third of what is left, repeat; keep five in your pocket for the final exam. Any experiment that quietly exceeds these is not measuring what it claims.
+<br><br>
+Where did those numbers come from? From a sweep: run the thing at every (budget, check) pair and colour the result. Test score (100 = the pool's best row) is the colour; the contours mark 75, 85 and 95 (figure from <a href="https://arxiv.org/abs/2606.03640">Menzies, Srinivasan & Ganguly, <em>Can AI be Easy? Lessons Learned from the EZR.py Toolkit</em>, SPE 2026</a>):
+<img src="budget-check.png" width=600      alt="Test score as a heatmap over budget (10-150) and check (1-10); contours at 75, 85 and 95 run almost vertically">
+<br><br>
+Read the contours, not the colours: they run almost VERTICALLY. That means the score depends mostly on <em>check</em> &mdash; the labels spent confirming the top of the final ranking &mdash; and only weakly on <em>budget</em>, the labels spent searching. Going from a budget of 30 to 150 (five times the money) barely moves the colour; moving check from 1 to 5 crosses two contour lines, and the yellow lives out past check 7. The cheap corner is bottom right: a SMALL budget with a few more checks beats a large budget with one.
+<br><br>
+Why? The search only has to get the right rows NEAR the top of its ranking; the checks are what pick the winner out of that shortlist. Pay for the sort, not for the search. And note the shape of this lesson &mdash; it is <em>weak indicators</em> once more: the ranking is a cheap guess, so spend a little confirming it rather than a lot perfecting it.
+</li>
+<li>
+<b>acquire</b>: One sweep of <em>sway3</em>, in code. Label up to <em>the.more</em> rows in the current pool, sort the pool by the projection onto poles drawn from those labelled rows, keep the best <em>the.keepf</em> of it, repeat until the pool is small or the budget is gone. Nothing here builds a model; the geometry does all the work, and the goals are only ever read for the few rows we paid for.
+<pre><span class=k>function</span> <span class=f>TBL.acquire</span>(i,rows,cap,lab,lo,hi,<br>                     seen,more,new)<br>  seen = {}<br>  <span class=k>for</span> _,r <span class=k>in</span> ipairs(lab) <span class=k>do</span> seen[r] = <span class=k>true</span> <span class=k>end</span><br>  <span class=k>while</span> #rows &gt;= 2*the.leaf <span class=k>do</span><br>    more, new = min(the.more, cap - #lab), {}<br>    <span class=k>for</span> _,r <span class=k>in</span> ipairs(rows) <span class=k>do</span> <span class=c>-- new = labels in this pool</span><br>      <span class=k>if</span> seen[r] <span class=k>then</span> push(new, r)<br>      <span class=k>elseif</span> more &gt; 0 <span class=k>then</span><br>        more, seen[r] = more - 1, <span class=k>true</span><br>        push(new, push(lab, r)) <span class=k>end</span> <span class=k>end</span><br>    <span class=k>if</span> #lab &gt;= cap <span class=k>then</span> <span class=k>return</span> lab <span class=k>end</span> <span class=c>-- budget spent</span><br>    rows = slice(keysort(rows, (i:poles(new, lo, hi))),<br>               1, max(1, floor(the.keepf * #rows))) <span class=k>end</span><br>  <span class=k>return</span> lab <span class=k>end</span></pre>
+</li>
+<li>
+<b>restart</b>: A log-n chop reaches a tiny pool long before fifty labels are spent. So when the pool dries with budget left, reshuffle and descend again &mdash; but anchored at <em>lo, hi</em>, the best and worst rows labelled SO FAR. Every restart inherits everything paid for to date, which is why the second descent is sharper than the first. The loop stops when the budget is gone, or when a whole sweep buys nothing new.
+<pre><span class=k>function</span> <span class=f>TBL.acquirer</span>(i,cap,    lab,lo,hi,t,b4)<br>  lab = {}<br>  <span class=k>while</span> <span class=k>true</span> <span class=k>do</span><br>    b4  = #lab<br>    lab = i:acquire(shuffle(i.rows), cap, lab, lo, hi)<br>    <span class=k>if</span> #lab &gt;= cap <span class=k>or</span> #lab &gt;= #i.rows <span class=k>or</span><br>       #lab == b4 <span class=k>then</span> <span class=k>break</span> <span class=k>end</span> <span class=c>-- full, or no progress</span><br>    t = keysort(lab, i:Y())<br>    lo, hi = t[1], t[#t] <span class=k>end</span> <span class=c>-- best+worst seen</span><br>  <span class=k>return</span> keysort(lab, i:Y()) <span class=k>end</span></pre>
+</li>
+<li>
+<b>holdout</b>: The honesty check. Finding a good row among rows you have studied proves nothing; the question is whether what you learned TRANSFERS. So: split the rows in half, spend the budget on the train half, grow a <em>tree</em> from those labels, use that tree to rank the unseen test half, then spend the last <em>the.check</em> labels confirming the top of that ranking. The assert on line five is the whole ethic of the course &mdash; the spend is counted before anything is scored.
+<pre><span class=k>function</span> <span class=f>TBL.holdout</span>(i,how,    rows,n,train,test,lab,t,top)<br>  how  = how <span class=k>or</span> <span class=k>function</span>(t2,cap) <span class=k>return</span> t2:acquirer(cap) <span class=k>end</span><br>  rows = shuffle(i.rows)<br>  n    = floor(#rows/2)<br>  train= slice(rows, 1, n)<br>  test = slice(rows, n+1)<br>  lab  = how(i:clone(train), the.budget - the.check)<br>  assert(#lab + the.check &lt;= the.budget) <span class=c>-- spend, counted</span><br>  t    = Tree(i, lab)<br>  top  = slice(keysort(test, <span class=k>function</span>(r) <span class=k>return</span> t:leaf(i, r) <span class=k>end</span>),<br>           1, the.check)<br>  <span class=k>return</span> keysort(top, i:Y())[1] <span class=k>end</span></pre>
+<br><br>
+One holdout is an anecdote; twenty of them are a distribution, and the distribution is the result. Which raises next week's question: when is one distribution really better than another?
+<br><br><div class="reference">
+<a href="https://arxiv.org/abs/2606.03640">Menzies, Srinivasan & Ganguly: Can AI be easy? Lessons learned from the EZR.py toolkit</a>. Tim Menzies, S. Srinivasan, Kishan Kumar Ganguly. Software: Practice and Experience, 2026. arXiv:2606.03640. (Source of the budget/check sweep above.)
+</div>
+<div class="reference">
+<a href="https://minds.wisconsin.edu/handle/1793/60660">Settles: Active learning literature survey</a>. Burr Settles. Univ. Wisconsin-Madison, Computer Sciences TR 1648, 2009.
+</div>
+<div class="reference">
+<a href="https://doi.org/10.1109/TSE.2018.2790925">Chen, Nair, Krishna & Menzies: Sampling as a baseline optimizer for search-based software engineering</a>. IEEE TSE 45(6), 2019, 597-614.
+</div>
+</li>
+</ol>
+<footer>This page is <a href="http://jeffhuang.com/designed_to_last/">designed to last</a>.</footer>
+</main>
+</body>
+</html>

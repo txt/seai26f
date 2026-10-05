@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Glossary 8: SE for AI</title>
+<link rel="icon" href="data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏁</text></svg>">
+<meta name="viewport" content="width=device-width" />
+<style>
+:root {
+    --back-color: rgb(30, 30, 30);
+    --text-color: rgb(212, 212, 212);
+}
+
+/* minimalist reset */
+* {
+    padding: 0;
+    margin: 0;
+    font-size: 1em;
+}
+
+body {
+    background-color: var(--back-color);
+    color: var(--text-color);
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
+}
+
+main {
+    margin: 0 auto;
+    padding: 30px 140px 0 140px;
+    max-width: 600px;
+    min-height: 100vh;
+}
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid var(--text-color);
+    margin: 3em 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 1.2em;
+    font-weight: 700;
+    display: inline;
+    margin-right: 5px;
+    line-height: 1.2;
+}
+
+h2 {
+    margin-top: 50px;
+    font-size: 1.4em;
+}
+
+h3 {
+    margin-top: 40px;
+    font-size: 1.1em;
+    text-align: center;
+}
+
+h4 {
+    font-weight: 400;
+    margin-bottom: 40px;
+}
+
+ol {
+    counter-reset: item;
+}
+ol>li {
+    counter-increment: item;
+    list-style: none inside;
+    margin: 20px 0;
+    overflow: hidden;
+    line-height: 1.5em;
+}
+ol>li:before {
+    content: counter(item) ;
+    margin-right: 10px;
+    padding: 8px;
+    border-radius: 50%;
+    width: 25px;
+    background: var(--text-color);
+    color: var(--back-color);
+    text-align: center;
+    float: left;
+    font-weight: 700;
+}
+
+footer {
+    text-align: right;
+    margin-top: 80px;
+    padding-bottom: 20px;
+    font-size: 0.7em;
+    font-style: italic;
+}
+
+p {
+    line-height: 1.5em;
+    margin-top: 20px;
+    display: block;
+}
+
+a {
+    color: inherit;
+}
+a:hover, a:focus {
+    color: var(--back-color);
+    background-color: var(--text-color);
+}
+
+img {
+    margin: 3px;
+}
+
+ul {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding-left: 1.4em;
+}
+
+table {
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 0.85em;
+    line-height: 1.35;
+}
+th, td {
+    border: 1px solid rgba(212, 212, 212, 0.35);
+    padding: 4px 9px;
+    text-align: left;
+}
+th {
+    font-weight: 700;
+}
+
+.reference {
+    font-size: 0.8rem;
+    line-height: 1.2rem;
+}
+
+.footnote {
+    font-size: 0.8rem;
+    line-height: 1.2rem;
+    margin-top: 20px;
+}
+
+sup {
+    font-size: 0.7em;
+    line-height: 0;
+}
+
+.reference > a {
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+  main {
+      max-width: 600px;
+    padding: 10px;
+  }
+  h2 {
+    font-size: 1.2em;
+  }
+  img {
+    width: 100%;
+  }
+}
+</style>
+</head>
+<body>
+<main>
+<style>:root { --back-color: rgb(24, 31, 43); } pre { background: rgba(212,212,212,0.07); border: 1px solid rgba(212,212,212,0.25); padding: 10px 14px; margin: 20px 0; font-size: 0.85em; line-height: 1.4; overflow-x: auto; } pre .k { color: #79b8ff; } pre .s { color: #e0b06a; } pre .c { color: #8ac28a; font-style: italic; } pre .f { color: #d2a8ff; }</style>
+<h1>A glossary of tiny lectures, part 8</h1>
+<h2>Week 8: optimizers</h2>
+<h4>By <a href="https://timm.fyi">Tim Menzies</a>, published 2026-11-02, updated 2026-11-02</h4>
+<p>
+<b>Summary:</b> <em>Fifty years of search, in four short functions: genetic algorithms, differential evolution, simulated annealing and greedy local search &mdash; plus the random baseline that exists to embarrass anyone whose clever method cannot beat a lucky dip. They all work. They also spend evaluations like water, which is fine when the model is cheap and ruinous when it is not. Demos in <a href="ezr-eg8.html">ezr-eg8.lua</a>; machinery verbatim from <a href="ezr-apps.html">ezr-apps.lua</a>.</em>
+</p>
+<hr id="week8">
+<h3>The drag race</h3>
+<hr>
+<p>
+New acronyms: GA (genetic algorithm), DE (differential evolution), SA (simulated annealing).
+</p>
+<ol>
+<li>
+<b>snap and guess</b>: The classic optimizers invent new x values, so their offspring have no goals at all. Rather than call the model for every mutant, this code SNAPS a mutant to the nearest real row and grades it by that neighbour's disty. That is a lie with a purpose: it keeps the comparison fair (every method scores against the same pool) and it keeps the demos fast. Homework asks where the lie leaks.
+<pre><span class=k>function</span> <span class=f>TBL.guess</span>(i,row)<br>  <span class=k>return</span> i:disty(i:snap(row)) <span class=k>end</span></pre>
+</li>
+<li>
+<b>mutate</b>: Copy a row, re-pick a few x cells: symbols by frequency (rare values stay rare), numbers by a gaussian step of one standard deviation, clamped to &plusmn;3sd. Mutation is where every population method gets its new ideas, and the clamp is what stops those ideas leaving the world the data came from.
+<pre><span class=k>function</span> <span class=f>pick</span>(col,v,    sd)<br>  <span class=k>if</span> col.has <span class=k>then</span> <span class=k>return</span> wkey(col.has) <span class=k>end</span><br>  v  = v ~= <span class=s>"?"</span> <span class=k>and</span> v <span class=k>or</span> col.mu<br>  sd = col:div()<br>  <span class=k>return</span> max(col.mu - 3*sd,<br>             min(col.mu + 3*sd, v + sd * gauss())) <span class=k>end</span></pre>
+</li>
+<li>
+<b>ga (genetic algorithm)</b>: Darwin in twelve lines. Keep a population; to make each kid, pick two parents by a domination tournament, cut-and-splice them, then mutate. Repeat for <em>the.gens</em> generations and return the best of the final population. Everything expensive lives in the fitness call, which is why a GA is a fine idea when the model is cheap and a terrible one when each label costs a week.
+<pre><span class=k>function</span> <span class=f>TBL.ga</span>(i,    pop,kids)<br>  pop = slice(shuffle(i.rows), 1, the.np)<br>  <span class=k>for</span> _ = 1, the.gens <span class=k>do</span><br>    kids = {}<br>    <span class=k>for</span> _ = 1, the.np <span class=k>do</span><br>      push(kids, i:mutate(cross(i, tourn(i, pop),<br>                                    tourn(i, pop)))) <span class=k>end</span><br>    pop = kids <span class=k>end</span><br>  <span class=k>return</span> i:snap(keysort(pop, <span class=k>function</span>(r)<br>                          <span class=k>return</span> i:guess(r) <span class=k>end</span>)[1]) <span class=k>end</span></pre>
+</li>
+<li>
+<b>de (differential evolution)</b>: The population IS the step size. A kid is a + F(b - c) for three random members &mdash; so while the population is spread out the jumps are long, and as it converges they shrink automatically, with no cooling schedule to tune. A kid replaces its parent only if it is better. Across this course's races, DE is the classic that keeps winning.
+<pre><span class=k>function</span> <span class=f>TBL.de</span>(i,    pop,es,t,kid,d,at)<br>  pop = slice(shuffle(i.rows), 1, the.np)<br>  es  = map(pop, <span class=k>function</span>(r) <span class=k>return</span> i:guess(r) <span class=k>end</span>)<br>  <span class=k>for</span> _ = 1, the.gens <span class=k>do</span><br>    <span class=k>for</span> j = 1, #pop <span class=k>do</span><br>      t   = some(pop, 3)<br>      kid = i:extrapolate(t[1], t[2], t[3])<br>      d   = i:guess(kid)<br>      <span class=k>if</span> d &lt; es[j] <span class=k>then</span> pop[j], es[j] = kid, d <span class=k>end</span> <span class=k>end</span> <span class=k>end</span><br>  at = 1<br>  <span class=k>for</span> j = 2, #es <span class=k>do</span> <span class=k>if</span> es[j] &lt; es[at] <span class=k>then</span> at = j <span class=k>end</span> <span class=k>end</span><br>  <span class=k>return</span> i:snap(pop[at]) <span class=k>end</span></pre>
+</li>
+<li>
+<b>local search</b>: The (1+1) loop, stripped to nothing: mutate the current solution, accept the mutant if the acceptance rule says so, and remember the best ever seen. <em>ls</em> accepts only improvements &mdash; fast, and stuck in the first valley it finds.
+<pre><span class=k>local</span> <span class=k>function</span> <span class=f>climb</span>(i,accept,    s,e,b,eb,kid,d)<br>  s = i.rows[rand(#i.rows)]<br>  e = i:guess(s)<br>  b, eb = s, e<br>  <span class=k>for</span> h = 1, the.budget1 <span class=k>do</span><br>    kid = i:mutate(s)<br>    d   = i:guess(kid)<br>    <span class=k>if</span> d &lt; eb <span class=k>then</span> b, eb = kid, d <span class=k>end</span><br>    <span class=k>if</span> accept(e, d, h) <span class=k>then</span> s, e = kid, d <span class=k>end</span> <span class=k>end</span><br>  <span class=k>return</span> i:snap(b) <span class=k>end</span></pre>
+</li>
+<li>
+<b>sa (simulated annealing)</b>: The same loop with one different line: accept a WORSE mutant with probability e<sup>-&Delta;/T</sup>, where the temperature T falls as the budget burns. Early on it wanders (escaping local valleys); late on it only improves. One rule, two behaviours, zero extra machinery &mdash; which is why annealing is still the best first thing to try on a strange problem.
+<pre><span class=k>function</span> <span class=f>TBL.sa</span>(i)<br>  <span class=k>return</span> climb(i, <span class=k>function</span>(e,d,h)<br>    <span class=k>return</span> d &lt; e <span class=k>or</span> rand() &lt; exp((e - d) /<br>      (1 - h/the.budget1 + 1e-32)) <span class=k>end</span>) <span class=k>end</span></pre>
+</li>
+<li>
+<b>race</b>: The drag race: every optimizer, several repeats, plus a best-of-<em>np</em> random baseline (<em>any</em>) that exists to embarrass anyone whose clever method cannot beat a lucky dip. Results go straight into <em>ranks</em>, so the output is a rank table, not a champion. Always race against <em>any</em>; papers that do not are how the field wastes decades.
+<pre><span class=k>function</span> <span class=f>TBL.race</span>(i,repeats,    d)<br>  d = {ga={}, de={}, sa={}, ls={}, any={}}<br>  <span class=k>for</span> _ = 1, repeats <span class=k>or</span> the.repeats <span class=k>do</span><br>    push(d.ga,  i:disty(i:ga()))<br>    push(d.de,  i:disty(i:de()))<br>    push(d.sa,  i:disty(i:sa()))<br>    push(d.ls,  i:disty(i:ls()))<br>    push(d.any, i:disty(<br>      keysort(some(i.rows, the.np), i:Y())[1])) <span class=k>end</span><br>  <span class=k>return</span> d, ranks(d) <span class=k>end</span></pre>
+<br><br><div class="reference">
+<a href="https://doi.org/10.7551/mitpress/1090.001.0001">Holland: Adaptation in natural and artificial systems</a>. John H. Holland. University of Michigan Press, 1975.
+</div>
+<div class="reference">
+<a href="https://doi.org/10.1023/A:1008202821328">Storn & Price: Differential evolution -- a simple and efficient heuristic for global optimization over continuous spaces</a>. Rainer Storn, Kenneth Price. Journal of Global Optimization 11, 1997, 341-359.
+</div>
+<div class="reference">
+<a href="https://doi.org/10.1126/science.220.4598.671">Kirkpatrick, Gelatt & Vecchi: Optimization by simulated annealing</a>. S. Kirkpatrick, C.D. Gelatt, M.P. Vecchi. Science 220(4598), 1983, 671-680.
+</div>
+</li>
+</ol>
+<footer>This page is <a href="http://jeffhuang.com/designed_to_last/">designed to last</a>.</footer>
+</main>
+</body>
+</html>

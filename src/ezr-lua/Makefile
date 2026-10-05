@@ -13,6 +13,7 @@ CSV   := $(filter-out $(MOOT)/optimize/test/%, \
            $(wildcard $(MOOT)/optimize/*/*.csv))
 FILES := ezr.lua ezr-lib.lua etc/ezr-eg.lua ezr-apps.lua \
          ezr-dtlz.lua play.lua Makefile tut.md README.md \
+         INSTALL.md $(wildcard ezr-eg[0-9].lua) \
          data/auto93.csv etc/img/fig2-w2.png etc/tut/repl.lua \
          $(wildcard etc/tut/*.in)
 
@@ -29,6 +30,11 @@ demo: ## run every demo; each must end "failures: 0"
 	@$(LUA) etc/ezr-eg.lua   --all
 	@$(LUA) ezr-apps.lua --all
 	@$(LUA) ezr-dtlz.lua --all
+
+weeks: ## run the weekly tutorial files (ezr-eg1 .. ezr-eg8)
+	@for n in 1 2 3 4 5 6 7 8; do \
+	   printf 'ezr-eg%s: ' $$n; $(LUA) ezr-eg$$n.lua --all | tail -1; \
+	 done
 
 apps: ## higher-level demos only: knn, nb, kmeans, ga/de/sa/ls, race, dtlz
 	@$(LUA) ezr-apps.lua --all
@@ -101,11 +107,11 @@ all: ## every table, CORES at a time, into results.tsv
 
 zip: ezr-lua.zip ## bundle the course into ezr-lua.zip
 
-ezr-lua.zip: $(FILES) ../LICENSE.md
+ezr-lua.zip: $(FILES) ../../LICENSE.md
 	@rm -f $@
 	@d=$$(mktemp -d); mkdir -p $$d/ezr-lua; \
 	 tar cf - $(FILES) | (cd $$d/ezr-lua && tar xf -); \
-	 cp ../LICENSE.md $$d/ezr-lua/; \
+	 cp ../../LICENSE.md $$d/ezr-lua/; \
 	 (cd $$d && zip -qX -r $(CURDIR)/$@ ezr-lua); \
 	 rm -rf $$d
 	@unzip -l $@ | tail -1 | sed 's/^/  /'

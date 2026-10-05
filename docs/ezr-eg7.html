@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>ezr-eg7.lua</title>
+  <link rel="stylesheet" href="pycco.css">
+</head>
+<body>
+<div id='container'>
+  <div id="background"></div>
+  <div class='section'>
+    <div class='docs'><!-- seai26f-nav --><p align="center">
+  <a href="https://github.com/txt/seai26f/blob/main/README.md"><img 
+     src="https://img.shields.io/badge/Home-%23ff5733?style=flat-square&logo=home&logoColor=white" /></a>
+  <a href="https://github.com/txt/seai26f/blob/main/docs/lect/policies.md"><img 
+      src="https://img.shields.io/badge/Policies-%230055ff?style=flat-square&logo=openai&logoColor=white" /></a>
+  <a href="#"><img
+      src="https://img.shields.io/badge/Teams-%23ffd700?style=flat-square&logo=users&logoColor=white" /></a>
+  <a href="https://moodle-courses2527.wolfware.ncsu.edu/course/view.php?id=11951&bp=s"><img 
+      src="https://img.shields.io/badge/491%20Moodle-%23dc143c?style=flat-square&logo=moodle&logoColor=white" /></a>
+  <a href="https://moodle-courses2527.wolfware.ncsu.edu/course/view.php?id=13665&bp=sfroge"><img 
+      src="https://img.shields.io/badge/591%20Moodle-%23f98012?style=flat-square&logo=moodle&logoColor=white" /></a>
+  <a href="https://ncsu.hosted.panopto.com/Panopto/Pages/Sessions/List.aspx#folderID=a8560b36-2071-4a70-8c3a-b4a4017e9ff5"><img 
+      src="https://img.shields.io/badge/Recordings-%236f42c1?style=flat-square&logo=youtube&logoColor=white" /></a>
+  <a href="https://discord.gg/uQgTnGsfR"><img 
+      src="https://img.shields.io/badge/Chat-%23008080?style=flat-square&logo=discord&logoColor=white" /></a>
+  <a href="https://github.com/txt/seai26f/blob/main/LICENSE.md"><img 
+      src="https://img.shields.io/badge/©%20timm%202026-%234b4b4b?style=flat-square&logoColor=white" /></a></p><p align="center"><a href="ezr.html">ezr</a> | <a href="ezr-lib.html">ezr-lib</a> | <a href="ezr-eg0.html">ezr-eg0</a> | <a href="ezr-eg1.html">ezr-eg1</a> | <a href="ezr-eg2.html">ezr-eg2</a> | <a href="ezr-eg3.html">ezr-eg3</a> | <a href="ezr-eg4.html">ezr-eg4</a> | <a href="ezr-eg5.html">ezr-eg5</a> | <a href="ezr-eg6.html">ezr-eg6</a> | <b>ezr-eg7</b> | <a href="ezr-eg8.html">ezr-eg8</a> | <a href="ezr-apps.html">ezr-apps</a> | <a href="ezr-dtlz.html">ezr-dtlz</a> | <a href="play.html">play</a></p><p align="center"><a href="ezr-eg6.html">&lt; prev</a> | <a href="ezr-eg8.html">next &gt;</a></p><h1><a href="https://github.com/txt/seai26f/blob/main/src/ezr-lua/ezr-eg7.lua">ezr-eg7.lua</a></h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      <p>ezr-eg7.lua: week 7 of ten. Applications.
+Tutorial and tests in one file: prose lives in these
+comments, each demo is one eg[] function that reseeds,
+prints, then asserts; no crash means pass.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span></span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <h2>Install</h2>
+<pre><code>sudo apt install lua5.4 luajit         # Debian, Ubuntu
+brew install lua luajit                # macOS
+sudo ln -sf /usr/bin/lua5.4 /usr/local/bin/lua # Debian
+</code></pre>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      <h2>Run</h2>
+<pre><code>lua ezr-eg7.lua --egs     # list this week's demos
+lua ezr-eg7.lua --all     # run them all; "failures: 0"
+lua ezr-eg7.lua --knn     # run just one
+luajit ezr-eg7.lua --all  # 10-50x faster, same output
+</code></pre>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      <h2>This week&rsquo;s story</h2>
+<p>Data mining textbooks give a chapter each to prediction,
+anomaly detection, Bayes classifiers and clustering. This
+week is the claim that those chapters are SYNONYMS: with a
+distance function and a few column summaries already built,
+each chapter is a dozen lines.</p>
+<ul>
+<li>The Fortune Teller (<code>knn</code>): to guess a row&rsquo;s goals, ask
+  the <code>the.k</code> rows nearest it. No model is fitted; the
+  neighbours ARE the model.</li>
+<li>The Bouncer (<code>anomaly</code>): score a row by how far it sits
+  from everything seen so far. This is the certification
+  envelope &ndash; the red light that says &ldquo;you are asking me
+  about something I was never built from&rdquo;. Learners without
+  one answer anyway, confidently, which is how NASA&rsquo;s Crater
+  model came to rule on debris 400 times larger than
+  anything it had been calibrated on.</li>
+<li>The ER Nurse (<code>classify</code>): naive Bayes, test-then-train.
+  Each class keeps its own column summaries, a row goes to
+  whichever class likes it best, and only then is the true
+  label folded in. No batch, no epochs.</li>
+<li>The Curator (<code>kmeans</code>, <code>kpp</code>): k centroids, assign and
+  recentre &ndash; and kpp, which seeds those centroids far
+  apart, because week 3&rsquo;s poles taught the same lesson.</li>
+</ul>
+<p>Four &ldquo;different&rdquo; algorithms; one substrate. Count the new
+lines each one needed: that number is the whole argument of
+this course, and of the undergraduate project.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      <h2>Glossary</h2>
+<p><a href="https://github.com/txt/seai26f/blob/main/docs/lect/glossary.md#knn">knn</a>,
+<a href="https://github.com/txt/seai26f/blob/main/docs/lect/glossary.md#anomaly-detection">anomaly detection</a>,
+<a href="https://github.com/txt/seai26f/blob/main/docs/lect/glossary.md#certification-envelope">certification envelope</a>,
+<a href="https://github.com/txt/seai26f/blob/main/docs/lect/glossary.md#naive-bayes">naive bayes</a>,
+<a href="https://github.com/txt/seai26f/blob/main/docs/lect/glossary.md#kmeans">kmeans</a>,
+<a href="https://github.com/txt/seai26f/blob/main/docs/lect/glossary.md#kpp">kpp</a>,
+<a href="https://github.com/txt/seai26f/blob/main/docs/lect/glossary.md#synonyms">synonyms</a></p>
+<hr />
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      <p>find <a href="ezr.html">ezr.lua</a> beside this file, whatever the cwd</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="nb">package.path</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="nv">arg</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nv">arg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">):</span><span class="nf">gsub</span><span class="p">(</span><span class="s2">&quot;[^/]*$&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="w">               </span><span class="o">..</span><span class="w"> </span><span class="s2">&quot;?.lua;&quot;</span><span class="w"> </span><span class="o">..</span><span class="w"> </span><span class="nb">package.path</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      <p>reads fall through to <a href="ezr-apps.html">ezr-apps</a>, where this
+week&rsquo;s four residents live, and through it to ezr, lib, _G</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kd">local</span><span class="w"> </span><span class="nv">_ENV</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">setmetatable</span><span class="p">({},</span><span class="w"> </span><span class="p">{</span><span class="nv">__index</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">require</span><span class="s2">&quot;ezr-apps&quot;</span><span class="p">})</span>
+<span class="kr">if</span><span class="w"> </span><span class="nv">setfenv</span><span class="w"> </span><span class="kr">then</span><span class="w"> </span><span class="nf">setfenv</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nv">_ENV</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span>
+
+<span class="kd">local</span><span class="w"> </span><span class="nv">abs</span><span class="p">,</span><span class="w"> </span><span class="nv">floor</span><span class="p">,</span><span class="w"> </span><span class="nv">min</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">math.abs</span><span class="p">,</span><span class="w"> </span><span class="nb">math.floor</span><span class="p">,</span><span class="w"> </span><span class="nb">math.min</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-7'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-7'>#</a>
+      </div>
+      <h2>demos</h2>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="nv">eg</span><span class="p">,</span><span class="w"> </span><span class="nv">doc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{},</span><span class="w"> </span><span class="p">{}</span>
+
+<span class="nv">doc</span><span class="p">[</span><span class="s2">&quot;--egs&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;list this week&#39;s demos&quot;</span>
+<span class="nv">eg</span><span class="p">[</span><span class="s2">&quot;--egs&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">function</span><span class="p">()</span>
+<span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="nv">_</span><span class="p">,</span><span class="nv">k</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nb">ipairs</span><span class="p">(</span><span class="nf">keys</span><span class="p">(</span><span class="nv">eg</span><span class="p">))</span><span class="w"> </span><span class="kr">do</span>
+<span class="w">    </span><span class="nb">print</span><span class="p">((</span><span class="s2">&quot;%-10s %s&quot;</span><span class="p">):</span><span class="nf">format</span><span class="p">(</span><span class="nv">k</span><span class="p">,</span><span class="w"> </span><span class="nv">doc</span><span class="p">[</span><span class="nv">k</span><span class="p">]</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s2">&quot;&quot;</span><span class="p">))</span><span class="w"> </span><span class="kr">end</span><span class="w"> </span><span class="kr">end</span>
+
+<span class="nv">doc</span><span class="p">[</span><span class="s2">&quot;--repl&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;an interactive prompt; bare names resolve&quot;</span>
+<span class="nv">eg</span><span class="p">[</span><span class="s2">&quot;--repl&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">function</span><span class="p">()</span><span class="w"> </span><span class="nf">repl</span><span class="p">(</span><span class="nv">_ENV</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span>
+
+<span class="nv">doc</span><span class="p">[</span><span class="s2">&quot;--all&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;all the demos; fail if any of them do&quot;</span>
+<span class="nv">eg</span><span class="p">[</span><span class="s2">&quot;--all&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="w">    </span><span class="nv">bad</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">bad</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="nv">_</span><span class="p">,</span><span class="nv">k</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nb">ipairs</span><span class="p">(</span><span class="nf">keys</span><span class="p">(</span><span class="nv">eg</span><span class="p">))</span><span class="w"> </span><span class="kr">do</span>
+<span class="w">    </span><span class="kr">if</span><span class="w"> </span><span class="nv">k</span><span class="w"> </span><span class="o">~=</span><span class="w"> </span><span class="s2">&quot;--all&quot;</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nv">k</span><span class="w"> </span><span class="o">~=</span><span class="w"> </span><span class="s2">&quot;--egs&quot;</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nv">k</span><span class="w"> </span><span class="o">~=</span><span class="w"> </span><span class="s2">&quot;--repl&quot;</span><span class="w"> </span><span class="ow">and</span>
+<span class="w">       </span><span class="nf">run</span><span class="p">(</span><span class="nv">eg</span><span class="p">,</span><span class="w"> </span><span class="nv">k</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="kr">then</span><span class="w"> </span><span class="nv">bad</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">bad</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="kr">end</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;failures: &quot;</span><span class="w"> </span><span class="o">..</span><span class="w"> </span><span class="nv">bad</span><span class="p">)</span>
+<span class="w">  </span><span class="nb">assert</span><span class="p">(</span><span class="nv">bad</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-8'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-8'>#</a>
+      </div>
+      <p><em><code>lua ezr-eg7.lua --knn</code></em>
+Neighbours beat the global mean as a guess. Nothing was
+fitted; the data is the model.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="nv">doc</span><span class="p">[</span><span class="s2">&quot;--knn&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;guess from k neighbours; beats the mean guess&quot;</span>
+<span class="nv">eg</span><span class="p">[</span><span class="s2">&quot;--knn&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="w">    </span><span class="nv">t</span><span class="p">,</span><span class="nv">y</span><span class="p">,</span><span class="nv">mu</span><span class="p">,</span><span class="nv">e1</span><span class="p">,</span><span class="nv">e2</span><span class="p">,</span><span class="nv">r</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">t</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nf">Tbl</span><span class="p">(</span><span class="nf">csv</span><span class="p">(</span><span class="nv">the</span><span class="p">.</span><span class="py">file</span><span class="p">))</span>
+<span class="w">  </span><span class="nv">y</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nv">t</span><span class="p">:</span><span class="nf">Y</span><span class="p">()</span>
+<span class="w">  </span><span class="nv">mu</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">adds</span><span class="p">(</span><span class="nf">map</span><span class="p">(</span><span class="nv">t</span><span class="p">.</span><span class="py">rows</span><span class="p">,</span><span class="w"> </span><span class="nv">y</span><span class="p">)).</span><span class="nv">mu</span>
+<span class="w">  </span><span class="nv">e1</span><span class="p">,</span><span class="w"> </span><span class="nv">e2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="nv">_</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">32</span><span class="w"> </span><span class="kr">do</span>
+<span class="w">    </span><span class="nv">r</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nv">t</span><span class="p">.</span><span class="py">rows</span><span class="p">[</span><span class="nf">rand</span><span class="p">(</span><span class="o">#</span><span class="nv">t</span><span class="p">.</span><span class="py">rows</span><span class="p">)]</span>
+<span class="w">    </span><span class="nv">e1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">e1</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">abs</span><span class="p">(</span><span class="nv">t</span><span class="p">:</span><span class="nf">knn</span><span class="p">(</span><span class="nv">r</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="nf">y</span><span class="p">(</span><span class="nv">r</span><span class="p">))</span>
+<span class="w">    </span><span class="nv">e2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">e2</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nf">abs</span><span class="p">(</span><span class="nv">mu</span><span class="w">       </span><span class="o">-</span><span class="w"> </span><span class="nf">y</span><span class="p">(</span><span class="nv">r</span><span class="p">))</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="nb">print</span><span class="p">((</span><span class="s2">&quot;knn err %.3f vs mean-guess err %.3f&quot;</span><span class="p">):</span><span class="nf">format</span><span class="p">(</span>
+<span class="w">          </span><span class="nv">e1</span><span class="o">/</span><span class="mi">32</span><span class="p">,</span><span class="w"> </span><span class="nv">e2</span><span class="o">/</span><span class="mi">32</span><span class="p">))</span>
+<span class="w">  </span><span class="nb">assert</span><span class="p">(</span><span class="nv">e1</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nv">e2</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-9'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-9'>#</a>
+      </div>
+      <p><em><code>lua ezr-eg7.lua --detect</code></em>
+Anomaly scores, 0..1: someone in here is lonely. That score
+is the red light on any prediction made about that row.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="nv">doc</span><span class="p">[</span><span class="s2">&quot;--detect&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;anomaly scores; the red light on a guess&quot;</span>
+<span class="nv">eg</span><span class="p">[</span><span class="s2">&quot;--detect&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="w">    </span><span class="nv">t</span><span class="p">,</span><span class="nv">det</span><span class="p">,</span><span class="nv">ss</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">t</span><span class="w">   </span><span class="o">=</span><span class="w"> </span><span class="nf">Tbl</span><span class="p">(</span><span class="nf">csv</span><span class="p">(</span><span class="nv">the</span><span class="p">.</span><span class="py">file</span><span class="p">))</span>
+<span class="w">  </span><span class="nv">det</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">t</span><span class="p">:</span><span class="nf">anomaly</span><span class="p">()</span>
+<span class="w">  </span><span class="nv">ss</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nf">sorted</span><span class="p">(</span><span class="nf">map</span><span class="p">(</span><span class="nv">t</span><span class="p">.</span><span class="py">rows</span><span class="p">,</span><span class="w"> </span><span class="nv">det</span><span class="p">))</span>
+<span class="w">  </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;anomaly scores &quot;</span><span class="w"> </span><span class="o">..</span><span class="w"> </span><span class="nv">show</span><span class="p">{</span><span class="nv">lo</span><span class="o">=</span><span class="nv">ss</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+<span class="w">        </span><span class="nv">mid</span><span class="o">=</span><span class="nv">ss</span><span class="p">[</span><span class="nf">floor</span><span class="p">(</span><span class="o">#</span><span class="nv">ss</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="nv">hi</span><span class="o">=</span><span class="nv">ss</span><span class="p">[</span><span class="o">#</span><span class="nv">ss</span><span class="p">]})</span>
+<span class="w">  </span><span class="nb">assert</span><span class="p">(</span><span class="mi">0</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="nv">ss</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nv">ss</span><span class="p">[</span><span class="o">#</span><span class="nv">ss</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<span class="w">  </span><span class="nb">assert</span><span class="p">(</span><span class="nv">ss</span><span class="p">[</span><span class="o">#</span><span class="nv">ss</span><span class="p">]</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.5</span><span class="p">)</span><span class="w">                 </span><span class="c1">-- somebody is odd</span>
+<span class="w">  </span><span class="nb">assert</span><span class="p">(</span><span class="nv">ss</span><span class="p">[</span><span class="nf">floor</span><span class="p">(</span><span class="o">#</span><span class="nv">ss</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="nv">ss</span><span class="p">[</span><span class="o">#</span><span class="nv">ss</span><span class="p">])</span><span class="w"> </span><span class="kr">end</span><span class="w"> </span><span class="c1">-- most are not</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-10'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-10'>#</a>
+      </div>
+      <p><em><code>lua ezr-eg7.lua --nb</code></em>
+Naive Bayes, test-then-train: guess first, learn second, so
+every score is earned on unseen rows.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="nv">doc</span><span class="p">[</span><span class="s2">&quot;--nb&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;test-then-train naive bayes, on diabetes&quot;</span>
+<span class="nv">eg</span><span class="p">[</span><span class="s2">&quot;--nb&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="w">    </span><span class="nv">t</span><span class="p">,</span><span class="nv">seen</span><span class="p">,</span><span class="nv">a</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">t</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="nf">Tbl</span><span class="p">(</span><span class="nv">csv</span><span class="s2">&quot;$MOOT/classify/diabetes.csv&quot;</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">seen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">t</span><span class="p">:</span><span class="nf">classify</span><span class="p">()</span>
+<span class="w">  </span><span class="nv">a</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="nf">acc</span><span class="p">(</span><span class="nv">seen</span><span class="p">)</span>
+<span class="w">  </span><span class="nb">print</span><span class="p">((</span><span class="s2">&quot;diabetes: acc %.2f over %s guesses&quot;</span><span class="p">):</span><span class="nf">format</span><span class="p">(</span>
+<span class="w">          </span><span class="nv">a</span><span class="p">,</span><span class="w"> </span><span class="o">#</span><span class="nv">seen</span><span class="p">))</span>
+<span class="w">  </span><span class="nb">assert</span><span class="p">(</span><span class="nv">a</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.65</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-11'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-11'>#</a>
+      </div>
+      <p><em><code>lua ezr-eg7.lua --kmeans</code></em>
+The textbook clusterer: assign, recentre, repeat. Rows are
+conserved &ndash; a cheap, sharp test of any clusterer.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="nv">doc</span><span class="p">[</span><span class="s2">&quot;--kmeans&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;assign and recentre; rows are conserved&quot;</span>
+<span class="nv">eg</span><span class="p">[</span><span class="s2">&quot;--kmeans&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="w">    </span><span class="nv">t</span><span class="p">,</span><span class="nv">cs</span><span class="p">,</span><span class="nv">n</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">t</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="nf">Tbl</span><span class="p">(</span><span class="nf">csv</span><span class="p">(</span><span class="nv">the</span><span class="p">.</span><span class="py">file</span><span class="p">))</span>
+<span class="w">  </span><span class="nv">cs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">t</span><span class="p">:</span><span class="nf">kmeans</span><span class="p">()</span>
+<span class="w">  </span><span class="nv">n</span><span class="w">  </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="nv">_</span><span class="p">,</span><span class="nv">c</span><span class="w"> </span><span class="kr">in</span><span class="w"> </span><span class="nb">ipairs</span><span class="p">(</span><span class="nv">cs</span><span class="p">)</span><span class="w"> </span><span class="kr">do</span><span class="w"> </span><span class="nv">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">n</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="o">#</span><span class="nv">c</span><span class="p">.</span><span class="py">rows</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="nb">print</span><span class="p">(</span><span class="s2">&quot;cluster sizes &quot;</span><span class="w"> </span><span class="o">..</span>
+<span class="w">    </span><span class="nf">show</span><span class="p">(</span><span class="nf">sorted</span><span class="p">(</span><span class="nf">map</span><span class="p">(</span><span class="nv">cs</span><span class="p">,</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="nv">c</span><span class="p">)</span><span class="w"> </span><span class="kr">return</span><span class="w"> </span><span class="o">#</span><span class="nv">c</span><span class="p">.</span><span class="py">rows</span><span class="w"> </span><span class="kr">end</span><span class="p">))))</span>
+<span class="w">  </span><span class="nb">assert</span><span class="p">(</span><span class="nv">n</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="o">#</span><span class="nv">t</span><span class="p">.</span><span class="py">rows</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="o">#</span><span class="nv">cs</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="nv">the</span><span class="p">.</span><span class="py">kluster</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-12'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-12'>#</a>
+      </div>
+      <p><em><code>lua ezr-eg7.lua --kpp</code></em>
+Seeds, spread out: each new centre is picked with a chance
+proportional to its distance from the centres so far. Week
+3&rsquo;s poles, wearing a different hat.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="nv">doc</span><span class="p">[</span><span class="s2">&quot;--kpp&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;seeds picked far apart, kmeans++ style&quot;</span>
+<span class="nv">eg</span><span class="p">[</span><span class="s2">&quot;--kpp&quot;</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kr">function</span><span class="p">(</span><span class="w">    </span><span class="nv">t</span><span class="p">,</span><span class="nv">cents</span><span class="p">,</span><span class="nv">d</span><span class="p">)</span>
+<span class="w">  </span><span class="nv">t</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="nf">Tbl</span><span class="p">(</span><span class="nf">csv</span><span class="p">(</span><span class="nv">the</span><span class="p">.</span><span class="py">file</span><span class="p">))</span>
+<span class="w">  </span><span class="nv">cents</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">t</span><span class="p">:</span><span class="nf">kpp</span><span class="p">()</span>
+<span class="w">  </span><span class="nv">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1e32</span>
+<span class="w">  </span><span class="kr">for</span><span class="w"> </span><span class="nv">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">#</span><span class="nv">cents</span><span class="w"> </span><span class="kr">do</span>
+<span class="w">    </span><span class="kr">for</span><span class="w"> </span><span class="nv">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">j</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="o">#</span><span class="nv">cents</span><span class="w"> </span><span class="kr">do</span>
+<span class="w">      </span><span class="nv">d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">min</span><span class="p">(</span><span class="nv">d</span><span class="p">,</span><span class="w"> </span><span class="nv">t</span><span class="p">:</span><span class="nf">distx</span><span class="p">(</span><span class="nv">cents</span><span class="p">[</span><span class="nv">j</span><span class="p">],</span><span class="w"> </span><span class="nv">cents</span><span class="p">[</span><span class="nv">k</span><span class="p">]))</span><span class="w"> </span><span class="kr">end</span><span class="w"> </span><span class="kr">end</span>
+<span class="w">  </span><span class="nb">print</span><span class="p">((</span><span class="s2">&quot;%s kpp seeds, min gap %.3f&quot;</span><span class="p">):</span><span class="nf">format</span><span class="p">(</span><span class="o">#</span><span class="nv">cents</span><span class="p">,</span><span class="w"> </span><span class="nv">d</span><span class="p">))</span>
+<span class="w">  </span><span class="nb">assert</span><span class="p">(</span><span class="o">#</span><span class="nv">cents</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nv">the</span><span class="p">.</span><span class="py">kluster</span><span class="w"> </span><span class="ow">and</span><span class="w"> </span><span class="nv">d</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="kr">end</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-13'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-13'>#</a>
+      </div>
+      <h2>homework 7</h2>
+<ol>
+<li>Give Claude this prompt:
+   &ldquo;Read ezr-eg7.lua. For its demos (&ndash;knn, &ndash;detect, &ndash;nb,
+   &ndash;kmeans, &ndash;kpp), trace only the functions they actually
+   call, following the require chain into
+   <a href="ezr-apps.html">ezr-apps.lua</a>, <a href="ezr.html">ezr.lua</a> and
+   <a href="ezr-lib.html">ezr-lib.lua</a>. Print that Lua source in two
+   parts, split by a divider line: above it, code I must
+   hand-port to Python; below it, code a Python builtin
+   already handles, each function commented with the module
+   and function that replaces it. Near enough is good
+   enough.&rdquo;</li>
+<li>Port the above-the-line code to Python, on top of the
+   weeks before, wiring each demo to a test_ function. Near
+   enough is good enough.</li>
+<li>Think, pair, share: list all the bits you do not
+   understand. Share that list with your pair. See if,
+   together, you can figure them out.</li>
+<li>Make that Python perform like the Lua: same demos,
+   similar printed numbers. Stuck on the ideas? Each function
+   here gets its own tiny lecture in <a href="gloss7.html">gloss7</a>.</li>
+<li>Hand in: one side of one piece of paper, showing your
+   Python code for knn, anomaly and the naive Bayes scorer.
+   At the end of that code, add comments answering the
+   &ldquo;check your port&rdquo; questions below.</li>
+</ol>
+<p>Check your port (we will discuss these in class):</p>
+<ol>
+<li>Count the NEW lines each resident needed on top of the
+   distance and column machinery you already had. Plot those
+   counts, chapter by chapter. Is the plot falling? (That is
+   the undergraduate project, in miniature.)</li>
+<li>&ndash;detect scores rows already IN the table. Sketch the
+   three extra lines that would turn it into a certification
+   envelope around &ndash;knn: a guess, plus a warning when the
+   row is too strange to trust. What threshold would you
+   use, and how would you pick it?</li>
+<li>Naive Bayes assumes the columns are independent, which is
+   plainly false for (say) weight and horsepower. Rerun &ndash;nb
+   with two strongly correlated columns duplicated. What
+   happens to accuracy, and why is &ldquo;naive&rdquo; still a winning
+   bet in practice?</li>
+<li>kmeans needs k, a full pass per iteration and a distance
+   to every centroid. Week 3&rsquo;s Node needs none of those.
+   Name one thing kmeans gives you that Node does not &ndash; and
+   one thing Node gives you that kmeans cannot.</li>
+</ol>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-14'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-14'>#</a>
+      </div>
+      <h2>start-up</h2>
+<p>Fires only when this file is the script the user ran.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="nf">go</span><span class="p">(</span><span class="nv">eg</span><span class="p">)</span>
+
+<span class="kr">return</span><span class="w"> </span><span class="nv">_ENV</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>
