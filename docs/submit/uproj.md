@@ -58,7 +58,11 @@ payoff. Four moves:
    estimating software projects (`process/nasa93dem.csv`,
    `process/coc1000.csv`), designing a development process
    (`process/pom3*.csv`, `process/xomo*.csv`), predicting open-source
-   project health (`hpo/Health-*.csv`)...
+   project health (`hpo/Health-*.csv`)... Browse the whole shop at
+   [moot/optimize](https://github.com/timm/moot/tree/master/optimize).
+   Fair warning: some data sets will just laugh at you — nothing
+   learns, nothing shrinks. That is a negative result, not a
+   disaster: report it honestly and it scores.
 2. **Write a requirements doc**: twenty skills a customer might ask
    of an AI in that domain. One line each, in domain words, not
    algorithm words ("find me a great car cheap", not "run NSGA-II").
