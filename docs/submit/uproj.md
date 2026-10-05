@@ -20,11 +20,32 @@
 
 # Undergraduate Project: the Shrinking-Code Demos
 
-**Team:** your ugrad group (three-ish). One submission per group.
+**Team:** your group (three-ish). One submission per group. The two
+cohorts differ only in scope: 491 builds one domain, 591 builds
+three (see "The corpora").
 **Due:** last class (Mon Nov 30). One deliverable, no intermediaries.
-**Hand in:** repo URL + a video (5 minutes MAX — watching stops at
-5:00) + one report (histogram, `same` tables, a verdict on the
-conjecture — details below), as one PDF/links page to Moodle.
+**Hand in:** one PDF to Moodle: the report (ACM transactions
+format; 491: 3 pages, 591: 6 to 9 pages), repo URL on page one.
+
+## The hypothesis, and its rival
+
+Everything below tests one claim. State it, and its rival, on the
+first page of your report:
+
+> **The Timm hypothesis.** Neuro-symbolic systems improve when
+> their symbolic half is factored into small reusable structures.
+> The ten skills are [synonyms](../lect/glossary.md#synonyms): one
+> machine (cluster, tree, leaf) wearing ten hats. Hence an LLM, or
+> a human, extends a well-factored library with less new code, and
+> fewer errors, than a monolithic one.
+
+> **The rival.** The ten skills are ten separate problems. Factoring
+> buys nothing: skill i+1 costs about the same whoever writes it,
+> and whatever library sits underneath.
+
+The falsifiable prediction is the shape of your new-code histogram:
+if the bars fall, reuse is real; if they stay flat, the rival wins.
+Either way you score — honest negative results are findings.
 
 ## The big picture
 
@@ -47,12 +68,13 @@ payoff. Four moves:
    git-tagged. If your architecture is right, each step reuses the
    machinery of the steps before it, so step[i+1] needs less new
    code than step[i].
-4. **Hand in** the repo, a 5-minute video of every demo running, and
-   a histogram showing the new-code-per-step falling.
+4. **Hand in** a report (sections below) whose histograms and
+   `same` tables deliver a verdict on the hypothesis.
 
-## Pick ONE corpus
+## The corpora
 
-Your twenty skills must cover one of these:
+Three corpora. The first two are vocabularies to mine; the third is
+the assignment:
 
 - **Corpus A — analytics.** Figure 6 of
   [Buse & Zimmermann, ICSE 2012](../lect/buse-icse-2012.pdf): nine
@@ -70,6 +92,16 @@ Your twenty skills must cover one of these:
   hospital roster, a game studio. The list must be written down before
   you code, and it must be honest work for the client, not ten
   restatements of one query. Get the list okayed by the lecturer.
+
+How many Corpus C's?
+
+- **CSC 491 (undergraduate): one.** One client, one wish list, one
+  MOOT data set — every skill tagged with the Corpus A or B cell it
+  demos.
+- **CSC 591 (graduate): three.** Three different clients on three
+  different MOOT data sets, one shared codebase. The synonyms claim
+  says your machinery transfers: by the third domain you should be
+  writing almost nothing except the wish list.
 
 Build an **impressive sequence of small demos** that covers your
 corpus, running on your chosen MOOT data.
@@ -152,15 +184,10 @@ earns its keep: each of Buse's nine analyses, and each of Hoffman's
 triggers and measures, is a customer ask waiting to be phrased in
 your domain's words.
 
-**What is being tested.** The claim is that these skills are
-[synonyms](../lect/glossary.md#synonyms): one machine (cluster, tree,
-leaf) wearing ten hats. The rival claim is that they are ten separate
-problems. So the falsifiable prediction is the shape of your histogram:
-if the bars fall, reuse is real; if they stay flat, this course's
-architecture lost, and saying so clearly scores full marks. The rival
-baselines are not optional — they are the no-reuse treatments in the
-experiment below: ask an LLM for each skill cold, one fresh prompt per
-skill, and plot its new-code-per-step beside yours.
+**What is being tested** is the hypothesis at the top of this page.
+The rival gets its day in court via the no-reuse treatments in the
+experiment below: ask an LLM for each skill cold, one fresh prompt
+per skill, and plot its new-code-per-step beside yours.
 
 ## Example ladders (yours may differ)
 
@@ -240,39 +267,47 @@ ezr is untuned for your data. Fixing that is part of the project:
 If tuned ezr still loses, say so. Honest negative results score;
 hidden failures cost more.
 
-## What to hand in
+## The report
 
-1. **The repo.** Public. Steps tagged. Tests exist. The requirements
-   doc (twenty skills, corpus-tagged) at `docs/requirements.md`. A
-   README that says how to run every demo in one command each.
-2. **The video (5 minutes, hard cap).** Every step demoed, live, in
-   order. Narrate what each step adds and what it reuses.
-3. **The report.** It contains (i) the histogram — x-axis: step
-   number; y-axis: % of that step's code that is NEW — computed from
-   your git tags (`git diff --stat step2..step3`, or cloc per tag),
-   one line per treatment; (ii) the `same` tables comparing the seven
-   treatments; and (iii) a verdict on the conjecture below.
+One PDF, ACM transactions format (LaTeX `acmart`; Overleaf has the
+template). **491: 3 pages. 591: 6 to 9 pages** (three domains need
+the room). Repo URL on page one; the repo is public, steps tagged,
+tests exist, requirements doc at `docs/requirements.md`, README
+runs every demo in one command each. These five section headers,
+in this order:
 
-**The conjecture.** *Neuro-symbolic systems improve when their
-symbolic half is factored into small reusable structures: an LLM
-extends a well-factored library with less new code, and fewer
-errors, than a monolithic one.* Your seven treatments test this.
-Agree, refute, or qualify — but only with claims your `same` tables
-support.
+1. **Hypotheses.** The Timm hypothesis and its rival, verbatim from
+   the top of this page, then one paragraph: your domain(s), your
+   data, and what result would make each side win.
+2. **Requirements.** The twenty customer asks (591: per domain),
+   each tagged with its skill and its Corpus A/B cell.
+3. **Methods.** The seven treatments, the reset protocol you
+   actually used, your N, and any ezr tuning (the oracle rewire,
+   the self-tuning csv).
+4. **Results.** The histograms — x-axis: step; y-axis: % new code,
+   from your git tags (`git diff --stat step2..step3`, or cloc per
+   tag), one line per treatment — and the `same` tables.
+5. **Discussion.** The verdict: which hypothesis won, where, and
+   why — using only differences your `same` tables certify. Honest
+   failures belong here, not in a drawer.
 
 ## Rubric (25 marks)
 
-| Marks | For | 3-point check |
-|------:|-----|---------------|
-| 6 | **Coverage**: how much of your requirements doc is demoed, and the doc covers the corpus | all 20 skills, all cells = 6; two-thirds = 4; half = 3 |
-| 6 | **The experiment**: seven treatments, N repeats, differences certified by `same` | N≥10 with clean resets = 6; N=3 = 3; claims without `same` = 0 |
-| 6 | **The video**: 5 min, every demo runs, story is clear | a stranger sees why step N was cheap = 6 |
-| 3 | **Code quality**: tests, small, readable | |
-| 4 | **AI disclosure**: what the LLM wrote, which of its errors you caught | zero caught errors reads as zero checking |
+One row per report section, plus the repo and the disclosure:
 
-Ways to lose marks: a demo that only runs in the video; a histogram not
-derivable from the repo's tags; steps that share nothing (nine little
-programs is not a ladder); code dumped in one final commit; a
-requirements doc written in algorithm words instead of customer words;
-trials that shared an LLM context (that is one trial, counted once);
-a "difference" between treatments that `same` calls noise.
+| Marks | Section | For | 3-point check |
+|------:|---------|-----|---------------|
+| 2 | **Hypotheses** | both claims stated, win conditions named | verbatim + win conditions = 2; paraphrased or one-sided = 1 |
+| 5 | **Requirements** | 20 asks in customer words, all tagged (591: ×3 domains) | all = 5; two-thirds = 3; algorithm words = 1 |
+| 4 | **Methods** | seven treatments, documented resets, N declared | all three = 4; shared contexts = 1 |
+| 6 | **Results** | histograms derivable from tags, `same` on every comparison | N≥10 = 6; N=3 = 3; claims without `same` = 0 |
+| 3 | **Discussion** | verdict follows from the tables; honest negatives score full | conclusions the tables do not support = 0 |
+| 2 | **The repo** | tags, tests, one-command demos | a demo that only "ran once" = 0 |
+| 3 | **AI disclosure** | what the LLM wrote, which of its errors you caught | zero caught errors reads as zero checking |
+
+Ways to lose marks: a histogram not derivable from the repo's tags;
+steps that share nothing (nine little programs is not a ladder); code
+dumped in one final commit; a requirements doc written in algorithm
+words instead of customer words; trials that shared an LLM context
+(that is one trial, counted once); a "difference" between treatments
+that `same` calls noise; a report over the page limit.
