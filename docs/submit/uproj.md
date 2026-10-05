@@ -18,12 +18,14 @@
 <h1 align="center">:cyclone: CSC491/591: SE for AI <br>NC State, Fall '26</h1>
 <img src="https://raw.githubusercontent.com/txt/seai26f/refs/heads/main/etc/img/seai26f.png">
 
-# Undergraduate Project: the Shrinking-Code Demos
+# The Shrinking-Code Project (491 + 591)
 
 **Team:** your group (three-ish). One submission per group. The two
 cohorts differ only in scope: 491 builds one domain, 591 builds
-three (see "The corpora").
-**Due:** last class (Mon Nov 30). One deliverable, no intermediaries.
+three (see "Invent a domain").
+**Due:** 491: last class (Mon Nov 30), one deliverable, no
+intermediaries. 591: initial Mon Nov 9, final Mon Nov 30
+(see [gproj.md](gproj.md)).
 **Hand in:** one PDF to Moodle: the report (ACM transactions
 format; 491: 3 pages, 591: 6 to 9 pages), repo URL on page one.
 
@@ -66,8 +68,10 @@ payoff. Four moves:
 2. **Write a requirements doc**: twenty skills a customer might ask
    of an AI in that domain. One line each, in domain words, not
    algorithm words ("find me a great car cheap", not "run NSGA-II").
-   Tag each skill with the corpus cell (below) it will demo. Put
-   this doc at `docs/requirements.md` in your repo.
+   Tag each ask with the skill it will demo — remember, guess,
+   certify, flow, blame, justify, choose, fix, spot, race (see the
+   car-yard table below). Put this doc at `docs/requirements.md`
+   in your repo.
 3. **Build the skills in steps** (step1, step2, ...), each step
    git-tagged. If your architecture is right, each step reuses the
    machinery of the steps before it, so step[i+1] needs less new
@@ -75,40 +79,27 @@ payoff. Four moves:
 4. **Hand in** a report (sections below) whose histograms and
    `same` tables deliver a verdict on the hypothesis.
 
-## The corpora
+## Invent a domain
 
-Three corpora. The first two are vocabularies to mine; the third is
-the assignment:
+Pick a client and write their wish list: the things they want to
+know. A car yard ("which cars sell? which listing is a scam? what
+happens to price if I restock?"), a swimming coach ("who is about
+to quit the team?"), a hospital roster, a game studio. The list
+must be written down before you code, and it must be honest work
+for the client, not twenty restatements of one query. Get the list
+okayed by the lecturer.
 
-- **Corpus A — analytics.** Figure 6 of
-  [Buse & Zimmermann, ICSE 2012](../lect/buse-icse-2012.pdf): nine
-  analyses in a 3×3 grid — Trends, Alerts, Forecasting; Summarization,
-  Overlays, Goals; Modeling, Benchmarking, Simulation.
-- **Corpus B — explanation.** Figure 1 and Tables 1–2 of
-  [Hoffman et al., Metrics for XAI](../lect/xai.pdf): the explanation
-  triggers — *how does it work? what did it just do? why not z? what if
-  x were different?* — plus the goodness and satisfaction measures that
-  score the answers.
-- **Corpus C — a domain you invent.** Pick a client and write their
-  wish list: 10 to 20 things they want to know. A car yard ("which
-  cars sell? which listing is a scam? what happens to price if I
-  restock?"), a swimming coach ("who is about to quit the team?"), a
-  hospital roster, a game studio. The list must be written down before
-  you code, and it must be honest work for the client, not ten
-  restatements of one query. Get the list okayed by the lecturer.
-
-How many Corpus C's?
+How many domains?
 
 - **CSC 491 (undergraduate): one.** One client, one wish list, one
-  MOOT data set — every skill tagged with the Corpus A or B cell it
-  demos.
+  MOOT data set — every ask tagged with the skill it demos.
 - **CSC 591 (graduate): three.** Three different clients on three
   different MOOT data sets, one shared codebase. The synonyms claim
   says your machinery transfers: by the third domain you should be
   writing almost nothing except the wish list.
 
-Build an **impressive sequence of small demos** that covers your
-corpus, running on your chosen MOOT data.
+Build an **impressive sequence of small demos** that covers the
+wish list, running on your chosen MOOT data.
 
 **The rule of the game:** work in steps — step1, step2, step3... If your
 architecture is right, each step reuses the machinery of the steps
@@ -183,10 +174,9 @@ effort, fewer defects):
 | Race our estimator against the field's best             | race     |
 
 Your requirements doc does this for your domain, then grows the
-list to twenty. Getting from ten to twenty is where your corpus
-earns its keep: each of Buse's nine analyses, and each of Hoffman's
-triggers and measures, is a customer ask waiting to be phrased in
-your domain's words.
+list to twenty. Getting from ten to twenty is the interview: keep
+asking your imagined client for trends, alerts, forecasts,
+what-ifs and why-nots until the worries stop repeating.
 
 **What is being tested** is the hypothesis at the top of this page.
 The rival gets its day in court via the no-reuse treatments in the
@@ -195,14 +185,14 @@ per skill, and plot its new-code-per-step beside yours.
 
 ## Example ladders (yours may differ)
 
-**Corpus A:** load+summarize a MOOT csv → trends (regression over
+**An analytics ladder:** load+summarize a MOOT csv → trends (regression over
 releases) → alerts (anomaly = far from trend) → forecast (extrapolate
 the trend) → overlays (correlate two indicators) → goals (which
 indicator moved us toward/away from target) → modeling (learn
 normal-vs-odd) → benchmarking (significance test between two projects)
 → simulation (what-if: perturb a config, rerun the pipeline).
 
-**Corpus B:** train a tiny model on a MOOT csv → global explanation
+**An explanation ladder:** train a tiny model on a MOOT csv → global explanation
 ("how it works": rules or feature ranks) → local explanation ("what did
 it just do" for one row) → contrastive ("why not z") → counterfactual
 ("what if x were different") → error modes ("when will it get it
@@ -284,7 +274,7 @@ in this order:
    the top of this page, then one paragraph: your domain(s), your
    data, and what result would make each side win.
 2. **Requirements.** The twenty customer asks (591: per domain),
-   each tagged with its skill and its Corpus A/B cell.
+   each tagged with the skill it demos.
 3. **Methods.** The seven treatments, the reset protocol you
    actually used, your N, and any ezr tuning (the oracle rewire,
    the self-tuning csv).
@@ -295,19 +285,24 @@ in this order:
    why — using only differences your `same` tables certify. Honest
    failures belong here, not in a drawer.
 
-## Rubric (25 marks)
+## Rubric
 
-One row per report section, plus the repo and the disclosure:
+One table, both cohorts: the 491 report is marked out of 25, the
+591 report out of 34. (591 also has an initial deliverable, Mon
+Nov 9, 5 marks — rubric in [gproj.md](gproj.md) — so the grad
+project totals 39.) One row per report section, plus the repo and
+the disclosure:
 
-| Marks | Section | For | 3-point check |
-|------:|---------|-----|---------------|
-| 2 | **Hypotheses** | both claims stated, win conditions named | verbatim + win conditions = 2; paraphrased or one-sided = 1 |
-| 5 | **Requirements** | 20 asks in customer words, all tagged (591: ×3 domains) | all = 5; two-thirds = 3; algorithm words = 1 |
-| 4 | **Methods** | seven treatments, documented resets, N declared | all three = 4; shared contexts = 1 |
-| 6 | **Results** | histograms derivable from tags, `same` on every comparison | N≥10 = 6; N=3 = 3; claims without `same` = 0 |
-| 3 | **Discussion** | verdict follows from the tables; honest negatives score full | conclusions the tables do not support = 0 |
-| 2 | **The repo** | tags, tests, one-command demos | a demo that only "ran once" = 0 |
-| 3 | **AI disclosure** | what the LLM wrote, which of its errors you caught | zero caught errors reads as zero checking |
+| 491 | 591 | Section | For | 3-point check |
+|----:|----:|---------|-----|---------------|
+| 2 | 3 | **Hypotheses** | both claims stated, win conditions named | verbatim + win conditions = full; paraphrased or one-sided = half |
+| 5 | 7 | **Requirements** | 20 asks in customer words, all skill-tagged (591: ×3 domains) | all = full; two-thirds = half; algorithm words = 1 |
+| 4 | 5 | **Methods** | seven treatments, documented resets, N declared | all three = full; shared contexts = 1 |
+| 6 | 9 | **Results** | histograms derivable from tags, `same` on every comparison (591: plus transfer evidence across domains) | N≥10 = full; N=3 = half; claims without `same` = 0 |
+| 3 | 4 | **Discussion** | verdict follows from the tables (591: per domain and overall); honest negatives score full | conclusions the tables do not support = 0 |
+| 2 | 3 | **The repo** | tags, tests, one-command demos (591: shared across domains) | a demo that only "ran once" = 0 |
+| 3 | 3 | **AI disclosure** | what the LLM wrote, which of its errors you caught | zero caught errors reads as zero checking |
+| **25** | **34** | **Total** | | |
 
 Ways to lose marks: a histogram not derivable from the repo's tags;
 steps that share nothing (nine little programs is not a ladder); code

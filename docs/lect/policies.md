@@ -105,25 +105,26 @@ Each cohort is graded out of 100 marks.
 | Group tool talk                       |                         15                         |                                     15                                     |
 | Task talk                             |                         —                          |                                     15                                     |
 | Mid-term                              |                         24                         |                                     24                                     |
-| Project                               |  25 (group [shrinking-code demos](../submit/uproj.md)) | 39 (six-week team [research project](../submit/gproj.md) |
+| Project                               |  25 (group [shrinking-code demos](../submit/uproj.md)) | 39 (six-week team [shrinking-code experiment, three domains](../submit/gproj.md)) |
 | Final exam (last class, Nov 30, 1 hr) |                         24                         |                      — (project carries that weight)                       |
 | **Total**                             |                      **100**                       |                                  **100**                                   |
 
-The grad project must be far more
-creative than the undergrad one:
+Both cohorts run the same experiment — the
+[shrinking-code project](../submit/uproj.md) — at different scopes:
 
-- undergrads execute a defined corpus;
--  grads must invent the problem, pre-register its eval, and defend the
-results. 
+- undergrads build one invented domain and report in 3 pages;
+- grads build three domains on one shared codebase, pre-register the
+  eval, and defend the result in a 6-to-9-page report
+  ([gproj.md](../submit/gproj.md)).
 
 For grad students
-- the  project's initial deliverable (5 marks), two weeks in (Mon
-Nov 9), must show *something working* — a runnable slice plus the
-pre-registered eval: claim (metric, threshold, baseline) and instrument
-demonstrated on sample or synthetic data. 
+- the project's initial deliverable (5 marks), two weeks in (Mon
+Nov 9), must show *something working* — three requirements docs, one
+domain's ladder running, and the pre-registered claim (both
+hypotheses with their win conditions, stated before coding).
 - The final project deliverable (34
 marks), on the last class (Mon Nov 30), reports results against that
-pre-registered claim; real data earns the top of the range, and a failed
+pre-registered claim; a failed
 claim with a recorded decision (persevere, re-plan, descope) loses
 nothing — an unrun or hidden eval does.
 - Task talks (20 minutes: aim for 15, leaving 5 for questions;

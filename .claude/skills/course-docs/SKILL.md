@@ -50,16 +50,23 @@ description: Use when editing any markdown in this course repo (README, docs/lec
   mid-term 24 + final 24 (in class, Nov 30, 1 hr); CSC 591 = quizzes 7 (grads stop quizzing
   after the mid-term) + tool talk 15 + task talk 15 + mid-term 24 +
   project 39 (initial 5 + final 34), NO final exam — project carries
-  that weight. NO homeworks. ALL exams weigh the same (24). Ugrad
-  project = group-of-3 shrinking-code demos (docs/submit/uproj.md,
-  one submission per group, video capped 5 min): Buse Fig 6
-  analytics or Hoffman XAI triggers on MOOT data, git-tagged steps,
-  5-min video, %-new-code histogram that must fall, due last class
-  (Mon Nov 30), no intermediary. Grad project = research paper
-  (docs/submit/gproj.md): citation-knee lit review, reproduction-package
-  baseline, pre-registered eval, sigconf paper 3-5pp; initial 5 marks
-  (Nov 9: knee evidence 2, running package 2, claim 1), final 34 marks
-  (rubric in file). Split structure: ugrads = quizzes + tool talk +
+  that weight. NO homeworks. ALL exams weigh the same (24). BOTH
+  cohorts' project = the shrinking-code experiment
+  (docs/submit/uproj.md; NO video — one acmart "ACM transactions"
+  PDF report): invent-a-domain client wish list (20 customer asks,
+  skill-tagged, lecturer-okayed; Corpora A/B dumped — no
+  Buse/Hoffman), MOOT data, seven treatments (plain-Python /
+  scikit-learn / ezr × reuse-or-not + one manual), N repeats with
+  fresh-LLM resets (headless one-shot calls), differences certified
+  by ezr's `same`; Timm hypothesis vs rival stated up front; report
+  headers Hypotheses/Requirements/Methods/Results/Discussion;
+  shared two-column rubric in uproj.md (491: 25, 3pp, one domain;
+  591: 34, 6-9pp, three domains). Grad track (docs/submit/gproj.md):
+  initial 5 marks (Nov 9: 3 requirements docs 2, one ladder running
+  2, pre-registered claim 1), final 34 via uproj rubric's 591
+  column; old research-paper/citation-knee track parked at
+  docs/attic/gproj-litreview.md; task talk (15) presents the
+  experiment. Split structure: ugrads = quizzes + tool talk +
   exams; grads = quizzes (pre-mid-term) + two talks + mid-term + a
   six-week project (Oct 26–Nov 30, runnable-slice initial deliverable
   Nov 9). Shared blocks after the cohort lists: attendance (quizzes
@@ -81,9 +88,9 @@ description: Use when editing any markdown in this course repo (README, docs/lec
   students: seven 3s + one 2; tool talk + task talk + semester
   project).
 - Grad project = pre-registered eval: initial deliverable (week 10)
-  carries the claim (metric, threshold, baseline) plus a runnable
-  instrument on sample/synthetic data; final deliverable (last class)
-  reports against that claim. Real data = top of range, never a gate.
+  carries the claim (the two hypotheses + win conditions, written
+  before coding) plus one domain's ladder running; final deliverable
+  (last class) reports against that claim.
 - "Failures are findings": honest negative results score; hidden
   failures cost more than honest low scores.
 - Talks make measurable claims — show the tool running against a
