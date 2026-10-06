@@ -33,7 +33,7 @@ See [hello](https://txt.github.io/seai26f/hello.html) for the course intro, [pol
 | Sep 14 | [gloss3](https://txt.github.io/seai26f/gloss3.html) | [eg2](https://txt.github.io/seai26f/ezr-eg2.html) | [tool:gp](docs/lect/tools.md#gp) | [tool:nsga2](docs/lect/tools.md#nsga2) | [w4](docs/review/w4.md) |
 | Sep 21 | [gloss4](https://txt.github.io/seai26f/gloss4.html) | [eg3](https://txt.github.io/seai26f/ezr-eg3.html) | [tool:nov](docs/lect/tools.md#nov) | — | [w5](docs/review/w5.md) |
 | Sep 28 | [gloss5](https://txt.github.io/seai26f/gloss5.html) | [eg4](https://txt.github.io/seai26f/ezr-eg4.html) | — | [tool:ibea](docs/lect/tools.md#ibea) |  [w6](docs/review/w6.md)  |
-| Oct 05 | [gloss6](https://txt.github.io/seai26f/gloss6.html) | [eg5](https://txt.github.io/seai26f/ezr-eg5.html) | [tool:moead](docs/lect/tools.md#moead) | [tool:al](docs/lect/tools.md#al) | |
+| Oct 05 | [gloss6](https://txt.github.io/seai26f/gloss6.html) | [eg5](https://txt.github.io/seai26f/ezr-eg5.html) | [tool:moead](docs/lect/tools.md#moead) | [tool:al](docs/lect/tools.md#al) | [w7](docs/review/w7.md)  |
 | Oct 12 | 🟥 ${\color{#ff9999}\textsf{Mid-term exam}}$ | | no talks | no talks | |
 | 🟩 ${\color{green}\textsf{Oct 19 — Fall break, no class}}$ | | | | | |
 | Oct 26 | [gloss7](https://txt.github.io/seai26f/gloss7.html) | [eg6](https://txt.github.io/seai26f/ezr-eg6.html) · **[grad project](docs/submit/gproj.md) starts** | [tool:sway](docs/lect/tools.md#sway) | [tool:nsga3](docs/lect/tools.md#nsga3) | |
