@@ -172,62 +172,172 @@ sup {
 <main>
 <style>:root { --back-color: rgb(24, 31, 43); } pre { background: rgba(212,212,212,0.07); border: 1px solid rgba(212,212,212,0.25); padding: 10px 14px; margin: 20px 0; font-size: 0.85em; line-height: 1.4; overflow-x: auto; } pre .k { color: #79b8ff; } pre .s { color: #e0b06a; } pre .c { color: #8ac28a; font-style: italic; } pre .f { color: #d2a8ff; }</style>
 <h1>A glossary of tiny lectures, part 10</h1>
-<h2>Revision: one machine, many names</h2>
-<h4>By <a href="https://timm.fyi">Tim Menzies</a>, published 2026-11-09, updated 2026-11-09</h4>
+<h2>Revision: desugaring data mining</h2>
+<h4>By <a href="https://timm.fyi">Tim Menzies</a>, published 2026-11-09, updated 2026-10-26</h4>
 <p>
-<b>Summary:</b> <em>No new terms here. This page is the map: what each week bought, how the pieces stack into one machine, and the claim the whole course exists to test &mdash; that most of the "different" tools in a data mining textbook are the same tool, wearing hats. Read this before the final, and before you write up either project.</em>
+<b>Summary:</b> <em>No new terms here. This page is the map. Compilers run a big surface language for humans over a tiny core for the machine, and the bridge between them is called desugaring. The claim this whole course exists to test: data mining is all surface. Four primitives, one learner, one coordinate, three aimings &mdash; and every chapter heading in the textbook desugars to them. Read this before the final, and before you write up either project.</em>
 </p>
-<hr id="stack">
-<h3>The stack, in one page</h3>
+<hr id="desugar">
+<h3>Surface and core</h3>
 <hr>
 <p>
-Every week added one layer, and every layer used only the ones below it.
+Languages run a big surface for humans over a tiny core for the machine. Haskell calls the bridge <em>desugaring</em>; Rust calls it <em>lowering</em>; Lean calls it <em>elaboration</em>; Lisp calls it <em>macro expansion</em>. Same move every time: <em>do</em>, <em>for</em>, <em>async</em>, <em>guard</em>, <em>cond</em> stop existing, and a handful of forms survive. Surface is where the vocabulary lives. Core is where the work happens, and it is always smaller than anyone expects.
+</p>
+<ol>
+<li>
+Data mining is all surface. Classification, regression, anomaly detection, retrieval, repair, planning, monitoring, forecasting &mdash; those are chapter headings, not algorithms. Here is the core, and you have already built every piece of it.
+</li>
+<hr id="core">
+<h3>The core</h3>
+<hr>
+<p>
+Four primitives. Each branches exactly once, on column type &mdash; and the header row already said which:
 </p>
 <table>
-<tr><th>week</th><th>what it added</th><th>what that bought</th></tr>
-<tr><td>1</td><td>columns that summarize as they read (<em>Num</em>, <em>Sym</em>, <em>add</em>, <em>mid</em>, <em>div</em>)</td><td>O(1) memory, and summaries that subtract</td></tr>
-<tr><td>2</td><td>tables, distance, <em>disty</em> (gap to heaven)</td><td>one number for "how good is this row"</td></tr>
-<tr><td>3</td><td>fastmap poles, projection, recursive halving</td><td>structure with no labels, and an index</td></tr>
-<tr><td>4</td><td>cuts scored by expected diversity; trees; XAI</td><td>a model small enough to argue with</td></tr>
-<tr><td>5</td><td>budgets, acquire, restart, holdout</td><td>good rows for about 45 labels, honestly scored</td></tr>
-<tr><td>6</td><td>cohen, cliffs, ks, ranks, domination, wins</td><td>the right to say "this one is better"</td></tr>
-<tr><td>7</td><td>knn, anomaly, naive Bayes, kmeans, kpp</td><td>the textbook chapters, a dozen lines each</td></tr>
-<tr><td>8</td><td>ga, de, sa, local search, race</td><td>fifty years of search, and its price tag</td></tr>
-<tr><td>9</td><td>the model seam, DTLZ</td><td>goals that cost money, and known right answers</td></tr>
+<tr><th>primitive</th><th>on a <em>Sym</em></th><th>on a <em>Num</em></th><th>job</th></tr>
+<tr><td><em>mid</em></td><td>mode</td><td>mean</td><td>summarize</td></tr>
+<tr><td><em>dist</em></td><td>0 or 1</td><td>scaled difference</td><td>compare</td></tr>
+<tr><td><em>sample</em></td><td>roulette</td><td>gauss</td><td>generate</td></tr>
+<tr><td><em>delta</em></td><td>frequency shift</td><td>mu difference</td><td>extrapolate</td></tr>
 </table>
-<ol>
+<p>
+One learner and one coordinate, built only from the primitives:
+</p>
+<table>
+<tr><th>form</th><th>job</th></tr>
+<tr><td><em>project</em>(a, b) &rarr; t</td><td>place a row on the line between two far poles</td></tr>
+<tr><td><em>cluster</em>(rows) &rarr; groups</td><td>group the similar: <em>project</em>, halve, recurse</td></tr>
+</table>
+<p>
+Three aimings and one clock &mdash; ways of pointing the primitives at clusters:
+</p>
+<table>
+<tr><th>aiming</th><th>spelled in primitives</th></tr>
+<tr><td><em>relevant</em>(row, clusters)</td><td><em>dist</em>, row to each cluster's <em>mid</em>s; smallest wins</td></tr>
+<tr><td><em>DISTINGUISH</em>(here, there)</td><td><em>dist</em> between two clusters' <em>mid</em>s; largest wins</td></tr>
+<tr><td><em>impute</em>(row, cluster)</td><td><em>sample</em> the cluster, write it back into the row</td></tr>
+<tr><td><em>TRAJECTORY</em>(eras)</td><td><em>delta</em>, era i to era i+1, chained forward</td></tr>
+</table>
+<p>
+You met all of these, one per week. <em>mid</em> is week 1: mode for <em>Sym</em>s, mean for <em>Num</em>s. <em>dist</em> is week 2's <em>distx</em>: zero-or-one for symbols, scaled difference for numbers. <em>project</em> and <em>cluster</em> are week 3: fastmap poles, projection, recursive halving. <em>delta</em> is week 6: a shift in frequencies, a difference in means &mdash; cohen and friends are <em>delta</em> with a threshold. <em>sample</em> is how week 8's optimizers made new rows: roulette on a <em>Sym</em>'s counts, a gaussian step from a <em>Num</em>'s mu and sd.
+</p>
+<li>
+Goals need no operator of their own. The header row already says <em>Lbs-</em>, <em>Acc+</em>, <em>class!</em>, and <em>disty</em> (week 2) folds any set of those into one number, 0 = best.
+</li>
+<hr id="rules">
+<h3>The rules</h3>
+<hr>
+<p>
+Every task in the textbook is one of the aimings, pointed somewhere. Read the right column: it only uses the words of the core &mdash; that is the whole claim.
+</p>
+<table>
+<tr><th>core call</th><th>task</th><th>desugars to</th></tr>
+<tr><td><em>cluster</em>(rows)</td><td>summarization</td><td>read each cluster's <em>mid</em>s</td></tr>
+<tr><td><em>relevant</em>(row, clusters)</td><td>classification</td><td><em>mid</em> of the nearest cluster's <em>Sym</em> target</td></tr>
+<tr><td></td><td>regression</td><td><em>mid</em> of the nearest cluster's <em>Num</em> target</td></tr>
+<tr><td></td><td>anomaly</td><td>the <em>dist</em> itself: how far to the nearest <em>mid</em>s?</td></tr>
+<tr><td></td><td>retrieval</td><td>the nearest cluster's rows</td></tr>
+<tr><td></td><td>spread</td><td><em>sample</em> the nearest cluster's y cells</td></tr>
+<tr><td><em>impute</em>(row, cluster)</td><td>repair</td><td><em>sample</em> own cluster; write the empty cells</td></tr>
+<tr><td></td><td>planning</td><td><em>sample</em> a better cluster; write the actionable cells</td></tr>
+<tr><td></td><td>synthesis</td><td><em>sample</em> any cluster; write all the cells</td></tr>
+<tr><td><em>DISTINGUISH</em>(here, there)</td><td>explanation</td><td>largest <em>dist</em> between left's and right's <em>mid</em>s</td></tr>
+<tr><td></td><td>planning</td><td>here = worse cluster, there = better</td></tr>
+<tr><td></td><td>monitoring</td><td>here = better cluster, there = worse</td></tr>
+<tr><td></td><td>trends</td><td>here = era i, there = era i+1</td></tr>
+<tr><td><em>TRAJECTORY</em>(eras)</td><td>trends</td><td>the <em>delta</em>s, read at t &le; 1</td></tr>
+<tr><td></td><td>forecasting</td><td>the same <em>delta</em>s, read at t &gt; 1</td></tr>
+<tr><td></td><td>alerts</td><td>a step whose <em>dist</em> from the last <em>mid</em>s is anomalous</td></tr>
+<tr><td>compositions</td><td>optimization</td><td>planning + monitoring, looped</td></tr>
+<tr><td></td><td>simulation</td><td>synthesis (<em>impute</em>), then <em>relevant</em> to predict</td></tr>
+<tr><td></td><td>benchmarking</td><td><em>same()</em>: three <em>delta</em>s (cohen, cliffs, ks), hedged</td></tr>
+</table>
+<p>
+Nothing in that table branches on the task. The only branch anywhere in the system is <em>Num</em> or <em>Sym</em>, inside the four primitives.
+</p>
+<li>
+Read a few rows aloud and the week 7 demos fall out. Classification is <em>relevant</em>: walk a row to its nearest cluster, report the mid of a symbolic target &mdash; that is knn, that is the leaf's mode. Make the target numeric and the same walk is regression. Keep the walk but report the distance instead of the mid and you have anomaly detection: loneliness is the whole test. Point <em>DISTINGUISH</em> at a worse and a better cluster and the biggest difference between their mids is a plan ("change these cells"); swap the direction and the same answer is a monitor ("watch these cells"). Loop plan-then-monitor under a label budget and you have week 5's optimizer. None of those took a new algorithm. Each took an argument.
+</li>
+<hr id="nine">
+<h3>The nine</h3>
+<hr>
+<p>
+Buse & Zimmermann (ICSE 2012) surveyed what practitioners ask of software analytics and got nine techniques: three activities, three tenses. That grid is the surface language of this field. Here is what each cell desugars to:
+</p>
+<table>
+<tr><th></th><th>Past</th><th>Present</th><th>Future</th></tr>
+<tr><td><b>Explore</b></td><td>Trends: <em>trajectory, read at t &le; 1</em></td><td>Alerts: <em>steps + anomaly</em></td><td>Forecasting: <em>trajectory, read at t &gt; 1</em></td></tr>
+<tr><td><b>Analyze</b></td><td>Summarization: <em>read the mids</em></td><td>Overlays: <em>unclaimed</em></td><td>Goals: <em>disty</em></td></tr>
+<tr><td><b>Experiment</b></td><td>Modeling: <em>cluster</em></td><td>Benchmarking: <em>same()</em></td><td>Simulation: <em>synthesis, then predict</em></td></tr>
+</table>
+<p>
+Eight of nine. Goals is not even a technique here &mdash; it is punctuation in the header row (<em>Lbs-</em>, <em>Acc+</em>). Only Overlays has no core form.
+</p>
+<li>
+Classic machine learning covers a different slice of the same surface &mdash; classify, regress, cluster, detect, retrieve, repair, synthesize, explain, plan &mdash; and desugars to the same core. Two literatures, one machine.
+</li>
+<hr id="stack">
+<h3>The stack: where each week fits</h3>
+<hr>
+<p>
+Every week added one layer, every layer used only the ones below it, and every layer is a core form:
+</p>
+<table>
+<tr><th>week</th><th>what it added</th><th>core form</th></tr>
+<tr><td>1</td><td>columns that summarize as they read (<em>Num</em>, <em>Sym</em>, <em>add</em>, <em>mid</em>, <em>div</em>)</td><td><em>mid</em></td></tr>
+<tr><td>2</td><td>tables, distance, <em>disty</em> (gap to heaven)</td><td><em>dist</em>, goals</td></tr>
+<tr><td>3</td><td>fastmap poles, projection, recursive halving</td><td><em>project</em>, <em>cluster</em></td></tr>
+<tr><td>4</td><td>cuts scored by expected diversity; trees; XAI</td><td><em>DISTINGUISH</em></td></tr>
+<tr><td>5</td><td>budgets, acquire, restart, holdout</td><td>plan + monitor, looped</td></tr>
+<tr><td>6</td><td>cohen, cliffs, ks, ranks, domination, wins</td><td><em>delta</em>, <em>same()</em></td></tr>
+<tr><td>7</td><td>knn, anomaly, naive Bayes, kmeans, kpp</td><td><em>relevant</em>, and the rules above</td></tr>
+<tr><td>8</td><td>ga, de, sa, local search, race</td><td><em>sample</em>, and the loop again</td></tr>
+<tr><td>9</td><td>the model seam, DTLZ</td><td>simulation, with known right answers</td></tr>
+</table>
 <li>
 <b>The one machine.</b> Read down this picture and every week is in it:
 <pre>rows (x cheap, y expensive)<br>  |<br>  +-- distx -----&gt; poles -----&gt; projection -----&gt; halve<br>  |                                                  |<br>  |                                            recurse = tree<br>  |                                                  |<br>  +-- disty (buys labels) --&gt; better half only --&gt; acquire<br>                                                     |<br>                              leaf -&gt; mean = regression<br>                              leaf -&gt; mode = classification<br>                              far from leaf = anomaly / alert<br>                              read the tree  = summarization / XAI<br>                              mutate + re-drop = forecast / what-if</pre>
 </li>
-<hr id="synonyms">
-<h3>The synonyms claim</h3>
+<hr id="falsify">
+<h3>How you can prove this wrong</h3>
 <hr>
 <p>
-Buse & Zimmermann's analytics grid has nine boxes; the explanation literature has its own list of triggers. The claim is that those lists collapse:
+The claim is falsifiable, and the undergraduate project is the experiment: build the skills in order, tag each step, and plot the percentage of NEW code per step. If the core is real the bars fall &mdash; each new task is a few lines pointing an old aiming somewhere new. If the bars stay flat, this course's architecture lost &mdash; and an honest flat histogram scores full marks, because failures are findings.
+</p>
+<li>
+The rival is easy to run: ask an LLM for each skill cold, one fresh prompt per skill, with no instruction to reuse anything. The prediction to beat is a thousand lines of new glue per skill, ten separate programs, each hooked into a large library.
+</li>
+<hr id="skills">
+<h3>The ten skills, desugared and assessed</h3>
+<hr>
+<p>
+The project scores ten skills. Here is each one four ways: its harness name re-labeled in core vocabulary; what a used car yard manager would actually ask for; what the scorer does to it; and the number Q it earns. The middle columns are surface. Column one is the core. The last column is the part most students skip &mdash; and it is the most reusable thing on this page.
 </p>
 <table>
-<tr><th>they call it</th><th>we call it</th></tr>
-<tr><td>classification</td><td>the leaf's mode</td></tr>
-<tr><td>regression, forecasting</td><td>the leaf's mean</td></tr>
-<tr><td>optimization, tuning</td><td>keep the better half, recurse</td></tr>
-<tr><td>alerts, anomaly detection</td><td>far outside the leaf's own spread</td></tr>
-<tr><td>benchmarking</td><td>anomaly detection, with a reference population</td></tr>
-<tr><td>simulation, what-if, goals</td><td>mutate x, re-drop, read the new leaf</td></tr>
-<tr><td>summarization, overlays</td><td>read the tree</td></tr>
-<tr><td>privacy</td><td>publish the corner (prototypes of the columns that matter)</td></tr>
-<tr><td>explanation</td><td>the tree is the explanation</td></tr>
+<tr><th>skill</th><th>the yard asks</th><th>the scorer does</th><th>Q (higher is better)</th></tr>
+<tr><td>1 remember = <em>retrieval</em></td><td>"Pull a short list of cars like our best sellers ever."</td><td>Skill returns up to 5% of the rows it judges best.</td><td>1 &minus; (median score of the returned rows &divide; median score of random sets of the same size). Baseline 0.</td></tr>
+<tr><td>2 guess = <em>regression</em></td><td>"No sticker on this trade-in &mdash; estimate its mpg from cars like it."</td><td>30 train/test splits; predicts the target on held-out rows.</td><td>Average of 1 &minus; (error &divide; error of predicting the training average). Baseline 0.</td></tr>
+<tr><td>3 certify = <em>same()</em></td><td>"This month's trade-ins feel different from last month's. Really, or just noise?"</td><td>200 pairs of samples: half the same, half shifted by 0.5, 1 or 2 sd; three shapes; sizes 10, 30, 100.</td><td>Balanced accuracy of saying "same" or "different". Chance = 0.5.</td></tr>
+<tr><td>4 flow = <em>disty</em>, streamed</td><td>"At auction the cars roll past once. Bid the moment you see a good one &mdash; no going back."</td><td>100 random arrival orders; must commit to a row the moment it is read (no look-ahead).</td><td>Average of 1 &minus; (chosen row's score &divide; average score of the stream). Baseline 0.</td></tr>
+<tr><td>5 blame = <em>explanation</em></td><td>"The yard lost money this quarter. Which features of the cars we stocked did it?"</td><td>Names predictor columns and rules that explain a poor score.</td><td>Rewrite the blamed cells to values no row blames; re-score. Q = (old score &minus; new score) &divide; old score, minus the same delta from rewriting as many random columns. Baseline 0.</td></tr>
+<tr><td>6 justify = <em>disty</em> percentile + <em>explanation</em></td><td>"How good is this car, really &mdash; and why should I believe you?"</td><td>20 rows from the best quarter; skill returns a score percentile and a text reason.</td><td>Improvement over always answering 0.5: (error of 0.5 &minus; error of the answer) &divide; error of 0.5. Baseline 0.</td></tr>
+<tr><td>7 choose = <em>optimization</em></td><td>"You can afford 50 mechanic inspections. Find me the best car on the lot."</td><td>30 runs; may look at no more than 50 labels; returns the best row it found.</td><td>Win rate against the best of 50 random rows: win 1, tie 0.5, loss 0. Chance = 0.5.</td></tr>
+<tr><td>8 fix = <em>planning</em></td><td>"These 20 clunkers will not sell. What can we actually change &mdash; price, tires, detailing?"</td><td>20 worst-quartile rows; skill returns a change to allowed lever columns only.</td><td>Share of the 20 with a valid change (levers only, values in range). It does not measure improvement.</td></tr>
+<tr><td>9 spot = <em>anomaly</em></td><td>"Odometer readings get typed in by hand. Find the entries that look wrong."</td><td>30 copies of 1,000 rows with 10 injected errors; skill returns suspect rows.</td><td>Precision at 20: hits among the first 20 returned &divide; 20. Chance &asymp; 0.01.</td></tr>
+<tr><td>10 race = <em>benchmarking</em></td><td>"Three consultants swear by three buying strategies. Same budget each; who wins?"</td><td>30 runs; must race at least 3 strategies, one random, within 50 labels.</td><td>Win rate of the returned winner against random-50 (win 1, tie 0.5, loss 0). Invalid race counts as failed.</td></tr>
 </table>
+<p>
+"Score" throughout is the domain's combined objective &mdash; <em>disty</em>, lower is better. A call that fails earns the baseline value in the primary analysis: crashing is not a way to sit out a round.
+</p>
 <li>
-<b>How you can prove this wrong.</b> The claim is falsifiable, and the undergraduate project is the experiment: build the skills in order, tag each step, and plot the percentage of NEW code per step. If reuse is real the bars fall. If they stay flat, this course's architecture lost &mdash; and an honest flat histogram scores full marks, because failures are findings.
-<br><br>
-The rival is easy to run: ask an LLM for each skill cold, one fresh prompt per skill, with no instruction to reuse anything. The prediction to beat is a thousand lines of new glue per skill, ten separate programs, each hooked into a large library.
+<b>How to read the Q column.</b> Every Q is the same three moves, and together they are how you assess any system designed this way. First, pick a dumb rival that costs nothing: random rows of the same size, the training average, chance, always answering 0.5. Second, scale against that rival so 0 means "no better than dumb" and higher is better &mdash; now every number carries its own baseline. Third, score failures at the baseline, so a crash and a useless answer cost the same. That is week 6 pointed at your own code: no score without a rival, no number without a zero, no silent failures. Blame gets the strictest test of all: an explanation is assessed by acting on it &mdash; rewrite what was blamed, re-score, and beat the rival of rewriting as many random columns. An explanation that changes nothing when acted on explained nothing. One wrinkle remains &mdash; each skill has its own scale and baseline &mdash; so before comparing conditions, the analysis re-expresses Q as Z within each domain and skill.
 </li>
 <hr id="ideas">
 <h3>Ideas worth carrying out of here</h3>
 <hr>
 <ul>
 <li><b>x is cheap, y is expensive.</b> Almost everything in this   course follows from that one asymmetry.</li>
+<li><b>Surface is vocabulary, core is work.</b> Before learning a   "new" technique, ask what it desugars to.</li>
 <li><b>Weak indicators, hedged.</b> A cheap heuristic is evidence,   not truth: ask it more times, or act on it more gently.</li>
 <li><b>Before optimizing a computation, ask how little data it   needs.</b> Poles from 128 rows; cuts from a sample; prototypes   instead of rows.</li>
 <li><b>Support, not just purity.</b> A split that isolates one row   explains nothing.</li>
