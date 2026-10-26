@@ -39,7 +39,7 @@ See [hello](https://txt.github.io/seai26f/hello.html) for the course intro, [pol
 | Oct 26 | [gloss7](https://txt.github.io/seai26f/gloss7.html) | [eg6](https://txt.github.io/seai26f/ezr-eg6.html) · **[grad project](docs/submit/gproj.md) starts** | [tool:sway](docs/lect/tools.md#sway) | [tool:nsga3](docs/lect/tools.md#nsga3) | |
 | Nov 02 | [gloss8](https://txt.github.io/seai26f/gloss8.html) | [eg7](https://txt.github.io/seai26f/ezr-eg7.html) | — | [tool:mosa](docs/lect/tools.md#mosa) | |
 | Nov 09 | [gloss9](https://txt.github.io/seai26f/gloss9.html) | [eg8](https://txt.github.io/seai26f/ezr-eg8.html) · **[grad project](docs/submit/gproj.md): initial** | — | [tool:llm](docs/lect/tools.md#llm) | |
-| Nov 16 | | | | [taskA–D](docs/submit/gproj.md#the-task-talk-15-marks) | [gloss10](https://txt.github.io/seai26f/gloss10.html) |
+| Nov 16 | [gloss10](https://txt.github.io/seai26f/gloss10.html) | | | [taskA–D](docs/submit/gproj.md#the-task-talk-15-marks) | |
 | Nov 23 | | | | [taskE–G](docs/submit/gproj.md#the-task-talk-15-marks) | |
 | Nov 30 | 🟥 ${\color{#ff9999}\textsf{Final exam (491 only, 1 hr)}}$ | **[grad project](docs/submit/gproj.md): final** · **[ugrad project](docs/submit/uproj.md)** | | | [gloss10](https://txt.github.io/seai26f/gloss10.html) |
 </div>
