@@ -37,7 +37,7 @@ See [hello](https://txt.github.io/seai26f/hello.html) for the course intro, [pol
 | Oct 12 | 🟥 ${\color{#ff9999}\textsf{Mid-term exam}}$ | | no talks | no talks | |
 | 🟩 ${\color{green}\textsf{Oct 19 — Fall break, no class}}$ | | | | | |
 | Oct 26 | [gloss7](https://txt.github.io/seai26f/gloss7.html) | [eg6](https://txt.github.io/seai26f/ezr-eg6.html) · **[grad project](docs/submit/gproj.md) starts** | [tool:sway](docs/lect/tools.md#sway) | [tool:nsga3](docs/lect/tools.md#nsga3) | [w8](docs/review/w8.md) |
-| Nov 02 | [gloss8](https://txt.github.io/seai26f/gloss8.html) [desugar](https://github.com/timm/ezr/blob/main/docs/notes/desugar.md) | [eg7](https://txt.github.io/seai26f/ezr-eg7.html) | — | [tool:mosa](docs/lect/tools.md#mosa) | |
+| Nov 02 | [gloss8](https://txt.github.io/seai26f/gloss8.html) <br> [desugar](https://github.com/timm/ezr/blob/main/docs/notes/desugar.md) | [eg7](https://txt.github.io/seai26f/ezr-eg7.html) | — | [tool:mosa](docs/lect/tools.md#mosa) | |
 | Nov 09 | [gloss9](https://txt.github.io/seai26f/gloss9.html) | [eg8](https://txt.github.io/seai26f/ezr-eg8.html) · **[grad project](docs/submit/gproj.md): initial** | — | [tool:llm](docs/lect/tools.md#llm) | |
 | Nov 16 | [gloss10](https://txt.github.io/seai26f/gloss10.html) | | | [taskA–D](docs/submit/gproj.md#the-task-talk-15-marks) | |
 | Nov 23 | | | | [taskE–G](docs/submit/gproj.md#the-task-talk-15-marks) | |
