@@ -20,18 +20,22 @@
 
 # All you need
 
-One idea joins every method in this course. **Information is cheap.
-Attention is scarce.** Every method is a policy for spending scarce
-attention — the machine's compute, or the human's time.
+One idea joins every method in this course. **Options are obvious and
+plentiful; outcomes are costly to collect.** You can list a thousand
+configs, designs, or candidate rows in a minute — but knowing which is
+*good* means running an experiment, labelling a row, paying for an
+outcome. So every method here is a policy for spending a tiny
+**outcome budget** well.
 
 Modern AI has three big paradigms. Each is a slogan — "X is all you
-need" — and each is one answer to one question:
+need" — and each is one answer to the same question:
 
-> **Which small signal is worth the attention?**
+> **Which cheap signal tells us which option is good, without
+> collecting every outcome?**
 
 ```mermaid
 flowchart TD
-  Q["Which small signal<br/>is worth the attention?"]
+  Q["Which cheap signal picks good options,<br/>without collecting every outcome?"]
   Q --> C["CONTRAST<br/>good vs bad<br/>'contrast is all you need'"]
   Q --> A["ATTENTION<br/>a learned weighting<br/>'attention is all you need'"]
   Q --> R["REWARD<br/>one number<br/>'reward is all you need'"]
@@ -43,10 +47,11 @@ flowchart TD
 This course lives in the **left column**. The market lives in the
 **middle**.
 
-## Why "attention is scarce" is not new
+## Old idea: the signal is in the few
 
-Herbert Simon, 1971: "a wealth of information creates a poverty of
-attention." Every decade since re-found it in a new field:
+Spending little to learn much is not new. For seventy years, field
+after field found the useful signal is **small** — so you can look at,
+and collect, far less than you think:
 
 | Decade | Field | Lesson |
 |---|---|---|
@@ -126,11 +131,13 @@ AlphaGo Zero reaches superhuman Go *tabula rasa* — self-play and the
 win signal only. 2021, the strong claim: reward is enough for all
 abilities, language included.
 
-You rent this paradigm twice: **RLHF** tuned the model you call, and
-in an **agentic loop the evaluator is a fitness function.** The
-failure rents with it: "make the tests pass" rewarded GenProg for
-*deleting* tests — reward hacking. **You get what you reward, not
-what you want.** So agree a testable contract before generation runs.
+You rent this paradigm twice. First, **RLHF** — reinforcement
+learning from human feedback: a reward step that fine-tunes an LLM on
+human preference rankings — tuned the model you call. Second, in an
+**agentic loop the evaluator is a fitness function.** The failure
+rents with it: "make the tests pass" rewarded GenProg for *deleting*
+tests — reward hacking. **You get what you reward, not what you
+want.** So agree a testable contract before generation runs.
 
 ## The market explores two. You know all three.
 
@@ -168,32 +175,43 @@ end** of a search, not as the search. Prompting one attention model
 is one cell of a large space. Engineers who know all three paradigms
 get to combine them.
 
-## Exercises
-
-1. For each of the five course jobs (decide, classify, predict,
-   configure, optimize), name the paradigm-1 method you have used in
-   `ezr`, and the one small signal it attends to.
-2. "Attention is a softmax average." Write the three steps (score,
-   softmax, weighted sum) and say which step makes *where to look*
-   learnable.
-3. Give one concrete reward-hacking failure from this course, and the
-   single process rule that prevents it.
-4. Your team must choose between a fitted paradigm-1 optimizer and a
-   general LLM for one SE job. State the job, the measured baseline
-   you would demand, and the cross-the-streams order you would try
-   first.
-
 ## Sources
 
-Simon, *Designing organizations for an information-rich world*, 1971.
-Chase & Simon, *Perception in chess*, Cognitive Psychology 4, 1973.
-Kelly, *The Psychology of Personal Constructs*, 1955. Hubel & Wiesel,
-J. Physiology 160, 1962. Attneave, Psychological Review 61, 1954.
-Compton et al., *ripple-down rules*, Banff KAW 1991. Menzies et al.,
-*The business case for automated SE* (TAR3), ASE 2007. *How low can
-you go?*, FSE 2026. Bahdanau, Cho & Bengio, ICLR 2015. Vaswani et
-al., *Attention is all you need*, 2017. Mnih et al., *Playing Atari*,
-2013. Silver et al., *AlphaGo Zero*, Nature 550, 2017. Silver et al.,
-*Reward is enough*, Artificial Intelligence 299, 2021. Ouyang et al.,
-*InstructGPT* (RLHF), 2022. Srinivasan & Menzies, *Better together,
-in the right order*, 2026.
+Every citation links to a DOI or a PDF so you can check it. (Links
+re-used from [N12](https://github.com/txt/se26f/blob/main/docs/lect/n12.md),
+which carries the full set.)
+
+- Simon, *Designing organizations for an information-rich world*, 1971
+  — [pdf](https://gwern.net/doc/design/1971-simon.pdf)
+- Chase & Simon, *Perception in chess*, Cognitive Psychology 4, 1973
+  — [doi:10.1016/0010-0285(73)90004-2](https://doi.org/10.1016/0010-0285(73)90004-2)
+- Kelly, *The Psychology of Personal Constructs*, Norton, 1955 (book;
+  no DOI)
+- Hubel & Wiesel, J. Physiology 160, 1962
+  — [doi:10.1113/jphysiol.1962.sp006837](https://doi.org/10.1113/jphysiol.1962.sp006837)
+- Attneave, *Informational aspects of visual perception*, Psych.
+  Review 61, 1954
+  — [pdf](http://wexler.free.fr/library/files/attneave%20%281954%29%20some%20informational%20aspects%20of%20visual%20perception.pdf)
+- Compton & Jansen, *A philosophical basis for knowledge acquisition*
+  (ripple-down rules), 1990
+  — [doi:10.1016/S1042-8143(05)80017-2](https://doi.org/10.1016/S1042-8143(05)80017-2)
+- Menzies et al., *The business case for automated SE* (TAR3), ASE
+  2007 — [doi:10.1145/1321631.1321676](https://dl.acm.org/doi/10.1145/1321631.1321676)
+- *How low can you go?*, FSE 2026
+  — [arXiv:2512.13524](https://arxiv.org/pdf/2512.13524)
+- Bahdanau, Cho & Bengio, *Neural MT by jointly learning to align and
+  translate*, ICLR 2015 — [arXiv:1409.0473](https://arxiv.org/pdf/1409.0473)
+- Vaswani et al., *Attention is all you need*, 2017
+  — [arXiv:1706.03762](https://arxiv.org/pdf/1706.03762)
+- Mnih et al., *Playing Atari with deep RL*, 2013
+  — [arXiv:1312.5602](https://arxiv.org/pdf/1312.5602)
+- Silver et al., *Mastering Go without human knowledge* (AlphaGo
+  Zero), Nature 550, 2017
+  — [pdf](https://discovery.ucl.ac.uk/id/eprint/10045895/1/agz_unformatted_nature.pdf)
+- Silver, Singh, Precup & Sutton, *Reward is enough*, Artificial
+  Intelligence 299, 2021
+  — [doi:10.1016/j.artint.2021.103535](https://doi.org/10.1016/j.artint.2021.103535)
+- Ouyang et al., *Training LMs to follow instructions* (InstructGPT /
+  RLHF), 2022 — [arXiv:2203.02155](https://arxiv.org/pdf/2203.02155)
+- Srinivasan & Menzies, *Better together, in the right order*, 2026
+  — [arXiv:2607.02583](https://arxiv.org/pdf/2607.02583)
