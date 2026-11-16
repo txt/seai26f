@@ -40,6 +40,8 @@ afford.
 
 <pre><span class=k>function</span> <span class=f>cohen</span>(xs,ys,    x,y,n,m,sd)<br>  x, y = adds(xs), adds(ys)<br>  n, m = x.n, y.n<br>  sd = sqrt(((n-1)*x:div()^2 + (m-1)*y:div()^2)/(n+m-2))<br>  <span class=k>return</span> abs(x.mu - y.mu) / (sd + TINY) <span class=k>end</span></pre>
 
+<img src="stats-cohen.png" width=600 alt="cohen: two bell curves; effect size is the mean gap measured in pooled standard deviations">
+
 -
 
 **cliffs delta**: Forget the means; count the comparisons. Of all pairs (x,y),
@@ -50,6 +52,8 @@ only ranks, no outlier can drag it around &mdash; the complaint that
 kills *cohen* on skewed data.
 
 <pre><span class=k>function</span> <span class=f>cliffs</span>(xs,ys,    gt,lt,j,k)<br>  gt, lt, j, k = 0, 0, 0, 0<br>  <span class=k>for</span> _, x <span class=k>in</span> ipairs(xs) <span class=k>do</span><br>    <span class=k>while</span> j &lt; #ys <span class=k>and</span> ys[j+1] &lt;  x <span class=k>do</span> j = j + 1; k = j <span class=k>end</span><br>    <span class=k>while</span> k &lt; #ys <span class=k>and</span> ys[k+1] == x <span class=k>do</span> k = k + 1 <span class=k>end</span><br>    gt = gt + j; lt = lt + #ys - k <span class=k>end</span><br>  <span class=k>return</span> abs(gt - lt) / (#xs * #ys) <span class=k>end</span></pre>
+
+<img src="stats-cliffs.png" width=600 alt="cliffs delta: every (x,y) pair scored x-above-y or x-below-y; the imbalance scaled to 0..1">
 
 -
 
@@ -63,6 +67,8 @@ and still fail this test, because one is a lump and the other
 is two humps.
 
 <pre><span class=k>function</span> <span class=f>ks</span>(xs,ys,    nx,ny,d,p,q,v)<br>  nx, ny  = #xs, #ys<br>  d, p, q = 0, 0, 0<br>  <span class=k>while</span> p &lt; nx <span class=k>and</span> q &lt; ny <span class=k>do</span><br>    v = min(xs[p+1], ys[q+1])<br>    <span class=k>while</span> p &lt; nx <span class=k>and</span> xs[p+1] == v <span class=k>do</span> p = p + 1 <span class=k>end</span><br>    <span class=k>while</span> q &lt; ny <span class=k>and</span> ys[q+1] == v <span class=k>do</span> q = q + 1 <span class=k>end</span><br>    d = max(d, abs(p / nx - q / ny)) <span class=k>end</span><br>  <span class=k>return</span> d / ((nx + ny) / (nx * ny)) ^ 0.5 <span class=k>end</span></pre>
+
+<img src="stats-ks.png" width=600 alt="ks: two CDFs walked together; D is the widest vertical gap between them. Two bags can share a mean yet differ in shape">
 
 At 5%, this test cries wolf on about one comparison in twenty
 even when both bags come from the same generator. That is not
@@ -89,6 +95,8 @@ not a name. Reporting a single winner when four methods tie is
 the most common statistical lie in this field.
 
 <pre><span class=k>function</span> <span class=f>ranks</span>(d,big,    mid,dd,sign,out,win,rank,best)<br>  mid = <span class=k>function</span>(t) <span class=k>return</span> t[floor(#t / 2) + 1] <span class=k>end</span><br>  dd  = {}; <span class=k>for</span> k,v <span class=k>in</span> pairs(d) <span class=k>do</span> dd[k] = sorted(v) <span class=k>end</span><br>  sign = big <span class=k>and</span> -1 <span class=k>or</span> 1<br>  out, win, rank, best = {}, {}, -1, <span class=k>nil</span><br>  <span class=k>for</span> _, k <span class=k>in</span> ipairs(keysort(keys(dd),<br>                <span class=k>function</span>(k) <span class=k>return</span> sign * mid(dd[k]) <span class=k>end</span>)) <span class=k>do</span><br>    <span class=k>if</span> best == <span class=k>nil</span> <span class=k>or</span> <span class=k>not</span> same(dd[best], dd[k]) <span class=k>then</span><br>      rank, best = rank + 1, k <span class=k>end</span><br>    <span class=k>if</span> rank == 0 <span class=k>then</span> win[1+#win] = k <span class=k>end</span><br>    out[k] = rank <span class=k>end</span><br>  <span class=k>return</span> {winners=win, ranks=out} <span class=k>end</span></pre>
+
+<img src="stats-ranks.png" width=600 alt="ranks: treatments sorted by median; a new rank starts only when a treatment is not 'same' as the one above, so ties share a rank and rank 0 is a set of winners">
 
 -
 
