@@ -63,12 +63,23 @@ P(value | column), summed over the x columns. "Naive" means
 the columns are assumed independent &mdash; plainly false, and it
 wins anyway, because a wrong-but-consistent bias still ranks
 the classes correctly. Note the protocol at work: symbols get
-an m-estimate, numbers get a gaussian pdf, and *likes* never
-asks which is which.
+an m-estimate, numbers get a gaussian pdf, and *like* never
+asks which is which. Three functions stack up: *like* scores
+ONE column, *likes* sums across ALL x columns for one class,
+*mostlikes* runs *likes* for every class and keeps the winner.
 
-<pre><span class=k>function</span> <span class=f>like</span>(col,v,prior,    z)<br>  <span class=k>if</span> <span class=k>not</span> col.mu <span class=k>then</span><br>    <span class=k>return</span> ((col.has[v] <span class=k>or</span> 0) + the.L*prior)<br>           / (col.n + the.L) <span class=k>end</span><br>  z = 2 * col:div()^2 + 1e-32<br>  <span class=k>return</span> exp(-(v - col.mu)^2 / z) / (pi * z)^0.5 <span class=k>end</span></pre>
+<pre><span class=c>-- the whole guess, across every x column, then pick the class:</span><br>  score(class) = log P(class) + &Sigma;<sub>c &isin; x-cols</sub> log P(row[c] | class)<br>  guess        = argmax<sub>class</sub> score(class)</pre>
+
+<pre><span class=c>-- like: score ONE column (gaussian for nums, m-estimate for syms)</span><br><span class=k>function</span> <span class=f>like</span>(col,v,prior,    z)<br>  <span class=k>if</span> <span class=k>not</span> col.mu <span class=k>then</span><br>    <span class=k>return</span> ((col.has[v] <span class=k>or</span> 0) + the.L*prior)<br>           / (col.n + the.L) <span class=k>end</span><br>  z = 2 * col:div()^2 + 1e-32<br>  <span class=k>return</span> exp(-(v - col.mu)^2 / z) / (pi * z)^0.5 <span class=k>end</span></pre>
 
 <img src="nb-likelihood.png" width=600 alt="naive bayes: each class is a gaussian on a numeric column; a new row's value has a likelihood under each class, and the class with the bigger prior times product of likelihoods wins">
+
+The picture above is ONE column. *likes* turns the product
+into a sum of logs over every x column (logs, so tiny
+probabilities do not underflow), and *mostlikes* picks the
+best-scoring class:
+
+<pre><span class=c>-- likes: one class's score = log prior + &Sigma; per-column log-likes</span><br><span class=k>function</span> <span class=f>TBL.likes</span>(h,row,nrows,nh,    prior,out,v)<br>  prior = (#h.rows + the.m) / (nrows + the.m*nh)<br>  out   = log(prior)<br>  <span class=k>for</span> _,c <span class=k>in</span> ipairs(h.cols.x) <span class=k>do</span>              <span class=c>-- across ALL x columns</span><br>    v = row[c.at]<br>    <span class=k>if</span> v ~= <span class=s>"?"</span> <span class=k>then</span><br>      v = like(c, v, prior)<br>      <span class=k>if</span> v &gt; 0 <span class=k>then</span> out = out + log(v) <span class=k>end</span> <span class=k>end</span> <span class=k>end</span><br>  <span class=k>return</span> out <span class=k>end</span><br><br><span class=c>-- mostlikes: run likes for every class, return the winner</span><br><span class=k>function</span> <span class=f>mostlikes</span>(h,row,nrows,nh,    best,bs,s)<br>  bs = -1e32<br>  <span class=k>for</span> k,hk <span class=k>in</span> pairs(h) <span class=k>do</span><br>    s = hk:likes(row, nrows, nh)<br>    <span class=k>if</span> s &gt; bs <span class=k>then</span> bs, best = s, k <span class=k>end</span> <span class=k>end</span><br>  <span class=k>return</span> best <span class=k>end</span></pre>
 
 The rig is test-then-train: every row is GUESSED before it is
 learned, so the accuracy needs no held-out split and the model
