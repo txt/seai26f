@@ -35,7 +35,7 @@ Nothing is fitted; the neighbours ARE the model. It is also the
 cheapest possible regression &mdash; and on auto93 it beats guessing
 the global mean by about four times.
 
-<pre><span class=k>function</span> <span class=f>TBL.knn</span>(i,row,k,    t)<br>  t = i:around(row)<br>  <span class=k>return</span> adds(map(slice(t, 1, k <span class=k>or</span> the.k), i:Y())).mu <span class=k>end</span></pre>
+<pre><span class=c>-- 1. around: sort every row, nearest first (by distance on x)</span><br><span class=k>function</span> <span class=f>TBL.around</span>(i,row,rows)<br>  <span class=k>return</span> keysort(rows <span class=k>or</span> i.rows,<br>           <span class=k>function</span>(r) <span class=k>return</span> i:distx(row, r) <span class=k>end</span>) <span class=k>end</span><br><br><span class=c>-- 2. knn: average the y of the k nearest -- that is the guess</span><br><span class=k>function</span> <span class=f>TBL.knn</span>(i,row,k,    t)<br>  t = i:around(row)<br>  <span class=k>return</span> adds(map(slice(t, 1, k <span class=k>or</span> the.k), i:Y())).mu <span class=k>end</span><br><br><span class=c>-- 3. call it: nothing is fitted, the data IS the model</span><br>t = Tbl(csv(the.file))                 <span class=c>-- load auto93.csv</span><br>r = t.rows[rand(#t.rows)]              <span class=c>-- pick any row</span><br>print( t:knn(r) )                      <span class=c>-- its guessed y = mean .mu of k nearest</span><br><span class=c>-- auto93:  knn err 0.049  vs  mean-guess err 0.201  (~4x better)</span></pre>
 
 -
 
