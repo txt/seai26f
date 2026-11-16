@@ -83,13 +83,13 @@ best-scoring class:
 
 That `log(prior)` on the first line of *likes* is not
 decoration &mdash; it is the base rate, and dropping it is the most
-famous mistake in probability. A test that is 92% accurate for
-a disease 1% of people have does NOT make a positive result 92%
+famous mistake in probability. A test that is 90% accurate for
+a disease 1% of people have does NOT make a positive result 90%
 likely to be real: the few true positives are swamped by false
 positives from the huge healthy group, so the honest answer is
-about 10%.
+about 8%.
 
-<img src="bayes-square.png" width=640 alt="A 92% accurate test for a 1% disease: of 10,000 people, 92 are sick-and-positive (red) but 792 are well-and-positive (orange), so a positive result means only 92/884 is about 10% chance of being sick. The base-rate prior dominates.">
+<img src="bayes-square.png" width=640 alt="A 90% accurate test for a 1% disease: of 20,000 people, 180 are sick-and-positive (red) but 1,980 are well-and-positive (orange), so a positive result means only 180/2,160 is about 8% chance of being sick. The base-rate prior dominates.">
 
 NB only gets this right because *likes* starts from the prior.
 The rig is test-then-train: every row is GUESSED before it is
