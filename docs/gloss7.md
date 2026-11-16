@@ -81,6 +81,17 @@ best-scoring class:
 
 <pre><span class=c>-- likes: one class's score = log prior + &Sigma; per-column log-likes</span><br><span class=k>function</span> <span class=f>TBL.likes</span>(h,row,nrows,nh,    prior,out,v)<br>  prior = (#h.rows + the.m) / (nrows + the.m*nh)<br>  out   = log(prior)<br>  <span class=k>for</span> _,c <span class=k>in</span> ipairs(h.cols.x) <span class=k>do</span>              <span class=c>-- across ALL x columns</span><br>    v = row[c.at]<br>    <span class=k>if</span> v ~= <span class=s>"?"</span> <span class=k>then</span><br>      v = like(c, v, prior)<br>      <span class=k>if</span> v &gt; 0 <span class=k>then</span> out = out + log(v) <span class=k>end</span> <span class=k>end</span> <span class=k>end</span><br>  <span class=k>return</span> out <span class=k>end</span><br><br><span class=c>-- mostlikes: run likes for every class, return the winner</span><br><span class=k>function</span> <span class=f>mostlikes</span>(h,row,nrows,nh,    best,bs,s)<br>  bs = -1e32<br>  <span class=k>for</span> k,hk <span class=k>in</span> pairs(h) <span class=k>do</span><br>    s = hk:likes(row, nrows, nh)<br>    <span class=k>if</span> s &gt; bs <span class=k>then</span> bs, best = s, k <span class=k>end</span> <span class=k>end</span><br>  <span class=k>return</span> best <span class=k>end</span></pre>
 
+That `log(prior)` on the first line of *likes* is not
+decoration &mdash; it is the base rate, and dropping it is the most
+famous mistake in probability. A test that is 92% accurate for
+a disease 1% of people have does NOT make a positive result 92%
+likely to be real: the few true positives are swamped by false
+positives from the huge healthy group, so the honest answer is
+about 10%.
+
+<img src="bayes-square.png" width=640 alt="A 92% accurate test for a 1% disease: of 10,000 people, 92 are sick-and-positive (red) but 792 are well-and-positive (orange), so a positive result means only 92/884 is about 10% chance of being sick. The base-rate prior dominates.">
+
+NB only gets this right because *likes* starts from the prior.
 The rig is test-then-train: every row is GUESSED before it is
 learned, so the accuracy needs no held-out split and the model
 is always as current as the last row seen.
