@@ -35,7 +35,7 @@ Nothing is fitted; the neighbours ARE the model. It is also the
 cheapest possible regression &mdash; and on auto93 it beats guessing
 the global mean by about four times.
 
-<pre><span class=c>-- 1. around: sort every row, nearest first (by distance on x)</span><br><span class=k>function</span> <span class=f>TBL.around</span>(i,row,rows)<br>  <span class=k>return</span> keysort(rows <span class=k>or</span> i.rows,<br>           <span class=k>function</span>(r) <span class=k>return</span> i:distx(row, r) <span class=k>end</span>) <span class=k>end</span><br><br><span class=c>-- 2. knn: average the y of the k nearest -- that is the guess</span><br><span class=k>function</span> <span class=f>TBL.knn</span>(i,row,k,    t)<br>  t = i:around(row)<br>  <span class=k>return</span> adds(map(slice(t, 1, k <span class=k>or</span> the.k), i:Y())).mu <span class=k>end</span><br><br><span class=c>-- 3. call it: nothing is fitted, the data IS the model</span><br>t = Tbl(csv(the.file))                 <span class=c>-- load auto93.csv</span><br>r = t.rows[rand(#t.rows)]              <span class=c>-- pick any row</span><br>print( t:knn(r) )                      <span class=c>-- its guessed y = mean .mu of k nearest</span><br><span class=c>-- auto93:  knn err 0.049  vs  mean-guess err 0.201  (~4x better)</span></pre>
+<pre><span class=c>-- 1. around: sort every row, nearest first (by distance on x)</span><br><span class=k>function</span> <span class=f>TBL.around</span>(i,row,rows)<br>  <span class=k>return</span> keysort(rows <span class=k>or</span> i.rows,<br>           <span class=k>function</span>(r) <span class=k>return</span> i:distx(row, r) <span class=k>end</span>) <span class=k>end</span><br><br><span class=c>-- 2. knn: NUM of the k nearest y's -- .mu is the point guess</span><br><span class=k>function</span> <span class=f>TBL.knn</span>(i,row,k,    t)<br>  t = i:around(row)<br>  <span class=k>return</span> adds(map(slice(t, 1, k <span class=k>or</span> the.k), i:Y())) <span class=k>end</span><br><br><span class=c>-- 3. call it: nothing is fitted, the data IS the model</span><br>t = Tbl(csv(the.file))                 <span class=c>-- load auto93.csv</span><br>r = t.rows[rand(#t.rows)]              <span class=c>-- pick any row</span><br>print( t:knn(r).mu )                   <span class=c>-- guessed y = mean of k nearest (.sd = spread)</span><br><span class=c>-- auto93:  knn err 0.049  vs  mean-guess err 0.201  (~4x better)</span></pre>
 
 -
 
@@ -52,6 +52,8 @@ cluster? (*synonyms*, again.)
 
 <pre><span class=k>function</span> <span class=f>TBL.anomaly</span>(i,    dn,gap)<br>  gap = <span class=k>function</span>(r,    lo,d)<br>    lo = 1e32<br>    <span class=k>for</span> _,z <span class=k>in</span> ipairs(i.rows) <span class=k>do</span><br>      <span class=k>if</span> z ~= r <span class=k>then</span><br>        d = i:distx(r, z); <span class=k>if</span> d &lt; lo <span class=k>then</span> lo = d <span class=k>end</span> <span class=k>end</span> <span class=k>end</span><br>    <span class=k>return</span> lo <span class=k>end</span><br>  dn = Num()<br>  <span class=k>for</span> _,r <span class=k>in</span> ipairs(i.rows) <span class=k>do</span> dn:add(gap(r)) <span class=k>end</span><br>  <span class=k>return</span> <span class=k>function</span>(r) <span class=k>return</span> dn:norm(gap(r)) <span class=k>end</span> <span class=k>end</span></pre>
 
+<img src="anomaly-gap.png" width=600 alt="anomaly: a tight crowd of points with a small typical nearest-neighbour gap, and one far outlier whose nearest-neighbour gap is huge, so its normalized score is near 1">
+
 -
 
 **naive bayes**: The ER Nurse: sort arrivals into classes, fast, one row at a
@@ -65,6 +67,8 @@ an m-estimate, numbers get a gaussian pdf, and *likes* never
 asks which is which.
 
 <pre><span class=k>function</span> <span class=f>like</span>(col,v,prior,    z)<br>  <span class=k>if</span> <span class=k>not</span> col.mu <span class=k>then</span><br>    <span class=k>return</span> ((col.has[v] <span class=k>or</span> 0) + the.L*prior)<br>           / (col.n + the.L) <span class=k>end</span><br>  z = 2 * col:div()^2 + 1e-32<br>  <span class=k>return</span> exp(-(v - col.mu)^2 / z) / (pi * z)^0.5 <span class=k>end</span></pre>
+
+<img src="nb-likelihood.png" width=600 alt="naive bayes: each class is a gaussian on a numeric column; a new row's value has a likelihood under each class, and the class with the bigger prior times product of likelihoods wins">
 
 The rig is test-then-train: every row is GUESSED before it is
 learned, so the accuracy needs no held-out split and the model
@@ -81,7 +85,13 @@ needs k, needs a full pass per iteration, and needs a distance
 to every centroid &mdash; while node splits on two rows and gives you
 an index for free. Both cluster; they do not cost the same.
 
-<pre><span class=k>function</span> <span class=f>TBL.kmeans</span>(i,k,iter,    cents)<br>  cents = some(i.rows, k <span class=k>or</span> the.kluster)<br>  <span class=k>for</span> _ = 1, iter <span class=k>or</span> the.iter <span class=k>do</span><br>    cents = recentre(assign(i, cents)) <span class=k>end</span><br>  <span class=k>return</span> assign(i, cents) <span class=k>end</span></pre>
+<pre><span class=c>-- assign: drop every row into the cluster of its nearest centroid</span><br><span class=k>function</span> <span class=f>assign</span>(i,cents,    out)<br>  out = map(cents, <span class=k>function</span>() <span class=k>return</span> i:clone() <span class=k>end</span>)<br>  <span class=k>for</span> _,r <span class=k>in</span> ipairs(i.rows) <span class=k>do</span><br>    out[nearest(i, cents, r)]:add(r) <span class=k>end</span><br>  <span class=k>return</span> out <span class=k>end</span><br><br><span class=c>-- recentre: new centroid = the middle (mids) of each cluster</span><br><span class=k>function</span> <span class=f>recentre</span>(clusters,    cents)<br>  cents = {}<br>  <span class=k>for</span> _,c <span class=k>in</span> ipairs(clusters) <span class=k>do</span><br>    <span class=k>if</span> #c.rows &gt; 0 <span class=k>then</span> push(cents, c:mids()) <span class=k>end</span> <span class=k>end</span><br>  <span class=k>return</span> cents <span class=k>end</span><br><br><span class=c>-- kmeans: seed k centroids, then loop assign/recentre</span><br><span class=k>function</span> <span class=f>TBL.kmeans</span>(i,k,iter,    cents)<br>  cents = some(i.rows, k <span class=k>or</span> the.kluster)<br>  <span class=k>for</span> _ = 1, iter <span class=k>or</span> the.iter <span class=k>do</span><br>    cents = recentre(assign(i, cents)) <span class=k>end</span><br>  <span class=k>return</span> assign(i, cents) <span class=k>end</span></pre>
+
+<img src="kmeans-loop.png" width=640 alt="kmeans in three snapshots: k random centroids, then assign each point to its nearest centroid (colours), then recentre each centroid on its cluster mean and repeat until the centroids settle on the three blobs">
+
+The two verbs are the whole algorithm: *assign* reads the
+centroids, *recentre* rewrites them. Loop until they stop
+moving.
 
 -
 

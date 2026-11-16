@@ -47,11 +47,12 @@ function TBL.around(i,row,rows)
   return keysort(rows or i.rows,
            function(r) return i:distx(row, r) end) end
 
--- *`TBL:knn(row:row, k?:int) -> num`*  
--- Guess row's disty from its k nearest neighbours.
+-- *`TBL:knn(row:row, k?:int) -> NUM`*
+-- Guess row's disty from its k nearest neighbours. Returns the
+-- NUM of those k; take `.mu` for the point guess (`.sd` for spread).
 function TBL.knn(i,row,k,    t)
   t = i:around(row)
-  return adds(map(slice(t, 1, k or the.k), i:Y())).mu end
+  return adds(map(slice(t, 1, k or the.k), i:Y())) end
 
 --## anomaly (the Bouncer) -------------------------------------
 -- Who does not belong? Loneliness is the whole test: how far
@@ -390,8 +391,8 @@ eg["--knn"] = function(    t,y,mu,e1,e2,r)
   e1, e2 = 0, 0
   for _ = 1, 32 do
     r  = t.rows[rand(#t.rows)]
-    e1 = e1 + abs(t:knn(r) - y(r))
-    e2 = e2 + abs(mu       - y(r)) end
+    e1 = e1 + abs(t:knn(r).mu - y(r))
+    e2 = e2 + abs(mu          - y(r)) end
   print(("knn err %.3f  vs mean-guess err %.3f")
         :format(e1/32, e2/32))
   assert(e1 < e2) end
